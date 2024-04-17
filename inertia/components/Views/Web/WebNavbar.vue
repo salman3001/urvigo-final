@@ -13,9 +13,13 @@ import NavSearchBar from '~//layouts/components/NavSearchBar.vue'
 import routes from '~/utils/routes'
 import { computed, ref, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
+import { IPageProps } from '#helpers/types'
 
 const display = useDisplay()
-const { auth, meta } = usePage().props as any
+const page = usePage<IPageProps<{}>>()
+
+const user = computed(() => page.props.user)
+const meta = computed(() => page.props.meta)
 
 interface navItem {
   name: string
@@ -37,7 +41,6 @@ const navMenuItems = [
 const { y } = useWindowScroll()
 
 const sidebar = ref(false)
-const page = usePage()
 
 watch(
   () => display,
@@ -312,8 +315,8 @@ const isPageActive = computed(() =>
           <NavSearchBar v-if="!meta?.disableSearchbar" />
           <NavbarThemeSwitcher v-if="$vuetify.display.mdAndUp" />
 
-          <NavBarNotifications v-if="auth?.user" />
-          <UserProfile v-if="auth?.user" />
+          <NavBarNotifications v-if="user" />
+          <UserProfile v-if="user" />
           <Link v-else :href="routes.auth.login">
             <VBtn
               prepend-icon="tabler-lock"

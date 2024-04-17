@@ -1,12 +1,6 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  belongsTo,
-  column,
-  hasOne,
-  manyToMany,
-} from '@adonisjs/lucid/orm'
-import CampaignType from './campaignType.js'
+import { BaseModel, belongsTo, column, hasOne, manyToMany } from '@adonisjs/lucid/orm'
+import CampaignType from './campaign_type.js'
 import type { BelongsTo, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Interest from './interest.js'
 import Template from './template.js'

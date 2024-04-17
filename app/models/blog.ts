@@ -1,12 +1,7 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  belongsTo,
-  column,
-  manyToMany,
-} from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import type { ImageType } from '#helpers/types'
-import BlogCategory from './blogCategory.js'
+import BlogCategory from './blog_category.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Language from './language.js'
 

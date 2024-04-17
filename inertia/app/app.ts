@@ -9,7 +9,7 @@ import '../assets/styles/styles.scss'
 import { createPinia } from 'pinia'
 import { registerPlugins } from '~/@core/utils/plugins'
 
-const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
+const appName = import.meta.env.VITE_APP_NAME || 'Urvigo'
 
 const pinia = createPinia()
 

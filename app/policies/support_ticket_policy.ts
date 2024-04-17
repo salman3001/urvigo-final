@@ -1,6 +1,6 @@
 import { permissions } from '#helpers/enums'
 import { hasPermission, isAdmin, isVendor } from '#helpers/permission_helpers'
-import SupportTicket from '#models/supportTicket'
+import SupportTicket from '#models/support_ticket'
 import User from '#models/user'
 import { BasePolicy, action } from '@adonisjs/bouncer'
 

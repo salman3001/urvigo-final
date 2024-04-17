@@ -9,11 +9,11 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.string('title', 256).notNullable()
       table.string('desc', 1500)
-      table.json('skills_required')
-      table.enum('budget_type', Object.values(BudgetType))
+      table.string('budget_unit', 50)
       table.decimal('budget', 10, 2).notNullable()
       table.dateTime('expires_at')
       table.point('location')
+      table.boolean('urgent').notNullable().defaultTo(false)
       table
         .integer('user_id')
         .unsigned()

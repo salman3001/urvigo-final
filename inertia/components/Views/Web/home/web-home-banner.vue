@@ -1,0 +1,57 @@
+<script setup lang="ts">
+import { Link } from '@inertiajs/vue3'
+import ctaDashborad from '~/assets/images/front-pages/landing-page/cta-dashboard.png'
+import routes from '~/utils/routes'
+</script>
+
+<template>
+  <div
+    class="landing-cta bg-surface"
+    :class="$vuetify.theme.current.dark ? 'banner-bg-dark' : 'banner-bg-light'"
+  >
+    <VContainer>
+      <div
+        class="d-flex justify-center justify-md-space-between gap-6 gap-x-10 position-relative pt-12"
+      >
+        <div class="align-self-center">
+          <div class="banner-title text-primary mb-1">Are you a Service Provider ?</div>
+
+          <h5 class="text-h5 text-medium-emphasis mb-8">
+            "Unloack New Oppurtunities: Join Out platform and reach more customers" Signup as a
+            Vendor
+          </h5>
+          <Link :href="routes.auth.login" target="_blank">
+            <VBtn color="primary" :size="$vuetify.display.smAndUp ? 'large' : 'default'">
+              Get Started
+            </VBtn>
+          </Link>
+        </div>
+
+        <div class="banner-img mb-n5">
+          <img :src="ctaDashborad" class="w-100" />
+        </div>
+      </div>
+    </VContainer>
+  </div>
+</template>
+
+<style lang="scss">
+.landing-cta {
+  background-size: cover;
+  margin-block: auto;
+}
+
+.banner-title {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 44px;
+}
+
+.banner-bg-light {
+  background-image: url('~/assets/images/front-pages/backgrounds/cta-bg.png');
+}
+
+.banner-bg-dark {
+  background-image: url('~/assets/images/front-pages/backgrounds/cta-bg-dark.png');
+}
+</style>

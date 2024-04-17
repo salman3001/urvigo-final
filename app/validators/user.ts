@@ -1,11 +1,9 @@
-import { userTypes } from '#helpers/enums'
 import vine from '@vinejs/vine'
 
 export const createUserValidator = vine.compile(
   vine.object({
     firstName: vine.string().maxLength(50).trim(),
     lastName: vine.string().maxLength(50).trim(),
-    userType: vine.enum(Object.values(userTypes)),
     email: vine
       .string()
       .maxLength(255)

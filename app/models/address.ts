@@ -11,8 +11,5 @@ export default class Address extends BaseModel {
   declare geoLocation: string
 
   @column()
-  declare userProfileId: number
-
-  @column()
-  declare vendorProfileId: number
+  declare businessProfileId: number
 }

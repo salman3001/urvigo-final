@@ -1,5 +1,4 @@
-// import type { HttpContext } from '@adonisjs/core/http'
-
+import User from '#models/user'
 import AuthService from '#services/auth_service'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -8,27 +7,38 @@ import { HttpContext } from '@adonisjs/core/http'
 export default class WebAuthsController {
   constructor(protected authService: AuthService) {}
 
-  async login({ inertia, request, session }: HttpContext) {
-    await this.authService.login()
+  async login({ response, request, session, auth }: HttpContext) {
+    const user = await this.authService.login()
     const next = request.qs()?.next
-    session.flash('flash', {
-      message: 'Login Success!',
-      type: 'success',
-    })
-    if (next) {
-      return inertia.render(next)
+
+    if (user instanceof User) {
+      await auth.use('web').login(user)
+      session.flash('flash', {
+        message: 'Login Success!',
+        type: 'success',
+      })
+
+      if (next) {
+        return response.redirect(next)
+      } else {
+        return response.redirect().toRoute('home')
+      }
     } else {
-      return inertia.render('home')
+      session.flash('flash', {
+        message: 'Invalid Credentials!',
+        type: 'error',
+      })
     }
   }
 
-  async signup({ inertia, session }: HttpContext) {
-    await this.authService.signup()
+  async signup({ response, session, auth }: HttpContext) {
+    const user = await this.authService.signup()
+    await auth.use('web').login(user)
     session.flash('flash', {
       message: 'Account Created !',
       type: 'success',
     })
-    return inertia.render('home')
+    return response.redirect().toRoute('home')
   }
 
   async sendForgotPasswordOtp({ inertia, response, session }: HttpContext) {
@@ -38,36 +48,42 @@ export default class WebAuthsController {
         message: 'Invalid Credentials',
         type: 'error',
       })
-      return response.redirect().toRoute('auth/forget-password')
+      return response.redirect().toRoute('auth.forgot-password')
     } else {
       session.flash('flash', {
         message: 'OTP Sent',
         type: 'success',
       })
-      return inertia.render('auth/reset-password')
+      return response.redirect().withQs({ email: user?.email }).toRoute('auth.reset-password')
     }
   }
 
-  async resetPassword({ inertia, response, session }: HttpContext) {
+  async resetPassword({ response, session }: HttpContext) {
     const data = await this.authService.varifyOtpAndUpdatePassword()
     if (data === 'Invalid OTP') {
       session.flash('flash', {
         message: 'Invalid OTP',
         type: 'error',
       })
-      return response.redirect().toRoute('auth/reset-password')
+      return response.redirect().toRoute('auth.reset-password')
     } else if (data === 'Invalid Email') {
       session.flash('flash', {
         message: 'Invalid Email ID',
         type: 'error',
       })
-      return response.redirect().toRoute('auth/reset-password')
+      return response.redirect().toRoute('auth.reset-password')
     } else {
       session.flash('flash', {
         message: 'Password Reset Successfully',
         type: 'success',
       })
-      return inertia.render('auth/home')
+      return response.redirect().toRoute('home')
     }
+  }
+
+  async logout({ response, session }: HttpContext) {
+    await this.authService.logout()
+    session.flash({ message: 'Logout Success', type: 'success' })
+    return response.redirect().toRoute('home')
   }
 }

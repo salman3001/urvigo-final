@@ -7,21 +7,63 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
-
-defineProps()
+// import WebHomeTopServices from '~/components/Views/Web/home/web-home-top-services.vue'
+// defineProps<{
+//   topServices: IPaginatedModel<Service[]>
+//   categories: ServiceCategory[]
+// }>()
 </script>
 
 <template>
-  <Head title="Homepage" />
+  <div class="landing-page-wrapper">
+    <!-- 👉 Hero Section  -->
+    <WebHomeHeroSection ref="refHome" />
 
-  <div class="container">
-    <div class="title">AdonisJS 6 x Inertia x Vue.js</div>
+    <!-- top services -->
+    <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
+      <!-- <WebHomeTopServices :topServices="topServices.data" /> -->
+    </div>
 
-    <span>
-      Learn more about AdonisJS and Inertia.js by visiting the
-      <a href="https://docs.adonisjs.com/guides/inertia">AdonisJS documentation</a>.
-      <VBtn color="primary">salman</VBtn>
-    </span>
+    <!-- 👉 Startup as Vendor  -->
+    <!-- <WebHomeBanner /> -->
+
+    <!-- 👉 Vendor features  -->
+
+    <!-- <WebHomeFeatures ref="refFeatures" /> -->
+
+    <!-- 👉 Customer Review -->
+    <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
+      <!-- <CustomersReview /> -->
+    </div>
+
+    <!-- 👉 Our Team -->
+    <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
+      <!-- <WebHomeOurTeam ref="refTeam" /> -->
+    </div>
+
+    <!-- 👉 Pricing Plans -->
+    <!-- <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
+            <PricingPlans />
+        </div> -->
+
+    <!-- 👉 FAQ Section -->
+    <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
+      <!-- <WebHomeFaqSection ref="refFaq" /> -->
+    </div>
+
+    <!-- 👉 Contact Us  -->
+    <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
+      <!-- <WebHomeContactUs ref="refContact" /> -->
+    </div>
   </div>
 </template>
+
+<style lang="scss">
+@media (max-width: 960px) and (min-width: 600px) {
+  .landing-page-wrapper {
+    .v-container {
+      padding-inline: 2rem !important;
+    }
+  }
+}
+</style>

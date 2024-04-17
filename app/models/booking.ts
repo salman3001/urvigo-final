@@ -3,7 +3,8 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import { OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import ServiceVariant from './serviceVariant.js'
+import ServiceVariant from './service_variant.js'
+import BusinessProfile from './business_profile.js'
 
 export default class Booking extends BaseModel {
   @column({ isPrimary: true })
@@ -14,6 +15,9 @@ export default class Booking extends BaseModel {
 
   @column()
   declare userId: number
+
+  @column()
+  declare businessProfileId: number
 
   @column({ prepare: (v) => JSON.stringify(v) })
   declare bookingDetail: {}
@@ -32,6 +36,9 @@ export default class Booking extends BaseModel {
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
+
+  @belongsTo(() => BusinessProfile)
+  declare businessProfile: BelongsTo<typeof BusinessProfile>
 
   @belongsTo(() => ServiceVariant)
   declare serviceVariant: BelongsTo<typeof ServiceVariant>

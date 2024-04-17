@@ -1,4 +1,4 @@
-import ServiceRequirement from '#models/serviceRequirement'
+import ServiceRequirement from '#models/service_requirement'
 import User from '#models/user'
 import { BasePolicy, action } from '@adonisjs/bouncer'
 

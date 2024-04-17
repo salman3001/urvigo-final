@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import { withAuthFinder } from '@adonisjs/auth'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import {
@@ -13,16 +12,17 @@ import {
 } from '@adonisjs/lucid/orm'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { userTypes } from '#helpers/enums'
-import UserProfile from './userProfile.js'
+import UserProfile from './user_profile.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Notification from './notification.js'
 import Booking from './booking.js'
 import Wishlist from './wishlist.js'
-import BidBooking from './bidBooking.js'
+import BidBooking from './bid_booking.js'
 import Conversation from './conversation.js'
-import ServiceCategory from './serviceCategory.js'
+import ServiceCategory from './service_category.js'
 import Role from './role.js'
-import BusinessProfile from './businessProfile.js'
+import BusinessProfile from './business_profile.js'
+import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -98,7 +98,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare conversations: ManyToMany<typeof Conversation>
 
   @manyToMany(() => ServiceCategory, {
-    pivotTable: 'vendor_subscribed_categories',
+    pivotTable: 'user_subscribed_categories',
   })
   declare subscribedCategories: ManyToMany<typeof ServiceCategory>
 

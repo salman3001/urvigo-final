@@ -1,13 +1,10 @@
-import ServiceCategory from '#models/serviceCategory'
-import BaseService from '#services/base_service'
+import ServiceCategory from '#models/service_category'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
 @inject()
-export default class ServiceCategoryService extends BaseService {
-  constructor(protected ctx: HttpContext) {
-    super()
-  }
+export default class ServiceCategoryService {
+  constructor(protected ctx: HttpContext) {}
 
   protected searchByFileds(): string[] {
     return ['name']
@@ -18,8 +15,6 @@ export default class ServiceCategoryService extends BaseService {
     await bouncer.with('ServiceCategoryPolicy').authorize('viewList')
 
     const serviceCategoryQuery = ServiceCategory.query()
-
-    this.applyFilters(serviceCategoryQuery, request.qs())
 
     const categories = await serviceCategoryQuery.exec()
 

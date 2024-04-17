@@ -15,6 +15,14 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('user_profiles')
         .onDelete('CASCADE')
+
+      table
+        .integer('business_profile_id', 10)
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('business_profiles')
+        .onDelete('CASCADE')
     })
   }
 

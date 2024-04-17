@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { useSkins } from '~/@core/composable/useSkins'
 import BaseAppLayout from './components/BaseAppLayout.vue'
+import useInjectToast from '~/composables/useInjectToast'
 
 const { injectSkinClasses } = useSkins()
 
 // ℹ️ This will inject classes in body tag for accurate styling
 injectSkinClasses()
+
+useInjectToast()
 </script>
 
 <template>
@@ -21,3 +24,4 @@ injectSkinClasses()
   flex-direction: column;
 }
 </style>
+~/composables/useInjectToast

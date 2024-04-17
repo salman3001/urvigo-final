@@ -15,6 +15,7 @@ export default class extends BaseSchema {
       table.point('geo_location')
       table.decimal('avg_rating', 2, 1).defaultTo(0)
       table.json('video')
+      table.json('thumbnail')
       table
         .integer('business_profile_id')
         .unsigned()

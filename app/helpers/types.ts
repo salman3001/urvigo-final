@@ -1,5 +1,4 @@
 import User from '#models/user'
-import type { PageProps } from '@adonisjs/inertia/types'
 
 export type ImageType = {
   url: string
@@ -36,4 +35,9 @@ export type IPageProps<T> = {
   user: User | null
   query: Record<any, any>
   params: Record<any, any>
+  flash?: {
+    message: string
+    type: 'success' | 'error' | 'info' | 'warning'
+  }
+  meta: Record<any, any>
 } & T

@@ -9,19 +9,19 @@ import {
   manyToMany,
 } from '@adonisjs/lucid/orm'
 
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { ImageType } from '#helpers/types'
-import BusinessProfile from './businessProfile.js'
-import ServiceCategory from './serviceCategory.js'
-import ServiceSubcategory from './serviceSubcategory.js'
+import ServiceCategory from './service_category.js'
+import ServiceSubcategory from './service_subcategory.js'
 import Image from './image.js'
 import Seo from './seo.js'
 import Faq from './faq.js'
-import ServiceTag from './serviceTag.js'
+import ServiceTag from './service_tag.js'
 import Review from './review.js'
-import ServiceVariant from './serviceVariant.js'
+import ServiceVariant from './service_variant.js'
 import Coupon from './coupon.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
+import BusinessProfile from './business_profile.js'
 
 export default class Service extends BaseModel {
   serializeExtras = true
@@ -57,6 +57,9 @@ export default class Service extends BaseModel {
 
   @column()
   declare video: ImageType
+
+  @column()
+  declare thumbnail: ImageType
 
   @column()
   declare businessProfileId: number

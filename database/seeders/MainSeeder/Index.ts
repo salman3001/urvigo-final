@@ -1,15 +1,15 @@
 // import Application from '@ioc:Adonis/Core/Application'
-import blogCategoryFactory from '#database/factories/blogCategoryFactory'
-import campaignTypeFactory from '#database/factories/campaignTypeFactory'
-import contactMessageFactory from '#database/factories/contactMessageFactory'
-import knowledgebaseCategoryFactory from '#database/factories/knowledgebaseCategoryFactory'
-import languageFactory from '#database/factories/languageFactory'
-import roleFactory from '#database/factories/roleFactory'
-import serviceCategoryFactory from '#database/factories/serviceCategoryFactory'
-import serviceTagFactory from '#database/factories/serviceTagFactory'
-import supportTicketFactory from '#database/factories/supportTicketFactory'
-import templateFactory from '#database/factories/templateFactory'
-import userFactory from '#database/factories/userFactory'
+import blogCategoryFactory from '#database/factories/blog_category_factory'
+import campaignTypeFactory from '#database/factories/campaign_type_factory'
+import contactMessageFactory from '#database/factories/contact_message_factory'
+import knowledgebaseCategoryFactory from '#database/factories/knowledgebase_category_factory'
+import languageFactory from '#database/factories/language_factory'
+import roleFactory from '#database/factories/role_factory'
+import serviceCategoryFactory from '#database/factories/service_category_factory'
+import serviceTagFactory from '#database/factories/service_tag_factory'
+import supportTicketFactory from '#database/factories/support_ticket_factory'
+import templateFactory from '#database/factories/template_factory'
+import userFactory from '#database/factories/user_factory'
 import { TicketStatus, permissions, userTypes } from '#helpers/enums'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
@@ -35,7 +35,7 @@ export default class extends BaseSeeder {
       .merge([
         { name: 'Super Admin', isActive: true, permissions: permissionsObject },
         { name: 'Moderator' },
-        { name: 'Vendor' },
+        { name: 'Blogger' },
       ])
       .createMany(3)
 

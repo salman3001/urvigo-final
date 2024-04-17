@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import ServiceRequirement from './serviceRequirement.js'
+import ServiceRequirement from './service_requirement.js'
 import { NotificationTypes } from '#helpers/enums'
 
 export default class Bid extends BaseModel {
@@ -16,6 +16,14 @@ export default class Bid extends BaseModel {
 
   @column()
   declare message: string
+
+  @column()
+  declare negotiateHistory: {
+    date_time: DateTime
+    asked_price: string
+    message: string
+    accepted: boolean
+  }[]
 
   @column()
   declare serviceRequirementId: number

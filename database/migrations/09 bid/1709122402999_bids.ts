@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.decimal('offered_price', 8, 2)
       table.string('message', 1500)
+      table.json('negotiate_history').defaultTo([])
       table
         .integer('service_requirement_id')
         .unsigned()

@@ -6,14 +6,11 @@ export default class Image extends BaseModel {
   declare id: number
 
   @column()
-  declare mediaId: number
-
-  @column()
   declare file: ImageType
 
   @column()
   declare serviceId: number
 
   @column()
-  declare vendorProfileId: number
+  declare businessProfileId: number
 }

@@ -11,7 +11,8 @@ export default defineConfig({
    */
   sharedData: {
     errors: (ctx) => ctx.session?.flashMessages.get('errors'),
-    user: (ctx) => ctx.auth.user,
+    flash: (ctx) => ctx.session?.flashMessages.get('flash'),
+    user: (ctx) => ctx.auth.use('web').user,
     query: (ctx) => ctx.request.qs(),
     params: (ctx) => ctx.request.param,
   },

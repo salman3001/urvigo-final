@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { Link, router, usePage } from '@inertiajs/vue3'
+import { IPageProps } from '#helpers/types'
+import { Link, usePage } from '@inertiajs/vue3'
 import avatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
 
 const getImageUrl = useGetImageUrl()
-const auth = usePage().props?.auth as any
+const { user } = usePage<IPageProps<{}>>().props
 </script>
 
 <template>
   <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
     <VAvatar class="cursor-pointer" color="primary" variant="tonal">
-      <VImg :src="getImageUrl(auth?.user?.profile?.avatar?.breakpoints?.thumbnail?.url, avatar)" />
+      <VImg :src="getImageUrl(user?.profile?.avatar?.breakpoints?.thumbnail?.url, avatar)" />
 
       <!-- SECTION Menu -->
       <VMenu activator="parent" width="230" location="bottom end" offset="14px">
@@ -23,12 +24,7 @@ const auth = usePage().props?.auth as any
                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
                   <VAvatar color="primary" variant="tonal">
                     <VImg
-                      :src="
-                        getImageUrl(
-                          auth?.user?.profile?.avatar?.breakpoints?.thumbnail?.url,
-                          avatar
-                        )
-                      "
+                      :src="getImageUrl(user?.profile?.avatar?.breakpoints?.thumbnail?.url, avatar)"
                     />
                   </VAvatar>
                 </VBadge>
@@ -36,10 +32,10 @@ const auth = usePage().props?.auth as any
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              {{ auth?.user?.first_name + ' ' + auth?.user?.last_name }}
+              {{ user?.firstName + ' ' + user?.lastName }}
             </VListItemTitle>
             <VListItemSubtitle
-              ><span class="normalcase">{{ auth?.user?.userType }}</span></VListItemSubtitle
+              ><span class="normalcase">{{ user?.userType }}</span></VListItemSubtitle
             >
           </VListItem>
 

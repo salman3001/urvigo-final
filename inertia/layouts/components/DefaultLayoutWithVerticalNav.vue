@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import navItems from '~/navigation/vertical'
-import { themeConfig } from 'themeConfig'
+import { themeConfig } from '~/themeConfig'
 
 // Components
 import Footer from '~/layouts/components/Footer.vue'
 import NavbarThemeSwitcher from '~/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '~/layouts/components/UserProfile.vue'
-import NavBarI18n from '@core/components/I18n.vue'
+import NavBarI18n from '~/@core/components/I18n.vue'
 
 // @layouts plugin
-import { VerticalNavLayout } from '@layouts'
+import { VerticalNavLayout } from '~/@layouts'
 import NavBarNotifications from '~/layouts/components/NavBarNotifications.vue'
 </script>
 
@@ -23,10 +23,7 @@ import NavBarNotifications from '~/layouts/components/NavBarNotifications.vue'
           class="ms-n3 d-lg-none"
           @click="toggleVerticalOverlayNavActive(true)"
         >
-          <VIcon
-            size="26"
-            icon="tabler-menu-2"
-          />
+          <VIcon size="26" icon="tabler-menu-2" />
         </IconBtn>
 
         <NavbarThemeSwitcher />
@@ -37,8 +34,8 @@ import NavBarNotifications from '~/layouts/components/NavBarNotifications.vue'
           v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
           :languages="themeConfig.app.i18n.langConfig"
         />
-        <div class="d-flex  gap-2">
-          <NavBarNotifications/>
+        <div class="d-flex gap-2">
+          <NavBarNotifications />
           <UserProfile />
         </div>
       </div>

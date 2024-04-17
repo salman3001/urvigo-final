@@ -9,7 +9,7 @@ export default class Activity extends BaseModel {
   declare name: string
 
   @column()
-  declare adminUserId: number
+  declare userId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

@@ -14,11 +14,11 @@ export default class WebPagesController {
 
   //auth
 
-  async home({ view }: HttpContext) {
+  async home({ inertia }: HttpContext) {
     const services = await this.serviceService.index()
     const categories = await this.categoryService.index()
     services.baseUrl('/')
-    return view.render('pages/home', {
+    return inertia.render('pages/home', {
       services,
       categories,
     })

@@ -8,6 +8,7 @@
     "start": "node bin/server.js",
     "build": "node ace build",
     "dev": "node ace serve --watch",
+    "dev:hmr": "node ace serve --unstable-hmr",
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -35,7 +36,7 @@
     "#helpers/*": "./app/helpers/*.js"
   },
   "devDependencies": {
-    "@adonisjs/assembler": "^7.4.0",
+    "@adonisjs/assembler": "^7.5.0",
     "@adonisjs/eslint-config": "^1.3.0",
     "@adonisjs/prettier-config": "^1.3.0",
     "@adonisjs/tsconfig": "^1.3.0",
@@ -47,6 +48,7 @@
     "@types/node": "^20.12.7",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "^8.57.0",
+    "hot-hook": "^0.1.10",
     "pino-pretty": "^11.0.0",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.1.2",
@@ -58,7 +60,8 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^9.2.0",
-    "@adonisjs/core": "^6.6.0",
+    "@adonisjs/bouncer": "^3.1.1",
+    "@adonisjs/core": "^6.7.1",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/inertia": "1.0.0-25",
     "@adonisjs/lucid": "^20.5.1",
@@ -68,6 +71,8 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^3.0.0-11",
     "@antfu/utils": "^0.7.7",
+    "@casl/vue": "^2.2.2",
+    "@floating-ui/dom": "^1.6.3",
     "@iconify-json/fa": "^1.1.8",
     "@iconify-json/mdi": "^1.1.66",
     "@iconify-json/tabler": "^1.1.110",
@@ -87,6 +92,7 @@
     "@vueuse/core": "^10.9.0",
     "@vueuse/integrations": "^10.9.0",
     "adonis-lucid-filter": "^5.1.0",
+    "bignumber.js": "^9.1.2",
     "cookie-es": "^1.1.0",
     "destr": "^2.0.3",
     "edge.js": "^6.0.2",
@@ -98,17 +104,26 @@
     "sass-math": "^1.0.0",
     "shepherd.js": "^11.2.0",
     "shikiji": "^0.10.2",
+    "socket.io-client": "^4.7.5",
+    "swiper": "^11.1.1",
     "tsx": "^4.7.2",
     "type-fest": "^4.15.0",
     "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
     "vue-flatpickr-component": "^11.0.5",
     "vue-i18n": "^9.12.1",
+    "vue-toastification": "2.0.0-rc.5",
     "vue3-perfect-scrollbar": "^2.0.0",
     "vuetify": "^3.5.15"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config",
+  "hotHook": {
+    "boundaries": [
+      "../app/controllers/**/*.ts",
+      "../app/middlewares/*.ts"
+    ]
+  }
 }

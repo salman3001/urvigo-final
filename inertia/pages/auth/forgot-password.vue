@@ -18,6 +18,9 @@ import authV2MaskLight from '~/assets/images/pages/misc-mask-light.png'
 import { Link, useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
 import { emailValidator, requiredValidator } from '~/@core/utils/validators'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import CustomForm from '~/components/form/CustomForm.vue'
+import ErrorAlert from '~/components/form/ErrorAlert.vue'
 
 const form = useForm({
   email: '',
@@ -68,14 +71,14 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
         </VCardText>
 
         <VCardText>
-          <FormCustom
+          <CustomForm
             @submit="
               () => {
                 form.post(routes.auth.forgot_password)
               }
             "
           >
-            <FormErrorAlert v-if="form.errors" :errors="form.errors" />
+            <ErrorAlert v-if="form.errors" :errors="form.errors" />
             <VRow>
               <!-- email -->
               <VCol cols="12">
@@ -102,7 +105,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                 </Link>
               </VCol>
             </VRow>
-          </FormCustom>
+          </CustomForm>
         </VCardText>
       </VCard>
     </VCol>

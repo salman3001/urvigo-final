@@ -1,6 +1,6 @@
 import { permissions } from '#helpers/enums'
 import { hasPermission, isAdmin, isVendor } from '#helpers/permission_helpers'
-import BusinessProfile from '#models/businessProfile'
+import BusinessProfile from '#models/business_profile'
 import { BasePolicy, action } from '@adonisjs/bouncer'
 
 export default class BusinessPolicy extends BasePolicy {

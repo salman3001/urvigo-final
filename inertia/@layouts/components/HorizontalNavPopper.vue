@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { ReferenceElement } from '@floating-ui/dom'
 import { computePosition, flip, offset, shift } from '@floating-ui/dom'
-import { useLayoutConfigStore } from '@layouts/stores/config'
-import { themeConfig } from '@themeConfig'
+import { useLayoutConfigStore } from '~/@layouts/stores/config'
+import { themeConfig } from '~/themeConfig'
 
 interface Props {
   popperInlineEnd?: boolean
@@ -29,17 +29,22 @@ const popperContentStyles = ref({
 
 const updatePopper = async () => {
   if (refPopperContainer.value !== undefined && refPopper.value !== undefined) {
-    const { x, y } = await computePosition(refPopperContainer.value,
-      refPopper.value, {
-        placement: props.popperInlineEnd ? (props.isRtl ? 'left-start' : 'right-start') : 'bottom-start',
-        middleware: [
-          ...(configStore.horizontalNavPopoverOffset ? [offset(configStore.horizontalNavPopoverOffset)] : []),
-          flip({ boundary: document.querySelector('body')!, padding: { bottom: 16 } }),
+    const { x, y } = await computePosition(refPopperContainer.value, refPopper.value, {
+      placement: props.popperInlineEnd
+        ? props.isRtl
+          ? 'left-start'
+          : 'right-start'
+        : 'bottom-start',
+      middleware: [
+        ...(configStore.horizontalNavPopoverOffset
+          ? [offset(configStore.horizontalNavPopoverOffset)]
+          : []),
+        flip({ boundary: document.querySelector('body')!, padding: { bottom: 16 } }),
 
-          shift({ boundary: document.querySelector('body')!, padding: { bottom: 16 } }),
-        ],
+        shift({ boundary: document.querySelector('body')!, padding: { bottom: 16 } }),
+      ],
 
-        /*
+      /*
       ℹ️ Why we are not using fixed positioning?
 
       `position: fixed` doesn't work as expected when some CSS properties like `transform` is applied on its parent element.
@@ -52,8 +57,8 @@ const updatePopper = async () => {
 
       NOTE: This issue starts from third level children (Top Level > Sub item > Sub item).
     */
-        // strategy: 'fixed',
-      })
+      // strategy: 'fixed',
+    })
 
     popperContentStyles.value.left = `${x}px`
     popperContentStyles.value.top = `${y}px`
@@ -65,8 +70,10 @@ const updatePopper = async () => {
   We don't want to update position every time user scrolls when horizontal nav is sticky
 */
 until(() => configStore.horizontalNavType)
-  .toMatch(type => type === 'static')
-  .then(() => { useEventListener('scroll', updatePopper) })
+  .toMatch((type) => type === 'static')
+  .then(() => {
+    useEventListener('scroll', updatePopper)
+  })
 
 const isContentShown = ref(false)
 
@@ -82,13 +89,7 @@ const hideContent = () => {
 onMounted(updatePopper)
 
 // ℹ️ Recalculate popper position when it's triggerer changes its position
-watch(
-  [
-    () => configStore.isAppRTL,
-    () => configStore.appContentWidth,
-  ],
-  updatePopper,
-)
+watch([() => configStore.isAppRTL, () => configStore.appContentWidth], updatePopper)
 
 // Watch for route changes and close popper content if route is changed
 const route = useRoute()
@@ -99,10 +100,12 @@ watch(() => route.fullPath, hideContent)
 <template>
   <div
     class="nav-popper"
-    :class="[{
-      'popper-inline-end': popperInlineEnd,
-      'show-content': isContentShown,
-    }]"
+    :class="[
+      {
+        'popper-inline-end': popperInlineEnd,
+        'show-content': isContentShown,
+      },
+    ]"
   >
     <div
       ref="refPopperContainer"

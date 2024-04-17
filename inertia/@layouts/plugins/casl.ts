@@ -1,6 +1,6 @@
 import { useAbility } from '@casl/vue'
-import type { RouteLocationNormalized } from 'vue-router'
 import type { NavGroup } from '@layouts/types'
+import { getCurrentInstance } from 'vue'
 
 /**
  * Returns ability result if ACL is configured or else just return true
@@ -15,8 +15,7 @@ import type { NavGroup } from '@layouts/types'
 export const can = (action: string | undefined, subject: string | undefined) => {
   const vm = getCurrentInstance()
 
-  if (!vm)
-    return false
+  if (!vm) return false
 
   const localCan = vm.proxy && '$can' in vm.proxy
 
@@ -30,19 +29,18 @@ export const can = (action: string | undefined, subject: string | undefined) => 
  * @param {object} item navigation object item
  */
 export const canViewNavMenuGroup = (item: NavGroup) => {
-  const hasAnyVisibleChild = item.children.some(i => can(i.action, i.subject))
+  const hasAnyVisibleChild = item.children.some((i) => can(i.action, i.subject))
 
   // If subject and action is defined in item => Return based on children visibility (Hide group if no child is visible)
   // Else check for ability using provided subject and action along with checking if has any visible child
-  if (!(item.action && item.subject))
-    return hasAnyVisibleChild
+  if (!(item.action && item.subject)) return hasAnyVisibleChild
 
   return can(item.action, item.subject) && hasAnyVisibleChild
 }
 
-export const canNavigate = (to: RouteLocationNormalized) => {
+export const canNavigate = (to: any) => {
   const ability = useAbility()
 
   // @ts-expect-error We should allow passing string | undefined to can because for admin ability we omit defining action & subject
-  return to.matched.some(route => ability.can(route.meta.action, route.meta.subject))
+  return to.matched.some((route) => ability.can(route.meta.action, route.meta.subject))
 }

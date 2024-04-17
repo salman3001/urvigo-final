@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/blank.vue'
+import ErrorAlert from '~/components/form/ErrorAlert.vue'
 
 export default {
   layout: Layout,
@@ -84,7 +85,7 @@ const form = useForm({
               }
             "
           >
-            <FormErrorAlert v-if="form.errors" :errors="form.errors" />
+            <ErrorAlert v-if="form.errors" :errors="form.errors" />
             <VRow>
               <!-- password -->
               <VCol cols="12">
@@ -145,6 +146,6 @@ const form = useForm({
   </VRow>
 </template>
 
-<styles lang="scss">
+<style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
-</styles>
+</style>

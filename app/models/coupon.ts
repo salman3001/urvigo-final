@@ -1,15 +1,9 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  belongsTo,
-  column,
-  manyToMany,
-} from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import { CouponType, DiscountType } from '#helpers/enums'
 import Service from './service.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
-import BusinessProfile from './businessProfile.js'
-
+import BusinessProfile from './business_profile.js'
 
 export default class Coupon extends BaseModel {
   @column({ isPrimary: true })

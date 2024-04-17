@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { NuxtLink } from '#components'
-
+import { Link } from '@inertiajs/vue3'
 import { layoutConfig } from '@layouts'
 import { can } from '@layouts/plugins/casl'
 import type { NavLink } from '@layouts/types'
@@ -22,13 +21,15 @@ const props = withDefaults(defineProps<Props>(), {
   <li
     v-if="can(item.action, item.subject)"
     class="nav-link"
-    :class="[{
-      'sub-item': props.isSubItem,
-      'disabled': item.disable,
-    }]"
+    :class="[
+      {
+        'sub-item': props.isSubItem,
+        'disabled': item.disable,
+      },
+    ]"
   >
     <Component
-      :is="item.to ? NuxtLink : 'a'"
+      :is="item.to ? Link : 'a'"
       v-bind="getComputedNavLinkToProp(item)"
       :class="{ 'router-link-active router-link-exact-active': isNavLinkActive(item, $router) }"
     >

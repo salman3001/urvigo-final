@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import BusinessProfile from './businessProfile.js'
+import BusinessProfile from './business_profile.js'
 import Service from './service.js'
 import { BigNumber } from 'bignumber.js'
 
