@@ -1,0 +1,21 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.client.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "module": "ESNext",
+    "jsxImportSource": "vue",
+    "paths": {
+      "~/*": ["./*"],
+      "@themeConfig": ["./themeConfig.ts"],
+      "@layouts/*": ["./@layouts/*"],
+      "@layouts": ["./@layouts"],
+      "@core/*": ["./@core/*"],
+      "@core": ["./@core"],
+      "@images/*": ["./assets/images/*"],
+      "@styles/*": ["./assets/styles/*"],
+      "@validators": ["./@core/utils/validators"]
+    }
+  },
+  "include": ["./**/*.ts", "./**/*.vue"]
+}

@@ -1,0 +1,35 @@
+import { BaseSchema } from '@adonisjs/lucid/schema'
+import { DiscountType } from '#helpers/enums'
+
+export default class extends BaseSchema {
+  protected tableName = 'service_variants'
+
+  async up() {
+    this.schema.createTable(this.tableName, (table) => {
+      table.increments('id').primary()
+      table.string('name', 100).notNullable()
+      table.decimal('price', 12, 2).notNullable()
+      table.enu('discount_type', Object.values(DiscountType)).defaultTo(0)
+      table.decimal('discount_flat', 10, 2).defaultTo(0)
+      table.decimal('discount_percentage', 4, 2).defaultTo(0)
+      table.json('features')
+      table.json('included')
+      table.json('excluded')
+      table.json('additional_properties')
+      table.bigInteger('order').defaultTo(1).notNullable()
+      table.json('image')
+      table
+        .integer('service_id')
+        .unsigned()
+        .references('id')
+        .inTable('services')
+        .onDelete('CASCADE')
+        .notNullable()
+    })
+  }
+
+  async down() {
+    this.schema.raw('DROP TYPE IF EXISTS "discount_type"')
+    this.schema.dropTable(this.tableName)
+  }
+}
