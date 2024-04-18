@@ -1,4 +1,7 @@
 import User from '#models/user'
+import { HttpContext } from '@adonisjs/core/http'
+import { PageObject, PageProps } from '@adonisjs/inertia/types'
+import { LucidModel, ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export type ImageType = {
   url: string
@@ -41,3 +44,12 @@ export type IPageProps<T> = {
   }
   meta: Record<any, any>
 } & T
+
+type InertiaPartialPropsType = (...args: any[]) => Record<'props', unknown> | Record<any, any>
+
+type ObjectReturnType<T> = T extends string ? never : T
+export type Prop<T extends InertiaPartialPropsType> = ObjectReturnType<
+  Awaited<ReturnType<T>>
+>['props']
+
+export type AwaitedInfer<T extends InertiaPartialPropsType> = Awaited<ReturnType<T>>

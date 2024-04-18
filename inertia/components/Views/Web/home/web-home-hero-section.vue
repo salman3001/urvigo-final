@@ -16,7 +16,7 @@ const theme = useTheme()
         :class="theme.current.value.dark ? 'landing-hero-dark-bg' : 'landing-hero-light-bg'"
       >
         <VContainer>
-          <div class="hero-text-box text-center px-6 mt-sm-16">
+          <div class="hero-text-box text-center px-6 mt-6">
             <h1 class="hero-title mb-4">One place to manage all your services</h1>
             <h6 class="mb-6 text-h6">
               Streamline Your Services, Simplify Your Bookings: Your One-Stop Services solution.

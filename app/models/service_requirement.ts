@@ -24,6 +24,9 @@ export default class ServiceRequirement extends BaseModel {
   @column()
   declare budget: string | number
 
+  @column()
+  declare budgetUnit: string
+
   @column.dateTime()
   declare expiresAt: DateTime
 

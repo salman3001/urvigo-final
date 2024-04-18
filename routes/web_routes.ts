@@ -2,6 +2,7 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 const WebAuthsController = () => import('#controllers/web/web_auths_controller')
 const WebPagesController = () => import('#controllers/web/web_pages_controller')
+const WebBookingsController = () => import('#controllers/web/web_bookings_controller')
 
 // auth
 router
@@ -41,6 +42,34 @@ router
 //pages
 
 router.group(() => {
-  router.get('/', [WebPagesController, 'home'])
-  router.get('/services', [WebPagesController, 'services'])
+  router.get('/', [WebPagesController, 'home']).as('home')
+  router.get('/services', [WebPagesController, 'services']).as('web.services')
+  router.get('/services/:slug', [WebPagesController, 'services_show']).as('web.services.show')
+
+  // with auth
+  router
+    .group(() => {
+      router
+        .post('/services/:id/create-review', [WebPagesController, 'createReview'])
+        .as('web.services.create_review')
+
+      // bookings
+      router
+        .group(() => {
+          router.get('/', [WebBookingsController, 'index'])
+          router.get('/:id', [WebBookingsController, 'show'])
+          router.post('/checkout/summary', [WebBookingsController, 'summary'])
+        })
+        .prefix('bookings')
+
+      // custom bookings
+      router
+        .group(() => {
+          router.get('/', [WebBookingsController, 'index'])
+          router.get('/:id', [WebBookingsController, 'show'])
+          router.post('/checkout/summary', [WebBookingsController, 'summary'])
+        })
+        .prefix('bookings')
+    })
+    .use(middleware.auth())
 })

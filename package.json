@@ -92,6 +92,7 @@
     "@vueuse/core": "^10.9.0",
     "@vueuse/integrations": "^10.9.0",
     "adonis-lucid-filter": "^5.1.0",
+    "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
     "cookie-es": "^1.1.0",
     "destr": "^2.0.3",

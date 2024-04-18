@@ -154,6 +154,8 @@ const sources: BundleScriptConfig = {
         'file',
         'eye-off',
         'eye',
+        'star-filled',
+        'star',
       ],
     },
     {

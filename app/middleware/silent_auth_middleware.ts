@@ -10,6 +10,7 @@ export default class SilentAuthMiddleware {
   ) {
     for (let guard of options.guards || [ctx.auth.defaultGuard]) {
       await ctx.auth.use(guard).check()
+      ctx.auth.use(guard).user
     }
     return next()
   }

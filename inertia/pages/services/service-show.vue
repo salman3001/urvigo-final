@@ -1,20 +1,25 @@
 <script setup lang="ts">
-import { IPaginatedModel } from '#helpers/types'
+import { IPageProps } from '#helpers/types'
 import Service from '#models/service'
+import { Link, router, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 import { ref } from 'vue'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import ReviewsCard from '~/components/ReviewsCard.vue'
 import ReviewsOverview from '~/components/ReviewsOverview.vue'
 import ServiceCard2 from '~/components/ServiceCard2.vue'
 import SwiperCrousel from '~/components/SwiperCrousel.vue'
+import ModalAddReview from '~/components/modal/ModalAddReview.vue'
+import WebSelectVariant from '~/components/web/WebSelectVariant.vue'
 
 const getImageUrl = useGetImageUrl()
-
 const addReviewModal = ref(false)
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page.props?.user)
 
 defineProps<{
   service: Service
-  similarServices: IPaginatedModel<Service[]>
+  similarServices: Service[]
 }>()
 </script>
 
@@ -99,19 +104,20 @@ export default {
                   <VAvatar
                     :image="
                       getImageUrl(
-                        service?.businessProfile.user?.profile?.avatar?.breakpoints?.thumbnail?.url,
+                        service?.businessProfile.vendor?.profile?.avatar?.breakpoints?.thumbnail
+                          ?.url,
                         dummyAvatar
                       )
                     "
                     size="38"
                   />
                   <div>
-                    <NuxtLink :to="routes.vendor_profile.view(service?.businessProfileId!)">
+                    <Link :href="routes.vendor_profile.view(service?.businessProfileId!)">
                       <h6 class="text-h6 mb-1">
-                        {{ service?.businessProfile.user?.firstName }}
-                        {{ service?.businessProfile.user?.lastName }}
+                        {{ service?.businessProfile.vendor?.firstName }}
+                        {{ service?.businessProfile.vendor?.lastName }}
                       </h6>
-                    </NuxtLink>
+                    </Link>
                     <div class="text-body-2">
                       {{ service?.businessProfile.businessName }}
                     </div>
@@ -131,7 +137,11 @@ export default {
             <VBtn
               @click="
                 () => {
-                  addReviewModal = true
+                  if (user) {
+                    addReviewModal = true
+                  } else {
+                    router.visit(routes.auth.login + `?next=${page.url}`)
+                  }
                 }
               "
             >
@@ -151,12 +161,7 @@ export default {
       <VCol cols="12" md="3">
         <h6 class="text-h6">Similar Services</h6>
         <div class="course-content">
-          <ServiceCard2
-            class="ma-2"
-            v-for="(s, i) in similarServices?.data"
-            :service="s"
-            :key="i"
-          />
+          <ServiceCard2 class="ma-2" v-for="(s, i) in similarServices" :service="s" :key="i" />
         </div>
       </VCol>
     </VRow>
@@ -165,7 +170,7 @@ export default {
       :service-id="service!.id"
       @submit="
         async () => {
-          await refreshService()
+          router.reload({ only: ['service'] })
           addReviewModal = false
         }
       "

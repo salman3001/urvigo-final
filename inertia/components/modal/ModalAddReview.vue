@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
+import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import { requiredValidator } from '~/@core/utils/validators'
 import routes from '~/utils/routes'
+import CustomForm from '../form/CustomForm.vue'
+import ErrorAlert from '../form/ErrorAlert.vue'
+import ModalBase from './ModalBase.vue'
+import { VRating } from 'vuetify/components'
 
 const isVisible = defineModel<boolean>('isVisible')
 
@@ -48,9 +54,9 @@ const formSubmit = async () => {
     title="Add Review"
     subtitle="Share your thoughts about this service"
   >
-    <VForm fast-fail @submit.prevent="() => formSubmit()" ref="formRef">
-      <FormErrorAlert v-if="serviceErrors" :errors="serviceErrors" />
-      <FormErrorAlert v-if="vendorErrors" :errors="vendorErrors" />
+    <CustomForm fast-fail @submit="() => formSubmit()" ref="formRef">
+      <ErrorAlert v-if="serviceReviewForm.errors" :errors="serviceReviewForm.errors" />
+      <ErrorAlert v-if="vendorReviewForm.errors" :errors="vendorReviewForm.errors" />
       <br />
       <VRow>
         <!-- 👉 Card Number -->
@@ -62,7 +68,7 @@ const formSubmit = async () => {
             :rules="[requiredValidator]"
           />
           <VRating
-            v-if="vendorId"
+            v-if="businessProfileId"
             v-model="vendorReviewForm.rating"
             label="Rating"
             :rules="[requiredValidator]"
@@ -78,7 +84,7 @@ const formSubmit = async () => {
             :rules="[requiredValidator]"
           />
           <AppTextarea
-            v-if="vendorId"
+            v-if="businessProfileId"
             v-model="vendorReviewForm.message"
             label="Message"
             :rules="[requiredValidator]"
@@ -90,6 +96,6 @@ const formSubmit = async () => {
           <VBtn color="secondary" variant="tonal" @click="isVisible = false"> Cancel </VBtn>
         </VCol>
       </VRow>
-    </VForm>
+    </CustomForm>
   </ModalBase>
 </template>

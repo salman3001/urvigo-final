@@ -1,17 +1,16 @@
 <script setup lang="ts">
-defineProps<{
-  title: string;
-  subtitle: string;
-}>();
+import DialogCloseBtn from '~/@core/components/DialogCloseBtn.vue'
 
-const isVisible = defineModel<boolean>("isVisible");
+defineProps<{
+  title: string
+  subtitle: string
+}>()
+
+const isVisible = defineModel<boolean>('isVisible')
 </script>
 
 <template>
-  <VDialog
-    v-model="isVisible"
-    :width="$vuetify.display.smAndDown ? 'auto' : 600"
-  >
+  <VDialog v-model="isVisible" :width="$vuetify.display.smAndDown ? 'auto' : 600">
     <!-- Dialog close btn -->
     <DialogCloseBtn @click="isVisible = false" />
 

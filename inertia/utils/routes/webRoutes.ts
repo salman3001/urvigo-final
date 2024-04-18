@@ -19,16 +19,16 @@ export default {
   },
   bookings: {
     list: '/bookings',
-    view: (id: number) => `/bookings/booking-${id}`,
-    book_now: (variantId: number) => `/bookings/book-now-${variantId}`,
+    view: (id: number) => `/bookings/${id}`,
+    book_now: () => `/bookings/checkout/summary`,
   },
   custom_bookings: {
     list: '/custom-bookings',
-    view: (id: number) => `/custom-bookings/custom-booking-${id}`,
-    book_now: (requirementId: number) => `/custom-bookings/book-now-${requirementId}`,
+    view: (id: number) => `/custom-bookings/${id}`,
+    book_now: (requirementId: number) => `/custom-bookings/checkout/${requirementId}`,
   },
   vendor_profile: {
-    view: (id: number) => `/vendor-profiles/vendor-profile-${id}`,
+    view: (id: number) => `/vendor-profiles/${id}`,
     reviews: {
       list: (id: number) => `/service/${id}/reviews`,
       create: (id: number) => `/service/${id}/reviews`,
@@ -36,15 +36,19 @@ export default {
   },
   services: {
     list: '/services',
-    view: (slug: string) => `/services/service-${slug}`,
+    view: (slug: string) => `/services/${slug}`,
     services_by_category: (slug: string) => `/service-category/${slug}`,
     reviews: {
-      list: (serviceId: number) => `/service/${serviceId}/reviews`,
-      create: (serviceId: number) => `/service/${serviceId}/reviews`,
+      list: (serviceId: number) => `/services/${serviceId}/reviews`,
+      create: (serviceId: number) => `/services/${serviceId}/create-review`,
     },
   },
   service_requirement: {
     list: '/service-requirements',
-    view: (id: number) => `/service-requirements/service-requirement-${id}`,
+    create: '/service-requirements',
+    view: (id: number) => `/service-requirements/${id}`,
+    update: (id: number) => `/service-requirements/${id}`,
+    edit: (id: number) => `/service-requirements/${id}/edit`,
+    delete: (id: number) => `/service-requirements/${id}/delete`,
   },
 }

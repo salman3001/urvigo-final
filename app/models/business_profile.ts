@@ -62,5 +62,5 @@ export default class BusinessProfile extends BaseModel {
   declare reviews: HasMany<typeof Review>
 
   @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
+  declare vendor: BelongsTo<typeof User>
 }

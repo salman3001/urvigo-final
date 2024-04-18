@@ -13,10 +13,10 @@ export default class extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('phone', 15)
       table.enum('user_type', Object.values(userTypes)).defaultTo(userTypes.USER).notNullable()
+      table.integer('role_id').unsigned().references('roles.id').onDelete('SET NULL')
       table.boolean('is_active').defaultTo(false).notNullable()
       table.string('socket_token').nullable()
       table.string('otp').nullable()
-      table.integer('role_id').unsigned().references('roles.id').onDelete('SET NULL')
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */

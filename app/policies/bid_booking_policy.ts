@@ -14,10 +14,10 @@ export default class BidBookingPolicy extends BasePolicy {
   }
 
   async myList(user: User) {
-    if (isUser(user) || isVendor(user)) {
+    if (user) {
       return true
     } else {
-      false
+      return false
     }
   }
 

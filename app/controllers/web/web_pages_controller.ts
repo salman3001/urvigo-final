@@ -16,7 +16,7 @@ export default class WebPagesController {
 
   async home({ inertia }: HttpContext) {
     return inertia.render('home', {
-      topServices: await this.serviceService.index(),
+      topServices: () => this.serviceService.index(),
       meta: {
         disableSearchbar: true,
       },
@@ -25,8 +25,8 @@ export default class WebPagesController {
 
   async services({ inertia }: HttpContext) {
     return inertia.render('services/service-list', {
-      services: await this.serviceService.index(),
-      categories: await this.categoryService.index(),
+      services: () => this.serviceService.index(),
+      categories: () => this.categoryService.index(),
       meta: {
         disableSearchbar: true,
       },
@@ -34,9 +34,25 @@ export default class WebPagesController {
   }
 
   async services_show({ inertia }: HttpContext) {
-    return inertia.render('services/service-list', {
-      service: await this.serviceService.showBySlug(),
+    return inertia.render('services/service-show', {
+      service: () => this.serviceService.showBySlug(),
+      similarServices: () => this.serviceService.similarServices(),
     })
+  }
+
+  async createReview({ response, session }: HttpContext) {
+    const data = await this.serviceService.createReview()
+    if (data === 'Review Exit') {
+      session.flash({
+        message: 'You have already reviews this service',
+        type: 'error',
+      })
+
+      return response.redirect().back()
+    } else {
+      session.flash({ message: 'Review added', type: 'success' })
+      return response.redirect().back()
+    }
   }
 
   // async businessProfile({ view }: HttpContext) {

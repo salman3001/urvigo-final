@@ -13,16 +13,8 @@ export default class BookingPolicy extends BasePolicy {
     }
   }
 
-  async customerList(user: User) {
-    if (isUser(user)) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  async vendorList(user: User) {
-    if (isVendor(user)) {
+  async myList(user: User) {
+    if (user) {
       return true
     } else {
       return false

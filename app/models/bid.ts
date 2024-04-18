@@ -32,7 +32,7 @@ export default class Bid extends BaseModel {
   declare userId: number
 
   @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
+  declare vendor: BelongsTo<typeof User>
 
   @belongsTo(() => ServiceRequirement)
   declare serviceRequirement: BelongsTo<typeof ServiceRequirement>

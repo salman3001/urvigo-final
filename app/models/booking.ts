@@ -25,6 +25,13 @@ export default class Booking extends BaseModel {
   @column({ prepare: (v) => JSON.stringify(v) })
   declare paymentDetail: {}
 
+  @column({ prepare: (v) => JSON.stringify(v) })
+  declare history: {
+    date_time: DateTime | string
+    event: string
+    remarks: string
+  }[]
+
   @column()
   declare status: OrderStatus
 

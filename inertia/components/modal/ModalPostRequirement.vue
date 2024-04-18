@@ -1,36 +1,44 @@
 <script setup lang="ts">
-const isVisible = defineModel<boolean>("isVisible");
-const formRef = ref();
+import ServiceCategory from '#models/service_category'
+import ServiceTag from '#models/service_tag'
+import { useForm } from '@inertiajs/vue3'
+import routes from '~/utils/routes'
+import ModalBase from './ModalBase.vue'
+import CustomForm from '../form/CustomForm.vue'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import { minNumValidator, requiredValidator } from '~/@core/utils/validators'
+import SelectOrAdd from '../form/SelectOrAdd.vue'
+import DropZone from '~/@core/components/DropZone.vue'
+
+const isVisible = defineModel<boolean>('isVisible')
+defineProps<{
+  categories: ServiceCategory[]
+  tags: ServiceTag[]
+}>()
 
 const emit = defineEmits<{
-  (e: "submit"): void;
-}>();
+  (e: 'submit'): void
+}>()
 
-const { form, create, loading, errors } = useServiceRequirementApi.cretae();
-const { list: getCetgoryList } = useServiceCategoryApi.list({});
-const { list: getTagList } = useServiceTagApi.list({});
-
-const { data, pending } = useAsyncData(async () => {
-  const [categeories, tags] = await Promise.all([
-    await getCetgoryList(),
-    await getTagList(),
-  ]);
-  return {
-    categories: categeories.data,
-    tags: tags.data,
-  };
-});
+const form = useForm({
+  images: null as null | any[],
+  title: '',
+  desc: '',
+  serviceCategoryId: '',
+  keywords: [],
+  urgent: false,
+  budget: '',
+  budgetUnit: '',
+  location: '21.25,87.52',
+})
 
 const creatRequirement = async () => {
-  const { valid } = await formRef.value?.validate();
-  if (valid) {
-    await create({
-      onSuccess: () => {
-        emit("submit");
-      },
-    });
-  }
-};
+  form.post(routes.service_requirement.create, {
+    onSuccess: () => {
+      emit('submit')
+    },
+  })
+}
 </script>
 
 <template>
@@ -39,14 +47,10 @@ const creatRequirement = async () => {
     title="Add Service Requirement"
     subtitle="Please specify your service requirement"
   >
-    <VForm
-      ref="formRef"
-      class="q-gutter-y-sm"
-      @submit.prevent="creatRequirement"
-    >
+    <CustomForm ref="formRef" class="q-gutter-y-sm" @submit.prevent="creatRequirement">
       <VRow>
         <VCol cols="12">
-          <FormErrorAlert v-if="errors" :errors="errors" />
+          <FormErrorAlert v-if="form.errors" :errors="form.errors" />
         </VCol>
         <VCol cols="12">
           <AppTextField
@@ -68,17 +72,17 @@ const creatRequirement = async () => {
           <AppSelect
             label="Select Category"
             :rules="[requiredValidator]"
-            :items="data?.categories"
+            :items="categories"
             item-title="name"
             item-value="id"
             v-model="form.serviceCategoryId"
           />
         </VCol>
         <VCol cols="12">
-          <FormSelectOrAdd
+          <SelectOrAdd
             label="Select Kewwords"
             v-model="form.keywords"
-            :items="data?.tags?.map((t) => t.name) || []"
+            :items="tags?.map((t) => t.name) || []"
             placeholder="Select Kewwords"
             chips
             multiple
@@ -107,11 +111,7 @@ const creatRequirement = async () => {
           />
         </VCol>
         <VCol cols="12">
-          <AppTextField
-            v-model="form.location"
-            label="Location"
-            :rules="[requiredValidator]"
-          />
+          <AppTextField v-model="form.location" label="Location" :rules="[requiredValidator]" />
         </VCol>
         <VCol cols="12">
           <VCard border class="mb-6">
@@ -120,24 +120,19 @@ const creatRequirement = async () => {
             </VCardItem>
 
             <VCardText>
-              <DropZone
-                :max="5"
-                @change="(images) => (form.images = images.map((i) => i.file))"
-              />
+              <DropZone :max="5" @change="(images) => (form.images = images.map((i) => i.file))" />
             </VCardText>
           </VCard>
         </VCol>
         <!-- 👉 Card actions -->
         <VCol cols="12" class="text-center">
-          <VBtn class="me-4" type="submit" :disabled="loading">
-            <VProgressCircular indeterminate color="primary" v-if="loading" />
+          <VBtn class="me-4" type="submit" :disabled="form.processing">
+            <VProgressCircular indeterminate color="primary" v-if="form.processing" />
             Submit
           </VBtn>
-          <VBtn color="secondary" variant="tonal" @click="isVisible = false">
-            Cancel
-          </VBtn>
+          <VBtn color="secondary" variant="tonal" @click="isVisible = false"> Cancel </VBtn>
         </VCol>
       </VRow>
-    </VForm>
+    </CustomForm>
   </ModalBase>
 </template>

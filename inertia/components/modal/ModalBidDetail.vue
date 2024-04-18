@@ -1,28 +1,29 @@
 <script setup lang="ts">
-import dummyAvatar from "@images/dummy-avatar.webp";
-import BigNumber from "bignumber.js";
+import dummyAvatar from '@images/dummy-avatar.webp'
+import BigNumber from 'bignumber.js'
+import routes from '~/utils/routes'
 
 const props = defineProps<{
-  selectedBid: IBid;
-  acceptedBid: IBid;
-  serviceRequirement: IServiceRequirement;
-}>();
+  selectedBid: IBid
+  acceptedBid: IBid
+  serviceRequirement: IServiceRequirement
+}>()
 
 const emit = defineEmits<{
-  (e: "createChat"): void;
-  (e: "negotiated"): void;
-}>();
+  (e: 'createChat'): void
+  (e: 'negotiated'): void
+}>()
 
-const model = defineModel<boolean>({ required: true });
-const negotiateModal = ref(false);
+const model = defineModel<boolean>({ required: true })
+const negotiateModal = ref(false)
 
-const getImageUrl = useGetImageUrl();
+const getImageUrl = useGetImageUrl()
 
 const {
   create: negotiate,
   form: negotiateForm,
   loading: negotiateOnProgress,
-} = useServiceRequirementApi.negotiate();
+} = useServiceRequirementApi.negotiate()
 </script>
 
 <template>
@@ -31,20 +32,12 @@ const {
       <div class="d-flex gap-2 flex-wrap justify-space-between">
         <div class="d-flex gap-2">
           <VAvatar
-            :image="
-              getImageUrl(
-                selectedBid?.vendorUser?.profile?.avatar?.url,
-                dummyAvatar,
-              )
-            "
+            :image="getImageUrl(selectedBid?.vendorUser?.profile?.avatar?.url, dummyAvatar)"
             size="x-large"
           />
           <div>
             <div>
-              <RatingComponent
-                :rating="selectedBid?.vendorUser?.avg_rating || 0"
-                size="large"
-              />
+              <RatingComponent :rating="selectedBid?.vendorUser?.avg_rating || 0" size="large" />
             </div>
             <p v-if="acceptedBid?.id === selectedBid?.id">
               {{ selectedBid?.vendorUser.first_name }}
@@ -59,10 +52,9 @@ const {
             </p>
             <p v-else>Anonymous</p>
             <div>
-              <NuxtLink
-                :to="routes.vendor_profile.view(selectedBid?.vendor_user_id)"
-                >{{ selectedBid?.vendorUser?.business_name }}</NuxtLink
-              >
+              <NuxtLink :to="routes.vendor_profile.view(selectedBid?.vendor_user_id)">{{
+                selectedBid?.vendorUser?.business_name
+              }}</NuxtLink>
             </div>
           </div>
         </div>
@@ -70,11 +62,7 @@ const {
           <p class="text-caption">
             {{ new Date(selectedBid?.created_at).toDateString() }}
           </p>
-          <VChip
-            v-if="acceptedBid?.id === selectedBid?.id"
-            outline
-            color="success"
-          >
+          <VChip v-if="acceptedBid?.id === selectedBid?.id" outline color="success">
             Accepted</VChip
           >
         </div>
@@ -83,9 +71,7 @@ const {
       <div>
         Price Offered
         <span class="font-weight-bold"
-          >&#x20B9;{{
-            new BigNumber(selectedBid?.offered_price || 0).toFixed(2)
-          }}</span
+          >&#x20B9;{{ new BigNumber(selectedBid?.offered_price || 0).toFixed(2) }}</span
         >
       </div>
       <br />
@@ -113,9 +99,7 @@ const {
             size="x-small"
           >
             <div class="d-flex justify-space-between align-center">
-              <div class="app-timeline-title">
-                You Offered {{ h.asked_price }}
-              </div>
+              <div class="app-timeline-title">You Offered {{ h.asked_price }}</div>
               <div class="app-timeline-meta">
                 {{ new Date(h?.date_time).toDateString() }}
               </div>
@@ -166,9 +150,7 @@ const {
           @click.prevent="negotiateModal = true"
           v-if="
             !selectedBid?.negotiate_history?.length ||
-            selectedBid?.negotiate_history[
-              selectedBid?.negotiate_history?.length - 1
-            ]?.accepted
+            selectedBid?.negotiate_history[selectedBid?.negotiate_history?.length - 1]?.accepted
           "
           >Negotiate</VBtn
         >
@@ -191,8 +173,8 @@ const {
       :service-requirement="serviceRequirement"
       @negotiated="
         () => {
-          negotiateModal = false;
-          emit('negotiated');
+          negotiateModal = false
+          emit('negotiated')
         }
       "
     />
