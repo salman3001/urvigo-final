@@ -22,8 +22,12 @@ import ServiceVariant from './service_variant.js'
 import Coupon from './coupon.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
+import { compose } from '@adonisjs/core/helpers'
+import { Filterable } from 'adonis-lucid-filter'
+import ServiceFilter from './filters/service_filter.js'
 
-export default class Service extends BaseModel {
+export default class Service extends compose(BaseModel, Filterable) {
+  static $filter = () => ServiceFilter
   serializeExtras = true
 
   @column({ isPrimary: true })

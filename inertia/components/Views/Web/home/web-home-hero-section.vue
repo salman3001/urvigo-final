@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3'
 import { useTheme } from 'vuetify'
 import joinArrow from '~/assets/images/front-pages/icons/Join-community-arrow.png'
 import NavSearchBar from '~/layouts/components/NavSearchBar.vue'
@@ -28,21 +29,16 @@ const theme = useTheme()
                 <VImg :src="joinArrow" class="flip-in-rtl" width="54" height="31" />
               </h6>
               <div class="d-flex flex-column flex-sm-row gap-2">
-                <VBtn
-                  :size="$vuetify.display.smAndUp ? 'large' : 'default'"
-                  :to="routes.services.list"
-                  :active="false"
-                >
-                  Explore Services
-                </VBtn>
-
-                <VBtn
-                  :size="$vuetify.display.smAndUp ? 'large' : 'default'"
-                  :to="routes.service_requirement.list"
-                  :active="false"
-                >
-                  PersonaliZe Service
-                </VBtn>
+                <Link :href="routes.services.list">
+                  <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
+                    Explore Services
+                  </VBtn>
+                </Link>
+                <Link :href="routes.service_requirement.list">
+                  <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
+                    PersonaliZe Service
+                  </VBtn>
+                </Link>
               </div>
             </div>
             <div class="mt-sm-16 pt-8">
@@ -190,7 +186,7 @@ section {
 
 .landing-hero-dark-bg {
   background-color: #25293c;
-  background-image: url('~/assets/images/front-pages/backgrounds/hero-bg.png');
+  background-image: url('../../../../assets/images/front-pages/backgrounds/hero-bg.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

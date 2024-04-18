@@ -50,10 +50,20 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 5000,
+    target: 'esnext',
+  },
+  esbuild: {
+    target: 'esnext',
+    supported: {
+      'top-level-await': true,
+    },
   },
   optimizeDeps: {
     exclude: ['vuetify'],
     entries: ['./inertia/**/*.vue'],
+    esbuildOptions: {
+      target: 'esnext',
+    },
   },
   ssr: {
     noExternal: ['@inertiajs/server', /\.css$/, /\?vue&type=style/, /^vuetify/],

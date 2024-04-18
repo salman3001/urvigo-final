@@ -1,25 +1,44 @@
 <script setup lang="ts">
-import { IPageProps } from '#helpers/types'
-import { usePage } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import { IPageProps, IPaginatedModel } from '#helpers/types'
+import Service from '#models/service'
+import ServiceCategory from '#models/service_category'
+import { router, usePage } from '@inertiajs/vue3'
+import { watchDebounced } from '@vueuse/core'
+import { computed, reactive } from 'vue'
+import TablePagination from '~/@core/components/TablePagination.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import academyCourseIllustration1 from '~/assets/images/pages/academy-course-illustration1.png'
 import academyCourseIllustration2 from '~/assets/images/pages/academy-course-illustration2.png'
+import ServiceCard from '~/components/ServiceCard.vue'
+import routes from '~/utils/routes'
 
-const page = usePage<IPageProps<{}>>()
+const page = usePage<
+  IPageProps<{
+    services: IPaginatedModel<Service[]>
+    categories: ServiceCategory[]
+  }>
+>()
 
-const query = computed(() => ({
-  search: page.props?.query?.search,
-  orderBy: page.props?.query?.search,
-}))
+const services = computed(() => page.props.services)
+const categories = computed(() => page.props.categories)
 
-// watchDebounced(
-//   search,
-//   () => {
-//     query.search = search.value
-//   },
-//   { debounce: 1000, maxWait: 1000, immediate: true }
-// )
+const query = reactive({
+  search: page.props?.query?.search || '',
+  order_by: page.props?.query?.order_by || '',
+  service_category_id: page.props?.query?.service_category_id || '',
+  page: page.props?.query?.page || 1,
+})
+
+watchDebounced(
+  query,
+  () => {
+    router.visit(routes.services.list, {
+      data: query,
+    })
+  },
+  { debounce: 500, maxWait: 1000 }
+)
 </script>
 
 <template>
@@ -72,7 +91,7 @@ const query = computed(() => ({
 
           <div class="d-flex flex-wrap gap-x-6 gap-y-4 align-center">
             <AppSelect
-              v-model="query.orderBy"
+              v-model="query.order_by"
               :items="[
                 { name: 'None', value: 'created_at:desc' },
                 { name: 'Highest Rating', value: 'avg_rating:desc' },
@@ -84,9 +103,8 @@ const query = computed(() => ({
               style="min-inline-size: 260px"
             />
             <AppSelect
-              v-if="!categoryPending"
-              v-model="query.field__service_category_id"
-              :items="[...categories, { name: 'All Services', id: null }]"
+              v-model="query.service_category_id"
+              :items="[...categories, { name: 'All Services', id: '' }]"
               item-title="name"
               item-value="id"
               label="Categories"
@@ -97,9 +115,9 @@ const query = computed(() => ({
       </VCardText>
     </VCard>
     <br />
-    <div v-if="!pending">
+    <div v-if="services">
       <VRow class="">
-        <VCol v-for="s in data?.data" cols="12" md="6" lg="3">
+        <VCol v-for="s in services?.data" cols="12" md="6" lg="3">
           <ServiceCard :service="s" />
         </VCol>
       </VRow>
@@ -114,8 +132,8 @@ const query = computed(() => ({
     <div>
       <TablePagination
         :page="Number(query.page)"
-        :items-per-page="Number(data?.meta?.per_page)"
-        :total-items="Number(data?.meta?.total)"
+        :items-per-page="Number(services?.meta?.perPage)"
+        :total-items="Number(services?.meta?.total)"
         @update:page="
           (p) => {
             query.page = p

@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.decimal('rating', 2, 1).notNullable()
       table.string('message', 1500).notNullable()
+      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table
         .integer('service_id')
         .unsigned()

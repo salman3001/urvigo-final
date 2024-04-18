@@ -15,10 +15,14 @@ export default class ServiceService {
       .preload('serviceCategory', (s) => {
         s.select(['name'])
       })
-      .preload('images')
-      .preload('variants', (v) => {
-        v.select(['name'])
+      .preload('serviceSubcategory', (s) => {
+        s.select(['id', 'name'])
       })
+      .preload('tags', (s) => {
+        s.select(['id', 'name'])
+      })
+      .preload('images')
+      .preload('variants')
       .select([
         'id',
         'name',
@@ -26,11 +30,20 @@ export default class ServiceService {
         'short_desc',
         'is_active',
         'geo_location',
+        'thumbnail',
         'avg_rating',
-        'business_profile_id',
         'service_category_id',
         'service_subcategory_id',
+        'created_at',
       ])
+      .withCount('reviews', (r) => {
+        r.as('reviews_count')
+      })
+      .withAggregate('variants', (v) => {
+        v.min('price').as('starting_from')
+      })
+
+    serviceQuery.filter(request.qs())
 
     return await serviceQuery.paginate(
       request.qs()?.page || 1,
@@ -47,10 +60,22 @@ export default class ServiceService {
       .where('slug', slug)
       .preload('variants')
       .preload('businessProfile', (v) => {
-        v.withCount('reviews')
+        v.preload('user')
       })
       .preload('reviews', (r) => {
+        r.preload('user', (u) => {
+          u.select(['first_name', 'last_name']).preload('profile', (p) => {
+            p.select('avatar')
+          })
+        })
         r.limit(10)
+      })
+      .preload('faq')
+      .preload('seo')
+      .preload('tags')
+      .preload('images')
+      .withCount('reviews', (r) => {
+        r.as('reviews_count')
       })
 
     const service = await serviceQuery.first()

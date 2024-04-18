@@ -15,12 +15,27 @@ export default class WebPagesController {
   //auth
 
   async home({ inertia }: HttpContext) {
-    const services = await this.serviceService.index()
-    const categories = await this.categoryService.index()
-    services.baseUrl('/')
-    return inertia.render('pages/home', {
-      services,
-      categories,
+    return inertia.render('home', {
+      topServices: await this.serviceService.index(),
+      meta: {
+        disableSearchbar: true,
+      },
+    })
+  }
+
+  async services({ inertia }: HttpContext) {
+    return inertia.render('services/service-list', {
+      services: await this.serviceService.index(),
+      categories: await this.categoryService.index(),
+      meta: {
+        disableSearchbar: true,
+      },
+    })
+  }
+
+  async services_show({ inertia }: HttpContext) {
+    return inertia.render('services/service-list', {
+      service: await this.serviceService.showBySlug(),
     })
   }
 

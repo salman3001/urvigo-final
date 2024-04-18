@@ -5,6 +5,7 @@ import { useConfigStore } from '~/@core/stores/config'
 import { defineAsyncComponent, ref, watch } from 'vue'
 import routes from '~/utils/routes'
 import { Link, router } from '@inertiajs/vue3'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
 interface Suggestion {
   icon: string

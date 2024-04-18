@@ -29,11 +29,19 @@ export default {
   },
   vendor_profile: {
     view: (id: number) => `/vendor-profiles/vendor-profile-${id}`,
+    reviews: {
+      list: (id: number) => `/service/${id}/reviews`,
+      create: (id: number) => `/service/${id}/reviews`,
+    },
   },
   services: {
     list: '/services',
     view: (slug: string) => `/services/service-${slug}`,
     services_by_category: (slug: string) => `/service-category/${slug}`,
+    reviews: {
+      list: (serviceId: number) => `/service/${serviceId}/reviews`,
+      create: (serviceId: number) => `/service/${serviceId}/reviews`,
+    },
   },
   service_requirement: {
     list: '/service-requirements',

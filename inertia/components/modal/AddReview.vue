@@ -1,0 +1,95 @@
+<script setup lang="ts">
+import { useForm } from '@inertiajs/vue3'
+import routes from '~/utils/routes'
+
+const isVisible = defineModel<boolean>('isVisible')
+
+const props = defineProps<{
+  serviceId?: number
+  businessProfileId?: number
+}>()
+
+const emit = defineEmits<{
+  (e: 'submit'): void
+}>()
+
+const serviceReviewForm = useForm({
+  rating: '',
+  message: '',
+})
+
+const vendorReviewForm = useForm({
+  rating: '',
+  message: '',
+})
+
+const formSubmit = async () => {
+  if (props.serviceId) {
+    serviceReviewForm.post(routes.services.reviews.create(props.serviceId), {
+      onSuccess: () => {
+        emit('submit')
+      },
+    })
+  }
+
+  if (props.businessProfileId) {
+    serviceReviewForm.post(routes.services.reviews.create(props.businessProfileId), {
+      onSuccess: () => {
+        emit('submit')
+      },
+    })
+  }
+}
+</script>
+
+<template>
+  <ModalBase
+    v-model:is-visible="isVisible"
+    title="Add Review"
+    subtitle="Share your thoughts about this service"
+  >
+    <VForm fast-fail @submit.prevent="() => formSubmit()" ref="formRef">
+      <FormErrorAlert v-if="serviceErrors" :errors="serviceErrors" />
+      <FormErrorAlert v-if="vendorErrors" :errors="vendorErrors" />
+      <br />
+      <VRow>
+        <!-- 👉 Card Number -->
+        <VCol cols="12" class="d-flex justify-center">
+          <VRating
+            v-if="serviceId"
+            v-model="serviceReviewForm.rating"
+            label="Rating"
+            :rules="[requiredValidator]"
+          />
+          <VRating
+            v-if="vendorId"
+            v-model="vendorReviewForm.rating"
+            label="Rating"
+            :rules="[requiredValidator]"
+          />
+        </VCol>
+
+        <!-- 👉 Card Name -->
+        <VCol cols="12" md="12">
+          <AppTextarea
+            v-if="serviceId"
+            v-model="serviceReviewForm.message"
+            label="Message"
+            :rules="[requiredValidator]"
+          />
+          <AppTextarea
+            v-if="vendorId"
+            v-model="vendorReviewForm.message"
+            label="Message"
+            :rules="[requiredValidator]"
+          />
+        </VCol>
+        <!-- 👉 Card actions -->
+        <VCol cols="12" class="text-center">
+          <VBtn class="me-4" type="submit"> Submit </VBtn>
+          <VBtn color="secondary" variant="tonal" @click="isVisible = false"> Cancel </VBtn>
+        </VCol>
+      </VRow>
+    </VForm>
+  </ModalBase>
+</template>

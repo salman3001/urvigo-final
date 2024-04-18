@@ -23,13 +23,17 @@ import ServiceCategory from './service_category.js'
 import Role from './role.js'
 import BusinessProfile from './business_profile.js'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { Filterable } from 'adonis-lucid-filter'
+import UserFilter from './filters/user_filter.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
   passwordColumnName: 'password',
 })
 
-export default class User extends compose(BaseModel, AuthFinder) {
+export default class User extends compose(BaseModel, AuthFinder, Filterable) {
+  static $filter = () => UserFilter
+
   @column({ isPrimary: true })
   declare id: number
 

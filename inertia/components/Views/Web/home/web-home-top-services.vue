@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Service from '#models/service'
+import ServiceCard from '~/components/ServiceCard.vue'
 import routes from '~/utils/routes'
 
 defineProps<{
@@ -9,7 +10,6 @@ defineProps<{
 
 <template>
   <VContainer id="features" class="py-10">
-    {{ topServices }}
     <div class="headers d-flex justify-center flex-column align-center">
       <VChip label color="primary" class="mb-4" size="small">Top Services </VChip>
 

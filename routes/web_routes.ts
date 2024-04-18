@@ -42,4 +42,5 @@ router
 
 router.group(() => {
   router.get('/', [WebPagesController, 'home'])
+  router.get('/services', [WebPagesController, 'services'])
 })

@@ -19,6 +19,12 @@ export default class Review extends BaseModel {
   declare message: string
 
   @column()
+  declare userId: number
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
+
+  @column()
   declare businessProfileId: number
 
   @belongsTo(() => BusinessProfile)
