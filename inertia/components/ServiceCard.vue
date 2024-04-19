@@ -12,6 +12,8 @@ const props = defineProps<{
   service: Service
 }>()
 
+
+
 const getImageUrl = useGetImageUrl()
 const wishlist = wishlistStore()
 const color = ref('secondary')
@@ -42,101 +44,77 @@ const isWishlisted = computed(() => {
 
 <template>
   <Link :href="routes.services.view(service?.slug)">
-    <VCard class="ma-0">
-      <VImg :src="getImageUrl(service?.thumbnail?.breakpoints?.thumbnail?.url)" cover />
+  <VCard class="ma-0">
+    <VImg :src="getImageUrl(service?.thumbnail?.breakpoints?.thumbnail?.url)" cover />
 
-      <VCardItem>
-        <VCardTitle>{{ service.name }}</VCardTitle>
-      </VCardItem>
+    <VCardItem>
+      <VCardTitle>{{ service.name }}</VCardTitle>
+    </VCardItem>
 
-      <VCardText>
-        <p class="line-clamp-3">
-          {{ service?.shortDesc }}
-        </p>
-      </VCardText>
+    <VCardText>
+      <p class="line-clamp-3">
+        {{ service?.shortDesc }}
+      </p>
+    </VCardText>
 
-      <VCardText class="text-subtitle-1">
+    <VCardText class="text-subtitle-1">
+      <span>
         <span>
-          <span>
-            <VChip
-              color="error"
-              v-if="discount.gt(0) && minPriceVariant.discountFlat === DiscountType.FLAT"
-              >&#x20B9;{{ minPriceVariant.discountFlat }} off</VChip
-            >
-            <VChip
-              color="error"
-              v-if="discount.gt(0) && minPriceVariant.discountFlat === DiscountType.PERCENATAGE"
-              >{{ minPriceVariant.discountPercentage }}% off</VChip
-            >
-          </span>
+          <VChip color="error" v-if="discount.gt(0) && minPriceVariant.discountFlat === DiscountType.FLAT">&#x20B9;{{
+    minPriceVariant.discountFlat }} off</VChip>
+          <VChip color="error" v-if="discount.gt(0) && minPriceVariant.discountFlat === DiscountType.PERCENATAGE">{{
+    minPriceVariant.discountPercentage }}% off</VChip>
         </span>
-        <span class="font-weight-medium">
-          <div class="d-flex justify-between">
-            <div class="">
-              <span> {{ service.variants?.length ? 1 && 'Starting From' : '' }}</span
-              ><span class="text-bold text-h6">
-                &#x20B9;{{
-                  service.variants?.length > 1
-                    ? service?.meta?.starting_from
-                    : service?.variants[0]?.price
-                }}</span
-              >
-            </div>
+      </span>
+      <span class="font-weight-medium">
+        <div class="d-flex justify-between">
+          <div class="">
+            <span> {{ service.variants?.length ? 1 && 'Starting From' : '' }}</span><span class="text-bold text-h6">
+              &#x20B9;{{
+    service.variants?.length > 1
+      ? service?.meta?.starting_from
+      : service?.variants[0]?.price
+  }}</span>
           </div>
-        </span>
-      </VCardText>
-      <VCardActions class="align-center justify-space-between">
-        <VBtn>
-          <VIcon icon="tabler-star-filled" color="primary" size="22" />
-          &nbsp;
-          <span>{{ service.avgRating }} | {{ service?.meta?.reviews_count }} Reviews</span>
-        </VBtn>
+        </div>
+      </span>
+    </VCardText>
+    <VCardActions class="align-center justify-space-between">
+      <VBtn>
+        <VIcon icon="tabler-star-filled" color="primary" size="22" />
+        &nbsp;
+        <span>{{ service.avgRating }} | {{ service?.meta?.reviews_count }} Reviews</span>
+      </VBtn>
 
-        <IconBtn color="secondary" icon="tabler-share" />
-      </VCardActions>
-      <div class="fav-icon">
-        <VTooltip text="Remove FromWishlist" v-if="isWishlisted">
-          <template v-slot:activator="{ props }">
-            <VBtn
-              icon
-              color="pink"
-              v-bind="props"
-              class="cursor-pointer"
-              size="large"
-              @click="
-                (e: Event) => {
-                  e.preventDefault()
-                  wishlist.removeWishlistItem(service.id)
-                }
-              "
-            >
-              <VIcon icon="tabler-heart-filled" />
-            </VBtn>
-          </template>
-        </VTooltip>
-        <VTooltip v-else text="Add to Wishlist">
-          <template v-slot:activator="{ props }">
-            <VBtn
-              icon
-              :color="color"
-              v-bind="props"
-              @mouseenter="color = 'pink'"
-              @mouseleave="color = 'secondary'"
-              class="cursor-pointer"
-              size="large"
-              @click="
-                (e: Event) => {
-                  e.preventDefault()
-                  wishlist.addWishlistItem(service.id)
-                }
-              "
-            >
-              <VIcon icon="tabler-heart-filled" />
-            </VBtn>
-          </template>
-        </VTooltip>
-      </div>
-    </VCard>
+      <IconBtn color="secondary" icon="tabler-share" />
+    </VCardActions>
+    <div class="fav-icon">
+      <VTooltip text="Remove FromWishlist" v-if="isWishlisted">
+        <template v-slot:activator="{ props }">
+          <VBtn icon color="pink" v-bind="props" class="cursor-pointer" size="large" @click="(e: Event) => {
+    e.preventDefault()
+    wishlist.removeWishlistItem(service.id)
+  }
+    ">
+            <VIcon icon="tabler-heart-filled" />
+          </VBtn>
+        </template>
+      </VTooltip>
+      <VTooltip v-else text="Add to Wishlist">
+
+        <template v-slot:activator="{ props }">
+          <VBtn icon :color="color" v-bind="props" @mouseenter="color = 'pink'" @mouseleave="color = 'secondary'"
+            class="cursor-pointer" size="large" @click="(e: Event) => {
+    e.preventDefault()
+    wishlist.addWishlistItem(service.id)
+    }
+    ">
+            <VIcon icon="tabler-heart-filled" />
+          </VBtn>
+        </template>
+      </VTooltip>
+    </div>
+  </VCard>
   </Link>
 </template>
 

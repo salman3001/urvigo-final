@@ -16,7 +16,7 @@ export default class WebPagesController {
 
   async home({ inertia }: HttpContext) {
     return inertia.render('home', {
-      topServices: () => this.serviceService.index(),
+      topServices: async () => await this.serviceService.index(),
       meta: {
         disableSearchbar: true,
       },

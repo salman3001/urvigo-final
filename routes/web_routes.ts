@@ -56,20 +56,24 @@ router.group(() => {
       // bookings
       router
         .group(() => {
-          router.get('/', [WebBookingsController, 'index'])
-          router.get('/:id', [WebBookingsController, 'show'])
-          router.post('/checkout/summary', [WebBookingsController, 'summary'])
+          router.get('/', [WebBookingsController, 'index']).as('web.booking.list')
+          router.get('/:id', [WebBookingsController, 'show']).as('web.booking.show')
+          router.get('/checkout/summary', [WebBookingsController, 'summary']).as('web.booking.summary')
+          router.get('/checkout/address', [WebBookingsController, 'address']).as('web.booking.address')
+          router.get('/checkout/payment', [WebBookingsController, 'payment']).as('web.booking.payment')
+          router.post('/checkout/create-booking', [WebBookingsController, 'createBooking']).as('web.booking.create')
+          router.get('/checkout/confirmation', [WebBookingsController, 'confirmation']).as('web.booking.confirmation')
         })
         .prefix('bookings')
 
       // custom bookings
       router
         .group(() => {
-          router.get('/', [WebBookingsController, 'index'])
-          router.get('/:id', [WebBookingsController, 'show'])
-          router.post('/checkout/summary', [WebBookingsController, 'summary'])
+          router.get('/', [WebBookingsController, 'index']).as('web.custom_booking.list')
+          router.get('/:id', [WebBookingsController, 'show']).as('web.custom_booking.show')
+          router.get('/checkout/summary', [WebBookingsController, 'summary']).as('web.custom_booking.summary')
         })
-        .prefix('bookings')
+        .prefix('custom-bookings')
     })
     .use(middleware.auth())
 })

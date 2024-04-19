@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import WebPagesController from '#controllers/web/web_pages_controller'
-import type { Prop, AwaitedInfer, AwaitedSerialized } from '#helpers/types'
+import type { IPaginatedModel } from '#helpers/types'
 import type Service from '#models/service'
-import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 import WebHomeBanner from '~/components/Views/Web/home/web-home-banner.vue'
 import WebHomeContactUs from '~/components/Views/Web/home/web-home-contact-us.vue'
 import WebHomeCustomersReview from '~/components/Views/Web/home/web-home-customers-review.vue'
@@ -13,11 +11,10 @@ import WebHomeOurTeam from '~/components/Views/Web/home/web-home-our-team.vue'
 import WebHomePricingPlans from '~/components/Views/Web/home/web-home-pricing-plans.vue'
 import WebHomeTopServices from '~/components/Views/Web/home/web-home-top-services.vue'
 
-type SerializedType<T> =
-  T extends ModelPaginatorContract<infer M> ? ReturnType<M['serialize']> : never
+
 
 defineProps<{
-  topServices: SerializedType<AwaitedInfer<Prop<WebPagesController['home']>['topServices']>>
+  topServices: IPaginatedModel<Service>
 }>()
 </script>
 

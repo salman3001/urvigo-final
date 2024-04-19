@@ -1,8 +1,14 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
-import { InferPageProps, InferXPassedProps } from '@adonisjs/inertia/types'
 import WebBookingsController from '#controllers/web/web_bookings_controller'
-import { InferProp, AwaitedInfer } from '#helpers/types'
+import { Prop } from '#helpers/types'
+import { router } from '@inertiajs/vue3'
+import ModalApplyCoupon from '~/components/modal/ModalApplyCoupon.vue'
+import Coupon from '../../../../app/models/coupon'
+import CheckoutCart from '~/components/Views/Web/checkout/CheckoutCart.vue'
+import { watch } from 'vue'
+import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
+import routes from '~/utils/routes'
 
 export default {
   layout: Layout,
@@ -10,54 +16,35 @@ export default {
 </script>
 
 <script setup lang="ts">
-import customAddress from '~/assets/images/svg/address.svg'
-import customCart from '~/assets/images/svg/cart.svg'
-import customPayment from '~/assets/images/svg/payment.svg'
-import customTrending from '~/assets/images/svg/trending.svg'
-import { ref } from 'vue'
 
-const applyCouponModal = ref(false)
+import { reactive, ref } from 'vue'
 
-const currentStep = ref(0)
-const isActiveStepValid = ref(true)
-
-defineProps<{
-  summary: AwaitedInfer<InferProp<WebBookingsController['summary']>['summary']>
-  meta: InferProp<WebBookingsController['summary']>['meta']
+const props = defineProps<{
+  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  couponList: Coupon[]
+  query: {
+    serviceVariantId: number,
+    qty: number
+    couponId: number
+  }
 }>()
 
-const checkoutSteps = [
-  {
-    title: 'Cart',
-    icon: customCart,
-  },
-  {
-    title: 'Address',
-    icon: customAddress,
-  },
-  {
-    title: 'Payment',
-    icon: customPayment,
-  },
-  {
-    title: 'Confirmation',
-    icon: customTrending,
-  },
-]
+const applyCouponModal = ref(false)
+const queryRef = reactive({
+  serviceVariantId: props.query.serviceVariantId,
+  qty: props.query.qty || 1,
+  couponId: props.query.couponId
+})
 
-const submit = async () => {
-  bookingForm.couponId = form.couponId
-  bookingForm.qty = form.qty as unknown as string
-  bookingForm.serviceVariantId = route.params.variantId
-  bookingForm.paymentdetail.paymentMode = 'online'
-  bookingForm.paymentdetail.paymentStatus = 'paid'
+watch(queryRef, () => {
+  router.reload({
+    only: ['summary', 'query'],
+    replace: true,
+    data: queryRef
+  })
+})
 
-  const res = await creatBooking()
 
-  if (res?.success == true) {
-    currentStep.value += 1
-  }
-}
 </script>
 
 <template>
@@ -66,63 +53,22 @@ const submit = async () => {
   <br />
   <br />
   <VContainer>
-    <VCard>
-      <VCardText>
-        {{ bookingSummary.bookingDetail }}
-        <!-- 👉 Stepper -->
-        <AppStepper
-          v-model:current-step="currentStep"
-          class="checkout-stepper"
-          :items="checkoutSteps"
-          :direction="$vuetify.display.mdAndUp ? 'horizontal' : 'vertical'"
-          :is-active-step-valid="isActiveStepValid"
-          align="center"
-        />
-      </VCardText>
+    <CheckoutLayout :step="0">
+      <CheckoutCart :qty="queryRef.qty" :summary="summary!" @apply-coupon="() => {
+      router.reload({
+        only: ['couponList'],
 
-      <VDivider />
-
-      <VCardText>
-        <!-- 👉 stepper content -->
-        <VWindow v-model="currentStep" class="disable-tab-transition" :touch="false">
-          <VWindowItem>
-            <ViewsWebCheckoutCart
-              v-model:qty="form.qty"
-              v-model:step="currentStep"
-              :summary="summary!"
-              @apply-coupon="() => (applyCouponModal = true)"
-            />
-          </VWindowItem>
-
-          <VWindowItem>
-            <ViewsWebCheckoutAddress :summary="summary!" v-model:step="currentStep" />
-          </VWindowItem>
-
-          <VWindowItem>
-            <ViewsWebCheckoutPayment
-              v-model:step="currentStep"
-              :summary="summary!"
-              @paid="submit"
-            />
-          </VWindowItem>
-
-          <VWindowItem>
-            <ViewsWebCheckoutConfirmation />
-          </VWindowItem>
-        </VWindow>
-      </VCardText>
-    </VCard>
-    <ModalApplyCoupon
-      v-model:is-visible="applyCouponModal"
-      :variant-id="route.params?.variantId"
-      @apply="
-        (couponId) => {
-          form.couponId = couponId as unknown as string
-          refresh()
-          applyCouponModal = false
-        }
-      "
-    />
+      })
+      applyCouponModal = true
+    }" @increment-qty="queryRef.qty = Number(queryRef.qty) + 1"
+        @decrement-qty="() => { if (Number(queryRef.qty) > 1) { queryRef.qty = Number(queryRef.qty) - 1 } }"
+        @next="router.visit(routes.bookings.checkout.address)" />
+    </CheckoutLayout>
+    <ModalApplyCoupon v-model:is-visible="applyCouponModal" :coupon-list="couponList" @apply="(couponId) => {
+      queryRef.couponId = couponId
+      applyCouponModal = false
+    }
+      " />
   </VContainer>
 
   <br />

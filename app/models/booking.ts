@@ -5,6 +5,7 @@ import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
 import BusinessProfile from './business_profile.js'
+import type { IBookingDetail } from '../helpers/types.js'
 
 export default class Booking extends BaseModel {
   @column({ isPrimary: true })
@@ -20,7 +21,7 @@ export default class Booking extends BaseModel {
   declare businessProfileId: number
 
   @column({ prepare: (v) => JSON.stringify(v) })
-  declare bookingDetail: {}
+  declare bookingDetail: IBookingDetail
 
   @column({ prepare: (v) => JSON.stringify(v) })
   declare paymentDetail: {}

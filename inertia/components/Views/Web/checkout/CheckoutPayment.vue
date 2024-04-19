@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import { Prop } from '../../../../../app/helpers/types';
+import WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller';
 
-const prop = defineProps<{
-  summary: any
+defineProps<{
+  summary: Awaited<ReturnType<Prop<WebBookingsController['summary']>['summary']>>
 }>()
 
-const step = defineModel<number>('step', { required: true })
+
 defineEmits<{
   (e: 'paid'): void
 }>()
@@ -26,14 +28,7 @@ const cardFormData = ref({
   <VRow>
     <VCol cols="12" md="8">
       <!-- 👉 Offers alert -->
-      <VAlert
-        type="success"
-        class="mb-6"
-        variant="tonal"
-        icon="tabler-percentage"
-        title="Available Offer"
-        closable
-      >
+      <VAlert type="success" class="mb-6" variant="tonal" icon="tabler-percentage" title="Available Offer" closable>
         <template #text>
           <p class="mb-0">
             - 0% Instant Discount on Bank of America Corp Bank Debit and Credit cards
@@ -54,12 +49,8 @@ const cardFormData = ref({
           <VForm class="mt-3">
             <VRow class="ma-0 pa-n2">
               <VCol cols="12">
-                <AppTextField
-                  v-model="cardFormData.cardNumber"
-                  type="number"
-                  label="Card Number"
-                  placeholder="1356 3215 6548 7898"
-                />
+                <AppTextField v-model="cardFormData.cardNumber" type="number" label="Card Number"
+                  placeholder="1356 3215 6548 7898" />
               </VCol>
 
               <VCol cols="12" md="4">
@@ -67,20 +58,12 @@ const cardFormData = ref({
               </VCol>
 
               <VCol cols="6" md="4">
-                <AppTextField
-                  v-model="cardFormData.cardExpiry"
-                  label="Expiry"
-                  placeholder="MM/YY"
-                />
+                <AppTextField v-model="cardFormData.cardExpiry" label="Expiry" placeholder="MM/YY" />
               </VCol>
 
               <VCol cols="6" md="4">
-                <AppTextField
-                  v-model="cardFormData.cardCvv"
-                  label="CVV"
-                  placeholder="123"
-                  type="number"
-                >
+                <AppTextField v-model="cardFormData.cardCvv" label="CVV" placeholder="123" type="number">
+
                   <template #append-inner>
                     <VTooltip text="Card Verification Value" location="bottom">
                       <template #activator="{ props: tooltipProps }">
@@ -121,7 +104,7 @@ const cardFormData = ref({
 
           <div class="d-flex justify-space-between text-base mb-2">
             <span class="text-high-emphasis">Order Total</span>
-            <span>&#x20B9;{{ summary.grand_total }}</span>
+            <span>&#x20B9;{{ summary.bookingDetail.grandTotal }}</span>
           </div>
 
           <div class="d-flex justify-space-between text-base">
@@ -141,7 +124,7 @@ const cardFormData = ref({
         <VCardText>
           <div class="d-flex justify-space-between text-base mb-2">
             <span class="text-high-emphasis font-weight-medium">Total</span>
-            <span class="font-weight-medium">&#x20B9;{{ summary.grand_total }}</span>
+            <span class="font-weight-medium">&#x20B9;{{ summary.bookingDetail.grandTotal }}</span>
           </div>
 
           <div class="d-flex justify-space-between text-base mb-4">

@@ -15,7 +15,7 @@ import routes from '~/utils/routes'
 
 const page = usePage<
   IPageProps<{
-    services: IPaginatedModel<Service[]>
+    services: IPaginatedModel<Service>
     categories: ServiceCategory[]
   }>
 >()
@@ -45,14 +45,9 @@ watchDebounced(
   <VContainer id="features" class="py-5">
     <VCard class="mb-6">
       <VCardText class="py-12 position-relative">
-        <div
-          class="d-flex flex-column gap-y-4 mx-auto"
-          :class="$vuetify.display.mdAndUp ? 'w-50' : $vuetify.display.xs ? 'w-100' : 'w-75'"
-        >
-          <h4
-            class="text-h4 text-center text-wrap mx-auto"
-            :class="$vuetify.display.mdAndUp ? 'w-75' : 'w-100'"
-          >
+        <div class="d-flex flex-column gap-y-4 mx-auto"
+          :class="$vuetify.display.mdAndUp ? 'w-50' : $vuetify.display.xs ? 'w-100' : 'w-75'">
+          <h4 class="text-h4 text-center text-wrap mx-auto" :class="$vuetify.display.mdAndUp ? 'w-75' : 'w-100'">
             Discover Our Permier Selection of Services
             <span class="text-primary text-no-wrap"> All in one place.</span>
           </h4>
@@ -68,16 +63,8 @@ watchDebounced(
             <VBtn color="primary" density="comfortable" icon="tabler-search" class="rounded" />
           </div>
         </div>
-        <img
-          :src="academyCourseIllustration1"
-          class="illustration1 d-none d-md-block"
-          height="180"
-        />
-        <img
-          :src="academyCourseIllustration2"
-          class="illustration2 d-none d-md-block"
-          height="100"
-        />
+        <img :src="academyCourseIllustration1" class="illustration1 d-none d-md-block" height="180" />
+        <img :src="academyCourseIllustration2" class="illustration2 d-none d-md-block" height="100" />
       </VCardText>
     </VCard>
     <VCard class="mb-6">
@@ -90,26 +77,13 @@ watchDebounced(
           </div>
 
           <div class="d-flex flex-wrap gap-x-6 gap-y-4 align-center">
-            <AppSelect
-              v-model="query.order_by"
-              :items="[
-                { name: 'None', value: 'created_at:desc' },
-                { name: 'Highest Rating', value: 'avg_rating:desc' },
-                { name: 'Lowest Price', value: 'starting_from' },
-              ]"
-              item-title="name"
-              item-value="value"
-              label="Sort By"
-              style="min-inline-size: 260px"
-            />
-            <AppSelect
-              v-model="query.service_category_id"
-              :items="[...categories, { name: 'All Services', id: '' }]"
-              item-title="name"
-              item-value="id"
-              label="Categories"
-              style="min-inline-size: 260px"
-            />
+            <AppSelect v-model="query.order_by" :items="[
+            { name: 'None', value: 'created_at:desc' },
+            { name: 'Highest Rating', value: 'avg_rating:desc' },
+            { name: 'Lowest Price', value: 'starting_from' },
+          ]" item-title="name" item-value="value" label="Sort By" style="min-inline-size: 260px" />
+            <AppSelect v-model="query.service_category_id" :items="[...categories, { name: 'All Services', id: '' }]"
+              item-title="name" item-value="id" label="Categories" style="min-inline-size: 260px" />
           </div>
         </div>
       </VCardText>
@@ -130,16 +104,11 @@ watchDebounced(
       </VRow>
     </div>
     <div>
-      <TablePagination
-        :page="Number(query.page)"
-        :items-per-page="Number(services?.meta?.perPage)"
-        :total-items="Number(services?.meta?.total)"
-        @update:page="
-          (p) => {
-            query.page = p
-          }
-        "
-      />
+      <TablePagination :page="Number(query.page)" :items-per-page="Number(services?.meta?.perPage)"
+        :total-items="Number(services?.meta?.total)" @update:page="(p) => {
+              query.page = p
+            }
+            " />
     </div>
   </VContainer>
 </template>

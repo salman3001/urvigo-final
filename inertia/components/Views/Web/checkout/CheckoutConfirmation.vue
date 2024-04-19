@@ -6,16 +6,12 @@
       <h4 class="text-h4 mb-4">Thank You! 😇</h4>
       <p>
         Your order
-        <span class="text-body-1 font-weight-medium text-high-emphasis"
-          >#1536548131</span
-        >
+        <span class="text-body-1 font-weight-medium text-high-emphasis">#1536548131</span>
         has been placed!
       </p>
       <p class="mb-0">
         We sent an email to
-        <span class="text-body-1 font-weight-medium text-high-emphasis"
-          >john.doe@example.com</span
-        >
+        <span class="text-body-1 font-weight-medium text-high-emphasis">john.doe@example.com</span>
         with your order confirmation and receipt.
       </p>
       <p>
@@ -29,24 +25,14 @@
     </div>
 
     <VRow class="border rounded ma-0 mt-6">
-      <VCol
-        cols="12"
-        md="4"
-        class="pa-6"
-        :class="$vuetify.display.mdAndUp ? 'border-e' : 'border-b'"
-      >
+      <VCol cols="12" md="4" class="pa-6" :class="$vuetify.display.mdAndUp ? 'border-e' : 'border-b'">
         <div class="d-flex align-center gap-2 text-high-emphasis mb-4">
           <VIcon icon="tabler-map-pin" size="20" />
           <span class="text-base font-weight-medium"> Shipping </span>
         </div>
       </VCol>
 
-      <VCol
-        cols="12"
-        md="4"
-        class="pa-6"
-        :class="$vuetify.display.mdAndUp ? 'border-e' : 'border-b'"
-      >
+      <VCol cols="12" md="4" class="pa-6" :class="$vuetify.display.mdAndUp ? 'border-e' : 'border-b'">
         <div class="d-flex align-center gap-2 text-high-emphasis mb-4">
           <VIcon icon="tabler-credit-card" size="20" />
           <span class="text-base font-weight-medium"> Billing Address </span>
@@ -120,7 +106,7 @@
               </div>
             </div>
           </template>
-        </div> -->
+</div> -->
       </VCol>
 
       <!-- <VCol

@@ -63,7 +63,7 @@ export default class ServiceService {
       .where('slug', slug)
       .preload('variants')
       .preload('businessProfile', (v) => {
-        v.preload('user')
+        v.preload('vendor')
       })
       .preload('reviews', (r) => {
         r.preload('user', (u) => {

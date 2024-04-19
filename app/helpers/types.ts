@@ -1,7 +1,7 @@
 import User from '#models/user'
-import { HttpContext } from '@adonisjs/core/http'
-import { PageObject, PageProps } from '@adonisjs/inertia/types'
-import { LucidModel, ModelPaginatorContract } from '@adonisjs/lucid/types/model'
+import { PageObject} from '@adonisjs/inertia/types'
+import { OrderStatus } from './enums.js'
+import ServiceVariant from '../models/service_variant.js'
 
 export type ImageType = {
   url: string
@@ -23,7 +23,7 @@ export type IPaginatedModel<T> = {
     hasMorePages: boolean
     hasPages: boolean
   }
-  data: T
+  data: T[]
 }
 
 export type IResType<T> = {
@@ -45,11 +45,22 @@ export type IPageProps<T> = {
   meta: Record<any, any>
 } & T
 
-type InertiaPartialPropsType = (...args: any[]) => Record<'props', unknown> | Record<any, any>
+export type Prop<T extends (...args: any[]) => Promise<string|PageObject>>= Exclude<Awaited<ReturnType<T>>,string>['props']
 
-type ObjectReturnType<T> = T extends string ? never : T
-export type Prop<T extends InertiaPartialPropsType> = ObjectReturnType<
-  Awaited<ReturnType<T>>
->['props']
 
-export type AwaitedInfer<T extends InertiaPartialPropsType> = Awaited<ReturnType<T>>
+interface PaymentDetail{
+  paymentMode: "cod" | "online";
+  paymentStatus: "pending" | "paid";
+}
+
+export interface IBookingDetail{
+    couponId? :number,
+    vendorUserId: number,
+    service_variant: ServiceVariant,
+    qty: number,
+    totalWithoutDiscount: string,
+    vendorDiscount: string,
+    totalAfterDiscount: string,
+    couponDiscount: string,
+    grandTotal: string,
+}

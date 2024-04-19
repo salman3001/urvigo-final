@@ -19,7 +19,7 @@ export default class WebAuthsController {
       })
 
       if (next) {
-        return response.redirect(next)
+        return response.redirect().toPath(next)
       } else {
         return response.redirect().toRoute('home')
       }

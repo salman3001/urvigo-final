@@ -6,7 +6,7 @@ import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class CouponPolicy extends BasePolicy {
   async viewList(user: User) {
-    if (isAdmin(user) && (await hasPermission(user, permissions.MANAGE_COUPONS))) {
+    if (user) {
       return true
     } else {
       return false

@@ -20,7 +20,13 @@ export default {
   bookings: {
     list: '/bookings',
     view: (id: number) => `/bookings/${id}`,
-    book_now: () => `/bookings/checkout/summary`,
+    checkout:{
+      summary: '/bookings/checkout/summary',
+      address: '/bookings/checkout/address',
+      payment: '/bookings/checkout/payment',
+      createBooking:`/bookings/checkout/create-booking`,
+      confirmation:`/bookings/checkout/confirmation`
+    },
   },
   custom_bookings: {
     list: '/custom-bookings',
