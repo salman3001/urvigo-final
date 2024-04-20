@@ -8,3 +8,4 @@
 */
 
 import '../routes/web_routes.js'
+import '../routes/api/bid_routes.js'

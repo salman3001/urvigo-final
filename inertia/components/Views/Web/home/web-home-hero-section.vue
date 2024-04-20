@@ -194,7 +194,7 @@ section {
 
 .landing-hero-light-bg {
   background:
-    url('~/assets/@mages/front-pages/backgrounds/hero-bg.png') center no-repeat,
+    url('~/assets/images/front-pages/backgrounds/hero-bg.png') center no-repeat,
     linear-gradient(138.18deg, #eae8fd 0%, #fce5e6 94.44%);
   background-size: cover;
 }

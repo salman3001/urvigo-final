@@ -20,7 +20,7 @@ export default class AuthService {
   }
 
   async signup() {
-    const { passwordConfirmation, ...payload } =
+    const { passwordConfirmation, avatar, logo, images, businessProfile, ...payload } =
       await this.ctx.request.validateUsing(createUserValidator)
 
     await User.create({ ...payload, isActive: true })

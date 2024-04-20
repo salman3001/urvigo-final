@@ -1,4 +1,4 @@
-export function flattenObject(obj, prefix = '') {
+export function flattenObject(obj: Record<any, any>, prefix = '') {
   const result = {}
 
   for (const key in obj) {
@@ -6,6 +6,7 @@ export function flattenObject(obj, prefix = '') {
       const nested = flattenObject(obj[key], `${prefix}${key}.`)
       Object.assign(result, nested)
     } else {
+      // @ts-ignore
       result[`${prefix}${key}`] = obj[key]
     }
   }

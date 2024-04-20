@@ -6,12 +6,8 @@ import { HttpContext } from '@adonisjs/core/http'
 export default class ServiceCategoryService {
   constructor(protected ctx: HttpContext) {}
 
-  protected searchByFileds(): string[] {
-    return ['name']
-  }
-
   async index() {
-    const { bouncer, request } = this.ctx
+    const { bouncer } = this.ctx
     await bouncer.with('ServiceCategoryPolicy').authorize('viewList')
 
     const serviceCategoryQuery = ServiceCategory.query()

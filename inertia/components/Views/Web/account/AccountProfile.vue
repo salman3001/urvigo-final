@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import AccountEdit from './AccountEdit.vue'
+import type User from '#models/user'
+
+defineProps<{
+  user: User
+}>()
 
 const isConfirmDialogOpen = ref(false)
 const isAccountDeactivated = ref(false)
@@ -10,7 +16,7 @@ const validateAccountDeactivation = [(v: string) => !!v || 'Please confirm accou
 <template>
   <VRow>
     <VCol cols="12">
-      <ViewsWebAccountEdit />
+      <AccountEdit />
     </VCol>
 
     <VCol cols="12">
@@ -40,12 +46,12 @@ const validateAccountDeactivation = [(v: string) => !!v || 'Please confirm accou
   </VRow>
 
   <!-- Confirm Dialog -->
-  <ConfirmDialog
+  <!-- <ConfirmDialog
     v-model:isDialogVisible="isConfirmDialogOpen"
     confirmation-question="Are you sure you want to deactivate your account?"
     confirm-title="Deactivated!"
     confirm-msg="Your account has been deactivated successfully."
     cancel-title="Cancelled"
     cancel-msg="Account Deactivation Cancelled!"
-  />
+  /> -->
 </template>

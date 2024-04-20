@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import BigNumber from "bignumber.js";
-import dummyThumb from "@images/dummy-avatar.webp";
+import BigNumber from 'bignumber.js'
+import dummyThumb from '@images/dummy-avatar.webp'
+import type Bid from '#models/bid'
+import useGetImageUrl from '~/composables/useGetImageUrl'
+import routes from '~/utils/routes'
 defineProps<{
-  accepted: boolean;
-  bid: IBid;
-}>();
+  accepted: boolean
+  bid: Bid
+}>()
 
 const emit = defineEmits<{
-  (e: "review", bid: IBid): void;
-  (e: "negotiate", bid: IBid): void;
-  (e: "create-chat"): void;
-}>();
+  (e: 'review', bid: Bid): void
+  (e: 'negotiate', bid: Bid): void
+  (e: 'create-chat'): void
+}>()
 
-const getImageUrl = useGetImageUrl();
+const getImageUrl = useGetImageUrl()
 </script>
 
 <template>
@@ -26,35 +29,28 @@ const getImageUrl = useGetImageUrl();
         <div class="d-flex gap-6">
           <VAvatar
             size="x-large"
-            :image="
-              getImageUrl(bid?.vendorUser?.profile?.avatar?.url, dummyThumb)
-            "
+            :image="getImageUrl(bid?.vendor?.profile?.avatar?.url, dummyThumb)"
           />
           <div>
             <div>
-              <RatingComponent
-                :rating="bid?.vendorUser?.avg_rating || 0"
-                size="small"
-              />
+              <RatingComponent :rating="bid?.vendor?.businessProfile.avgRating || 0" size="small" />
             </div>
             <p v-if="accepted">
-              {{ bid?.vendorUser.first_name }}
-              {{ bid?.vendorUser.last_name }}
+              {{ bid?.vendor.firstName }}
+              {{ bid?.vendor.lastName }}
               <VBtn color="primary" @click="emit('create-chat')">chat</VBtn>
             </p>
             <p v-else>Anonymous</p>
             <div>
-              <NuxtLink
-                :to="routes.vendor_profile.view(bid.vendorUser.id)"
-                class="underline"
-                >{{ bid?.vendorUser?.business_name }}</NuxtLink
-              >
+              <NuxtLink :to="routes.vendor_profile.view(bid?.vendor?.id)" class="underline">{{
+                bid?.vendor?.businessProfile?.businessName
+              }}</NuxtLink>
             </div>
           </div>
         </div>
         <div>
           <p class="text-caption">
-            {{ new Date(bid?.created_at).toDateString() }}
+            {{ new Date(bid?.createdAt as unknown as string).toDateString() }}
           </p>
           <VChip v-if="accepted" color="success"> Accepted</VChip>
         </div>
@@ -62,7 +58,7 @@ const getImageUrl = useGetImageUrl();
       <br />
       <div class="gap-2">
         <VChip color="primary">
-          &#x20B9;{{ new BigNumber(bid?.offered_price || 0).toFixed(2) }}</VChip
+          &#x20B9;{{ new BigNumber(bid?.offeredPrice || 0).toFixed(2) }}</VChip
         >
       </div>
       <br />

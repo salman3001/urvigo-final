@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import { VDataTable } from 'vuetify/components'
 
 export default {
   layout: Layout,
@@ -7,34 +8,34 @@ export default {
 </script>
 
 <script setup lang="ts">
-import avatar1 from "@images/avatars/avatar-1.png";
-import product21 from "@images/ecommerce-images/product-21.png";
-import product22 from "@images/ecommerce-images/product-22.png";
-import product23 from "@images/ecommerce-images/product-23.png";
-import product24 from "@images/ecommerce-images/product-24.png";
-import useGetImageUrl from "~/composables/useGetImageUrl";
-import Booking from "../../../app/models/booking";
-import { computed } from "vue";
+import avatar1 from '@images/avatars/avatar-1.png'
+import product21 from '@images/ecommerce-images/product-21.png'
+import product22 from '@images/ecommerce-images/product-22.png'
+import product23 from '@images/ecommerce-images/product-23.png'
+import product24 from '@images/ecommerce-images/product-24.png'
+import useGetImageUrl from '~/composables/useGetImageUrl'
+import Booking from '../../../app/models/booking'
+import { computed } from 'vue'
 
 // const isConfirmDialogVisible = ref(false);
 // const isUserInfoEditDialogVisible = ref(false);
 // const isEditAddressDialogVisible = ref(false);
-const getImagesUrl = useGetImageUrl();
+const getImagesUrl = useGetImageUrl()
 
 const props = defineProps<{
   booking: Booking
 }>()
 
-const bookingData = computed(() => (props.booking ? [props.booking] : []));
+const bookingData = computed(() => (props.booking ? [props.booking] : []))
 
 const headers = [
-  { title: "Service", key: "service_variant" },
-  { title: "Price", key: "variant_price" },
-  { title: "Quantity", key: "quantity" },
-  { title: "Discount", key: "vendor_discount" },
-  { title: "Coupon Discount", key: "coupon_discount" },
-  { title: "Total", key: "grandTotal" },
-];
+  { title: 'Service', key: 'service_variant' },
+  { title: 'Price', key: 'variant_price' },
+  { title: 'Quantity', key: 'quantity' },
+  { title: 'Discount', key: 'vendorDiscount' },
+  { title: 'Coupon Discount', key: 'couponDiscount' },
+  { title: 'Total', key: 'grandTotal' },
+]
 </script>
 
 <template>
@@ -59,7 +60,7 @@ const headers = [
             </div>
           </div>
           <div class="text-body-1">
-            {{ new Date(__VLS_ctx.booking?.createdAt as unknown as string).toDateString() }}
+            {{ new Date(booking?.createdAt as unknown as string).toDateString() }}
           </div>
         </div>
 
@@ -87,24 +88,28 @@ const headers = [
             </VCardItem>
 
             <VDivider />
-            <VDataTable :headers="headers" :items="bookingData" item-value="productName" show-select
-              class="text-no-wrap">
-
+            <VDataTable
+              :headers="headers"
+              :items="bookingData"
+              item-value="productName"
+              show-select
+              class="text-no-wrap"
+            >
               <template #item.service_variant="{ item }">
                 <div class="d-flex gap-x-3 align-center">
-                  <VAvatar size="34" :image="getImagesUrl(
-              booking?.bookingDetail?.service_variant?.image?.breakpoints?.thumbnail
-                ?.url,
-            )
-              " :rounded="0" />
+                  <VAvatar
+                    size="34"
+                    :image="getImagesUrl(booking?.bookingDetail?.service_variant?.image?.url)"
+                    :rounded="0"
+                  />
 
                   <div class="d-flex flex-column align-start">
                     <h6 class="text-h6">
-                      {{ item?.booking_detail?.service_variant.name }}
+                      {{ item?.bookingDetail?.service_variant.name }}
                     </h6>
 
                     <span class="text-body-2">
-                      {{ item.booking_detail?.service_variant?.service_name }}
+                      {{ item.bookingDetail?.service_variant?.service.name }}
                     </span>
                   </div>
                 </div>
@@ -112,32 +117,26 @@ const headers = [
 
               <template #item.variant_price="{ item }">
                 <div class="text-body-1">
-                  &#x20B9;{{ item.booking_detail.service_variant.price }}
+                  &#x20B9;{{ item?.bookingDetail?.service_variant.price }}
                 </div>
               </template>
 
               <template #item.quantity="{ item }">
                 <div class="text-body-1">
-                  {{ item?.booking_detail?.service_variant.qty }}
+                  {{ item?.bookingDetail?.qty }}
                 </div>
               </template>
 
-              <template #item.vendor_discount="{ item }">
-                <div class="text-body-1">
-                  &#x20B9;{{ item?.booking_detail?.vendor_discount }}
-                </div>
+              <template #item.vendorDiscount="{ item }">
+                <div class="text-body-1">&#x20B9;{{ item?.bookingDetail?.vendorDiscount }}</div>
               </template>
 
-              <template #item.coupon_discount="{ item }">
-                <div class="text-body-1">
-                  &#x20B9;{{ item?.booking_detail?.coupon_discount }}
-                </div>
+              <template #item.couponDiscount="{ item }">
+                <div class="text-body-1">&#x20B9;{{ item?.bookingDetail?.couponDiscount }}</div>
               </template>
 
               <template #item.grandTotal="{ item }">
-                <div class="text-body-1">
-                  &#x20B9;{{ item.booking_detail.grandTotal }}
-                </div>
+                <div class="text-body-1">&#x20B9;{{ item.bookingDetail.grandTotal }}</div>
               </template>
 
               <template #bottom />
@@ -163,11 +162,9 @@ const headers = [
                       <td class="font-weight-medium">&#x20B9;0</td>
                     </tr>
                     <tr>
-                      <td class="text-high-emphasis font-weight-medium">
-                        Total:
-                      </td>
+                      <td class="text-high-emphasis font-weight-medium">Total:</td>
                       <td class="font-weight-medium">
-                        &#x20B9;{{ booking?.bookingDetail }}
+                        &#x20B9;{{ booking?.bookingDetail.grandTotal }}
                       </td>
                     </tr>
                   </tbody>
@@ -179,15 +176,26 @@ const headers = [
           <!-- 👉 Shipping Activity -->
           <VCard title="Booking Activity">
             <VCardText>
-              <VTimeline truncate-line="both" line-inset="9" align="start" side="end" line-color="primary"
-                density="compact">
-                <VTimelineItem v-for="(h, i) in booking?.history" :key="i" dot-color="primary" size="x-small">
+              <VTimeline
+                truncate-line="both"
+                line-inset="9"
+                align="start"
+                side="end"
+                line-color="primary"
+                density="compact"
+              >
+                <VTimelineItem
+                  v-for="(h, i) in booking?.history"
+                  :key="i"
+                  dot-color="primary"
+                  size="x-small"
+                >
                   <div class="d-flex justify-space-between align-center">
                     <div class="app-timeline-title">
                       {{ h.event }}
                     </div>
                     <div class="app-timeline-meta">
-                      {{ new Date(h.date_time).toDateString() }}
+                      {{ new Date(h.date_time as string).toDateString() }}
                     </div>
                   </div>
                   <p class="app-timeline-text mb-0 mt-3">

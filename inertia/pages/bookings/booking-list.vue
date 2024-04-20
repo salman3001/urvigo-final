@@ -1,5 +1,7 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import { VDataTableServer } from 'vuetify/components'
+import TablePagination from '~/@core/components/TablePagination.vue'
 
 export default {
   layout: Layout,
@@ -7,16 +9,16 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
-import useGetImageUrl from '~/composables/useGetImageUrl';
-import { OrderStatus } from '../../../app/helpers/enums';
-import { IPaginatedModel } from '../../../app/helpers/types';
-import Booking from '../../../app/models/booking';
-import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue';
-import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue';
-import routes from '~/utils/routes';
-import { Link, router } from '@inertiajs/vue3';
-import { watchDebounced } from '@vueuse/core';
+import { reactive } from 'vue'
+import useGetImageUrl from '~/composables/useGetImageUrl'
+import { OrderStatus } from '../../../app/helpers/enums'
+import { IPaginatedModel } from '../../../app/helpers/types'
+import Booking from '../../../app/models/booking'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
+import routes from '~/utils/routes'
+import { Link, router } from '@inertiajs/vue3'
+import { watchDebounced } from '@vueuse/core'
 
 // import masterCardDark from "@images/icons/payments/img/master-dark.png";
 // import masterCardLight from "@images/icons/payments/img/mastercard.png";
@@ -30,50 +32,43 @@ defineProps<{
   bookings: IPaginatedModel<Booking>
 }>()
 
-const getImageUrl = useGetImageUrl();
+const getImageUrl = useGetImageUrl()
 
 const query = reactive({
   perPage: 20,
   page: 1,
-  orderBy: "created_at:desc",
-  search: "",
+  orderBy: 'created_at:desc',
+  search: '',
 })
-
 
 // Data table Headers
 const headers = [
-  { title: "id", key: "id" },
-  { title: "Date", key: "created_at" },
-  { title: "Service", key: "booking_detail" },
-  { title: "Payment", key: "payment_detail", sortable: false },
-  { title: "Status", key: "status" },
-  { title: "Method", key: "method", sortable: false },
-  { title: "Action", key: "actions", sortable: false },
-];
+  { title: 'id', key: 'id' },
+  { title: 'Date', key: 'createdAt' },
+  { title: 'Service', key: 'bookingDetail' },
+  { title: 'Payment', key: 'paymentDetail', sortable: false },
+  { title: 'Status', key: 'status' },
+  { title: 'Method', key: 'method', sortable: false },
+  { title: 'Action', key: 'actions', sortable: false },
+]
 
 const resolveStatus = (status: string) => {
-  if (status === OrderStatus.DELIVERED)
-    return { text: "Delivered", color: "success" };
-  if (status === OrderStatus.PLACED)
-    return { text: "Placed", color: "warning" };
-  if (status === OrderStatus.CONFIRMED)
-    return { text: "Confirmed", color: "secondary" };
-  if (status === OrderStatus.REJECTED)
-    return { text: "Rejected", color: "error" };
-  if (status === OrderStatus.CANCLED)
-    return { text: "Canceled", color: "error" };
-};
+  if (status === OrderStatus.DELIVERED) return { text: 'Delivered', color: 'success' }
+  if (status === OrderStatus.PLACED) return { text: 'Placed', color: 'warning' }
+  if (status === OrderStatus.CONFIRMED) return { text: 'Confirmed', color: 'secondary' }
+  if (status === OrderStatus.REJECTED) return { text: 'Rejected', color: 'error' }
+  if (status === OrderStatus.CANCLED) return { text: 'Canceled', color: 'error' }
+}
 
 const resolvePaymentStatus = (status: string) => {
-  if (status === "paid") return { text: "Paid", color: "success" };
-  if (status === "pending") return { text: "Pending", color: "warning" };
-};
-
+  if (status === 'paid') return { text: 'Paid', color: 'success' }
+  if (status === 'pending') return { text: 'Pending', color: 'warning' }
+}
 
 watchDebounced(query, () => {
   router.reload({
     data: query,
-    replace: true
+    replace: true,
   })
 })
 </script>
@@ -90,11 +85,18 @@ watchDebounced(query, () => {
         <!-- 👉 Filters -->
         <VCardText>
           <div class="d-flex justify-sm-space-between justify-start flex-wrap gap-4">
-            <AppTextField v-model="query.search" placeholder="Search Booking"
-              style="max-inline-size: 200px; min-inline-size: 200px" />
+            <AppTextField
+              v-model="query.search"
+              placeholder="Search Booking"
+              style="max-inline-size: 200px; min-inline-size: 200px"
+            />
 
             <div class="d-flex gap-x-4 align-center">
-              <AppSelect v-model="query.perPage" style="min-inline-size: 6.25rem" :items="[5, 10, 20, 50, 100]" />
+              <AppSelect
+                v-model="query.perPage"
+                style="min-inline-size: 6.25rem"
+                :items="[5, 10, 20, 50, 100]"
+              />
               <!-- <VBtn
               variant="tonal"
               color="secondary"
@@ -108,46 +110,46 @@ watchDebounced(query, () => {
         <VDivider />
 
         <!-- 👉 Order Table -->
-        <VDataTableServer v-model:items-per-page="query.perPage!" v-model:page="query.page" :headers="headers"
-          :items="bookings?.data" item-value="order" :items-length="bookings?.meta.total!" show-select
-          class="text-no-wrap">
+        <VDataTableServer
+          v-model:items-per-page="query.perPage!"
+          v-model:page="query.page"
+          :headers="headers"
+          :items="bookings?.data"
+          item-value="order"
+          :items-length="bookings?.meta?.total!"
+          show-select
+          class="text-no-wrap"
+        >
           <!-- Order ID -->
           <template #item.id="{ item }">
-            <Link :href="routes.bookings.view(item.id)">
-            #{{ item.id }}
-            </Link>
+            <Link :href="routes.bookings.view(item.id)"> #{{ item.id }} </Link>
           </template>
 
           <!-- Date -->
 
-          <template #item.created_at="{ item }">
-            {{ new Date(item.created_at).toDateString() }}
+          <template #item.createdAt="{ item }">
+            {{ new Date(item.createdAt as unknown as string).toDateString() }}
           </template>
 
           <!-- Customers  -->
 
-          <template #item.booking_detail="{ item }">
+          <template #item.bookingDetail="{ item }">
             <div class="d-flex align-center gap-x-3">
-              <VAvatar size="34" :color="item?.booking_detail?.service_variant.image?.breakpoints
-              ?.thumbnail?.url
-              ? 'primary'
-              : ''
-              " :variant="'tonal'">
-                <VImg :src="getImageUrl(
-              item?.booking_detail?.service_variant.image?.breakpoints
-                ?.thumbnail?.url,
-            )
-              " />
+              <VAvatar
+                size="34"
+                :color="item?.bookingDetail?.service_variant.image?.url ? 'primary' : ''"
+                :variant="'tonal'"
+              >
+                <VImg :src="getImageUrl(item?.bookingDetail?.service_variant.image?.thumb_url)" />
               </VAvatar>
 
               <div class="d-flex flex-column">
                 <div class="text-body-1 font-weight-medium">
-                  <Link :href="routes.services.view(
-              item.booking_detail?.service_variant
-                .service_id as unknown as string,
-            )
-              " class="text-link">
-                  {{ item.booking_detail?.service_variant.name }}
+                  <Link
+                    :href="routes.services.view(item.bookingDetail?.service_variant?.service?.slug)"
+                    class="text-link"
+                  >
+                    {{ item.bookingDetail?.service_variant.name }}
                   </Link>
                 </div>
               </div>
@@ -156,15 +158,14 @@ watchDebounced(query, () => {
 
           <!-- Payments -->
 
-          <template #item.payment_detail="{ item }">
-            <div :class="`text-${resolvePaymentStatus(item.payment_detail?.paymentStatus)?.color}`"
-              class="font-weight-medium d-flex align-center gap-x-2">
+          <template #item.paymentDetail="{ item }">
+            <div
+              :class="`text-${resolvePaymentStatus(item.paymentDetail?.paymentStatus)?.color}`"
+              class="font-weight-medium d-flex align-center gap-x-2"
+            >
               <VIcon icon="tabler-circle-filled" size="10" />
               <div style="line-height: 22px">
-                {{
-              resolvePaymentStatus(item?.payment_detail?.paymentStatus)
-                ?.text
-            }}
+                {{ resolvePaymentStatus(item?.paymentDetail?.paymentStatus)?.text }}
               </div>
             </div>
           </template>
@@ -197,9 +198,9 @@ watchDebounced(query, () => {
               <VIcon icon="tabler-dots-vertical" />
               <VMenu activator="parent">
                 <VList>
-                  <VListItem value="view" :to="routes.bookings.view(item.id)">
-                    View
-                  </VListItem>
+                  <Link :href="routes.bookings.view(item.id)">
+                    <VListItem value="view"> View </VListItem>
+                  </Link>
                 </VList>
               </VMenu>
             </IconBtn>
@@ -208,11 +209,16 @@ watchDebounced(query, () => {
           <!-- pagination -->
 
           <template #bottom>
-            <TablePagination :page="Number(query.page)" :items-per-page="Number(bookings?.meta?.perPage)"
-              :total-items="Number(bookings?.meta?.total)" @update:page="(p) => {
-              query.page = p;
-            }
-              " />
+            <TablePagination
+              :page="Number(query.page)"
+              :items-per-page="Number(bookings?.meta?.perPage)"
+              :total-items="Number(bookings?.meta?.total)"
+              @update:page="
+                (p) => {
+                  query.page = p
+                }
+              "
+            />
           </template>
         </VDataTableServer>
       </VCard>

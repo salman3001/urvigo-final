@@ -41,7 +41,7 @@ export default class WebAuthsController {
     return response.redirect().toRoute('home')
   }
 
-  async sendForgotPasswordOtp({ inertia, response, session }: HttpContext) {
+  async sendForgotPasswordOtp({ response, session }: HttpContext) {
     const user = await this.authService.sendForgotPasswordOtp()
     if (!user) {
       session.flash('flash', {
@@ -83,7 +83,7 @@ export default class WebAuthsController {
 
   async logout({ response, session }: HttpContext) {
     await this.authService.logout()
-    session.flash({ message: 'Logout Success', type: 'success' })
+    session.flash('flash', { message: 'Logout Success', type: 'success' })
     return response.redirect().toRoute('home')
   }
 }

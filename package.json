@@ -46,6 +46,8 @@
     "@swc/core": "^1.4.14",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "^8.57.0",
     "hot-hook": "^0.1.10",
@@ -95,6 +97,7 @@
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
     "cookie-es": "^1.1.0",
+    "date-fns": "^3.6.0",
     "destr": "^2.0.3",
     "edge.js": "^6.0.2",
     "luxon": "^3.4.4",
@@ -103,6 +106,7 @@
     "reflect-metadata": "^0.2.2",
     "sass": "^1.75.0",
     "sass-math": "^1.0.0",
+    "sharp": "^0.33.3",
     "shepherd.js": "^11.2.0",
     "shikiji": "^0.10.2",
     "socket.io-client": "^4.7.5",
@@ -111,6 +115,7 @@
     "type-fest": "^4.15.0",
     "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
+    "vue-easy-lightbox": "^1.19.0",
     "vue-flatpickr-component": "^11.0.5",
     "vue-i18n": "^9.12.1",
     "vue-toastification": "2.0.0-rc.5",
@@ -123,11 +128,11 @@
   "prettier": "@adonisjs/prettier-config",
   "hotHook": {
     "boundaries": [
-      "../app/controllers/**/*.ts",
-      "../app/services/**/*.ts",
+      "../app/**/*.ts",
       "../database/**/*.ts",
-      "../app/middlewares/*.ts",
-      "../routes/*.ts"
+      "../config/**/*.ts",
+      "../routes/*.ts",
+      "../resources/*.ts"
     ]
   }
 }

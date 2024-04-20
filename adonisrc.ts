@@ -15,7 +15,7 @@ export default defineConfig({
     () => import('@adonisjs/lucid/commands'),
     () => import('adonis-lucid-filter/commands'),
     () => import('@adonisjs/mail/commands'),
-    () => import('@adonisjs/bouncer/commands')
+    () => import('@adonisjs/bouncer/commands'),
   ],
 
   /*
@@ -46,7 +46,8 @@ export default defineConfig({
     () => import('@adonisjs/inertia/inertia_provider'),
     () => import('adonis-lucid-filter/provider'),
     () => import('@adonisjs/mail/mail_provider'),
-    () => import('@adonisjs/bouncer/bouncer_provider')
+    () => import('@adonisjs/bouncer/bouncer_provider'),
+    () => import('./providers/app_provider.js'),
   ],
 
   /*

@@ -156,6 +156,9 @@ const sources: BundleScriptConfig = {
         'eye',
         'star-filled',
         'star',
+        'filter',
+        'map-pin',
+        'currency-dollar',
       ],
     },
     {

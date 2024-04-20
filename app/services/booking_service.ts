@@ -95,7 +95,7 @@ export default class BookingService {
   }
 
   async store() {
-    const { bouncer, request,auth } = this.ctx
+    const { bouncer, request, auth } = this.ctx
     await bouncer.with('BookingPolicy').authorize('create')
     const payload = await request.validateUsing(CreateBookingValidator)
     const booking = await this.getBookingData(
@@ -105,7 +105,7 @@ export default class BookingService {
     )
 
     return await Booking.create({
-      userId:auth.user!.id,
+      userId: auth.user!.id,
       status: OrderStatus.PLACED,
       history: [
         {
@@ -115,7 +115,7 @@ export default class BookingService {
         },
       ],
       paymentDetail: payload.paymentdetail,
-      ...booking
+      ...booking,
     })
   }
 
@@ -147,7 +147,7 @@ export default class BookingService {
 
     await serviceVariant.load('service', (service) => {
       service.preload('businessProfile', (b) => {
-        b.preload('vendor',v=>{
+        b.preload('vendor', (v) => {
           v.select(['id', 'first_name', 'last_name'])
         })
       })
@@ -177,7 +177,7 @@ export default class BookingService {
     const grandTotal = totalAfterDiscount.minus(couponDiscount)
 
     const booking = {
-      businessProfileId:serviceVariant.service.businessProfile.id,
+      businessProfileId: serviceVariant.service.businessProfile.id,
       bookingDetail: {
         couponId,
         vendorUserId: serviceVariant.service.businessProfile.vendor.id,

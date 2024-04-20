@@ -1,10 +1,10 @@
 import User from '#models/user'
-import { PageObject} from '@adonisjs/inertia/types'
-import { OrderStatus } from './enums.js'
+import { PageObject } from '@adonisjs/inertia/types'
 import ServiceVariant from '../models/service_variant.js'
 
 export type ImageType = {
   url: string
+  thumb_url: string
 }
 
 export type VideoType = {
@@ -45,22 +45,43 @@ export type IPageProps<T> = {
   meta: Record<any, any>
 } & T
 
-export type Prop<T extends (...args: any[]) => Promise<string|PageObject>>= Exclude<Awaited<ReturnType<T>>,string>['props']
+export type Prop<T extends (...args: any[]) => Promise<string | PageObject>> = Exclude<
+  Awaited<ReturnType<T>>,
+  string
+>['props']
 
-
-interface PaymentDetail{
-  paymentMode: "cod" | "online";
-  paymentStatus: "pending" | "paid";
+export interface PaymentDetail {
+  paymentMode: 'cod' | 'online'
+  paymentStatus: 'pending' | 'paid'
 }
 
-export interface IBookingDetail{
-    couponId? :number,
-    vendorUserId: number,
-    service_variant: ServiceVariant,
-    qty: number,
-    totalWithoutDiscount: string,
-    vendorDiscount: string,
-    totalAfterDiscount: string,
-    couponDiscount: string,
-    grandTotal: string,
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface IBookingDetail {
+  couponId?: number
+  vendorUserId: number
+  service_variant: ServiceVariant
+  qty: number
+  totalWithoutDiscount: string
+  vendorDiscount: string
+  totalAfterDiscount: string
+  couponDiscount: string
+  grandTotal: string
+}
+
+export interface IbidBookingDetail {
+  serviceRequirement: {
+    id: number
+    title: string
+    desc: string
+    budgetUnit: string
+    budget: string | number
+  }
+  acceptedBid: {
+    id: number
+    offeredPrice: string | number
+  }
+}
+
+export interface IserviceProps {
+  filter: boolean
 }

@@ -29,7 +29,45 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * The method is used for handling errors and returning
    * response to the client
    */
-  async handle(error: unknown, ctx: HttpContext) {
+
+  async handle(error: any, ctx: HttpContext) {
+    if (ctx.response.getStatus() === 422) {
+      return ctx.response.status(ctx.response.getStatus()).send({
+        success: false,
+        message: 'Not all the fields are filled correctly',
+        data: null,
+        errors: error.messages.errors,
+      })
+    }
+
+    if (ctx.response.getStatus() === 500) {
+      return ctx.response
+        .status(ctx.response.getStatus())
+        .send({ success: false, message: 'Server Error', data: null, error: error.message })
+    }
+
+    if (ctx.response.getStatus() === 400) {
+      return ctx.response
+        .status(ctx.response.getStatus())
+        .send({ success: false, message: 'Bad Request', data: null, error: error.message })
+    }
+
+    if (ctx.response.getStatus() === 403) {
+      return ctx.response
+        .status(ctx.response.getStatus())
+        .send({ success: false, message: 'Authorization failed', data: null, error: error.message })
+    }
+
+    if (ctx.response.getStatus() === 404) {
+      console.log(ctx.response.getStatus())
+
+      return ctx.response
+        .status(ctx.response.getStatus())
+        .send({ success: false, message: 'Not Found', data: null, error: error.message })
+    }
+    /**
+     * Forward rest of the exceptions to the parent class
+     */
     return super.handle(error, ctx)
   }
 

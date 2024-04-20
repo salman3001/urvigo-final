@@ -5,12 +5,12 @@ import logger from '@adonisjs/core/services/logger'
 
 export default class ReviewPolicy extends BasePolicy {
   @action({ allowGuest: true })
-  async viewList(user: User) {
+  async viewList() {
     return true
   }
 
   @action({ allowGuest: true })
-  async view(user: User) {
+  async view() {
     return true
   }
 
@@ -22,7 +22,7 @@ export default class ReviewPolicy extends BasePolicy {
       return false
     }
   }
-  async update(user: User) {
+  async update() {
     return false
   }
   async delete(authUser: User, review: Review) {

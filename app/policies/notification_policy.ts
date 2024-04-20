@@ -3,15 +3,15 @@ import Notification from '#models/notification'
 import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class NotificationPolicy extends BasePolicy {
-  async viewList(user: any) {
+  async viewList() {
     return false
   }
 
-  async view(user: any, notification: Notification) {
+  async view() {
     return false
   }
 
-  async create(user: any) {
+  async create() {
     return false
   }
 

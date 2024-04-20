@@ -1,9 +1,4 @@
-import {
-  BaseModel,
-  belongsTo,
-  column,
-  manyToMany,
-} from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import Language from './language.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Blog from './blog.js'

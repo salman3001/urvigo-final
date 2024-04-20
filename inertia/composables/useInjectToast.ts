@@ -1,4 +1,4 @@
-import { IPageProps } from '#helpers/types'
+import type { IPageProps } from '#helpers/types'
 import { usePage } from '@inertiajs/vue3'
 import { watch } from 'vue'
 import * as vt from 'vue-toastification'

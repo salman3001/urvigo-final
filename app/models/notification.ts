@@ -30,12 +30,12 @@ export default class Notification extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @afterCreate()
-  static pushNotification(notification: Notification) {
-    let room = ''
-    if (notification.userId) {
-      room = `user:${notification.userId}`
-    }
-    // Ws.io.of('/notifications/').to(room).emit('new-notification', notification)
-  }
+  // @afterCreate()
+  // static pushNotification(notification: Notification) {
+  //   let room = ''
+  //   if (notification.userId) {
+  //     room = `user:${notification.userId}`
+  //   }
+  //   // Ws.io.of('/notifications/').to(room).emit('new-notification', notification)
+  // }
 }

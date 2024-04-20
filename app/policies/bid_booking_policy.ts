@@ -44,7 +44,7 @@ export default class BidBookingPolicy extends BasePolicy {
       return false
     }
   }
-  async delete(user: User, bidBooking: BidBooking) {
+  async delete() {
     return false
   }
 }

@@ -1,4 +1,4 @@
-export default function parseJSONInObject(obj) {
+export default function parseJSONInObject(obj: any) {
   for (const key in obj) {
     if (typeof obj[key] === 'string') {
       try {

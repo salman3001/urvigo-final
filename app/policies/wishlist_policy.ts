@@ -3,7 +3,7 @@ import User from '#models/user'
 import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class WishlistPolicy extends BasePolicy {
-  async viewList(user: User) {
+  async viewList() {
     return false
   }
 
@@ -14,7 +14,7 @@ export default class WishlistPolicy extends BasePolicy {
       return false
     }
   }
-  async create(user: User) {
+  async create() {
     // if (user && user instanceof User) {
     //   return true
     // } else {

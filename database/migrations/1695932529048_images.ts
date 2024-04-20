@@ -16,6 +16,13 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
 
       table
+        .integer('service_requirement_id')
+        .unsigned()
+        .references('id')
+        .inTable('service_requirements')
+        .onDelete('CASCADE')
+
+      table
         .integer('business_profile_id')
         .unsigned()
         .references('id')

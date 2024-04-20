@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import dummyAvatar from '@images/dummy-avatar.webp'
 import { usePage } from '@inertiajs/vue3'
-import { IPageProps } from '#helpers/types'
+import type { IPageProps } from '#helpers/types'
 import { ref } from 'vue'
 
 defineEmits<{

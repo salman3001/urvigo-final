@@ -4,6 +4,7 @@ import { NotificationTypes, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
+import type { IbidBookingDetail, PaymentDetail } from '#helpers/types'
 
 export default class BidBooking extends BaseModel {
   @column({ isPrimary: true })
@@ -22,10 +23,10 @@ export default class BidBooking extends BaseModel {
   declare businessProfileId: number
 
   @column({ prepare: (v) => JSON.stringify(v) })
-  declare bookingDetail: {}
+  declare bookingDetail: IbidBookingDetail
 
   @column({ prepare: (v) => JSON.stringify(v) })
-  declare paymentDetail: {}
+  declare paymentDetail: PaymentDetail
 
   @column({ prepare: (v) => JSON.stringify(v) })
   declare history: {

@@ -3,7 +3,7 @@ import User from '#models/user'
 import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class ConversationPolicy extends BasePolicy {
-  async viewList(user: User) {
+  async viewList() {
     return true
   }
 
@@ -15,7 +15,7 @@ export default class ConversationPolicy extends BasePolicy {
     }
   }
 
-  async create(user: User) {
+  async create() {
     return true
   }
 
@@ -26,7 +26,7 @@ export default class ConversationPolicy extends BasePolicy {
       return false
     }
   }
-  async delete(user: User, conversation: Conversation) {
+  async delete() {
     return false
   }
 }

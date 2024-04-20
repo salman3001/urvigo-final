@@ -8,7 +8,7 @@ export default class WebCustomBookingsController {
 
   async index({ inertia }: HttpContext) {
     return inertia.render('bookings/booking-list', {
-      bookings: () => this.bidBookingService.index(),
+      bookings: () => this.bidBookingService.myList(),
     })
   }
 

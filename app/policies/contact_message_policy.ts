@@ -20,7 +20,7 @@ export default class ContactMessagePolicy extends BasePolicy {
   }
 
   @action({ allowGuest: true })
-  async create(user: any) {
+  async create() {
     return true
   }
 

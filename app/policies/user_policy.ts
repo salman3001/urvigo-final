@@ -24,7 +24,7 @@ export default class UserPolicy extends BasePolicy {
   }
 
   @action({ allowGuest: true })
-  async create(user: User) {
+  async create() {
     return true
   }
 

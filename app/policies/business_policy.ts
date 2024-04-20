@@ -5,16 +5,16 @@ import { BasePolicy, action } from '@adonisjs/bouncer'
 
 export default class BusinessPolicy extends BasePolicy {
   @action({ allowGuest: true })
-  async viewList(user: any) {
+  async viewList() {
     return true
   }
 
   @action({ allowGuest: true })
-  async view(user: any) {
+  async view() {
     return true
   }
 
-  async create(user: any) {
+  async create() {
     return false
   }
 

@@ -4,9 +4,13 @@ import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import ServiceRequirement from './service_requirement.js'
 import { NotificationTypes } from '#helpers/enums'
+import BidFilter from './filters/bid_filter.js'
+import { compose } from '@adonisjs/core/helpers'
+import { Filterable } from 'adonis-lucid-filter'
 
-export default class Bid extends BaseModel {
+export default class Bid extends compose(BaseModel, Filterable) {
   serializeExtras = true
+  static $filter = () => BidFilter
 
   @column({ isPrimary: true })
   declare id: number

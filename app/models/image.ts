@@ -12,5 +12,8 @@ export default class Image extends BaseModel {
   declare serviceId: number
 
   @column()
+  declare serviceRequirementId: number
+
+  @column()
   declare businessProfileId: number
 }

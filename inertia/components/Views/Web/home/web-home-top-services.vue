@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Service from '#models/service'
+import { Link } from '@inertiajs/vue3'
 import ServiceCard from '~/components/ServiceCard.vue'
 import routes from '~/utils/routes'
 
@@ -20,7 +21,7 @@ defineProps<{
       </h4>
 
       <p class="text-center text-body-1 mb-1">Discover Our Permier Selction of Services</p>
-      <VBtn :to="routes.services.list">View All Services</VBtn>
+      <Link :href="routes.services.list"><VBtn>View All Services</VBtn></Link>
     </div>
     <br />
     <br />

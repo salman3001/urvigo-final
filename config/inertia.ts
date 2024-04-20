@@ -12,7 +12,10 @@ export default defineConfig({
   sharedData: {
     errors: (ctx) => ctx.session?.flashMessages.get('errors'),
     flash: (ctx) => ctx.session?.flashMessages.get('flash'),
-    user: (ctx) => ctx.auth.use('web').user,
+    user: async (ctx) => {
+      await ctx.auth.use('web').user?.load('profile')
+      return ctx.auth.use('web').user
+    },
     query: (ctx) => ctx.request.qs(),
     params: (ctx) => ctx.request.param,
   },

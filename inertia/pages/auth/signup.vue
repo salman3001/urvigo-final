@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/blank.vue'
+import { userTypes } from '#helpers/enums'
 
 export default {
   layout: Layout,
@@ -53,6 +54,7 @@ const form = useForm({
   password: '',
   passwordConfirmation: '',
   temp: false,
+  userType: userTypes.USER,
 })
 </script>
 

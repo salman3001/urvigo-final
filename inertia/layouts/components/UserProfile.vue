@@ -23,9 +23,7 @@ const { user } = usePage<IPageProps<{}>>().props
               <VListItemAction start>
                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
                   <VAvatar color="primary" variant="tonal">
-                    <VImg
-                      :src="getImageUrl(user?.profile?.avatar?.breakpoints?.thumbnail?.url, avatar)"
-                    />
+                    <VImg :src="getImageUrl(user?.profile?.avatar?.thumb_url, avatar)" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -85,7 +83,7 @@ const { user } = usePage<IPageProps<{}>>().props
             </VListItem>
           </Link>
 
-          <!-- 👉 FAQ -->
+          <!-- 👉 Wishlist -->
           <Link :href="routes.account.wishlist">
             <VListItem link>
               <template #prepend>
@@ -93,6 +91,17 @@ const { user } = usePage<IPageProps<{}>>().props
               </template>
 
               <VListItemTitle>Wishlist</VListItemTitle>
+            </VListItem>
+          </Link>
+
+          <!-- 👉 Notification -->
+          <Link :href="routes.account.notifications">
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-bell" size="22" />
+              </template>
+
+              <VListItemTitle>Notification</VListItemTitle>
             </VListItem>
           </Link>
 

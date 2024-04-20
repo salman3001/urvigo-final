@@ -12,12 +12,12 @@ export default class ServiceRequirmentPolicy extends BasePolicy {
   }
 
   @action({ allowGuest: true })
-  async viewList(user: User) {
+  async viewList() {
     return true
   }
 
   @action({ allowGuest: true })
-  async view(user: User, serviceRequirement: ServiceRequirement) {
+  async view() {
     return true
   }
 

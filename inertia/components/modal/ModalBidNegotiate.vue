@@ -1,32 +1,45 @@
 <script setup lang="ts">
+import type Bid from '#models/bid'
+import type ServiceRequirement from '#models/service_requirement'
+import { reactive } from 'vue'
+import useApi from '~/composables/useApi'
+import apiRoutes from '~/utils/apiRoutes'
+import ModalBase from './ModalBase.vue'
+import { requiredValidator } from '~/@core/utils/validators'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import CustomForm from '../form/CustomForm.vue'
+
 const props = defineProps<{
-  selectedBid: IBid;
-  serviceRequirement: IServiceRequirement;
-}>();
+  selectedBid: Bid
+  serviceRequirement: ServiceRequirement
+}>()
 
 const emits = defineEmits<{
-  (e: "negotiated"): void;
-}>();
+  (e: 'negotiated'): void
+}>()
 
-const model = defineModel<boolean>({ required: true });
-const formRef = ref(null);
+const model = defineModel<boolean>({ required: true })
 
-const {
-  create: negotiate,
-  form: negotiateForm,
-  loading: negotiateOnProgress,
-} = useServiceRequirementApi.negotiate();
+const form = reactive({
+  bidId: props.selectedBid.id,
+  price: '',
+  message: '',
+})
+
+const negotiate = useApi(apiRoutes.bids.acceptNegotiation(props.selectedBid.id), 'post')
 
 const submit = async () => {
-  negotiateForm.bidId = props.selectedBid.id as unknown as string;
-  if (await formRef.value?.validate()) {
-    const res = await negotiate(props.serviceRequirement.id);
-
-    if (res?.success == true) {
-      emits("negotiated");
+  negotiate.exec(
+    {
+      data: form,
+    },
+    {
+      onSuccess: () => {
+        emits('negotiated')
+      },
     }
-  }
-};
+  )
+}
 </script>
 
 <template>
@@ -35,23 +48,19 @@ const submit = async () => {
     title="Request a Negotiation"
     subtitle="Please ask a reasonable negotiation. Very high negotiations are most likely be rejected by the vendor"
   >
-    <VForm ref="formRef" @submit.prevent="submit">
+    <CustomForm ref="formRef" @submit.prevent="submit">
       <VCardItem class="column q-pa-lg">
         <AppTextField
           type="number"
-          v-model="negotiateForm.price"
+          v-model="form.price"
           label="Request a price"
           :rules="[requiredValidator]"
         />
-        <AppTextarea
-          v-model="negotiateForm.message"
-          label="message"
-          :rules="[requiredValidator]"
-        />
+        <AppTextarea v-model="form.message" label="message" :rules="[requiredValidator]" />
       </VCardItem>
       <VCardItem class="row justify-end q-pa-lg">
         <VBtn color="primary" type="submit">Submit Request</VBtn>
       </VCardItem>
-    </VForm>
+    </CustomForm>
   </ModalBase>
 </template>

@@ -4,11 +4,11 @@ import User from '#models/user'
 import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class BidPolicy extends BasePolicy {
-  async viewList(user: User) {
+  async viewList() {
     return true
   }
 
-  async view(user: User, bid: Bid) {
+  async view() {
     return true
   }
   async create(user: User) {

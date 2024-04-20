@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ServiceCategory from '#models/service_category'
-import ServiceTag from '#models/service_tag'
+import type ServiceCategory from '#models/service_category'
+import type ServiceTag from '#models/service_tag'
 import { useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
 import ModalBase from './ModalBase.vue'
@@ -9,6 +9,10 @@ import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { minNumValidator, requiredValidator } from '~/@core/utils/validators'
 import SelectOrAdd from '../form/SelectOrAdd.vue'
 import DropZone from '~/@core/components/DropZone.vue'
+import ErrorAlert from '../form/ErrorAlert.vue'
+import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
+import { addDays, format } from 'date-fns'
 
 const isVisible = defineModel<boolean>('isVisible')
 defineProps<{
@@ -30,6 +34,7 @@ const form = useForm({
   budget: '',
   budgetUnit: '',
   location: '21.25,87.52',
+  expiresAt: format(addDays(Date.now(), 3), 'dd/MM/yyyy HH:mm'),
 })
 
 const creatRequirement = async () => {
@@ -37,6 +42,7 @@ const creatRequirement = async () => {
     onSuccess: () => {
       emit('submit')
     },
+    forceFormData: true,
   })
 }
 </script>
@@ -47,10 +53,10 @@ const creatRequirement = async () => {
     title="Add Service Requirement"
     subtitle="Please specify your service requirement"
   >
-    <CustomForm ref="formRef" class="q-gutter-y-sm" @submit.prevent="creatRequirement">
+    <CustomForm ref="formRef" class="q-gutter-y-sm" @submit="creatRequirement">
       <VRow>
         <VCol cols="12">
-          <FormErrorAlert v-if="form.errors" :errors="form.errors" />
+          <ErrorAlert v-if="form.errors" :errors="form.errors" />
         </VCol>
         <VCol cols="12">
           <AppTextField
@@ -102,7 +108,7 @@ const creatRequirement = async () => {
           />
         </VCol>
         <VCol cols="12">
-          <FormSelectOrAdd
+          <SelectOrAdd
             label="Budget Units"
             v-model="form.budgetUnit"
             :items="['Hourly', 'Fixed', 'Per Unit', 'Monthly']"

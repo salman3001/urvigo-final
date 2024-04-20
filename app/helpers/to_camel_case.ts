@@ -1,4 +1,5 @@
-import { string } from '@ioc:Adonis/Core/Helpers'
+// @ts-nocheck
+import stringHelpers from '@adonisjs/core/helpers/string'
 
 export function convertKeysToCamelCase(obj: any) {
   if (Array.isArray(obj)) {
@@ -7,7 +8,7 @@ export function convertKeysToCamelCase(obj: any) {
     const camelCaseObj = {}
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
-        camelCaseObj[string.camelCase(key)] = convertKeysToCamelCase(obj[key])
+        camelCaseObj[stringHelpers.camelCase(key)] = convertKeysToCamelCase(obj[key])
       }
     }
     return camelCaseObj

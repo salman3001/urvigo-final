@@ -21,7 +21,7 @@ export default class SubscriberPolicy extends BasePolicy {
   }
 
   @action({ allowGuest: true })
-  async create(user: any) {
+  async create() {
     return true
   }
 

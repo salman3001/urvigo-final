@@ -1,54 +1,44 @@
 <script setup lang="ts">
-import { IPageProps } from '#helpers/types'
-import { useForm, usePage } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import type User from '#models/user'
+import { useForm } from '@inertiajs/vue3'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { emailValidator, requiredValidator } from '~/@core/utils/validators'
 import avatar from '~/assets/images/dummy-avatar.webp'
+import AvatarInput from '~/components/form/AvatarInput.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
+import apiRoutes from '~/utils/apiRoutes'
 
-const page = usePage<IPageProps<{}>>()
-
-const user = computed(() => page.props?.user)
+const props = defineProps<{
+  user: User
+}>()
 
 const getImageUrl = useGetImageUrl()
 
 const form = useForm({
-  image: undefined,
-  firstName: user.value?.firstName,
-  lastName: user.value?.lastName,
-  email: user.value?.email,
-  phone: user.value?.phone,
+  image: undefined as File | undefined,
+  firstName: props.user.firstName,
+  lastName: props.user.lastName,
+  email: props.user.email,
+  phone: props.user.phone,
 })
 
-// const { form, loading, update, errors } = useUserApi.updateProfile({
-//   image: undefined,
-//   firstName: user.value.first_name,
-//   lastName: user.value.last_name,
-//   email: user.value.email,
-//   phone: user.value.phone,
-// })
-
-// const updateProfile = async () => {
-//   const res = await update(user.value.id)
-//   if (res?.success == true) {
-//     user.value = res.data
-//   }
-// }
+const updateProfile = async () => {
+  form.post(apiRoutes.vendor_user.update_profile(props.user.id))
+}
 </script>
 
 <template>
   <VCard>
     <!-- 👉 Avatar -->
     <VCardText class="d-flex">
-      <FormAvatarInput
+      <AvatarInput
         size="100"
-        :url="getImageUrl(user?.profile?.avatar?.breakpoints?.thumbnail?.url, avatar)"
+        :url="getImageUrl(user?.profile?.avatar?.thumb_url, avatar)"
         @image="
-          // (f) => {
-          //   form.image = f
-          // }
+          (f) => {
+            form.image = f
+          }
         "
       />
     </VCardText>

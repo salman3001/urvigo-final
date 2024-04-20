@@ -21,14 +21,14 @@ interface Menu {
 const footerBg = useGenerateImageVariant(footerLightBg, footerDarkBg)
 
 const pagesList: Menu[] = [
-  { name: 'Pricing', to: { path: routes.pricing } },
-  { name: 'Services', to: { path: routes.services.list }, isNew: true },
+  { name: 'Pricing', to: routes.pricing },
+  { name: 'Services', to: routes.services.list, isNew: true },
   {
     name: 'Service Requirements',
-    to: { path: routes.service_requirement.list },
+    to: routes.service_requirement.list,
   },
-  { name: 'Help Center', to: { path: routes.help_center.list } },
-  { name: 'Login/Register', to: { path: routes.auth.login } },
+  { name: 'Help Center', to: routes.help_center.list },
+  { name: 'Login/Register', to: routes.auth.login },
 ]
 
 const demoList = [
@@ -130,9 +130,7 @@ const demoList = [
                       <div class="d-flex flex-column justify-content-start">
                         <div
                           :class="
-                            $vuetify.theme.current.dark
-                              ? 'text-body-2'
-                              : 'text-white-variant text-body-2'
+                            $vuetify.theme.current.dark ? 'text-body-2' : 'text-white-variant '
                           "
                         >
                           Download on the
