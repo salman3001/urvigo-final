@@ -7,14 +7,15 @@
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
+    "start:stage": "cd build && pnpm i --prod && node bin/server.js",
+    "build:stage": "pnpm i && node ace migration:fresh --seed && node pre_build.js && node ace build --ignore-ts-errors",
     "dev": "node ace serve --unstable-hmr",
     "dev:hmr": "node ace serve --unstable-hmr",
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "build:icons": "tsx inertia/plugins/iconify/build-icons.ts",
-    "postinstall": "npm run build:icons"
+    "build:icons": "tsx inertia/plugins/iconify/build-icons.ts"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
