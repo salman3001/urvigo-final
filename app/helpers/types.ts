@@ -4,7 +4,7 @@ import ServiceVariant from '../models/service_variant.js'
 
 export type ImageType = {
   url: string
-  thumb_url: string
+  thumbnailUrl: string
 }
 
 export type VideoType = {

@@ -16,7 +16,7 @@ const validateAccountDeactivation = [(v: string) => !!v || 'Please confirm accou
 <template>
   <VRow>
     <VCol cols="12">
-      <AccountEdit />
+      <AccountEdit :user="user" />
     </VCol>
 
     <VCol cols="12">

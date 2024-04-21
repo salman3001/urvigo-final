@@ -29,7 +29,7 @@ export default class FileService {
 
   async deleteImage(image: ImageType): Promise<void> {
     await this.deleteFile(image.url)
-    await this.deleteFile(image.thumb_url)
+    await this.deleteFile(image.thumbnailUrl)
   }
 
   async deleteFile(fileUrl: string): Promise<void> {

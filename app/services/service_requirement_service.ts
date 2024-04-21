@@ -222,9 +222,7 @@ export default class ServiceRequirementService {
       if (images) {
         for (const i of images) {
           const imageData = await this.fileservice.uploadeImage(i)
-          await serviceRequirement
-            .related('images')
-            .create({ file: { thumb_url: imageData.thumbnailUrl, url: imageData.url } })
+          await serviceRequirement.related('images').create({ file: imageData })
         }
       }
     })
