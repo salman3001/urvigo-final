@@ -14,7 +14,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Urvigo'
 const pinia = createPinia()
 
 createInertiaApp({
-  progress: { color: '#5468FF' },
+  progress: { color: '#5468FF',showSpinner:true },
 
   title: (title) => `${title} - ${appName}`,
 

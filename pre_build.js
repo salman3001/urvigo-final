@@ -5,9 +5,9 @@ const directoryPath = 'build'
 // Check if the directory exists
 async function checkAndDeleteDirectory(path) {
   try {
-    await fsPromises.access(directoryPath, constants.F_OK)
+    await fsPromises.access(path, constants.F_OK)
     // Directory exists, so delete it
-    await fsPromises.rm(directoryPath, { recursive: true })
+    await fsPromises.rm(path, { recursive: true })
     console.log('Directory deleted successfully')
   } catch (err) {
     console.error('Error:', err.code === 'ENOENT' ? 'Directory does not exist' : err.message)

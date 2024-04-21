@@ -5,8 +5,6 @@ import vue from '@vitejs/plugin-vue'
 import adonisjs from '@adonisjs/vite/client'
 import vuetify from 'vite-plugin-vuetify'
 import svgLoader from 'vite-svg-loader'
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
-import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   plugins: [
@@ -23,11 +21,6 @@ export default defineConfig({
       styles: {
         configFile: './inertia/assets/styles/variables/_vuetify.scss',
       },
-    }),
-    VueI18nPlugin({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [fileURLToPath(new URL('./inertia/plugins/i18n/locales/**', import.meta.url))],
     }),
     svgLoader(),
   ],
