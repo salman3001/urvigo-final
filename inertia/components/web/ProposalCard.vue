@@ -42,7 +42,7 @@ const getImageUrl = useGetImageUrl()
             </p>
             <p v-else>Anonymous</p>
             <div>
-              <NuxtLink :to="routes.vendor_profile.view(bid?.vendor?.id)" class="underline">{{
+              <NuxtLink :to="''" class="underline">{{
                 bid?.vendor?.businessProfile?.businessName
               }}</NuxtLink>
             </div>
@@ -75,3 +75,4 @@ const getImageUrl = useGetImageUrl()
     <br />
   </VCard>
 </template>
+~/utils/routes-old

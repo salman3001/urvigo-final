@@ -33,9 +33,9 @@ interface MenuItem {
 }
 
 const navMenuItems = [
-  { label: 'Home', link: routes.home },
-  { label: 'Services', link: routes.services.list },
-  { label: 'Service Requirements', link: routes.service_requirement.list },
+  { label: 'Home', link: routes('web.home') },
+  { label: 'Services', link: routes('web.services') },
+  { label: 'Service Requirements', link: routes('web.service_requirement.list') },
 ]
 
 const { y } = useWindowScroll()
@@ -58,10 +58,10 @@ const menuItems: MenuItem[] = [
     listTitle: 'Service Requirement',
     listIcon: 'tabler-layout-grid',
     navItems: [
-      { name: 'My Requirement', to: routes.service_requirement.list },
+      { name: 'My Requirement', to: routes('web.service_requirement.list') },
       {
         name: 'Post Requirement',
-        to: routes.service_requirement.list,
+        to: routes('web.service_requirement.list'),
       },
       // { name: 'Payment', to: { name: 'front-pages-payment' } },
       // { name: 'Checkout', to: { name: 'front-pages-checkout' } },
@@ -72,8 +72,8 @@ const menuItems: MenuItem[] = [
     listTitle: 'Bookings',
     listIcon: 'tabler-lock-open',
     navItems: [
-      { name: 'My Bookings', to: routes.bookings.list },
-      { name: 'My Custom Bookings', to: routes.custom_bookings.list },
+      { name: 'My Bookings', to: routes('web.booking.list') },
+      { name: 'My Custom Bookings', to: routes('web.custom_booking.list') },
       // { name: 'Login (Cover)', to: { name: 'pages-authentication-login-v2' } },
       // { name: 'Register (Basic)', to: { name: 'pages-authentication-register-v1' } },
       // { name: 'Register (Cover)', to: { name: 'pages-authentication-register-v2' } },
@@ -88,12 +88,12 @@ const menuItems: MenuItem[] = [
     listTitle: 'Other',
     listIcon: 'tabler-photo',
     navItems: [
-      { name: 'Pricing', to: routes.pricing },
-      { name: 'Help Center', to: routes.help_center.list },
-      { name: 'FAQ', to: routes.faqs },
-      { name: 'Blogs', to: routes.blogs.list },
-      { name: 'Contact', to: routes.contact },
-      { name: 'About', to: routes.about },
+      { name: 'Pricing', to: '' },
+      { name: 'Help Center', to: '' },
+      { name: 'FAQ', to: '' },
+      { name: 'Blogs', to: '' },
+      { name: 'Contact', to: '' },
+      { name: 'About', to: '' },
       // { name: 'Verify Email (Basic)', to: { name: 'pages-authentication-verify-email-v1' } },
       // { name: 'Verify Email (Cover)', to: { name: 'pages-authentication-verify-email-v2' } },
       // { name: 'Two Steps (Basic)', to: { name: 'pages-authentication-two-steps-v1' } },
@@ -212,7 +212,7 @@ const isPageActive = computed(() =>
         <div class="d-flex align-center">
           <VAppBarTitle class="me-6">
             <Link
-              :href="routes.home"
+              :href="routes('web.home')"
               class="d-flex gap-x-4"
               :class="$vuetify.display.mdAndUp ? 'd-none' : 'd-block'"
             >
@@ -317,7 +317,7 @@ const isPageActive = computed(() =>
 
           <NavBarNotifications v-if="user" />
           <UserProfile v-if="user" />
-          <Link v-else :href="routes.auth.login">
+          <Link v-else :href="routes('web.auth.login')">
             <VBtn
               prepend-icon="tabler-lock"
               variant="elevated"
@@ -475,3 +475,4 @@ const isPageActive = computed(() =>
   inset-inline-end: 1rem;
 }
 </style>
+~/utils/routes-old

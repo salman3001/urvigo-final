@@ -21,22 +21,22 @@ interface Menu {
 const footerBg = useGenerateImageVariant(footerLightBg, footerDarkBg)
 
 const pagesList: Menu[] = [
-  { name: 'Pricing', to: routes.pricing },
-  { name: 'Services', to: routes.services.list, isNew: true },
+  { name: 'Pricing', to: routes('web.home') },
+  { name: 'Services', to: routes('web.services'), isNew: true },
   {
     name: 'Service Requirements',
-    to: routes.service_requirement.list,
+    to: routes('web.service_requirement.list'),
   },
-  { name: 'Help Center', to: routes.help_center.list },
-  { name: 'Login/Register', to: routes.auth.login },
+  { name: 'Help Center', to: '' },
+  { name: 'Login/Register', to: routes('web.auth.login') },
 ]
 
 const demoList = [
-  { title: 'Home', to: routes.home },
-  { title: 'Blogs', to: routes.blogs.list },
-  { title: 'Faqs', to: routes.faqs },
-  { title: 'About', to: routes.about },
-  { title: 'Contact', to: routes.contact },
+  { title: 'Home', to: routes('web.home') },
+  { title: 'Blogs', to: '' },
+  { title: 'Faqs', to: '' },
+  { title: 'About', to: '' },
+  { title: 'Contact', to: '' },
 ]
 </script>
 
@@ -258,3 +258,4 @@ const demoList = [
   }
 }
 </style>
+~/utils/routes-old

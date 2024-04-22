@@ -8,6 +8,7 @@ import AvatarInput from '~/components/form/AvatarInput.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import apiRoutes from '~/utils/apiRoutes'
+import routes from '~/utils/routes'
 
 const props = defineProps<{
   user: User
@@ -24,7 +25,7 @@ const form = useForm({
 })
 
 const updateProfile = async () => {
-  form.post(apiRoutes.vendor_user.update_profile(props.user.id))
+  form.post(routes('web.account.profile.post'))
 }
 </script>
 
@@ -34,7 +35,7 @@ const updateProfile = async () => {
     <VCardText class="d-flex">
       <AvatarInput
         size="100"
-        :url="getImageUrl(user?.profile?.avatar?.thumb_url, avatar)"
+        :url="getImageUrl(user?.profile?.avatar?.thumbnailUrl, avatar)"
         @image="
           (f) => {
             form.image = f
@@ -45,7 +46,7 @@ const updateProfile = async () => {
 
     <VCardText class="pt-2">
       <!-- 👉 Form -->
-      <CustomForm @submit="() => {}" class="mt-3">
+      <CustomForm @submit="() => updateProfile" class="mt-3">
         <VRow>
           <!-- 👉 First Name -->
           <VCol md="6" cols="12">

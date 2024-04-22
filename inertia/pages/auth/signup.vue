@@ -59,7 +59,7 @@ const form = useForm({
 </script>
 
 <template>
-  <Link :href="routes.home">
+  <Link :href="routes('web.home')">
     <div class="auth-logo d-flex align-center gap-x-3">
       <VNodeRenderer :nodes="themeConfig.app.logo" />
       <h1 class="auth-title">
@@ -101,7 +101,7 @@ const form = useForm({
           <CustomForm
             @submit="
               () => {
-                form.post(routes.auth.sign_up)
+                form.post(routes('web.auth.'))
               }
             "
             ref="formRef"
@@ -174,7 +174,7 @@ const form = useForm({
               <!-- create account -->
               <VCol cols="12" class="text-center text-base">
                 <span class="d-inline-block">Already have an account?</span>
-                <Link class="text-primary ms-1 d-inline-block" :href="routes.auth.login">
+                <Link class="text-primary ms-1 d-inline-block" :href="routes('web.auth.login')">
                   Sign in instead
                 </Link>
               </VCol>
@@ -200,3 +200,4 @@ const form = useForm({
 <style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
 </style>
+~/utils/routes-old

@@ -122,7 +122,7 @@ watchDebounced(query, () => {
         >
           <!-- Order ID -->
           <template #item.id="{ item }">
-            <Link :href="routes.bookings.view(item.id)"> #{{ item.id }} </Link>
+            <Link :href="routes('web.booking.show', [item.id])"> #{{ item.id }} </Link>
           </template>
 
           <!-- Date -->
@@ -140,13 +140,19 @@ watchDebounced(query, () => {
                 :color="item?.bookingDetail?.service_variant.image?.url ? 'primary' : ''"
                 :variant="'tonal'"
               >
-                <VImg :src="getImageUrl(item?.bookingDetail?.service_variant.image?.thumb_url)" />
+                <VImg
+                  :src="getImageUrl(item?.bookingDetail?.service_variant.image?.thumbnailUrl)"
+                />
               </VAvatar>
 
               <div class="d-flex flex-column">
                 <div class="text-body-1 font-weight-medium">
                   <Link
-                    :href="routes.services.view(item.bookingDetail?.service_variant?.service?.slug)"
+                    :href="
+                      routes('web.services.show', [
+                        item.bookingDetail?.service_variant?.service?.slug,
+                      ])
+                    "
                     class="text-link"
                   >
                     {{ item.bookingDetail?.service_variant.name }}
@@ -198,7 +204,7 @@ watchDebounced(query, () => {
               <VIcon icon="tabler-dots-vertical" />
               <VMenu activator="parent">
                 <VList>
-                  <Link :href="routes.bookings.view(item.id)">
+                  <Link :href="routes('web.booking.show', [item.id])">
                     <VListItem value="view"> View </VListItem>
                   </Link>
                 </VList>
@@ -238,3 +244,4 @@ watchDebounced(query, () => {
   padding-block-end: 1rem;
 }
 </style>
+~/utils/routes-old

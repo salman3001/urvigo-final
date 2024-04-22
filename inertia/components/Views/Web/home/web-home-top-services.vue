@@ -21,7 +21,7 @@ defineProps<{
       </h4>
 
       <p class="text-center text-body-1 mb-1">Discover Our Permier Selction of Services</p>
-      <Link :href="routes.services.list"><VBtn>View All Services</VBtn></Link>
+      <Link :href="routes('web.services')"><VBtn>View All Services</VBtn></Link>
     </div>
     <br />
     <br />
@@ -34,3 +34,4 @@ defineProps<{
     </div>
   </VContainer>
 </template>
+~/utils/routes-old

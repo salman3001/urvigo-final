@@ -57,9 +57,7 @@ const getImageUrl = useGetImageUrl()
             </p>
             <p v-else>Anonymous</p>
             <div>
-              <Link :href="routes.vendor_profile.view(selectedBid?.userId)">{{
-                selectedBid?.vendor?.businessProfile?.businessName
-              }}</Link>
+              <Link :href="''">{{ selectedBid?.vendor?.businessProfile?.businessName }}</Link>
             </div>
           </div>
         </div>
@@ -159,15 +157,7 @@ const getImageUrl = useGetImageUrl()
           "
           >Negotiate</VBtn
         >
-        <VBtn
-          v-if="!serviceRequirement?.acceptedBidId"
-          color="primary"
-          :to="{
-            path: routes.custom_bookings.book_now(serviceRequirement.id),
-            query: {
-              acceptedBidId: selectedBid.id,
-            },
-          }"
+        <VBtn v-if="!serviceRequirement?.acceptedBidId" color="primary" :to="{}"
           >Accept and Book</VBtn
         >
       </div>
@@ -185,3 +175,4 @@ const getImageUrl = useGetImageUrl()
     />
   </ModalBase>
 </template>
+~/utils/routes-old

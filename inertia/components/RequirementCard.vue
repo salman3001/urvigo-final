@@ -106,8 +106,8 @@ const getImageUrls = useGetImageUrl()
               <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span></VChip
             >
             <Link
-              :href="routes.service_requirement.view(requirement.id)"
-              v-if="currentUrl != routes.service_requirement.view(requirement.id)"
+              :href="routes('web.service_requirement.show', [requirement.id])"
+              v-if="currentUrl != routes('web.service_requirement.show', [requirement.id])"
             >
               <VBtn color="primary"> View Detail </VBtn>
             </Link>
@@ -117,3 +117,4 @@ const getImageUrls = useGetImageUrl()
     </VRow>
   </VCard>
 </template>
+~/utils/routes-old

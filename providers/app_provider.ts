@@ -25,7 +25,10 @@ export default class AppProvider {
   /**
    * The process has been started
    */
-  async ready() {}
+  async ready() {
+    const { exportNamedRoutes } = await import('../app/helpers/common.js')
+    exportNamedRoutes()
+  }
 
   /**
    * Preparing to shutdown the app

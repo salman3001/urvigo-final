@@ -104,15 +104,14 @@ export default {
                   <VAvatar
                     :image="
                       getImageUrl(
-                        service?.businessProfile.vendor?.profile?.avatar?.breakpoints?.thumbnail
-                          ?.url,
+                        service?.businessProfile.vendor?.profile?.avatar?.thumbnailUrl,
                         dummyAvatar
                       )
                     "
                     size="38"
                   />
                   <div>
-                    <Link :href="routes.vendor_profile.view(service?.businessProfileId!)">
+                    <Link :href="''">
                       <h6 class="text-h6 mb-1">
                         {{ service?.businessProfile.vendor?.firstName }}
                         {{ service?.businessProfile.vendor?.lastName }}
@@ -140,7 +139,7 @@ export default {
                   if (user) {
                     addReviewModal = true
                   } else {
-                    router.visit(routes.auth.login + `?next=${page.url}`)
+                    router.visit(`${routes('web.auth.login')}?next=${page.url}`)
                   }
                 }
               "
@@ -253,3 +252,4 @@ body .v-layout .v-application__wrap {
   }
 }
 </style>
+~/utils/routes-old

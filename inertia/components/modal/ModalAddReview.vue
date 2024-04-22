@@ -31,7 +31,7 @@ const vendorReviewForm = useForm({
 
 const formSubmit = async () => {
   if (props.serviceId) {
-    serviceReviewForm.post(routes.services.reviews.create(props.serviceId), {
+    serviceReviewForm.post(routes('web.services.create_review', [props.serviceId]), {
       onSuccess: () => {
         emit('submit')
       },
@@ -39,7 +39,8 @@ const formSubmit = async () => {
   }
 
   if (props.businessProfileId) {
-    serviceReviewForm.post(routes.services.reviews.create(props.businessProfileId), {
+    // to be done
+    serviceReviewForm.post('', {
       onSuccess: () => {
         emit('submit')
       },
@@ -99,3 +100,4 @@ const formSubmit = async () => {
     </CustomForm>
   </ModalBase>
 </template>
+~/utils/routes-old

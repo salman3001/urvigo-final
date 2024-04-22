@@ -7,122 +7,118 @@ const WebAuthsController = () => import('#controllers/web/web_auths_controller')
 const WebPagesController = () => import('#controllers/web/web_pages_controller')
 const WebBookingsController = () => import('#controllers/web/web_bookings_controller')
 const WebCustomBookingsController = () => import('#controllers/web/web_custom_bookings_controller')
+const WebServiceRequirementsController = () =>
+  import('#controllers/web/web_service_requirements_controller')
 
 // auth
 router
   .group(() => {
-    router.on('login').renderInertia('auth/login').as('auth.login').use([middleware.guest()])
     router
-      .post('login', [WebAuthsController, 'login'])
-      .as('auth.login.post')
+      .group(() => {
+        router.on('login').renderInertia('auth/login').as('login').use([middleware.guest()])
+        router.post('login', [WebAuthsController, 'login']).as('login.post')
+        router.on('signup').renderInertia('auth/signup').as('signup').use([middleware.guest()])
+        router.post('signup', [WebAuthsController, 'signup']).as('signup.post')
+        router.on('forgot-password').renderInertia('auth/forgot-password').as('forgot-password')
+        router
+          .post('forgot-password', [WebAuthsController, 'sendForgotPasswordOtp'])
+          .as('forgot-password.post')
+        router.on('reset-password').renderInertia('auth/reset-password').as('auth.reset-password')
+        router
+          .post('reset-password', [WebAuthsController, 'resetPassword'])
+          .as('reset-password.post')
+      })
       .use([middleware.guest()])
-    router.on('signup').renderInertia('auth/signup').as('auth.signup').use([middleware.guest()])
-    router
-      .post('signup', [WebAuthsController, 'signup'])
-      .as('auth.signup.post')
-      .use([middleware.guest()])
-    router
-      .on('forgot-password')
-      .renderInertia('auth/forgot-password')
-      .as('auth.forgot-password')
-      .use([middleware.guest()])
-    router
-      .post('forgot-password', [WebAuthsController, 'sendForgotPasswordOtp'])
-      .as('auth.forgot-password.post')
-      .use([middleware.guest()])
-    router
-      .on('reset-password')
-      .renderInertia('auth/reset-password')
-      .as('auth.reset-password')
-      .use([middleware.guest()])
-    router
-      .post('reset-password', [WebAuthsController, 'resetPassword'])
-      .as('auth.reset-password.post')
-      .use([middleware.guest()])
-    router.get('logout', [WebAuthsController, 'logout']).as('auth.logout')
+
+    router.get('logout', [WebAuthsController, 'logout']).as('logout')
   })
   .prefix('auth')
+  .as('web.auth')
 
 //pages
 
-router.group(() => {
-  router.get('/', [WebPagesController, 'home']).as('home')
-  router.on('/temp').renderInertia('temp').as('temp')
-  router.post('/temp-post', [WebPagesController, 'temp']).as('temp.post')
-  router.get('/services', [WebPagesController, 'services']).as('web.services')
-  router.get('/services/:slug', [WebPagesController, 'services_show']).as('web.services.show')
+router
+  .group(() => {
+    router.get('', [WebPagesController, 'home']).as('home')
+    router.on('/temp').renderInertia('temp').as('temp')
+    router.post('/temp-post', [WebPagesController, 'temp']).as('temp.post')
+    router.get('/services', [WebPagesController, 'services']).as('services')
+    router.get('/services/:slug', [WebPagesController, 'services_show']).as('services.show')
 
-  // with auth
-  router
-    .group(() => {
-      router
-        .post('/services/:id/create-review', [WebPagesController, 'createReview'])
-        .as('web.services.create_review')
+    // with auth
+    router
+      .group(() => {
+        router
+          .post('/services/:id/create-review', [WebPagesController, 'createReview'])
+          .as('services.create_review')
 
-      // Account
-      router
-        .group(() => {
-          router.get('/profile', [WebPagesController, 'profile']).as('web.profile')
-          router.get('/security', [WebPagesController, 'security']).as('web.security')
-          router
-            .get('/notifications', [WebPagesController, 'notifications'])
-            .as('web.notifications')
-          router.get('/wishlist', [WebPagesController, 'wishlist']).as('web.wishlist')
-          router.get('/settings', [WebPagesController, 'settings']).as('web.settings')
-        })
-        .prefix('account')
+        // bookings
+        router.get('bookings', [WebBookingsController, 'index']).as('booking.list')
+        router.get('bookings/:id', [WebBookingsController, 'show']).as('booking.show')
+        router
+          .get('bookings/checkout/summary', [WebBookingsController, 'summary'])
+          .as('booking.summary')
+        router
+          .get('bookings/checkout/address', [WebBookingsController, 'address'])
+          .as('booking.address')
+        router
+          .get('bookings/checkout/payment', [WebBookingsController, 'payment'])
+          .as('booking.payment')
+        router
+          .post('bookings/checkout/create-booking', [WebBookingsController, 'createBooking'])
+          .as('booking.create')
+        router
+          .get('bookings/checkout/confirmation', [WebBookingsController, 'confirmation'])
+          .as('booking.confirmation')
 
-      // bookings
-      router
-        .group(() => {
-          router.get('/', [WebBookingsController, 'index']).as('web.booking.list')
-          router.get('/:id', [WebBookingsController, 'show']).as('web.booking.show')
-          router
-            .get('/checkout/summary', [WebBookingsController, 'summary'])
-            .as('web.booking.summary')
-          router
-            .get('/checkout/address', [WebBookingsController, 'address'])
-            .as('web.booking.address')
-          router
-            .get('/checkout/payment', [WebBookingsController, 'payment'])
-            .as('web.booking.payment')
-          router
-            .post('/checkout/create-booking', [WebBookingsController, 'createBooking'])
-            .as('web.booking.create')
-          router
-            .get('/checkout/confirmation', [WebBookingsController, 'confirmation'])
-            .as('web.booking.confirmation')
-        })
-        .prefix('bookings')
+        // custom bookings
+        router
+          .get('custom-bookings', [WebCustomBookingsController, 'index'])
+          .as('custom_booking.list')
+        router
+          .get('custom-bookings/:id', [WebCustomBookingsController, 'show'])
+          .as('custom_booking.show')
+        router
+          .get('custom-bookings/checkout/summary', [WebCustomBookingsController, 'summary'])
+          .as('custom_booking.summary')
 
-      // custom bookings
-      router
-        .group(() => {
-          router.get('/', [WebCustomBookingsController, 'index']).as('web.custom_booking.list')
-          router.get('/:id', [WebCustomBookingsController, 'show']).as('web.custom_booking.show')
-          router
-            .get('/checkout/summary', [WebCustomBookingsController, 'summary'])
-            .as('web.custom_booking.summary')
-        })
-        .prefix('custom-bookings')
+        // service Requirements
+        router
+          .get('service-requirements', [WebServiceRequirementsController, 'show'])
+          .as('service_requirement.list')
+        router
+          .post('service-requirements', [WebServiceRequirementsController, 'index'])
+          .as('service_requirement.create')
+        router
+          .get('service-requirements/:id', [WebServiceRequirementsController, 'show'])
+          .as('service_requirement.show')
 
-      // service Requirements
-      router
-        .group(() => {
-          router
-            .get('/', '#controllers/web/web_service_requirements_controller.index')
-            .as('web.service_requirement.list')
-          router
-            .post('/', '#controllers/web/web_service_requirements_controller.create')
-            .as('web.service_requirement.create')
-          router
-            .get('/:id', '#controllers/web/web_service_requirements_controller.show')
-            .as('web.service_requirement.show')
-        })
-        .prefix('service-requirements')
-    })
-    .use(middleware.auth())
-})
+        // account
+        router
+          .group(() => {
+            router.get('/propfile', [WebPagesController, 'profile']).as('profile')
+            router.post('/propfile', [WebPagesController, 'updatProfile']).as('profile.post')
+            router.get('/security', [WebPagesController, 'security']).as('security')
+            router.post('/security', [WebPagesController, 'updateSecurity']).as('post')
+            router.get('/settings', [WebPagesController, 'settings']).as('settings')
+            router.get('/wishlist', [WebPagesController, 'wishlist']).as('wishlist')
+            router
+              .post('/wishlist/add-item', [WebPagesController, 'AddWishlistItem'])
+              .as('wishlist.add_item')
+            router
+              .post('/wishlist/remove-item', [WebPagesController, 'RemoveWishlistItem'])
+              .as('wishlist.remove_item')
+            router
+              .post('/wishlist/clear', [WebPagesController, 'ClearWishlist'])
+              .as('wishlist.clear')
+            router.get('/notifications', [WebPagesController, 'notifications']).as('notifications')
+          })
+          .prefix('account')
+          .as('account')
+      })
+      .use(middleware.auth())
+  })
+  .as('web')
 
 // uploads
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -138,3 +134,4 @@ router.get('/uploads/*', ({ request, response }) => {
   const absolutePath = app.makePath(commonConfig.uploadPath, normalizedPath)
   return response.download(absolutePath)
 })
+export { router }

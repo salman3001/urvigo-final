@@ -25,7 +25,7 @@ if (minPriceVariant.discountType === DiscountType.FLAT) {
 </script>
 
 <template>
-  <VCard :to="routes.services.view(service?.slug)">
+  <VCard :to="routes('web.services.show', [service.slug])">
     <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column">
       <div class="ma-auto pa-1">
         <VImg
@@ -91,3 +91,4 @@ if (minPriceVariant.discountType === DiscountType.FLAT) {
     </div>
   </VCard>
 </template>
+~/utils/routes-old

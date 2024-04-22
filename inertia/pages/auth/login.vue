@@ -46,7 +46,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 </script>
 
 <template>
-  <Link :href="routes.home">
+  <Link :href="routes('web.home')">
     <div class="auth-logo d-flex align-center gap-x-3">
       <VNodeRenderer :nodes="themeConfig.app.logo" />
       <h1 class="auth-title">
@@ -86,7 +86,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
           <CustomForm
             @submit="
               () => {
-                form.post(routes.auth.login)
+                form.post(routes('web.auth.login'))
               }
             "
           >
@@ -118,7 +118,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
                 <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
                   <!-- <VCheckbox v-model="form.remember" label="Remember me" /> -->
-                  <Link class="text-primary ms-2 mb-1" :href="routes.auth.forgot_password">
+                  <Link class="text-primary ms-2 mb-1" :href="routes('web.auth.forgot-password')">
                     Forgot Password?
                   </Link>
                 </div>
@@ -130,7 +130,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
               <VCol cols="12" class="text-center">
                 <span>New on our platform?</span>
 
-                <Link class="text-primary ms-2" :href="routes.auth.sign_up">
+                <Link class="text-primary ms-2" :href="routes('web.auth.signup')">
                   Create an account
                 </Link>
               </VCol>
@@ -155,3 +155,4 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 <style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
 </style>
+~/utils/routes-old

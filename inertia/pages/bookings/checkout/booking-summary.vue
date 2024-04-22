@@ -16,14 +16,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-
 import { reactive, ref } from 'vue'
 
 const props = defineProps<{
   summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
   couponList: Coupon[]
   query: {
-    serviceVariantId: number,
+    serviceVariantId: number
     qty: number
     couponId: number
   }
@@ -33,18 +32,16 @@ const applyCouponModal = ref(false)
 const queryRef = reactive({
   serviceVariantId: props.query.serviceVariantId,
   qty: props.query.qty || 1,
-  couponId: props.query.couponId
+  couponId: props.query.couponId,
 })
 
 watch(queryRef, () => {
   router.reload({
     only: ['summary', 'query'],
     replace: true,
-    data: queryRef
+    data: queryRef,
   })
 })
-
-
 </script>
 
 <template>
@@ -54,24 +51,42 @@ watch(queryRef, () => {
   <br />
   <VContainer>
     <CheckoutLayout :step="0">
-      <CheckoutCart :qty="queryRef.qty" :summary="summary!" @apply-coupon="() => {
-      router.reload({
-        only: ['couponList'],
-
-      })
-      applyCouponModal = true
-    }" @increment-qty="queryRef.qty = Number(queryRef.qty) + 1"
-        @decrement-qty="() => { if (Number(queryRef.qty) > 1) { queryRef.qty = Number(queryRef.qty) - 1 } }"
-        @next="router.visit(routes.bookings.checkout.address)" />
+      <CheckoutCart
+        :qty="queryRef.qty"
+        :summary="summary!"
+        @apply-coupon="
+          () => {
+            router.reload({
+              only: ['couponList'],
+            })
+            applyCouponModal = true
+          }
+        "
+        @increment-qty="queryRef.qty = Number(queryRef.qty) + 1"
+        @decrement-qty="
+          () => {
+            if (Number(queryRef.qty) > 1) {
+              queryRef.qty = Number(queryRef.qty) - 1
+            }
+          }
+        "
+        @next="router.visit(routes('web.booking.address'))"
+      />
     </CheckoutLayout>
-    <ModalApplyCoupon v-model:is-visible="applyCouponModal" :coupon-list="couponList" @apply="(couponId) => {
-      queryRef.couponId = couponId
-      applyCouponModal = false
-    }
-      " />
+    <ModalApplyCoupon
+      v-model:is-visible="applyCouponModal"
+      :coupon-list="couponList"
+      @apply="
+        (couponId) => {
+          queryRef.couponId = couponId
+          applyCouponModal = false
+        }
+      "
+    />
   </VContainer>
 
   <br />
   <br />
   <br />
 </template>
+~/utils/routes-old

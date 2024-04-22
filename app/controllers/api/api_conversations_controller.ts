@@ -29,18 +29,29 @@ export default class ApiConversationsController {
     if (data === 'already exist') {
       return response.custom({
         code: 400,
-        data: 'Chat Alreay Exist',
-        message: null,
+        data: data,
+        message: 'Chat Alreay Exist',
         success: false,
       })
     } else {
       return response.custom({
         code: 200,
-        data: 'Chat Created',
-        message: null,
+        data: data,
+        message: 'Chat created',
         success: true,
       })
     }
+  }
+
+  async createMessage({ response }: HttpContext) {
+    const message = await this.chatService.createMessage()
+
+    return response.custom({
+      code: 200,
+      data: message,
+      message: 'Message created',
+      success: true,
+    })
   }
 
   async update({ response }: HttpContext) {

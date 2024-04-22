@@ -29,12 +29,12 @@ const theme = useTheme()
                 <VImg :src="joinArrow" class="flip-in-rtl" width="54" height="31" />
               </h6>
               <div class="d-flex flex-column flex-sm-row gap-2">
-                <Link :href="routes.services.list">
+                <Link :href="routes('web.services')">
                   <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
                     Explore Services
                   </VBtn>
                 </Link>
-                <Link :href="routes.service_requirement.list">
+                <Link :href="routes('web.service_requirement.list')">
                   <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
                     PersonaliZe Service
                   </VBtn>
@@ -266,3 +266,4 @@ section {
   inset-inline-start: 5%;
 }
 </style>
+~/utils/routes-old

@@ -8,6 +8,7 @@ import ModalBase from './ModalBase.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import CustomForm from '../form/CustomForm.vue'
+import routes from '~/utils/routes'
 
 const props = defineProps<{
   selectedBid: Bid
@@ -26,7 +27,7 @@ const form = reactive({
   message: '',
 })
 
-const negotiate = useApi(apiRoutes.bids.acceptNegotiation(props.selectedBid.id), 'post')
+const negotiate = useApi(routes('api.bids.accept-negotiate', [props.selectedBid.id]), 'post')
 
 const submit = async () => {
   negotiate.exec(

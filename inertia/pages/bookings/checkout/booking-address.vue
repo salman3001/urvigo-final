@@ -8,29 +8,29 @@ import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
 import CheckoutAddress from '~/components/Views/Web/checkout/CheckoutAddress.vue'
 
 export default {
-    layout: Layout,
+  layout: Layout,
 }
 </script>
 
 <script setup lang="ts">
 defineProps<{
-    summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
 }>()
-
 </script>
 
 <template>
-    <br />
-    <br />
-    <br />
-    <br />
-    <VContainer>
-        <CheckoutLayout :step="1">
-            <CheckoutAddress :summary="summary" @next="router.visit(routes.bookings.checkout.payment)" />
-        </CheckoutLayout>
-    </VContainer>
+  <br />
+  <br />
+  <br />
+  <br />
+  <VContainer>
+    <CheckoutLayout :step="1">
+      <CheckoutAddress :summary="summary" @next="router.visit(routes('web.booking.payment'))" />
+    </CheckoutLayout>
+  </VContainer>
 
-    <br />
-    <br />
-    <br />
+  <br />
+  <br />
+  <br />
 </template>
+~/utils/routes-old

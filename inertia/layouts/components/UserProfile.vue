@@ -12,7 +12,7 @@ const { user } = usePage<IPageProps<{}>>().props
 <template>
   <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
     <VAvatar class="cursor-pointer" color="primary" variant="tonal">
-      <VImg :src="getImageUrl(user?.profile?.avatar?.breakpoints?.thumbnail?.url, avatar)" />
+      <VImg :src="getImageUrl(user?.profile?.avatar?.thumbnailUrl, avatar)" />
 
       <!-- SECTION Menu -->
       <VMenu activator="parent" width="230" location="bottom end" offset="14px">
@@ -23,7 +23,7 @@ const { user } = usePage<IPageProps<{}>>().props
               <VListItemAction start>
                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
                   <VAvatar color="primary" variant="tonal">
-                    <VImg :src="getImageUrl(user?.profile?.avatar?.thumb_url, avatar)" />
+                    <VImg :src="getImageUrl(user?.profile?.avatar?.thumbnailUrl, avatar)" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -40,7 +40,7 @@ const { user } = usePage<IPageProps<{}>>().props
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <Link :href="routes.account.profile">
+          <Link :href="routes('web.account.profile')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-user" size="22" />
@@ -51,7 +51,7 @@ const { user } = usePage<IPageProps<{}>>().props
           </Link>
 
           <!-- 👉 Settings -->
-          <Link :href="routes.account.settings">
+          <Link :href="routes('web.account.settings')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-settings" size="22" />
@@ -62,7 +62,7 @@ const { user } = usePage<IPageProps<{}>>().props
           </Link>
 
           <!-- 👉 Bookings -->
-          <Link :href="routes.bookings.list">
+          <Link :href="routes('web.booking.list')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-currency-dollar" size="22" />
@@ -73,7 +73,7 @@ const { user } = usePage<IPageProps<{}>>().props
           </Link>
 
           <!-- 👉 Custom Bookings -->
-          <Link :href="routes.custom_bookings.list">
+          <Link :href="routes('web.custom_booking.list')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-currency-dollar" size="22" />
@@ -84,7 +84,7 @@ const { user } = usePage<IPageProps<{}>>().props
           </Link>
 
           <!-- 👉 Wishlist -->
-          <Link :href="routes.account.wishlist">
+          <Link :href="routes('web.account.wishlist')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-heart" size="22" />
@@ -95,7 +95,7 @@ const { user } = usePage<IPageProps<{}>>().props
           </Link>
 
           <!-- 👉 Notification -->
-          <Link :href="routes.account.notifications">
+          <Link :href="routes('web.account.notifications')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-bell" size="22" />
@@ -109,7 +109,7 @@ const { user } = usePage<IPageProps<{}>>().props
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <Link :href="routes.auth.logout">
+          <Link :href="routes('web.auth.logout')">
             <VListItem>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-logout" size="22" />
@@ -124,3 +124,4 @@ const { user } = usePage<IPageProps<{}>>().props
     </VAvatar>
   </VBadge>
 </template>
+~/utils/routes-old

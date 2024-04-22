@@ -20,7 +20,7 @@ import routes from '~/utils/routes'
             "Unloack New Oppurtunities: Join Out platform and reach more customers" Signup as a
             Vendor
           </h5>
-          <Link :href="routes.auth.login" target="_blank">
+          <Link :href="routes('web.auth.login')" target="_blank">
             <VBtn color="primary" :size="$vuetify.display.smAndUp ? 'large' : 'default'">
               Get Started
             </VBtn>
@@ -55,3 +55,4 @@ import routes from '~/utils/routes'
   background-image: url('~/assets/images/front-pages/backgrounds/cta-bg-dark.png');
 }
 </style>
+~/utils/routes-old

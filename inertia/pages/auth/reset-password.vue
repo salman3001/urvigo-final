@@ -44,7 +44,7 @@ const form = useForm({
 </script>
 
 <template>
-  <Link :href="routes.home">
+  <Link :href="routes('web.home')">
     <div class="auth-logo d-flex align-center gap-x-3">
       <VNodeRenderer :nodes="themeConfig.app.logo" />
       <h1 class="auth-title">
@@ -81,7 +81,7 @@ const form = useForm({
           <CustomForm
             @submit="
               () => {
-                form.post(routes.auth.reset_password)
+                form.post(routes('web.auth.forgot-password'))
               }
             "
           >
@@ -133,7 +133,7 @@ const form = useForm({
 
               <!-- back to login -->
               <VCol cols="12">
-                <Link class="d-flex align-center justify-center" :href="routes.auth.login">
+                <Link class="d-flex align-center justify-center" :href="routes('web.auth.login')">
                   <VIcon icon="tabler-chevron-left" size="20" class="me-1 flip-in-rtl" />
                   <span>Back to login</span>
                 </Link>
@@ -149,3 +149,4 @@ const form = useForm({
 <style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
 </style>
+~/utils/routes-old

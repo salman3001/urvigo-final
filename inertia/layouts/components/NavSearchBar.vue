@@ -41,17 +41,17 @@ const suggestionGroups: SuggestionGroup[] = [
       {
         icon: 'tabler-chart-bar',
         title: 'Services',
-        url: { path: routes.services.list },
+        url: { path: routes('web.services') },
       },
       {
         icon: 'tabler-chart-donut-3',
         title: 'Service Requirements',
-        url: { path: routes.service_requirement.list },
+        url: { path: routes('web.service_requirement.list') },
       },
       {
         icon: 'tabler-shopping-cart',
         title: 'Bookings',
-        url: { path: routes.bookings.list },
+        url: { path: routes('web.booking.list') },
       },
     ],
   },
@@ -61,17 +61,17 @@ const suggestionGroups: SuggestionGroup[] = [
       {
         icon: 'tabler-chart-bar',
         title: 'Vendor CRM',
-        url: { path: import.meta.env.VENDOR_BASE_URL + routes.vendor.dashboard },
+        url: { path: import.meta.env.VENDOR_BASE_URL + '' },
       },
       {
         icon: 'tabler-chart-donut-3',
         title: 'Blogs',
-        url: { path: routes.blogs.list },
+        url: { path: '' },
       },
       {
         icon: 'tabler-shopping-cart',
         title: 'Pricing',
-        url: { path: routes.pricing },
+        url: { path: '' },
       },
     ],
   },
@@ -81,12 +81,12 @@ const suggestionGroups: SuggestionGroup[] = [
       {
         icon: 'tabler-typography',
         title: 'Blogs 1',
-        url: { path: routes.blogs.list },
+        url: { path: '' },
       },
       {
         icon: 'tabler-menu-2',
         title: 'Blogs 2',
-        url: { path: routes.blogs.list },
+        url: { path: '' },
       },
       {
         icon: 'tabler-info-triangle',
@@ -96,7 +96,7 @@ const suggestionGroups: SuggestionGroup[] = [
       {
         icon: 'tabler-checkbox',
         title: 'Blogs 4',
-        url: { path: routes.blogs.list },
+        url: { path: '' },
       },
     ],
   },
@@ -106,22 +106,22 @@ const suggestionGroups: SuggestionGroup[] = [
       {
         icon: 'tabler-typography',
         title: 'Faq 1',
-        url: { path: routes.faqs },
+        url: { path: '' },
       },
       {
         icon: 'tabler-menu-2',
         title: 'Faq 2',
-        url: { path: routes.faqs },
+        url: { path: '' },
       },
       {
         icon: 'tabler-info-triangle',
         title: 'Faq 3',
-        url: { path: routes.faqs },
+        url: { path: '' },
       },
       {
         icon: 'tabler-checkbox',
         title: 'Faq 4',
-        url: { path: routes.faqs },
+        url: { path: '' },
       },
     ],
   },
@@ -132,17 +132,17 @@ const noDataSuggestions: Suggestion[] = [
   {
     title: 'Services',
     icon: 'tabler-brand-azure',
-    url: { path: routes.services.list },
+    url: { path: routes('web.services') },
   },
   {
     title: 'Blogs',
     icon: 'tabler-article',
-    url: { path: routes.blogs.list },
+    url: { path: '' },
   },
   {
     title: 'Faqs',
     icon: 'tabler-messages',
-    url: { path: routes.faqs },
+    url: { path: '' },
   },
 ]
 
@@ -243,7 +243,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('~/@core/components/A
 
     <template #noDataSuggestion>
       <Link
-        :href="routes.services.list"
+        :href="routes('web.services')"
         :data="{ search: searchQuery }"
         class="text-h5 text-primary"
         >Search for "{{ searchQuery }}" in services</Link
@@ -312,3 +312,4 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('~/@core/components/A
   }
 }
 </style>
+~/utils/routes-old

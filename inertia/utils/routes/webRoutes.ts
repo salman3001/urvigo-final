@@ -11,10 +11,10 @@ export default {
     view: (slug: string) => `/blogs/blog-${slug}`,
   },
   account: {
-    profile: '/account/profile',
-    security: '/account/security',
-    settings: '/account/settings',
-    wishlist: '/account/wishlist',
+    profile: { index: '/account/profile', update: '/account/profile' },
+    security: { index: '/account/security', update: '/account/security' },
+    settings: { index: '/account/settings', update: '/account/settings' },
+    wishlist: { index: '/account/wishlist', addItem: '' },
     notifications: '/account/notifications',
   },
   bookings: {

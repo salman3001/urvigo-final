@@ -119,7 +119,7 @@ watchDebounced(query, () => {
         >
           <!-- Order ID -->
           <template #item.id="{ item }">
-            <Link :href="routes.bookings.view(item.id)"> #{{ item.id }} </Link>
+            <Link :href="routes('web.custom_booking.show', [item.id])"> #{{ item.id }} </Link>
           </template>
 
           <!-- Date -->
@@ -144,7 +144,9 @@ watchDebounced(query, () => {
                 <div class="text-body-1 font-weight-medium">
                   <Link
                     :href="
-                      routes.service_requirement.view(item.bookingDetail?.serviceRequirement.id)
+                      routes('web.service_requirement.show', [
+                        item.bookingDetail?.serviceRequirement.id,
+                      ])
                     "
                     class="text-link"
                   >
@@ -197,7 +199,7 @@ watchDebounced(query, () => {
               <VIcon icon="tabler-dots-vertical" />
               <VMenu activator="parent">
                 <VList>
-                  <Link :href="routes.bookings.view(item.id)">
+                  <Link :href="routes('web.custom_booking.show', [item.id])">
                     <VListItem value="view"> View </VListItem>
                   </Link>
                 </VList>
@@ -237,3 +239,4 @@ watchDebounced(query, () => {
   padding-block-end: 1rem;
 }
 </style>
+~/utils/routes-old

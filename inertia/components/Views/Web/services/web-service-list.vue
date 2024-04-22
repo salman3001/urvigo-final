@@ -33,7 +33,7 @@ const query = reactive({
 watchDebounced(
   query,
   () => {
-    router.visit(routes.services.list, {
+    router.visit(routes('web.services'), {
       data: query,
     })
   },
@@ -163,3 +163,4 @@ watchDebounced(
   inset-inline-start: 2.5rem;
 }
 </style>
+~/utils/routes-old

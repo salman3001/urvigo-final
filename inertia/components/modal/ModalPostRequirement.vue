@@ -38,7 +38,7 @@ const form = useForm({
 })
 
 const creatRequirement = async () => {
-  form.post(routes.service_requirement.create, {
+  form.post(routes('web.service_requirement.create'), {
     onSuccess: () => {
       emit('submit')
     },
@@ -142,3 +142,4 @@ const creatRequirement = async () => {
     </CustomForm>
   </ModalBase>
 </template>
+~/utils/routes-old

@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import routes from '~/utils/routes'
 
 export default {
   layout: Layout,
@@ -30,7 +31,7 @@ const {
   exec: getRecievedBids,
   processing: processingRecievedBids,
 } = useApi<IPaginatedModel<typeof Bid>>(
-  apiRoutes.service_requirements.show_bids(props.requirement.id),
+  routes('api.requirements.show_bids', [props.requirement.id]),
   'get'
 )
 

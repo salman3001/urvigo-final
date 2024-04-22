@@ -12,7 +12,7 @@ export default class ReviewsService {
     const { params, request } = this.ctx
     const reviewsQuery = Review.query().whereHas('businessProfile', (b) => {
       b.whereHas('vendor', (v) => {
-        v.where('id', params.id)
+        v.where('id', params.vendorId)
       })
     })
 
@@ -24,7 +24,7 @@ export default class ReviewsService {
   async getServiceReviews() {
     const { params, request } = this.ctx
     const reviewsQuery = Review.query().whereHas('service', (s) => {
-      s.where('id', params.id)
+      s.where('id', params.serviceId)
     })
 
     const reviews = await paginate(reviewsQuery, request)

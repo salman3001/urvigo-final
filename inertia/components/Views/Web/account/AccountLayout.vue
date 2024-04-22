@@ -9,16 +9,21 @@ defineProps<{
 
 // tabs
 const tabs = [
-  { title: 'Account', icon: 'tabler-users', tab: 'profile', href: routes.account.profile },
-  { title: 'Security', icon: 'tabler-lock', tab: 'security', href: routes.account.security },
+  { title: 'Account', icon: 'tabler-users', tab: 'profile', href: routes('web.account.profile') },
+  { title: 'Security', icon: 'tabler-lock', tab: 'security', href: routes('web.account.security') },
   {
     title: 'Notifications',
     icon: 'tabler-bell',
     tab: 'notification',
-    href: routes.account.notifications,
+    href: routes('web.account.notifications'),
   },
-  { title: 'Wishlist', icon: 'tabler-heart', tab: 'wishlist', href: routes.account.wishlist },
-  { title: 'Settings', icon: 'tabler-tool', tab: 'settings', href: routes.account.settings },
+  {
+    title: 'Wishlist',
+    icon: 'tabler-heart',
+    tab: 'wishlist',
+    href: routes('web.account.wishlist'),
+  },
+  { title: 'Settings', icon: 'tabler-tool', tab: 'settings', href: routes('web.account.settings') },
 ]
 </script>
 
@@ -49,3 +54,4 @@ const tabs = [
     </div>
   </VContainer>
 </template>
+~/utils/routes-old
