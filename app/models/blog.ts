@@ -4,8 +4,13 @@ import type { ImageType } from '#helpers/types'
 import BlogCategory from './blog_category.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Language from './language.js'
+import { compose } from '@adonisjs/core/helpers'
+import { Filterable } from 'adonis-lucid-filter'
+import BlogFilter from './filters/blog_filter.js'
 
-export default class Blog extends BaseModel {
+export default class Blog extends compose(BaseModel, Filterable) {
+  static $filer = () => BlogFilter
+
   @column({ isPrimary: true })
   declare id: number
 

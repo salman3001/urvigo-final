@@ -11,7 +11,7 @@ export default class Message extends BaseModel {
   declare body: string
 
   @column()
-  declare userIdentifier: string
+  declare userId: number
 
   @column()
   declare read: boolean

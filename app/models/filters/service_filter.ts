@@ -15,7 +15,7 @@ export default class ServiceFilter extends BaseModelFilter {
     this.$query.orderBy(orderBy, (direction as 'desc') || 'asc')
   }
 
-  serviceCategoryId(value: string): void {
-    this.$query.where('service_category_id', value)
+  serviceCategory(id: string): void {
+    this.$query.where('service_category_id', id)
   }
 }

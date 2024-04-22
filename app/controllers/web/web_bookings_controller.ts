@@ -28,7 +28,7 @@ export default class WebBookingsController {
     session.put('booking-summary', summary)
     return inertia.render('bookings/checkout/booking-summary', {
       summary,
-      couponList: inertia.lazy(() => this.couponService.index()),
+      couponList: inertia.lazy(() => this.couponService.aplicableCoupons()),
     })
   }
 

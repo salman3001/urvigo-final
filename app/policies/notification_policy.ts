@@ -4,11 +4,11 @@ import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class NotificationPolicy extends BasePolicy {
   async viewList() {
-    return false
+    return true
   }
 
   async view() {
-    return false
+    return true
   }
 
   async create() {
@@ -18,8 +18,6 @@ export default class NotificationPolicy extends BasePolicy {
   async update(user: any, notification: Notification) {
     if (notification.userId === user.id) {
       return true
-    } else if (!isAdmin(user) && notification.userId === user.id) {
-      return true
     } else {
       return false
     }
@@ -27,8 +25,6 @@ export default class NotificationPolicy extends BasePolicy {
 
   async delete(user: any, notification: Notification) {
     if (notification.userId === user.id) {
-      return true
-    } else if (!isAdmin(user) && notification.userId === user.id) {
       return true
     } else {
       return false

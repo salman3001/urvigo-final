@@ -82,6 +82,6 @@ export interface IbidBookingDetail {
   }
 }
 
-export interface IserviceProps {
-  filter: boolean
+export interface IndexOption {
+  disableFilter?: boolean
 }

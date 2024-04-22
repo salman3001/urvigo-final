@@ -75,7 +75,7 @@ export default class ApiBidsController {
     })
   }
 
-  async delete({ response }: HttpContext) {
+  async destroy({ response }: HttpContext) {
     const data = await this.bidService.destroy()
     return response.custom({
       code: 200,

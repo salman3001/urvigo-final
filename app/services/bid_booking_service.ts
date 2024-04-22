@@ -10,12 +10,13 @@ import db from '@adonisjs/lucid/services/db'
 import vine from '@vinejs/vine'
 import { BigNumber } from 'bignumber.js'
 import { DateTime } from 'luxon'
+import { IndexOption } from '../helpers/types.js'
 
 @inject()
 export default class BidBookingService {
   constructor(protected ctx: HttpContext) {}
 
-  async index() {
+  async index(opt?: IndexOption) {
     const { bouncer, request } = this.ctx
     await bouncer.with('BidBookingPolicy').authorize('viewList')
     const bookingQuery = BidBooking.query()
@@ -31,6 +32,8 @@ export default class BidBookingService {
           })
         })
       })
+
+    !opt?.disableFilter && bookingQuery.filter(request.qs())
 
     return await bookingQuery.paginate(
       request.qs()?.page || 1,

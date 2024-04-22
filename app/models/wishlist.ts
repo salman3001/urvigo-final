@@ -1,6 +1,7 @@
-import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
-import ServiceVariant from './service_variant.js'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
+import Service from './service.js'
+import User from './user.js'
 
 export default class Wishlist extends BaseModel {
   @column({ isPrimary: true })
@@ -9,8 +10,11 @@ export default class Wishlist extends BaseModel {
   @column()
   declare userId: number
 
-  @manyToMany(() => ServiceVariant, {
+  @belongsTo(()=>User)
+  declare user: BelongsTo<typeof User>
+
+  @manyToMany(() => Service, {
     pivotTable: 'wishlist_items',
   })
-  declare items: ManyToMany<typeof ServiceVariant>
+  declare items: ManyToMany<typeof Service>
 }

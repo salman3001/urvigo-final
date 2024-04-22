@@ -13,10 +13,10 @@ export default class extends BaseSchema {
         .inTable('wishlists')
         .onDelete('CASCADE')
       table
-        .integer('service_variant_id', 10)
+        .integer('service_id', 10)
         .unsigned()
         .references('id')
-        .inTable('service_variants')
+        .inTable('services')
         .onDelete('CASCADE')
     })
   }

@@ -276,12 +276,7 @@ export default class ServiceRequirementService {
     const lastNegotiiate = bid.negotiateHistory[bid.negotiateHistory.length - 1]
 
     if (lastNegotiiate.accepted === false) {
-      return response.custom({
-        code: 400,
-        data: null,
-        message: 'Previous negotiate is still pending',
-        success: false,
-      })
+      return 'Last Request Pending'
     }
 
     bid.negotiateHistory.push({

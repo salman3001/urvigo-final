@@ -4,8 +4,12 @@ import { CouponType, DiscountType } from '#helpers/enums'
 import Service from './service.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
+import { compose } from '@adonisjs/core/helpers'
+import { Filterable } from 'adonis-lucid-filter'
+import CouponFilter from './filters/coupon_filter.js'
 
-export default class Coupon extends BaseModel {
+export default class Coupon extends compose(BaseModel, Filterable) {
+  static $filter = () => CouponFilter
   @column({ isPrimary: true })
   declare id: number
 
@@ -33,11 +37,11 @@ export default class Coupon extends BaseModel {
   @column()
   declare minPurchaseAmount: number
 
-  @column.dateTime({ autoCreate: true })
-  declare expiredAt: DateTime
+  @column({ consume: (v: string) => new Date(v) })
+  declare expiredAt: Date
 
-  @column.dateTime({ autoCreate: true })
-  declare validFrom: DateTime
+  @column({ consume: (v: string) => new Date(v) })
+  declare validFrom: Date
 
   @column()
   declare businessProfileId: number

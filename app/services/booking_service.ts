@@ -13,12 +13,14 @@ import config from '@adonisjs/core/services/config'
 import { BigNumber } from 'bignumber.js'
 import { DateTime } from 'luxon'
 import db from '@adonisjs/lucid/services/db'
+import { IndexOption } from '../helpers/types.js'
+import { paginate } from '../helpers/common.js'
 
 @inject()
 export default class BookingService {
   constructor(protected ctx: HttpContext) {}
 
-  async index() {
+  async index(opt?: IndexOption) {
     const { bouncer, request } = this.ctx
     await bouncer.with('BookingPolicy').authorize('viewList')
     const bookingQuery = Booking.query()
@@ -35,10 +37,9 @@ export default class BookingService {
         })
       })
 
-    return await bookingQuery.paginate(
-      request.qs()?.page || 1,
-      request.qs()?.perPage || config.get('common.rowsPerPage')
-    )
+    !opt?.disableFilter && bookingQuery.filter(request.qs())
+
+    return await paginate(bookingQuery, request)
   }
 
   async myList() {

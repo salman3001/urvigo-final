@@ -6,8 +6,12 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
 import BusinessProfile from './business_profile.js'
 import type { IBookingDetail } from '../helpers/types.js'
+import BookingFilter from './filters/booking_filter.js'
+import { Filterable } from 'adonis-lucid-filter'
+import { compose } from '@adonisjs/core/helpers'
 
-export default class Booking extends BaseModel {
+export default class Booking extends compose(BaseModel, Filterable) {
+  static $filter = () => BookingFilter
   @column({ isPrimary: true })
   declare id: number
 

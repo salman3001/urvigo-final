@@ -2,8 +2,12 @@ import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import Language from './language.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Blog from './blog.js'
+import { compose } from '@adonisjs/core/helpers'
+import { Filterable } from 'adonis-lucid-filter'
+import BlogCategoryFilter from './filters/blog_category_filter.js'
 
-export default class BlogCategory extends BaseModel {
+export default class BlogCategory extends compose(BaseModel, Filterable) {
+  static $filter = () => BlogCategoryFilter
   @column({ isPrimary: true })
   declare id: number
 

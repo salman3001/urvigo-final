@@ -15,16 +15,18 @@ export default class ServicePolicy extends BasePolicy {
     return true
   }
 
-  async create(user: any) {
+  async myList(user: User) {
+    if (user) {
+      return true
+    } else {
+      false
+    }
+  }
+
+  async create(user: User) {
     if (isVendor(user)) {
       return true
     }
-
-    // if (isAdmin(user) && (await hasPermission(user, permissions.MANAGE_SERVICE))) {
-    //   return true
-    // } else {
-    //   return false
-    // }
   }
 
   async update(user: User, service: Service) {

@@ -5,8 +5,12 @@ import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
 import type { IbidBookingDetail, PaymentDetail } from '#helpers/types'
+import { compose } from '@adonisjs/core/helpers'
+import { Filterable } from 'adonis-lucid-filter'
+import BidBookingFilter from './filters/bid_booking_filter.js'
 
-export default class BidBooking extends BaseModel {
+export default class BidBooking extends compose(BaseModel, Filterable) {
+  static $filter = () => BidBookingFilter
   @column({ isPrimary: true })
   declare id: number
 

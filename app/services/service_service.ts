@@ -3,14 +3,27 @@ import Service from '#models/service'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import config from '@adonisjs/core/services/config'
-import { CreateServiceReviewValidator } from '#validators/service'
+import {
+  CreateServiceReviewValidator,
+  createServiceValidator,
+  updateServiceValidator,
+} from '#validators/service'
 import ReviewPolicy from '#policies/review_policy'
+import { IndexOption } from '../helpers/types.js'
+import { paginate, slugify } from '../helpers/common.js'
+import db from '@adonisjs/lucid/services/db'
+import ServiceVariant from '../models/service_variant.js'
+import FileService from './file_service.js'
+import Image from '../models/image.js'
 
 @inject()
 export default class ServiceService {
-  constructor(protected ctx: HttpContext) {}
+  constructor(
+    protected ctx: HttpContext,
+    protected fileService: FileService
+  ) {}
 
-  async index() {
+  async index(opt?: IndexOption) {
     const { bouncer, request } = this.ctx
     await bouncer.with('ServicePolicy').authorize('viewList')
 
@@ -24,7 +37,6 @@ export default class ServiceService {
       .preload('tags', (s) => {
         s.select(['id', 'name'])
       })
-      .preload('images')
       .preload('variants')
       .select([
         'id',
@@ -46,12 +58,56 @@ export default class ServiceService {
         v.min('price').as('starting_from')
       })
 
-    serviceQuery.filter(request.qs())
+    !opt?.disableFilter && serviceQuery.filter(request.qs())
 
     return await serviceQuery.paginate(
       request.qs()?.page || 1,
       request.qs()?.perPage || config.get('common.rowsPerPage')
     )
+  }
+
+  async myList(opt?: IndexOption) {
+    const { request, response, bouncer, auth } = this.ctx
+    await bouncer.with('ServicePolicy').authorize('myList')
+
+    const serviceQuery = Service.query()
+      .where('vendor_user_id', auth.user!.id)
+      .preload('serviceCategory', (s) => {
+        s.select(['name'])
+      })
+      .preload('serviceSubcategory', (s) => {
+        s.select(['id', 'name'])
+      })
+      .preload('tags', (s) => {
+        s.select(['id', 'name'])
+      })
+      .preload('images')
+      .preload('variants')
+      .preload('images')
+      .select([
+        'id',
+        'name',
+        'slug',
+        'short_desc',
+        'is_active',
+        'geo_location',
+        'thumbnail',
+        'avg_rating',
+        'vendor_user_id',
+        'service_category_id',
+        'service_subcategory_id',
+        'created_at',
+      ])
+
+    !opt?.disableFilter && serviceQuery.filter(request.qs())
+    const services = await paginate(serviceQuery, request)
+
+    return response.custom({
+      code: 200,
+      data: services,
+      success: true,
+      message: null,
+    })
   }
 
   async showBySlug() {
@@ -154,5 +210,203 @@ export default class ServiceService {
 
     const review = await Review.create({ ...payload, userId: user?.id, serviceId: serviceId })
     return review
+  }
+
+  async store() {
+    const { request, bouncer, auth } = this.ctx
+
+    await bouncer.with('ServicePolicy').authorize('create')
+
+    const user = auth.user!
+    await user.load('businessProfile')
+
+    const payload = await request.validateUsing(createServiceValidator)
+    const slug = slugify(payload.service.name)
+
+    let service: Service | null = null
+
+    await db.transaction(async (trx) => {
+      service = await Service.create(
+        { ...payload.service, businessProfileId: user.businessProfile.id, slug: slug },
+        { client: trx }
+      )
+
+      if (payload.variant) {
+        for (const [index, variantPayload] of payload.variant.entries()) {
+          const variant = await ServiceVariant.create(
+            { ...variantPayload, serviceId: service.id },
+            { client: trx }
+          )
+
+          if (payload?.variantImages?.[index]) {
+            variant.image = await this.fileService.uploadeImage(
+              payload?.variantImages?.[index],
+              'services/variants'
+            )
+          }
+
+          await variant.save()
+        }
+      }
+
+      if (payload.seo) {
+        await service.related('seo').create(payload.seo)
+      }
+
+      if (payload.tags) {
+        await service.related('tags').attach(payload.tags)
+      }
+
+      if (payload.faq) {
+        await service.related('faq').createMany(payload.faq)
+      }
+
+      if (payload.thumbnail) {
+        service.thumbnail = await this.fileService.uploadeImage(
+          payload.thumbnail,
+          'services/thumbnails'
+        )
+      }
+
+      if (payload.images) {
+        for (const img of payload.images) {
+          await service
+            .related('images')
+            .create({ file: await this.fileService.uploadeImage(img, 'services/images') })
+        }
+      }
+
+      if (payload.video) {
+        service.video = { url: await this.fileService.uploadeFile(payload.video) }
+      }
+
+      await service.save()
+    })
+
+    return service!
+  }
+
+  async update() {
+    const { request, params, bouncer } = this.ctx
+    const service = await Service.findOrFail(+params.id)
+    const payload = await request.validateUsing(updateServiceValidator, {
+      meta: {
+        serviceId: service.id,
+      },
+    })
+
+    await db.transaction(async (trx) => {
+      await bouncer.with('ServicePolicy').authorize('update', service)
+      service.useTransaction(trx)
+      if (payload.service) {
+        if (payload.service?.name) {
+          const slug = slugify(payload.service.name)
+          service.merge({ ...payload.service, slug })
+          await service.save()
+        } else {
+          service.merge(payload.service)
+          await service.save()
+        }
+      }
+
+      if (payload.variant) {
+        await service.load('variants')
+
+        if (service.variants) {
+          for (const v of service.variants) {
+            await v.delete()
+          }
+        }
+
+        for (const [index, variantPayload] of payload.variant.entries()) {
+          const variant = await ServiceVariant.create(
+            { ...variantPayload, serviceId: service.id },
+            { client: trx }
+          )
+
+          if (payload.variantImages?.[index]) {
+            variant.image = await this.fileService.uploadeImage(
+              payload.variantImages?.[index],
+              'services/variants'
+            )
+          }
+          await variant.save()
+        }
+      }
+
+      if (payload.seo) {
+        await service.load('seo')
+        if (service.seo) {
+          service.seo.merge(payload.seo)
+          await service.seo.save()
+        } else {
+          await service.related('seo').create(payload.seo)
+        }
+      }
+
+      if (payload.tags) {
+        await service.related('tags').detach()
+        await service.related('tags').attach(payload.tags)
+      }
+
+      if (payload.faq) {
+        await service.load('faq')
+        if (service.faq) {
+          for (const f of service.faq) {
+            await f.delete()
+          }
+        }
+        await service.related('faq').createMany(payload.faq)
+      }
+
+      if (payload.thumbnail) {
+        service.thumbnail = await this.fileService.uploadeImage(
+          payload.thumbnail,
+          'services/thumbnails'
+        )
+      }
+
+      if (payload.images) {
+        // for (const img of service.images) {
+        //   await img.delete()
+
+        // }
+
+        for (const img of payload.images) {
+          await service.related('images').create({
+            file: await this.fileService.uploadeImage(img, 'services/images'),
+            serviceId: service.id,
+          })
+        }
+      }
+
+      if (payload.video) {
+        if (service.video) {
+          service.video = {
+            url: await this.fileService.uploadeFile(payload.video, 'services/videos'),
+          }
+        }
+      }
+
+      await service.save()
+    })
+
+    return service
+  }
+
+  async destroy() {
+    const { params, bouncer } = this.ctx
+    const service = await Service.findOrFail(+params.id)
+    await bouncer.with('ServicePolicy').authorize('delete', service)
+    await service.delete()
+
+    return service
+  }
+
+  async deleteImages() {
+    const { params } = this.ctx
+    const image = await Image.findOrFail(+params.id)
+    await image.delete()
+    return image
   }
 }

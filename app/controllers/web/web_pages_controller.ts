@@ -3,13 +3,19 @@ import ServiceCategoryService from '#services/service_category_service'
 import ServiceService from '#services/service_service'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
+import UserService from '../../services/user_service.js'
+import WishlstService from '../../services/wishlist_service.js'
+import notificationsService from '../../services/notification_service.js'
 
 @inject()
 export default class WebPagesController {
   constructor(
     protected serviceService: ServiceService,
     protected categoryService: ServiceCategoryService,
-    protected fileService: FileService
+    protected userService: UserService,
+    protected fileService: FileService,
+    protected wishlistService: WishlstService,
+    protected notificationService: notificationsService
   ) {}
 
   //auth
@@ -56,7 +62,18 @@ export default class WebPagesController {
   }
 
   async profile({ inertia }: HttpContext) {
-    return inertia.render('account/profile')
+    return inertia.render('account/profile', {
+      user: () => this.userService.me(),
+    })
+  }
+
+  async updatProfile({ response, session }: HttpContext) {
+    await this.userService.update()
+    session.flash('flas', {
+      message: 'Profile Updated',
+      type: 'success',
+    })
+    return response.redirect().back()
   }
 
   async security({ inertia }: HttpContext) {
@@ -68,11 +85,15 @@ export default class WebPagesController {
   }
 
   async wishlist({ inertia }: HttpContext) {
-    return inertia.render('account/wishlist')
+    return inertia.render('account/wishlist', {
+      wishlist: () => this.wishlistService.showDetailList(),
+    })
   }
 
   async notifications({ inertia }: HttpContext) {
-    return inertia.render('account/notifications')
+    return inertia.render('account/notifications', {
+      notifications: () => this.notificationService.index(),
+    })
   }
 
   // async businessProfile({ view }: HttpContext) {
