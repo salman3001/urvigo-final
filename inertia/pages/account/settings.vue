@@ -14,6 +14,5 @@ import AccountLayout from '~/components/Views/Web/account/AccountLayout.vue'
 <template>
   <AccountLayout :active-tab="'Settings'">
     <div>Settings</div>
-    <!-- <AccountProfile /> -->
   </AccountLayout>
 </template>

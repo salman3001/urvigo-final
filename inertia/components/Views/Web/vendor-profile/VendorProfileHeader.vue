@@ -29,12 +29,7 @@ defineProps<{
         <VAvatar
           rounded
           size="130"
-          :image="
-            getImageUrl(
-              profileHeaderData?.profile?.avatar?.breakpoints?.thumbnail?.url,
-              dummyAvatar
-            )
-          "
+          :image="getImageUrl(profileHeaderData?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
           class="user-profile-avatar mx-auto"
         />
       </div>
@@ -50,7 +45,7 @@ defineProps<{
             <span class="d-flex gap-x-2 align-center">
               <VIcon size="24" icon="tabler-palette" />
               <div class="text-body-1 font-weight-medium">
-                {{ profileHeaderData?.businessProfile.businessName }}
+                {{ profileHeaderData?.businessProfile?.businessName }}
               </div>
             </span>
 

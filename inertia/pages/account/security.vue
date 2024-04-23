@@ -8,12 +8,12 @@ export default {
 
 <script setup lang="ts">
 import AccountLayout from '~/components/Views/Web/account/AccountLayout.vue'
+import AccountSecurtiy from '~/components/Views/Web/account/AccountSecurtiy.vue'
 // import AccountProfile from '~/components/Views/Web/account/AccountProfile.vue'
 </script>
 
 <template>
   <AccountLayout :active-tab="'Security'">
-    <div>Security</div>
-    <!-- <AccountProfile /> -->
+    <AccountSecurtiy />
   </AccountLayout>
 </template>

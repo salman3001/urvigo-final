@@ -1,111 +1,122 @@
 <script lang="ts" setup>
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
-// import { Socket } from 'socket.io-client'
+import { Socket } from 'socket.io-client'
+import type Message from '#models/message'
+import type User from '#models/user'
+import type Conversation from '#models/conversation'
+import { usePage } from '@inertiajs/vue3'
+import { IPageProps, IPaginatedModel } from '#helpers/types'
+import { computed, reactive, ref } from 'vue'
+import useGetImageUrl from '~/composables/useGetImageUrl'
+import useApi from '~/composables/useApi'
+import routes from '~/utils/routes'
+import { watch } from 'vue'
+import { formatDate } from '@vueuse/core'
 
-// const props = defineProps<{
-//   selectedConversation: IConversation
-//   selectedParticipant: IVendorUser | IAdminUser | IUser
-//   socket: Socket | null
-//   newMessage: null | IMessage
-// }>()
+const props = defineProps<{
+  selectedConversation: Conversation
+  selectedParticipant: User
+  socket: Socket | null
+  newMessage: null | Message
+}>()
+
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page.props?.user)
 
 // const { fetcher } = useFetchRef()
-// const user = useCookie('user') as unknown as Ref<IUser>
-// const getImageUrl = useGetImageUrl()
-// const loadingMore = ref(false)
+const getImageUrl = useGetImageUrl()
 
-// const myIdentifier = `${user?.value.userType}-${user?.value.id}`
+const {
+  data,
+  processing,
+  exec: getMessages,
+} = useApi<IPaginatedModel<Message>>(
+  routes('api.chat.get_messages', [props.selectedConversation.id]),
+  'get'
+)
 
-// const { data, pending, refresh } = await useAsyncData(async () => {
-//   const data = await fetcher<IPageRes<IMessage[]>>(
-//     apiRoutes.chat.conversations.messages(props.selectedConversation.id),
-//     {
-//       query: {
-//         page: 1,
-//         orderBy: 'created_at:desc',
-//       } as IQs,
-//     }
-//   )
-//   return data.data
-// })
+const {
+  data: newData,
+  processing: loadingMore,
+  exec: getNewMessages,
+} = useApi<IPaginatedModel<Message>>(
+  routes('api.chat.get_messages', [props.selectedConversation.id]),
+  'get'
+)
 
-// const dataRef = ref(data.value)
+const query = reactive({
+  page: 1,
+  orderBy: 'createdAt:desc',
+})
 
-// watch(data, () => {
-//   dataRef.value = data.value
-// })
+const dataRef = ref(data.value)
 
-// watch(
-//   () => props.selectedConversation,
-//   () => {
-//     refresh()
-//   }
-// )
+watch(data, () => {
+  dataRef.value = data.value
+})
 
-// watch(
-//   () => props.newMessage,
-//   () => {
-//     if (
-//       props.newMessage !== null &&
-//       props.newMessage.conversation_id == props.selectedConversation.id
-//     ) {
-//       dataRef.value?.data.unshift(props.newMessage)
-//       if (dataRef.value?.data.length! > 19) {
-//         dataRef.value?.data.pop()
-//       }
-//     }
-//   }
-// )
+watch(
+  () => props.selectedConversation,
+  () => {
+    getMessages({
+      data: query,
+    })
+  }
+)
 
-// const getMoreMessages = async () => {
-//   loadingMore.value = true
-//   if (data.value?.meta.next_page_url) {
-//     const newData = await fetcher<IPageRes<IMessage[]>>(
-//       apiRoutes.chat.conversations.messages(props.selectedConversation.id),
-//       {
-//         query: {
-//           page: dataRef.value?.meta.current_page! + 1,
-//           orderBy: 'created_at:desc',
-//         } as AdditionalParams,
-//       }
-//     )
+watch(
+  () => props.newMessage,
+  () => {
+    if (
+      props.newMessage !== null &&
+      props.newMessage.conversationId == props.selectedConversation.id
+    ) {
+      dataRef.value?.data.unshift(props.newMessage)
+      if (dataRef.value?.data.length! > 19) {
+        dataRef.value?.data.pop()
+      }
+    }
+  }
+)
 
-//     const joinedData = [...(dataRef?.value?.data || []), ...newData?.data?.data]
+const getMoreMessages = async () => {
+  if (data.value?.meta.hasMorePages) {
+    await getNewMessages({
+      data: {
+        page: dataRef.value?.meta.currentPage! + 1,
+        orderBy: 'createdAt:desc',
+      },
+    })
 
-//     dataRef.value!.data = joinedData
-//     dataRef.value!.meta = newData.data.meta
-//   }
+    const joinedData = [...(dataRef?.value?.data || []), ...newData?.value!?.data]
 
-//   loadingMore.value = false
-// }
+    dataRef.value!.data = joinedData
+    dataRef.value!.meta = newData.value!?.meta
+  }
+}
 </script>
 
 <template>
-  <!-- <div class="chat-log pa-6" v-for="m in data?.data" :key="m.id">
+  <div class="chat-log pa-6" v-for="m in data?.data" :key="m.id">
     <div
       class="chat-group d-flex align-start"
       :class="[
         {
-          'flex-row-reverse': m.user_identifier == myIdentifier,
+          'flex-row-reverse': m.userId === user?.id,
         },
       ]"
     >
-      <div class="chat-avatar" :class="m.user_identifier == myIdentifier ? 'ms-4' : 'me-4'">
+      <div class="chat-avatar" :class="m.userId === user?.id ? 'ms-4' : 'me-4'">
         <VAvatar size="32">
           <VImg
-            :src="
-              getImageUrl(
-                selectedParticipant.profile?.avatar?.breakpoints?.thumbnail?.url,
-                dummyAvatar
-              )
-            "
-            :alt="user.first_name + user.last_name"
+            :src="getImageUrl(selectedParticipant.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+            :alt="user!?.firstName + user!?.lastName"
           />
         </VAvatar>
       </div>
       <div
         class="chat-body d-inline-flex flex-column"
-        :class="m.user_identifier == myIdentifier ? 'align-end' : 'align-start'"
+        :class="m.userId === user?.id ? 'align-end' : 'align-start'"
       >
         <div
           class="chat-content py-2 px-4 elevation-2"
@@ -113,10 +124,10 @@ import dummyAvatar from '~/assets/images/dummy-avatar.webp'
         >
           <p class="mb-0 text-base">{{ m.body }}</p>
         </div>
-        <div :class="{ 'text-right': m.user_identifier == myIdentifier }">
-          <VIcon v-if="m.user_identifier == myIdentifier" size="16" :color="'success'" />
+        <div :class="{ 'text-right': m.userId === user?.id }">
+          <VIcon v-if="m.userId === user?.id" size="16" :color="'success'" />
           <span class="text-sm ms-2 text-disabled">{{
-            formatDate(m.created_at, {
+            formatDate(m.createdAt as unknown as string, {
               hour: 'numeric',
               minute: 'numeric',
             })
@@ -135,7 +146,7 @@ import dummyAvatar from '~/assets/images/dummy-avatar.webp'
   </div>
   <div v-else-if="data?.data?.length! > 1" class="d-flex justify-center w-100">
     <VBtn
-      v-if="dataRef?.meta.next_page_url"
+      v-if="dataRef?.meta.hasMorePages"
       variant="tonal"
       @click="
         () => {
@@ -146,7 +157,7 @@ import dummyAvatar from '~/assets/images/dummy-avatar.webp'
       "
       >Load More</VBtn
     >
-  </div> -->
+  </div>
 </template>
 
 <style lang="scss">

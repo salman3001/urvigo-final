@@ -111,7 +111,11 @@ export default {
                     size="38"
                   />
                   <div>
-                    <Link :href="''">
+                    <Link
+                      :href="
+                        routes('web.vendor-profile.about', [service?.businessProfile.vendor?.id])
+                      "
+                    >
                       <h6 class="text-h6 mb-1">
                         {{ service?.businessProfile.vendor?.firstName }}
                         {{ service?.businessProfile.vendor?.lastName }}

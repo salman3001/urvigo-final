@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { IPageProps } from '#helpers/types'
 import { Link, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 import avatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
 
 const getImageUrl = useGetImageUrl()
-const { user } = usePage<IPageProps<{}>>().props
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page?.props?.user)
 </script>
 
 <template>

@@ -21,7 +21,7 @@ export default class WebAuthsController {
       if (next) {
         return response.redirect().toPath(next)
       } else {
-        return response.redirect().toRoute('home')
+        return response.redirect().toRoute('web.home')
       }
     } else {
       session.flash('flash', {
@@ -38,7 +38,7 @@ export default class WebAuthsController {
       message: 'Account Created !',
       type: 'success',
     })
-    return response.redirect().toRoute('home')
+    return response.redirect().toRoute('web.home')
   }
 
   async sendForgotPasswordOtp({ response, session }: HttpContext) {
@@ -48,13 +48,13 @@ export default class WebAuthsController {
         message: 'Invalid Credentials',
         type: 'error',
       })
-      return response.redirect().toRoute('auth.forgot-password')
+      return response.redirect().toRoute('web.auth.forgot-password')
     } else {
       session.flash('flash', {
         message: 'OTP Sent',
         type: 'success',
       })
-      return response.redirect().withQs({ email: user?.email }).toRoute('auth.reset-password')
+      return response.redirect().withQs({ email: user?.email }).toRoute('web.auth.reset-password')
     }
   }
 
@@ -65,25 +65,25 @@ export default class WebAuthsController {
         message: 'Invalid OTP',
         type: 'error',
       })
-      return response.redirect().toRoute('auth.reset-password')
+      return response.redirect().toRoute('web.auth.reset-password')
     } else if (data === 'Invalid Email') {
       session.flash('flash', {
         message: 'Invalid Email ID',
         type: 'error',
       })
-      return response.redirect().toRoute('auth.reset-password')
+      return response.redirect().toRoute('web.auth.reset-password')
     } else {
       session.flash('flash', {
         message: 'Password Reset Successfully',
         type: 'success',
       })
-      return response.redirect().toRoute('home')
+      return response.redirect().toRoute('web.home')
     }
   }
 
   async logout({ response, session }: HttpContext) {
     await this.authService.logout()
     session.flash('flash', { message: 'Logout Success', type: 'success' })
-    return response.redirect().toRoute('home')
+    return response.redirect().toRoute('web.home')
   }
 }

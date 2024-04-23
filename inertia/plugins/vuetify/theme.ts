@@ -1,4 +1,5 @@
 import type { ThemeDefinition } from 'vuetify'
+import colors from 'vuetify/util/colors'
 
 export const staticPrimaryColor = '#7367F0'
 export const staticPrimaryDarkenColor = '#675DD8'
@@ -44,6 +45,7 @@ export const themes: Record<string, ThemeDefinition> = {
       'skin-bordered-background': '#fff',
       'skin-bordered-surface': '#fff',
       'expansion-panel-text-custom-bg': '#fafafa',
+      'pink': colors.pink.base,
     },
 
     variables: {
@@ -117,6 +119,7 @@ export const themes: Record<string, ThemeDefinition> = {
       'perfect-scrollbar-thumb': '#4A5072',
       'skin-bordered-background': '#2F3349',
       'skin-bordered-surface': '#2F3349',
+      'pink': colors.pink.base,
     },
     variables: {
       'code-color': '#d400ff',

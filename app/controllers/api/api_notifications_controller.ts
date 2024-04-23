@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import notificationsService from '../../services/notification_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiNotificationsController {
   constructor(protected notificationService: notificationsService) {}
   async index({ response }: HttpContext) {

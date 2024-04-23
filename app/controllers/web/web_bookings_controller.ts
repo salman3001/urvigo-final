@@ -41,7 +41,7 @@ export default class WebBookingsController {
         type: 'error',
       })
 
-      return response.redirect().toRoute('home')
+      return response.redirect().toRoute('web.home')
     }
 
     return inertia.render('bookings/checkout/booking-address', {
@@ -58,7 +58,7 @@ export default class WebBookingsController {
         type: 'error',
       })
 
-      return response.redirect().toRoute('home')
+      return response.redirect().toRoute('web.home')
     }
 
     return inertia.render('bookings/checkout/booking-payment', {
@@ -75,7 +75,7 @@ export default class WebBookingsController {
         type: 'error',
       })
 
-      return response.redirect().toRoute('home')
+      return response.redirect().toRoute('web.home')
     }
     await this.bookingService.store()
     session.flash('flash', {

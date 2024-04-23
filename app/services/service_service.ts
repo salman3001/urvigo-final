@@ -15,6 +15,7 @@ import db from '@adonisjs/lucid/services/db'
 import ServiceVariant from '../models/service_variant.js'
 import FileService from './file_service.js'
 import Image from '../models/image.js'
+import User from '#models/user'
 
 @inject()
 export default class ServiceService {
@@ -153,6 +154,60 @@ export default class ServiceService {
       services = await Service.query()
         .whereHas('serviceCategory', (s) => {
           s.where('id', service.serviceCategoryId)
+        })
+        .preload('serviceCategory', (s) => {
+          s.select(['name'])
+        })
+        .preload('serviceSubcategory', (s) => {
+          s.select(['id', 'name'])
+        })
+        .preload('tags', (s) => {
+          s.select(['id', 'name'])
+        })
+        .preload('images')
+        .preload('variants')
+        .select([
+          'id',
+          'name',
+          'slug',
+          'short_desc',
+          'is_active',
+          'geo_location',
+          'thumbnail',
+          'avg_rating',
+          'service_category_id',
+          'service_subcategory_id',
+          'created_at',
+        ])
+        .withCount('reviews', (r) => {
+          r.as('reviews_count')
+        })
+        .withAggregate('variants', (v) => {
+          v.min('price').as('starting_from')
+        })
+        .limit(config.get('common.rowsPerPage') || 20)
+    }
+
+    return services
+  }
+
+  async vendorServices() {
+    const { bouncer, params } = this.ctx
+    await bouncer.with('ServicePolicy').authorize('viewList')
+
+    const vendor = await User.query()
+      .where('id', params.id)
+      .preload('businessProfile', (b) => {
+        b.select('id')
+      })
+      .firstOrFail()
+
+    let services: Service[] = []
+
+    if (vendor) {
+      services = await Service.query()
+        .whereHas('businessProfile', (s) => {
+          s.where('id', vendor?.businessProfile?.id)
         })
         .preload('serviceCategory', (s) => {
           s.select(['name'])

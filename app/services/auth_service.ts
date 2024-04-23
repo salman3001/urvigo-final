@@ -11,8 +11,16 @@ import hash from '@adonisjs/core/services/hash'
 export default class AuthService {
   constructor(protected ctx: HttpContext) {}
   async login() {
-    const { email, password } = this.ctx.request.only(['email', 'password'])
-    return await User.verifyCredentials(email, password)
+    const { request, response } = this.ctx
+    const { email, password } = request.only(['email', 'password'])
+    const user = await User.verifyCredentials(email, password)
+    const socketToken = Math.floor(100000 + Math.random() * 900000).toString()
+    user.socketToken = socketToken
+    await user.save()
+    response.cookie('socket-token', socketToken, {
+      httpOnly: false,
+    })
+    return user
   }
 
   async logout() {

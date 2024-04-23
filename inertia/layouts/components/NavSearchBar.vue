@@ -46,7 +46,7 @@ const suggestionGroups: SuggestionGroup[] = [
       {
         icon: 'tabler-chart-donut-3',
         title: 'Service Requirements',
-        url: { path: routes('web.service_requirement.list') },
+        url: { path: routes('web.service_requirement.my-list') },
       },
       {
         icon: 'tabler-shopping-cart',

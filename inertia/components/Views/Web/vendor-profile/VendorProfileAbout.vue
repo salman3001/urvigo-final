@@ -4,7 +4,7 @@ import User from '#models/user'
 interface Props {
   vendor: User
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <template>

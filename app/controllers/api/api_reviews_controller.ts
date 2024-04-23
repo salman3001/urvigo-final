@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import ReviewsService from '../../services/review_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiReviewsController {
   constructor(protected reviewService: ReviewsService) {}
 

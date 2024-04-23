@@ -6,6 +6,10 @@ import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { confirmedValidator, passwordValidator, requiredValidator } from '~/@core/utils/validators'
 import CustomForm from '~/components/form/CustomForm.vue'
 import ErrorAlert from '~/components/form/ErrorAlert.vue'
+import routes from '~/utils/routes'
+
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page.props?.user)
 
 const isCurrentPasswordVisible = ref(false)
 const isNewPasswordVisible = ref(false)
@@ -17,19 +21,20 @@ const passwordRequirements = [
   'At least one number, symbol, or whitespace character',
 ]
 
-const page = usePage<IPageProps<{}>>()
-
-const user = computed(() => page.props?.user)
-
-const initialForm = useForm({
+const form = useForm({
   old_password: '',
   password: '',
   password_confirmation: '',
 })
 
-const updatePassword = async (reset: () => void, resetValidation: () => void) => {}
-
-const form = ref(initialForm)
+const updatePassword = async (reset: () => void, resetValidation: () => void) => {
+  form.post(routes('web.account.security.post', [user.value!.id]), {
+    onSuccess: () => {
+      reset()
+      resetValidation()
+    },
+  })
+}
 </script>
 
 <template>

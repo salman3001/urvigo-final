@@ -159,6 +159,7 @@ const sources: BundleScriptConfig = {
         'filter',
         'map-pin',
         'currency-dollar',
+        'moon-stars',
       ],
     },
     {

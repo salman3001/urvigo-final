@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import ChatService from '../../services/chat_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiConversationsController {
   constructor(protected chatService: ChatService) {}
 

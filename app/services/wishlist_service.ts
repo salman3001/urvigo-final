@@ -121,14 +121,21 @@ export default class WishlstService {
   }
 
   async deleteItem() {
-    const { bouncer, auth, params } = this.ctx
+    const { bouncer, auth, request } = this.ctx
     await bouncer.with('WishlistPolicy').authorize('delete')
 
-    const itemId = params.itemId
     const user = auth.user
 
+    const vallidationSchema = vine.compile(
+      vine.object({
+        serviceId: vine.number(),
+      })
+    )
+
+    const payload = await request.validateUsing(vallidationSchema)
+
     const wishlist = await Wishlist.findByOrFail('user_id', user!.id)
-    await wishlist.related('items').detach([itemId])
+    await wishlist.related('items').detach([payload.serviceId])
 
     await wishlist!.load('items')
 

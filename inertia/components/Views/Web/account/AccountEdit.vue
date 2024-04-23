@@ -7,7 +7,6 @@ import avatar from '~/assets/images/dummy-avatar.webp'
 import AvatarInput from '~/components/form/AvatarInput.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import apiRoutes from '~/utils/apiRoutes'
 import routes from '~/utils/routes'
 
 const props = defineProps<{
@@ -17,7 +16,7 @@ const props = defineProps<{
 const getImageUrl = useGetImageUrl()
 
 const form = useForm({
-  image: undefined as File | undefined,
+  avatar: undefined as File | undefined,
   firstName: props.user.firstName,
   lastName: props.user.lastName,
   email: props.user.email,
@@ -25,7 +24,9 @@ const form = useForm({
 })
 
 const updateProfile = async () => {
-  form.post(routes('web.account.profile.post'))
+  form.post(routes('web.account.profile.post', [props.user.id]), {
+    forceFormData: true,
+  })
 }
 </script>
 
@@ -38,7 +39,7 @@ const updateProfile = async () => {
         :url="getImageUrl(user?.profile?.avatar?.thumbnailUrl, avatar)"
         @image="
           (f) => {
-            form.image = f
+            form.avatar = f
           }
         "
       />
@@ -46,7 +47,7 @@ const updateProfile = async () => {
 
     <VCardText class="pt-2">
       <!-- 👉 Form -->
-      <CustomForm @submit="() => updateProfile" class="mt-3">
+      <CustomForm @submit="updateProfile" class="mt-3">
         <VRow>
           <!-- 👉 First Name -->
           <VCol md="6" cols="12">

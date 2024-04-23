@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import BidBookingService from '../../services/bid_booking_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiBidBookingsController {
   constructor(protected bidBookingService: BidBookingService) {}
 

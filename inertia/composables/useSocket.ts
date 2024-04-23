@@ -1,35 +1,37 @@
-import { io, type Socket } from "socket.io-client";
+import type { IPageProps } from '#helpers/types'
+import { usePage } from '@inertiajs/vue3'
+import { io, type Socket } from 'socket.io-client'
+import { ref } from 'vue'
+import { useCookie } from '~/@core/composable/useCookie'
 
 export default function useSocket() {
-  const user = useCookie("user") as Ref<IUser>;
-  const socketToken = useCookie("socketToken");
-  const socket = ref<Socket | null>(null);
-  const config = useRuntimeConfig();
+  const socketToken = useCookie('socketToken')
+  const socket = ref<Socket | null>(null)
+  const { user } = usePage<IPageProps<{}>>().props
 
   const connectSocket = (url: string) => {
     if (!socket.value) {
-      socket.value = io(config.public.baseApi + url || "", {
-        transports: ["websocket"],
+      socket.value = io(url || '', {
+        transports: ['websocket'],
         auth: {
-          "user-id": user?.value.id as unknown as string,
-          "socket-token": socketToken.value || "",
-          "user-type": user.value.userType || "",
+          'user-id': user?.id as unknown as string,
+          'socket-token': socketToken.value || '',
         },
-      });
+      })
     }
-  };
+  }
 
   const disconnectSocket = () => {
     if (socket.value) {
-      socket.value.removeAllListeners();
-      socket.value.disconnect();
-      socket.value = null;
+      socket.value.removeAllListeners()
+      socket.value.disconnect()
+      socket.value = null
     }
-  };
+  }
 
   return {
     socket,
     connectSocket,
     disconnectSocket,
-  };
+  }
 }

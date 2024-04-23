@@ -1,7 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 import BlogCategoryService from '../../services/blog_category_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiBlogCategoriesController {
   constructor(protected blogCategoryService: BlogCategoryService) {}
 

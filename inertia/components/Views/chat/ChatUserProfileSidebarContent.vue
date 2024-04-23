@@ -2,16 +2,19 @@
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { usePage } from '@inertiajs/vue3'
 import type { IPageProps } from '#helpers/types'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import useGetImageUrl from '~/composables/useGetImageUrl'
+import dummyAvatar from '~/assets/images/dummy-avatar.webp'
+import { avatarText } from '~/@core/utils/formatters'
 
 defineEmits<{
   (e: 'close'): void
 }>()
 
 // composables
-
-// const getImageUrl = useGetImageUrl();
-const { user } = usePage<IPageProps<{}>>().props
+const getImageUrl = useGetImageUrl()
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page.props?.user)
 
 const isAuthenticationEnabled = ref(true)
 const isNotificationEnabled = ref(false)
@@ -27,7 +30,7 @@ const isNotificationEnabled = ref(false)
     </div>
 
     <!-- User Avatar + Name + Role -->
-    <!-- <div class="text-center px-6">
+    <div class="text-center px-6">
       <VBadge
         location="bottom right"
         offset-x="7"
@@ -39,26 +42,21 @@ const isNotificationEnabled = ref(false)
         <VAvatar size="84" :variant="'tonal'" :color="'success'">
           <VImg
             v-if="user?.profile?.avatar"
-            :src="
-              getImageUrl(
-                user?.profile?.avatar?.breakpoints?.thumbnail?.url,
-                dummyAvatar,
-              )
-            "
-            :alt="user?.first_name + ' ' + user?.last_name"
+            :src="getImageUrl(user?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+            :alt="user?.firstName + ' ' + user?.lastName"
           />
           <span v-else class="text-3xl">{{
-            avatarText(user?.first_name + " " + user?.last_name)
+            avatarText(user?.firstName + ' ' + user?.lastName)
           }}</span>
         </VAvatar>
       </VBadge>
       <h5 class="text-h5">
-        {{ user?.first_name || "" + " " + user?.last_name }}
+        {{ user?.firstName || '' + ' ' + user?.lastName }}
       </h5>
       <p class="text-capitalize text-medium-emphasis mb-0">
         {{ user.userType }}
       </p>
-    </div> -->
+    </div>
 
     <!-- User Data -->
     <PerfectScrollbar

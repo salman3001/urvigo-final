@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import wishlistStore from '~/stores/wishlistStore'
+import type Wishlist from '#models/wishlist'
+import ServiceCard from '~/components/ServiceCard.vue'
 
-const wishlist = wishlistStore()
-
-// const { data, pending } = useAsyncData(() => wishlist.fetchDetailedWishlist());
+defineProps<{
+  wishlist: Wishlist
+}>()
 </script>
 
 <template>
   <h2>My Wishist</h2>
   <br />
-  <!-- <VRow>
-    <VCol v-if="pending" v-for="s in 10" cols="12" md="6" lg="3">
+  <VRow>
+    <VCol v-if="!wishlist" v-for="s in 10" cols="12" md="6" lg="3">
       <VSkeletonLoader type="card" />
     </VCol>
-    <VCol v-else v-for="s in data?.items" cols="12" md="6" lg="3">
+    <VCol v-else v-for="s in wishlist?.items" cols="12" md="6" lg="3">
       <ServiceCard :service="s" />
     </VCol>
-  </VRow> -->
+  </VRow>
 </template>

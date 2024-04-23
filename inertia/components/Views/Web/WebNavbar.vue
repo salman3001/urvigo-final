@@ -35,7 +35,7 @@ interface MenuItem {
 const navMenuItems = [
   { label: 'Home', link: routes('web.home') },
   { label: 'Services', link: routes('web.services') },
-  { label: 'Service Requirements', link: routes('web.service_requirement.list') },
+  { label: 'Service Requirements', link: routes('web.service_requirement.my-list') },
 ]
 
 const { y } = useWindowScroll()
@@ -58,10 +58,10 @@ const menuItems: MenuItem[] = [
     listTitle: 'Service Requirement',
     listIcon: 'tabler-layout-grid',
     navItems: [
-      { name: 'My Requirement', to: routes('web.service_requirement.list') },
+      { name: 'My Requirement', to: routes('web.service_requirement.my-list') },
       {
         name: 'Post Requirement',
-        to: routes('web.service_requirement.list'),
+        to: routes('web.service_requirement.my-list'),
       },
       // { name: 'Payment', to: { name: 'front-pages-payment' } },
       // { name: 'Checkout', to: { name: 'front-pages-checkout' } },

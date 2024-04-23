@@ -6,6 +6,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import UserService from '../../services/user_service.js'
 import WishlstService from '../../services/wishlist_service.js'
 import notificationsService from '../../services/notification_service.js'
+import ReviewsService from '#services/review_service'
 @inject()
 export default class WebPagesController {
   constructor(
@@ -14,7 +15,8 @@ export default class WebPagesController {
     protected userService: UserService,
     protected fileService: FileService,
     protected wishlistService: WishlstService,
-    protected notificationService: notificationsService
+    protected notificationService: notificationsService,
+    protected reviewsService: ReviewsService
   ) {}
 
   //auth
@@ -68,7 +70,7 @@ export default class WebPagesController {
 
   async updatProfile({ response, session }: HttpContext) {
     await this.userService.update()
-    session.flash('flas', {
+    session.flash('flash', {
       message: 'Profile Updated',
       type: 'success',
     })
@@ -80,7 +82,11 @@ export default class WebPagesController {
   }
 
   async updateSecurity({ response, session }: HttpContext) {
-    await this.userService.updateUserPassword()
+    const data = await this.userService.updateUserPassword()
+    if (data === 'invalid') {
+      session.flash('flash', { message: 'Invalid Credentials', type: 'error' })
+      return response.redirect().back()
+    }
     session.flash('flash', { message: 'User security updated', type: 'success' })
     return response.redirect().back()
   }
@@ -136,9 +142,25 @@ export default class WebPagesController {
     return response.redirect().back()
   }
 
-  // async businessProfile({ view }: HttpContext) {
-  //   return view.render('pages/business/view', {})
-  // }
+  async vendorProfile({ inertia }: HttpContext) {
+    return inertia.render('vendor-profiles/about', {
+      vendor: () => this.userService.show(),
+    })
+  }
+
+  async vendorServices({ inertia }: HttpContext) {
+    return inertia.render('vendor-profiles/services', {
+      vendor: () => this.userService.show(),
+      services: () => this.serviceService.vendorServices(),
+    })
+  }
+
+  async vendorReviews({ inertia }: HttpContext) {
+    return inertia.render('vendor-profiles/reviews', {
+      reviews: () => this.reviewsService.getVendorReviews(),
+      vendor: () => this.userService.show(),
+    })
+  }
 
   async temp({ response }: HttpContext) {
     // const file = request.file('file')

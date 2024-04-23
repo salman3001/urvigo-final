@@ -25,7 +25,7 @@ const pagesList: Menu[] = [
   { name: 'Services', to: routes('web.services'), isNew: true },
   {
     name: 'Service Requirements',
-    to: routes('web.service_requirement.list'),
+    to: routes('web.service_requirement.my-list'),
   },
   { name: 'Help Center', to: '' },
   { name: 'Login/Register', to: routes('web.auth.login') },

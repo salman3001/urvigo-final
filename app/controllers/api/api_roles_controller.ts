@@ -1,7 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 import RoleService from '../../services/role_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiRolesController {
   constructor(protected roleService: RoleService) {}
 

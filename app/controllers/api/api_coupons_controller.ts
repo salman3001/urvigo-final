@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import CouponService from '../../services/coupon_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiCouponsController {
   constructor(protected couponService: CouponService) {}
 

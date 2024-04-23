@@ -7,6 +7,7 @@ import db from '@adonisjs/lucid/services/db'
 import FileService from './file_service.js'
 import vine from '@vinejs/vine'
 import { userTypes } from '#helpers/enums'
+import hash from '@adonisjs/core/services/hash'
 
 @inject()
 export default class UserService {
@@ -37,7 +38,7 @@ export default class UserService {
       })
       .firstOrFail()
 
-    await bouncer.with('userPolicy').authorize('view', user)
+    await bouncer.with('userPolicy').authorize('view')
 
     return user
   }
@@ -54,7 +55,7 @@ export default class UserService {
       })
       .firstOrFail()
 
-    await bouncer.with('userPolicy').authorize('view', user)
+    await bouncer.with('userPolicy').authorize('view')
 
     return user
   }
@@ -139,20 +140,25 @@ export default class UserService {
 
     const validationSchema = vine.compile(
       vine.object({
+        old_password: vine.string().trim(),
         password: vine.string().minLength(8).trim(),
         password_confirmation: vine.string().confirmed({ confirmationField: 'password' }),
       })
     )
 
     const payload = await request.validateUsing(validationSchema)
-    user.password = payload.password
-    await user.save()
-    return user
+    if (await hash.verify(user.password, payload.old_password)) {
+      user.password = payload.password
+      await user.save()
+      return user
+    } else {
+      return 'invalid'
+    }
   }
 
   async updateSubscribedCategories() {
     const { request, bouncer, auth } = this.ctx
-    const user = auth.user
+    const user = auth.user as User
 
     const isVendorUser = user?.userType === userTypes.VENDER
     if (!isVendorUser) {

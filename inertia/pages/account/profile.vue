@@ -18,7 +18,6 @@ defineProps<{
 
 <template>
   <AccountLayout :active-tab="'Account'">
-    <div>Profile</div>
     <AccountProfile :user="user" />
   </AccountLayout>
 </template>

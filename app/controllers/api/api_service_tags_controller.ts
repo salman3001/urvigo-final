@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import ServiceTagService from '../../services/service_tag_service.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiServiceTagsController {
   constructor(protected serviceTag: ServiceTagService) {}
 

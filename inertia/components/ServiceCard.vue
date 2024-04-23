@@ -3,10 +3,11 @@ import useGetImageUrl from '~/composables/useGetImageUrl'
 import BigNumber from 'bignumber.js'
 import Service from '#models/service'
 import wishlistStore from '~/stores/wishlistStore'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { DiscountType } from '#helpers/enums'
 import routes from '~/utils/routes'
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
+import { VBtn } from 'vuetify/components'
 
 const props = defineProps<{
   service: Service
@@ -30,20 +31,49 @@ if (minPriceVariant.discountFlat === DiscountType.FLAT) {
     .times(minPriceVariant.price)
 }
 
-const isWishlisted = computed(() => {
-  const matchedItem = wishlist.wishlistItems.filter((i) => i.id == props.service.id)
-  if (matchedItem.length > 0) {
-    return true
-  } else {
-    false
-  }
+const isWishlisted = ref<boolean | undefined>(false)
+
+watch(
+  () => wishlist.wishlistItems,
+  () => {
+    isWishlisted.value = wishlist.isWishlisted(props.service.id)
+  },
+  { immediate: true }
+)
+
+const addItemForm = useForm({
+  serviceId: '',
 })
+
+const removeItemForm = useForm({
+  serviceId: '',
+})
+
+const addItem = (serviceId: number | string) => {
+  addItemForm.serviceId = serviceId as string
+  addItemForm.post(routes('web.account.wishlist.add_item'), {
+    onSuccess: () => {
+      wishlist.fetchWishlist({})
+    },
+    preserveScroll: true,
+  })
+}
+
+const removeItem = (serviceId: number | string) => {
+  removeItemForm.serviceId = serviceId as string
+  removeItemForm.post(routes('web.account.wishlist.remove_item'), {
+    onSuccess: () => {
+      wishlist.fetchWishlist({})
+    },
+    preserveScroll: true,
+  })
+}
 </script>
 
 <template>
   <Link :href="routes('web.services.show', [service.slug])">
     <VCard class="ma-0">
-      <VImg :src="getImageUrl(service?.thumbnail?.breakpoints?.thumbnail?.url)" cover />
+      <VImg :src="getImageUrl(service?.thumbnail?.thumbnailUrl)" cover />
 
       <VCardItem>
         <VCardTitle>{{ service.name }}</VCardTitle>
@@ -106,7 +136,7 @@ const isWishlisted = computed(() => {
               @click="
                 (e: Event) => {
                   e.preventDefault()
-                  wishlist.removeWishlistItem(service.id)
+                  removeItem(service.id)
                 }
               "
             >
@@ -127,7 +157,7 @@ const isWishlisted = computed(() => {
               @click="
                 (e: Event) => {
                   e.preventDefault()
-                  wishlist.addWishlistItem(service.id)
+                  addItem(service.id)
                 }
               "
             >

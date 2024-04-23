@@ -18,7 +18,6 @@ export async function paginate<T extends LucidModel>(
 }
 
 export function slugify(str: string): string {
-  // Remove special characters, convert spaces to dashes, and make lowercase
   return str
     .replace(/[^\w\s-]/g, '') // Remove special characters except for spaces and dashes
     .trim() // Trim leading and trailing spaces
@@ -26,12 +25,11 @@ export function slugify(str: string): string {
     .toLowerCase() // Convert to lowercase
 }
 
-export function getNamedRoutes() {
-  /**
-   * Only sharing the main domain routes. Subdomains are
-   * ignored for now. Let's see if many people need it
-   */
+export const isEmptyObject = (obj: Object) => {
+  return Object.keys(obj).length === 0
+}
 
+export function getNamedRoutes() {
   const mainDomainRoutes = router.toJSON()?.['root'] ?? []
 
   return mainDomainRoutes.reduce<Record<string, string>>((routes, route) => {
@@ -49,7 +47,11 @@ export function exportNamedRoutes() {
   const data = getNamedRoutes()
   const outputDir = app.makePath(app.appRoot + '/inertia/utils') // Directory where the TS file will be written
   const outputFileName = 'routes' // File name without the extension
-  console.log(outputDir)
+
+  if (isEmptyObject(data)) {
+    console.log('routes not available')
+    return
+  }
 
   if (!existsSync(outputDir)) {
     mkdirSync(outputDir, { recursive: true })

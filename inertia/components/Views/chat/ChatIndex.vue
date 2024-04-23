@@ -8,17 +8,29 @@ import ChatLog from './ChatLog.vue'
 import ChatUserProfileSidebarContent from './ChatUserProfileSidebarContent.vue'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { useResponsiveLeftSidebar } from '~/@core/composable/useResponsiveSidebar'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import { IPageProps } from '#helpers/types'
 import { usePage } from '@inertiajs/vue3'
 import useSocket from '~/composables/useSocket'
 import { VNavigationDrawer } from 'vuetify/components'
 import { avatarText } from '~/@core/utils/formatters'
+import type Conversation from '#models/conversation'
+import type Message from '#models/message'
+import useApi from '~/composables/useApi'
+import routes from '~/utils/routes'
+import type User from '#models/user'
 
 // composables
 const vuetifyDisplays = useDisplay()
 const { isLeftSidebarOpen } = useResponsiveLeftSidebar(vuetifyDisplays.smAndDown)
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page.props?.user)
+const selectedConversation = ref<Conversation | null>(null)
+const getImageUrl = useGetImageUrl()
+
+const message = ref('')
+const newMessage = ref<null | Message>(null)
 
 // Perfect scrollbar
 const chatLogPS = ref()
@@ -52,64 +64,44 @@ const chatContentContainerBg = computed(() => {
   return color
 })
 
-// mine
-
-const selectedConversation = ref<IConversation | null>(null)
-const getImageUrl = useGetImageUrl()
-
-const message = ref('')
-const newMessage = ref<null | IMessage>(null)
-const { user } = usePage<IPageProps<{}>>().props
-
 const { connectSocket, disconnectSocket, socket } = useSocket()
 
-const myIdentifier = ``
+const { exec: execCreateMessage, processing: processingCreateMessage } = useApi(
+  routes('api.chat.create_message', [selectedConversation.value!.id]),
+  'post'
+)
 
 const createMessage = async () => {
-  // if (message.value.length > 0) {
-  //   try {
-  //     const res = await fetcher(
-  //       apiRoutes.chat.conversations.create_message(
-  //         selectedConversation.value!.id,
-  //       ),
-  //       {
-  //         method: "post",
-  //         body: {
-  //           body: message.value,
-  //         },
-  //       },
-  //     );
-  //     message.value = "";
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // nextTick(() => {
-  //   scrollToBottomInChatLog();
-  // });
+  if (message.value.length > 0) {
+    try {
+      await execCreateMessage({
+        data: {
+          body: message.value,
+        },
+      })
+      message.value = ''
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  nextTick(() => {
+    scrollToBottomInChatLog()
+  })
 }
 
-const openChatOfConversation = async (conversation: IConversation) => {
-  // selectedConversation.value = conversation;
-  // if (vuetifyDisplays.smAndDown.value) isLeftSidebarOpen.value = false;
-  // nextTick(() => {
-  //   scrollToBottomInChatLog();
-  // });
+const openChatOfConversation = async (conversation: Conversation) => {
+  selectedConversation.value = conversation
+  if (vuetifyDisplays.smAndDown.value) isLeftSidebarOpen.value = false
+  nextTick(() => {
+    scrollToBottomInChatLog()
+  })
 }
 
 const selectedParticipant = computed(() => {
-  if (selectedConversation.value?.participant_one_identifier != myIdentifier) {
-    return (
-      selectedConversation.value?.participantOne?.adminUser ||
-      selectedConversation.value?.participantOne?.user ||
-      selectedConversation.value?.participantOne?.vendorUser
-    )
-  } else if (selectedConversation.value?.participant_two_identifier != myIdentifier) {
-    return (
-      selectedConversation.value?.participantTwo?.adminUser ||
-      selectedConversation.value?.participantTwo?.user ||
-      selectedConversation.value?.participantTwo?.vendorUser
-    )
+  if (selectedConversation.value?.participantOneId != user.value?.id) {
+    return selectedConversation.value?.participantOne?.user
+  } else if (selectedConversation.value?.participantTwoId != user.value?.id) {
+    return selectedConversation.value?.participantTwo?.user
   } else {
     return null
   }
@@ -117,7 +109,7 @@ const selectedParticipant = computed(() => {
 
 onMounted(() => {
   connectSocket('/chat/')
-  socket?.value?.on('new-message', (message: IMessage) => {
+  socket?.value?.on('new-message', (message: Message) => {
     newMessage.value = message
   })
 })
@@ -126,10 +118,6 @@ onUnmounted(() => {
   disconnectSocket()
   socket.value?.removeAllListeners()
 })
-
-const temp = () => {
-  console.log('logged')
-}
 </script>
 
 <template>
@@ -212,22 +200,19 @@ const temp = () => {
                 <VImg
                   v-if="selectedParticipant?.profile?.avatar"
                   :src="
-                    getImageUrl(
-                      selectedParticipant?.profile?.avatar?.breakpoints?.thumbnail?.url,
-                      dummyAvatar
-                    )
+                    getImageUrl(selectedParticipant?.profile?.avatar?.thumbnailUrl, dummyAvatar)
                   "
-                  :alt="selectedParticipant.first_name + ' ' + selectedParticipant.last_name"
+                  :alt="selectedParticipant.firstName + ' ' + selectedParticipant.lastName"
                 />
                 <span v-else>{{
-                  avatarText(selectedParticipant.first_name + ' ' + selectedParticipant.last_name)
+                  avatarText(selectedParticipant.firstName + ' ' + selectedParticipant.lastName)
                 }}</span>
               </VAvatar>
             </VBadge>
 
             <div class="flex-grow-1 ms-4 overflow-hidden">
               <div class="text-h6 mb-0 font-weight-regular">
-                {{ selectedParticipant.first_name + ' ' + selectedParticipant.last_name }}
+                {{ selectedParticipant.firstName + ' ' + selectedParticipant.lastName }}
               </div>
               <p class="text-truncate mb-0 text-body-2 capitalize">
                 {{ selectedParticipant?.userType }}
@@ -264,7 +249,7 @@ const temp = () => {
           min
           class="flex-grow-1 d-flex flex-column-reverse"
           style="height: 65vh"
-          @ps-x-reach-start="temp"
+          @ps-x-reach-start="() => {}"
         >
           <ChatLog
             v-if="selectedConversation && selectedParticipant"

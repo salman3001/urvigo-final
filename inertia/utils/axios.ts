@@ -1,7 +1,4 @@
 import axios from 'axios'
-const apiBaseUrl = 'http://127.0.0.1:3333'
-const api = axios.create({
-  baseURL: apiBaseUrl,
-})
+const api = axios.create()
 
 export default api

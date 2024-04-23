@@ -1,26 +1,17 @@
 import { permissions } from '#helpers/enums'
 import { hasPermission, isAdmin } from '#helpers/permission_helpers'
 import User from '#models/user'
-import { BasePolicy, action } from '@adonisjs/bouncer'
+import { BasePolicy, action, allowGuest } from '@adonisjs/bouncer'
 
 export default class UserPolicy extends BasePolicy {
-  async viewList(user: User) {
-    if (isAdmin(user)) {
-      return true
-    } else {
-      return false
-    }
+  @allowGuest()
+  async viewList() {
+    return true
   }
 
-  async view(user: any, userModel: User) {
-    if (user.id === userModel.id) {
-      return true
-    }
-    if (isAdmin(user) && (await hasPermission(user, permissions.MANAGE_USER))) {
-      return true
-    } else {
-      return false
-    }
+  @allowGuest()
+  async view() {
+    return true
   }
 
   @action({ allowGuest: true })

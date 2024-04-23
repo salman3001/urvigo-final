@@ -2,105 +2,112 @@
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import Conversations from './Conversations.vue'
 import dummyAvatar from '!/assets/images/dummy-avatar.webp'
-
-const search = ref('')
-
-// mine
 import { findObjectAndMoveToIndex0 } from '~/utils/helpers'
-import { ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import { Ref } from 'vue'
-import User from '#models/user'
+import type Message from '#models/message'
+import type Conversation from '#models/conversation'
+import useApi from '~/composables/useApi'
+import routes from '~/utils/routes'
+import type { IPageProps, IPaginatedModel } from '#helpers/types'
+import { usePage } from '@inertiajs/vue3'
+import { watchDebounced } from '@vueuse/core'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
 const props = defineProps<{
   isDrawerOpen: boolean
-  newMessage: null | IMessage
-  selectedConversation?: IConversation
+  newMessage: null | Message
+  selectedConversation?: Conversation
 }>()
 
 const emit = defineEmits<{
-  (e: 'openChatOfConversation', conversation: IConversation): void
+  (e: 'openChatOfConversation', conversation: Conversation): void
   (e: 'showUserProfile'): void
   (e: 'close'): void
   (e: 'update:search', value: string): void
 }>()
 
 const getImageUrl = useGetImageUrl()
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page?.props?.user)
 
-// const { query, list } = useChatApi.list({
-//   page: 1,
-//   search: '',
-// })
+const {
+  data: list,
+  exec: getChatList,
+  processing,
+} = useApi<IPaginatedModel<Conversation>>(routes('api.chat.index'), 'get')
 
-// const { data, pending, refresh } = await useAsyncData(
-//   async () => {
-//     const data = await list()
-//     return data.data
-//   },
-//   { watch: [query] }
-// )
+const query = reactive({
+  page: 1,
+  search: '',
+})
 
-// if (route.query?.newConversationId) {
-//   const existingConversation = data.value?.data.filter(
-//     (c) => c.id == (route.query.newConversationId as unknown as number)
-//   )
-//   if (existingConversation) {
-//     emit('openChatOfConversation', existingConversation[0])
-//   } else {
-//     refresh()
-//   }
-// }
+if (page.props.query?.newConversationId) {
+  const existingConversation = list.value?.data.filter(
+    (c) => c.id == (page.props?.query.newConversationId as unknown as number)
+  )
+  if (existingConversation) {
+    emit('openChatOfConversation', existingConversation[0])
+  } else {
+    getChatList({})
+  }
+}
 
-// const conversationsRef = ref(data.value)
+const conversationsRef = ref(list.value?.data)
 
-// watch(data, () => {
-//   conversationsRef.value = data.value
-// })
+watch(list, () => {
+  conversationsRef.value = list.value?.data
+})
 
-// watch(
-//   () => props.newMessage,
-//   () => {
-//     if (props.newMessage !== null) {
-//       if (conversationsRef.value?.data.some((c) => c.id == props.newMessage?.conversation_id)) {
-//         const newData = findObjectAndMoveToIndex0(
-//           conversationsRef?.value!.data,
-//           props.newMessage,
-//           'id',
-//           'conversation_id'
-//         )
+watch(
+  () => props.newMessage,
+  () => {
+    if (props.newMessage !== null) {
+      if (conversationsRef.value?.some((c) => c.id == props.newMessage?.conversationId)) {
+        const newData = findObjectAndMoveToIndex0(
+          conversationsRef.value,
+          props.newMessage,
+          'id',
+          'conversationId'
+        )
 
-//         conversationsRef.value.data = newData as IConversation[]
-//         conversationsRef.value.data[0].messages[0] = props.newMessage
-//       } else {
-//         refresh()
-//       }
-//     }
-//   }
-// )
+        conversationsRef.value = newData as Conversation[]
+        conversationsRef.value[0].messages[0] = props.newMessage
+      } else {
+        getChatList({})
+      }
+    }
+  }
+)
 
-// const debouncedSearch = useDebounceFn(() => {
-//   query.search = search.value
-// }, 1000)
-
-// watch(search, () => {
-//   debouncedSearch()
-// })
+watchDebounced(
+  query,
+  () => {
+    getChatList({
+      data: query,
+    })
+  },
+  {
+    debounce: 500,
+    maxWait: 1000,
+  }
+)
 </script>
 
 <template>
   <!-- 👉 Chat list header -->
-  <!-- <div v-if="user" class="chat-list-header">
+  <div v-if="user" class="chat-list-header">
     <VBadge dot location="bottom right" offset-x="3" offset-y="3" :color="'success'" bordered>
       <VAvatar size="40" class="cursor-pointer" @click="$emit('showUserProfile')">
         <VImg
-          :src="getImageUrl(user.profile?.avatar?.breakpoints?.thumbnail?.url, dummyAvatar)"
-          :alt="user.first_name + user.last_name"
+          :src="getImageUrl(user.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+          :alt="user.firstName + user.lastName"
         />
       </VAvatar>
     </VBadge>
 
     <AppTextField
-      v-model="search"
+      v-model="query.search"
       placeholder="Search..."
       prepend-inner-icon="tabler-search"
       class="ms-4 me-1 chat-list-search"
@@ -122,7 +129,7 @@ const getImageUrl = useGetImageUrl()
     </li>
 
     <Conversations
-      v-for="conversation in data?.data"
+      v-for="conversation in list?.data"
       :key="conversation.id"
       :conversation="conversation"
       :selected-conversation="selectedConversation"
@@ -134,11 +141,11 @@ const getImageUrl = useGetImageUrl()
     />
 
     <span
-      v-show="Array.isArray(data?.data) && data.data.length < 1"
+      v-show="Array.isArray(list?.data) && list.data.length < 1"
       class="no-chat-items-text text-disabled"
       >No chats found</span
     >
-  </PerfectScrollbar> -->
+  </PerfectScrollbar>
 </template>
 
 <style lang="scss">

@@ -62,7 +62,7 @@ export default class User extends compose(BaseModel, AuthFinder, Filterable) {
   declare isActive: boolean
 
   @column({ serializeAs: null })
-  declare socketToken: boolean
+  declare socketToken: string
 
   @column({ serializeAs: null })
   declare otp: number | string

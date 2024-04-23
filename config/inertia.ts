@@ -26,5 +26,6 @@ export default defineConfig({
   ssr: {
     enabled: true,
     entrypoint: 'inertia/app/ssr.ts',
+    pages: (ctx, page) => page.startsWith('services') || page === '/',
   },
 })

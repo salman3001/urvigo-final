@@ -1,64 +1,32 @@
-import ServiceVariant from '#models/service_variant'
+import type Wishlist from '#models/wishlist'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import useApi from '~/composables/useApi'
+import routes from '~/utils/routes'
 // import { useWishlistApi } from '~/composables/api/useWishlistApi'
 
 const wishlistStore = defineStore('wishlistStore', () => {
-  const wishlistItems = ref<ServiceVariant[]>([])
+  const { data: wishlistItems, exec: fetchWishlist } = useApi<Wishlist>(
+    routes('api.wishlist.index'),
+    'get'
+  )
 
-  const fetchWishlist = async () => {
-    // const { show } = useWishlistApi.show()
-    // const { data, success } = await show(0)
-    // if (success == true) {
-    //   wishlistItems.value = data.items
-    // }
-  }
+  const isWishlisted = (serviceId: number) => {
+    const matchedItem = wishlistItems?.value?.items
+      ? wishlistItems?.value?.items.filter((i) => i.id === serviceId)
+      : []
 
-  const fetchDetailedWishlist = async () => {
-    // const { detailList } = useWishlistApi.detailList()
-    // const { data, success } = await detailList()
-    // return data
-  }
-
-  const addWishlistItem = async (serviceId: number) => {
-    // const {
-    //   addItem,
-    //   form,
-    //   loading: addingItem,
-    // } = useWishlistApi.addItem({
-    //   serviceId: '',
-    // })
-    // form.serviceId = serviceId as unknown as string
-    // const res = await addItem()
-    // if (res?.success == true) {
-    //   wishlistItems.value.push({ id: serviceId } as IServiceVariant)
-    // }
-  }
-
-  const removeWishlistItem = async (serviceId: number) => {
-    // const { deletItem } = useWishlistApi.deletItem()
-    // const res = await deletItem(serviceId)
-    // if (res?.success == true) {
-    //   const newList = wishlistItems.value.filter((item) => item.id != serviceId)
-    //   wishlistItems.value = newList
-    // }
-  }
-
-  const clearWishlist = async () => {
-    // const { destroy } = useWishlistApi.destroy()
-    // const res = await destroy(0)
-    // if (res?.success == true) {
-    //   wishlistItems.value = []
-    // }
+    console.log(matchedItem)
+    if (matchedItem.length > 0) {
+      return true
+    } else {
+      false
+    }
   }
 
   return {
     wishlistItems,
     fetchWishlist,
-    addWishlistItem,
-    removeWishlistItem,
-    clearWishlist,
-    fetchDetailedWishlist,
+    isWishlisted,
   }
 })
 

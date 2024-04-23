@@ -34,7 +34,7 @@ const theme = useTheme()
                     Explore Services
                   </VBtn>
                 </Link>
-                <Link :href="routes('web.service_requirement.list')">
+                <Link :href="routes('web.service_requirement.my-list')">
                   <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
                     PersonaliZe Service
                   </VBtn>

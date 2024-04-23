@@ -59,7 +59,7 @@ export default class FileService {
   async writeFile(folder: string = '', buffer: NodeJS.ArrayBufferView, extName: string) {
     // Ensure the output directory exists
     const url = path.join(folder, Date.now() + cuid() + `.${extName}`)
-    const outputDir = path.join(app.makePath(commonConfig.uploadPath), folder)
+    const outputDir = app.makePath(commonConfig.uploadPath)
     const outputPath = path.join(outputDir, url)
     if (!existsSync(outputDir)) {
       mkdirSync(outputDir, { recursive: true })

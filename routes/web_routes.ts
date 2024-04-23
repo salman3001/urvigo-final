@@ -84,10 +84,13 @@ router
 
         // service Requirements
         router
-          .get('service-requirements', [WebServiceRequirementsController, 'show'])
+          .get('service-requirements', [WebServiceRequirementsController, 'index'])
           .as('service_requirement.list')
         router
-          .post('service-requirements', [WebServiceRequirementsController, 'index'])
+          .get('service-requirements/my-list', [WebServiceRequirementsController, 'myList'])
+          .as('service_requirement.my-list')
+        router
+          .post('service-requirements', [WebServiceRequirementsController, 'create'])
           .as('service_requirement.create')
         router
           .get('service-requirements/:id', [WebServiceRequirementsController, 'show'])
@@ -96,9 +99,10 @@ router
         // account
         router
           .group(() => {
-            router.get('/propfile', [WebPagesController, 'profile']).as('profile')
-            router.post('/propfile', [WebPagesController, 'updatProfile']).as('profile.post')
+            router.get('/profile', [WebPagesController, 'profile']).as('profile')
+            router.post('/profile/:id', [WebPagesController, 'updatProfile']).as('profile.post')
             router.get('/security', [WebPagesController, 'security']).as('security')
+            router.post('/security/:id', [WebPagesController, 'updateSecurity']).as('security.post')
             router.post('/security', [WebPagesController, 'updateSecurity']).as('post')
             router.get('/settings', [WebPagesController, 'settings']).as('settings')
             router.get('/wishlist', [WebPagesController, 'wishlist']).as('wishlist')
@@ -115,8 +119,22 @@ router
           })
           .prefix('account')
           .as('account')
+
+        // vendor profile
+        router
+          .group(() => {
+            router.get('/:id/about/', [WebPagesController, 'vendorProfile']).as('about')
+            router.get('/:id/services/', [WebPagesController, 'vendorServices']).as('services')
+            router
+              .get('/:id/reviews/:vendorId', [WebPagesController, 'vendorReviews'])
+              .as('reviews')
+          })
+          .prefix('vendor-profile')
+          .as('vendor-profile')
+
+        router.on('chat').renderInertia('chat/chat-index').as('chat.index')
       })
-      .use(middleware.auth())
+      .use(middleware.auth({ guards: ['web'] }))
   })
   .as('web')
 

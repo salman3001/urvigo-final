@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type User from '#models/user'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { avatarText } from '~/@core/utils/formatters'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
@@ -9,7 +10,7 @@ defineEmits<{
 }>()
 
 defineProps<{
-  selectedParticipant?: IAdminUser | IVendorUser | IUser
+  selectedParticipant?: User
 }>()
 
 const getImageUrl = useGetImageUrl()
@@ -37,21 +38,16 @@ const getImageUrl = useGetImageUrl()
         <VAvatar size="84" :variant="'tonal'" :color="'success'">
           <VImg
             v-if="selectedParticipant?.profile?.avatar"
-            :src="
-              getImageUrl(
-                selectedParticipant?.profile?.avatar?.breakpoints?.thumbnail?.url,
-                dummyAvatar
-              )
-            "
-            :alt="selectedParticipant?.first_name || '' + ' ' + selectedParticipant?.last_name"
+            :src="getImageUrl(selectedParticipant?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+            :alt="selectedParticipant?.firstName || '' + ' ' + selectedParticipant?.lastName"
           />
           <span v-else class="text-3xl">{{
-            avatarText(selectedParticipant?.first_name || '' + ' ' + selectedParticipant?.last_name)
+            avatarText(selectedParticipant?.firstName || '' + ' ' + selectedParticipant?.lastName)
           }}</span>
         </VAvatar>
       </VBadge>
       <h5 class="text-h5">
-        {{ selectedParticipant?.first_name || '' + ' ' + selectedParticipant?.last_name }}
+        {{ selectedParticipant?.firstName || '' + ' ' + selectedParticipant?.lastName }}
       </h5>
       <p class="text-capitalize text-body-1 mb-0">
         {{ selectedParticipant.userType }}

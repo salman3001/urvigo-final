@@ -103,7 +103,7 @@ watch(query, () => {
         <br />
         <br />
         <div class="d-flex flex-wrap justify-end gap-2">
-          <div class="normalcase">
+          <div class="normalcase" v-if="filter">
             <VChip color="info">
               <VICon icon="tabler-filter" />
               filtering by {{ filter }}

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { IPageProps } from '#helpers/types'
+import type Conversation from '#models/conversation'
 import dummyAvatar from '@images/dummy-avatar.webp'
 import { usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
@@ -7,16 +8,15 @@ import { avatarText, formatDateToMonthShort } from '~/@core/utils/formatters'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
 interface Props {
-  conversation: IConversation
-  selectedConversation?: IConversation
+  conversation: Conversation
+  selectedConversation?: Conversation
 }
 
 const props = defineProps<Props>()
 
 const getImageUrl = useGetImageUrl()
-const { user } = usePage<IPageProps<{}>>().props
-
-const myIdentifier = ``
+const page = usePage<IPageProps<{}>>()
+const user = computed(() => page.props?.user)
 
 const isChatContactActive = computed(() => {
   const isActive = props?.selectedConversation?.id === props.conversation.id
@@ -25,20 +25,12 @@ const isChatContactActive = computed(() => {
 })
 
 const computedParticipant = computed(() => {
-  if (props.conversation.participant_one_identifier != myIdentifier) {
-    return (
-      props.conversation.participantOne?.adminUser ||
-      props.conversation.participantOne?.user ||
-      props.conversation.participantOne?.vendorUser
-    )
+  if (props.conversation.participantOneId != user.value?.id) {
+    return props.conversation.participantOne?.user
   }
 
-  if (props.conversation.participant_two_identifier != myIdentifier) {
-    return (
-      props.conversation.participantTwo?.adminUser ||
-      props.conversation.participantTwo?.user ||
-      props.conversation.participantTwo?.vendorUser
-    )
+  if (props.conversation.participantTwoId != user.value?.id) {
+    return props.conversation.participantTwo?.user
   } else {
     return null
   }
@@ -62,36 +54,31 @@ const computedParticipant = computed(() => {
       <VAvatar size="40" :variant="'tonal'">
         <VImg
           v-if="computedParticipant?.profile?.avatar"
-          :src="
-            getImageUrl(
-              computedParticipant?.profile?.avatar?.breakpoints?.thumbnail?.url,
-              dummyAvatar
-            )
-          "
-          :alt="computedParticipant?.first_name || '' + ' ' + computedParticipant?.last_name"
+          :src="getImageUrl(computedParticipant?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+          :alt="computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName"
         />
         <span v-else>{{
-          avatarText(computedParticipant?.first_name || '' + ' ' + computedParticipant?.last_name)
+          avatarText(computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName)
         }}</span>
       </VAvatar>
     </VBadge>
     <div class="flex-grow-1 ms-4 overflow-hidden">
       <p class="text-base text-high-emphasis mb-0">
-        {{ computedParticipant?.first_name || '' + ' ' + computedParticipant?.last_name }}
+        {{ computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName }}
       </p>
       <p class="mb-0 text-truncate text-body-2" v-if="conversation?.messages[0]?.body">
         {{ conversation?.messages[0]?.body }}
       </p>
       <p class="mb-0 text-truncate text-body-2" v-else>
-        Say Hi to {{ computedParticipant?.first_name }}
+        Say Hi to {{ computedParticipant?.firstName }}
       </p>
     </div>
     <div v-if="true" class="d-flex flex-column align-self-start">
       <div
-        v-if="conversation?.messages[0]?.created_at"
+        v-if="conversation?.messages[0]?.createdAt"
         class="text-body-2 text-disabled whitespace-no-wrap"
       >
-        {{ formatDateToMonthShort(conversation?.messages[0]?.created_at) }}
+        {{ formatDateToMonthShort(conversation?.messages[0]?.createdAt as unknown as string) }}
       </div>
       <div v-if="conversation.messages[0]">
         <VBadge

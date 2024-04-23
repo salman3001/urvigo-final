@@ -1,7 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 import WishlstService from '#services/wishlist_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class ApiWishlistsController {
   constructor(protected wishlistService: WishlstService) {}
 

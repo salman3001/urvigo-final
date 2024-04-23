@@ -15,6 +15,14 @@ export default class WebServiceRequirementsController {
 
   index({ inertia }: HttpContext) {
     return inertia.render('service-requirements/requirement-list', {
+      requirements: () => this.serviceRequirementService.index(),
+      categories: () => this.serviceCategoryService.index(),
+      tags: () => this.tagService.index(),
+    })
+  }
+
+  myList({ inertia }: HttpContext) {
+    return inertia.render('service-requirements/requirement-list', {
       requirements: () => this.serviceRequirementService.myList(),
       categories: () => this.serviceCategoryService.index(),
       tags: () => this.tagService.index(),
