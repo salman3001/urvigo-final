@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useConfigStore } from '@core/stores/config'
-import { AppContentLayoutNav } from '@layouts/enums'
-import { switchToVerticalNavOnLtOverlayNavBreakpoint } from '@layouts/utils'
+import { useConfigStore } from '~/@core/stores/config'
+import { AppContentLayoutNav } from '~/@layouts/enums'
+import { switchToVerticalNavOnLtOverlayNavBreakpoint } from '~/@layouts/utils'
 import { defineAsyncComponent } from 'vue'
 import { useSkins } from '~/@core/composable/useSkins'
 
@@ -24,14 +24,11 @@ injectSkinClasses()
 </script>
 
 <template>
-  <component
-    v-bind="layoutAttrs"
-    :is="
+  <component v-bind="layoutAttrs" :is="
       configStore.appContentLayoutNav === AppContentLayoutNav.Vertical
         ? DefaultLayoutWithVerticalNav
         : DefaultLayoutWithHorizontalNav
-    "
-  >
+    ">
     <slot />
   </component>
 </template>

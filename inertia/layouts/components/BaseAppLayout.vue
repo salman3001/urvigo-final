@@ -21,7 +21,7 @@ initConfigStore()
 const configStore = useConfigStore()
 
 onMounted(() => {
-  if (user) {
+  if (user.value) {
     wishlist.fetchWishlist({})
   }
 })

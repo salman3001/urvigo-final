@@ -15,10 +15,17 @@ router
   .group(() => {
     router
       .group(() => {
-        router.on('login').renderInertia('auth/login').as('login').use([middleware.guest()])
+        router.on('login').renderInertia('auth/login').as('login')
         router.post('login', [WebAuthsController, 'login']).as('login.post')
-        router.on('signup').renderInertia('auth/signup').as('signup').use([middleware.guest()])
+        router.on('signup').renderInertia('auth/signup').as('signup')
         router.post('signup', [WebAuthsController, 'signup']).as('signup.post')
+        router.on('vendor-signup/:type').renderInertia('auth/vendor-signup').as('vendor.signup')
+        router
+          .post('signup/new', [WebAuthsController, 'signupVendorNew'])
+          .as('vendor.signup.new.post')
+        router
+          .post('signup/existing-user', [WebAuthsController, 'signupVendorExistingUser'])
+          .as('vendor.signup.existing.post')
         router.on('forgot-password').renderInertia('auth/forgot-password').as('forgot-password')
         router
           .post('forgot-password', [WebAuthsController, 'sendForgotPasswordOtp'])
@@ -134,6 +141,11 @@ router
 
         router.get('chat', [WebPagesController, 'chat']).as('chat')
         router.post('chat/:id', [WebPagesController, 'createChatMessage']).as('chat.create-masaage')
+
+        router.on('/not-found').renderInertia('error').as('not-found')
+        router.on('/under-maintenance').renderInertia('under-maintenance').as('under-maintenance')
+        router.on('/denied').renderInertia('not-authorized').as('deined')
+        router.on('/comming-soon').renderInertia('coming-soon').as('comming-soon')
       })
       .use(middleware.auth({ guards: ['web'] }))
   })

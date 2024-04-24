@@ -10,6 +10,9 @@
 // web routes
 import '../routes/web_routes.js'
 
+// vendor routes
+import '../routes/vendor_routes.js'
+
 // api routes
 import '../routes/api/bid_routes.js'
 import '../routes/api/blog_routes.js'

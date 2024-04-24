@@ -60,12 +60,12 @@ const form = useForm({
 
 <template>
   <Link :href="routes('web.home')">
-    <div class="auth-logo d-flex align-center gap-x-3">
-      <VNodeRenderer :nodes="themeConfig.app.logo" />
-      <h1 class="auth-title">
-        {{ themeConfig.app.title }}
-      </h1>
-    </div>
+  <div class="auth-logo d-flex align-center gap-x-3">
+    <VNodeRenderer :nodes="themeConfig.app.logo" />
+    <h1 class="auth-title">
+      {{ themeConfig.app.title }}
+    </h1>
+  </div>
   </Link>
 
   <VRow no-gutters class="auth-wrapper bg-surface">
@@ -75,22 +75,12 @@ const form = useForm({
           <VImg max-width="500" :src="imageVariant" class="auth-illustration mt-16 mb-2" />
         </div>
 
-        <img
-          class="auth-footer-mask"
-          :src="authThemeMask"
-          alt="auth-footer-mask"
-          height="280"
-          width="100"
-        />
+        <img class="auth-footer-mask" :src="authThemeMask" alt="auth-footer-mask" height="280" width="100" />
       </div>
     </VCol>
 
-    <VCol
-      cols="12"
-      md="4"
-      class="auth-card-v2 d-flex align-center justify-center"
-      style="background-color: rgb(var(--v-theme-surface))"
-    >
+    <VCol cols="12" md="4" class="auth-card-v2 d-flex align-center justify-center"
+      style="background-color: rgb(var(--v-theme-surface))">
       <VCard flat :max-width="500" class="mt-12 mt-sm-0 pa-4">
         <VCardText>
           <h4 class="text-h4 mb-1">Adventure starts here 🚀</h4>
@@ -98,67 +88,40 @@ const form = useForm({
         </VCardText>
 
         <VCardText>
-          <CustomForm
-            @submit="
-              () => {
-                form.post(routes('web.auth.'))
-              }
-            "
-            ref="formRef"
-          >
+          <CustomForm @submit="() => {
+    form.post(routes('web.auth.signup.post'))
+  }
+    " ref="formRef">
             <ErrorAlert v-if="form.errors" :errors="form.errors" />
             <VRow>
               <!-- Username -->
               <VCol cols="12">
-                <AppTextField
-                  v-model="form.firstName"
-                  :rules="[requiredValidator]"
-                  autofocus
-                  label="First Name"
-                  placeholder="John"
-                />
+                <AppTextField v-model="form.firstName" :rules="[requiredValidator]" autofocus label="First Name"
+                  placeholder="John" />
               </VCol>
 
               <VCol cols="12">
-                <AppTextField
-                  v-model="form.lastName"
-                  :rules="[requiredValidator]"
-                  label="Last Name"
-                  placeholder="doe"
-                />
+                <AppTextField v-model="form.lastName" :rules="[requiredValidator]" label="Last Name"
+                  placeholder="doe" />
               </VCol>
 
               <!-- email -->
               <VCol cols="12">
-                <AppTextField
-                  v-model="form.email"
-                  :rules="[requiredValidator, emailValidator]"
-                  label="Email"
-                  type="email"
-                  placeholder="johndoe@email.com"
-                />
+                <AppTextField v-model="form.email" :rules="[requiredValidator, emailValidator]" label="Email"
+                  type="email" placeholder="johndoe@email.com" />
               </VCol>
 
               <!-- password -->
               <VCol cols="12">
-                <AppTextField
-                  v-model="form.password"
-                  :rules="[requiredValidator, passwordValidator]"
-                  label="Password"
-                  placeholder="············"
-                  :type="isPasswordVisible ? 'text' : 'password'"
+                <AppTextField v-model="form.password" :rules="[requiredValidator, passwordValidator]" label="Password"
+                  placeholder="············" :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                />
-                <AppTextField
-                  v-model="form.passwordConfirmation"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible" />
+                <AppTextField v-model="form.passwordConfirmation"
                   :rules="[requiredValidator, (v: string) => confirmedValidator(v, form.password)]"
-                  label="Confirm Password"
-                  placeholder="············"
-                  :type="isPasswordVisible ? 'text' : 'password'"
+                  label="Confirm Password" placeholder="············" :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                />
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible" />
 
                 <div class="d-flex align-center my-6">
                   <VCheckbox id="privacy-policy" v-model="form.temp" inline />
@@ -175,7 +138,14 @@ const form = useForm({
               <VCol cols="12" class="text-center text-base">
                 <span class="d-inline-block">Already have an account?</span>
                 <Link class="text-primary ms-1 d-inline-block" :href="routes('web.auth.login')">
-                  Sign in instead
+                Sign in instead
+                </Link>
+              </VCol>
+
+              <VCol cols="12" class="text-center text-base">
+                <span class="d-inline-block">Need an vendor account?</span>
+                <Link class="text-primary ms-1 d-inline-block" :href="routes('web.auth.vendor.signup', ['new'])">
+                Sign up as vendor
                 </Link>
               </VCol>
 
@@ -200,4 +170,3 @@ const form = useForm({
 <style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
 </style>
-~/utils/routes-old

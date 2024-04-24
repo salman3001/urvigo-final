@@ -41,6 +41,35 @@ export default class WebAuthsController {
     return response.redirect().toRoute('web.home')
   }
 
+  async signupVendorNew({ response, session, auth }: HttpContext) {
+    const user = await this.authService.signupVendorNew()
+    await auth.use('web').login(user)
+    session.flash('flash', {
+      message: 'Account Created !',
+      type: 'success',
+    })
+    return response.redirect().toRoute('web.home')
+  }
+
+  async signupVendorExistingUser({ response, session, auth }: HttpContext) {
+    const user = await this.authService.signupVendorExistingUser()
+    if (user === 'invalid') {
+      session.flash('flash', {
+        message: 'Invalid Credentials!',
+        type: 'error',
+      })
+
+      return response.redirect().back()
+    } else {
+      await auth.use('web').login(user)
+      session.flash('flash', {
+        message: 'User account migrated to vendor account !',
+        type: 'success',
+      })
+      return response.redirect().toRoute('web.home')
+    }
+  }
+
   async sendForgotPasswordOtp({ response, session }: HttpContext) {
     const user = await this.authService.sendForgotPasswordOtp()
     if (!user) {

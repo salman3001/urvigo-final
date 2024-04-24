@@ -1,11 +1,17 @@
 import User from '#models/user'
 import { getOtpValidator, updatePasswordValidator, varifyOtpValidator } from '#validators/auth'
-import { createUserValidator } from '#validators/user'
+import {
+  createUserValidator,
+  createVendorValidator,
+  vendorFromExistingUserValidator,
+} from '#validators/user'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import mail from '@adonisjs/mail/services/main'
 import config from '@adonisjs/core/services/config'
 import hash from '@adonisjs/core/services/hash'
+import { userTypes } from '../helpers/enums.js'
+import BusinessProfile from '../models/business_profile.js'
 
 @inject()
 export default class AuthService {
@@ -22,11 +28,44 @@ export default class AuthService {
   }
 
   async signup() {
-    const { passwordConfirmation, avatar, logo, images, businessProfile, ...payload } =
+    const { passwordConfirmation, avatar, logo, images, ...payload } =
       await this.ctx.request.validateUsing(createUserValidator)
 
-    await User.create({ ...payload, isActive: true })
+    await User.create({ ...payload, isActive: true, userType: userTypes.USER })
     return await User.verifyCredentials(payload.email, payload.password)
+  }
+
+  async signupVendorNew() {
+    const { passwordConfirmation, avatar, logo, images, businessProfile, ...payload } =
+      await this.ctx.request.validateUsing(createVendorValidator)
+
+    const user = await User.create({ ...payload, isActive: true, userType: userTypes.VENDER })
+    await BusinessProfile.create({
+      userId: user.id,
+      businessName: businessProfile.businessName,
+    })
+
+    return await User.verifyCredentials(payload.email, payload.password)
+  }
+
+  async signupVendorExistingUser() {
+    const { businessProfile, email, password } = await this.ctx.request.validateUsing(
+      vendorFromExistingUserValidator
+    )
+
+    const user = await User.findByOrFail('email', email)
+
+    if (await hash.verify(user.password, password)) {
+      user.userType = userTypes.VENDER
+      await BusinessProfile.create({
+        userId: user.id,
+        businessName: businessProfile.businessName,
+      })
+      await user.save()
+      return user
+    } else {
+      return 'invalid'
+    }
   }
 
   async sendForgotPasswordOtp() {
