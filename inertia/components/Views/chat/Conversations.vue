@@ -26,11 +26,9 @@ const isChatContactActive = computed(() => {
 
 const computedParticipant = computed(() => {
   if (props.conversation.participantOneId != user.value?.id) {
-    return props.conversation.participantOne?.user
-  }
-
-  if (props.conversation.participantTwoId != user.value?.id) {
-    return props.conversation.participantTwo?.user
+    return props.conversation.participantOne
+  } else if (props.conversation.participantTwoId != user.value?.id) {
+    return props.conversation.participantTwo
   } else {
     return null
   }
@@ -66,14 +64,14 @@ const computedParticipant = computed(() => {
       <p class="text-base text-high-emphasis mb-0">
         {{ computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName }}
       </p>
-      <p class="mb-0 text-truncate text-body-2" v-if="conversation?.messages[0]?.body">
+      <p class="mb-0 text-truncate text-body-2" v-if="conversation?.messages?.length > 0">
         {{ conversation?.messages[0]?.body }}
       </p>
       <p class="mb-0 text-truncate text-body-2" v-else>
         Say Hi to {{ computedParticipant?.firstName }}
       </p>
     </div>
-    <div v-if="true" class="d-flex flex-column align-self-start">
+    <div v-if="conversation?.messages?.length > 0" class="d-flex flex-column align-self-start">
       <div
         v-if="conversation?.messages[0]?.createdAt"
         class="text-body-2 text-disabled whitespace-no-wrap"
@@ -95,7 +93,7 @@ const computedParticipant = computed(() => {
 
 <style lang="scss">
 @use '~/@core/scss/template/mixins' as templateMixins;
-@use '~/@styles/variables/vuetify.scss';
+@use '~/assets/styles/variables/vuetify.scss';
 @use '~/@core/scss/base/mixins';
 @use 'vuetify/lib/styles/tools/states' as vuetifyStates;
 

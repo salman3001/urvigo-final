@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import ConversationParticipant from './conversation_participant.js'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Message from './message.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import ConversationFilter from './filters/conversation_filter.js'
+import User from './user.js'
 
 export default class Conversation extends compose(BaseModel, Filterable) {
   static $filter = () => ConversationFilter
@@ -22,15 +22,15 @@ export default class Conversation extends compose(BaseModel, Filterable) {
   @column()
   declare participantTwoId: number
 
-  @belongsTo(() => ConversationParticipant, {
+  @belongsTo(() => User, {
     foreignKey: 'participantOneId',
   })
-  declare participantOne: BelongsTo<typeof ConversationParticipant>
+  declare participantOne: BelongsTo<typeof User>
 
-  @belongsTo(() => ConversationParticipant, {
+  @belongsTo(() => User, {
     foreignKey: 'participantTwoId',
   })
-  declare participantTwo: BelongsTo<typeof ConversationParticipant>
+  declare participantTwo: BelongsTo<typeof User>
 
   @hasMany(() => Message)
   declare messages: HasMany<typeof Message>

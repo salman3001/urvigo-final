@@ -6,12 +6,12 @@ import type User from '#models/user'
 import type Conversation from '#models/conversation'
 import { usePage } from '@inertiajs/vue3'
 import { IPageProps, IPaginatedModel } from '#helpers/types'
-import { computed, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import useApi from '~/composables/useApi'
 import routes from '~/utils/routes'
 import { watch } from 'vue'
-import { formatDate } from '@vueuse/core'
+import { formatDistance } from 'date-fns'
+import useApiGet from '~/composables/useApiGet'
 
 const props = defineProps<{
   selectedConversation: Conversation
@@ -26,30 +26,20 @@ const user = computed(() => page.props?.user)
 // const { fetcher } = useFetchRef()
 const getImageUrl = useGetImageUrl()
 
-const {
-  data,
-  processing,
-  exec: getMessages,
-} = useApi<IPaginatedModel<Message>>(
-  routes('api.chat.get_messages', [props.selectedConversation.id]),
-  'get'
-)
+const { data, processing, exec: getMessages } = useApiGet<IPaginatedModel<Message>>()
 
 const {
   data: newData,
   processing: loadingMore,
   exec: getNewMessages,
-} = useApi<IPaginatedModel<Message>>(
-  routes('api.chat.get_messages', [props.selectedConversation.id]),
-  'get'
-)
+} = useApiGet<IPaginatedModel<Message>>()
 
 const query = reactive({
   page: 1,
   orderBy: 'createdAt:desc',
 })
 
-const dataRef = ref(data.value)
+const dataRef = ref<IPaginatedModel<Message> | null>(null)
 
 watch(data, () => {
   dataRef.value = data.value
@@ -58,8 +48,8 @@ watch(data, () => {
 watch(
   () => props.selectedConversation,
   () => {
-    getMessages({
-      data: query,
+    getMessages(routes('api.chat.get_messages', [props.selectedConversation.id]), {
+      params: query,
     })
   }
 )
@@ -80,9 +70,9 @@ watch(
 )
 
 const getMoreMessages = async () => {
-  if (data.value?.meta.hasMorePages) {
-    await getNewMessages({
-      data: {
+  if (dataRef.value?.meta.nextPageUrl) {
+    await getNewMessages(routes('api.chat.get_messages', [props.selectedConversation.id]), {
+      params: {
         page: dataRef.value?.meta.currentPage! + 1,
         orderBy: 'createdAt:desc',
       },
@@ -94,19 +84,27 @@ const getMoreMessages = async () => {
     dataRef.value!.meta = newData.value!?.meta
   }
 }
+
+onMounted(async () => {
+  await getMessages(routes('api.chat.get_messages', [props.selectedConversation.id]), {
+    params: query,
+  })
+
+  dataRef.value = data.value
+})
 </script>
 
 <template>
-  <div class="chat-log pa-6" v-for="m in data?.data" :key="m.id">
+  <div class="chat-log pa-6" v-for="m in dataRef?.data" :key="m.id">
     <div
       class="chat-group d-flex align-start"
       :class="[
         {
-          'flex-row-reverse': m.userId === user?.id,
+          'flex-row-reverse': m.userId == user?.id,
         },
       ]"
     >
-      <div class="chat-avatar" :class="m.userId === user?.id ? 'ms-4' : 'me-4'">
+      <div class="chat-avatar" :class="m.userId == user?.id ? 'ms-4' : 'me-4'">
         <VAvatar size="32">
           <VImg
             :src="getImageUrl(selectedParticipant.profile?.avatar?.thumbnailUrl, dummyAvatar)"
@@ -116,7 +114,7 @@ const getMoreMessages = async () => {
       </div>
       <div
         class="chat-body d-inline-flex flex-column"
-        :class="m.userId === user?.id ? 'align-end' : 'align-start'"
+        :class="m.userId == user?.id ? 'align-end' : 'align-start'"
       >
         <div
           class="chat-content py-2 px-4 elevation-2"
@@ -124,13 +122,10 @@ const getMoreMessages = async () => {
         >
           <p class="mb-0 text-base">{{ m.body }}</p>
         </div>
-        <div :class="{ 'text-right': m.userId === user?.id }">
-          <VIcon v-if="m.userId === user?.id" size="16" :color="'success'" />
+        <div :class="{ 'text-right': m.userId == user?.id }">
+          <VIcon v-if="m.userId == user?.id" size="16" :color="'success'" />
           <span class="text-sm ms-2 text-disabled">{{
-            formatDate(m.createdAt as unknown as string, {
-              hour: 'numeric',
-              minute: 'numeric',
-            })
+            formatDistance(new Date(m.createdAt as unknown as string), Date.now())
           }}</span>
         </div>
       </div>
@@ -144,10 +139,11 @@ const getMoreMessages = async () => {
       <VSkeletonLoader type="list-item" class="w-50" />
     </div>
   </div>
-  <div v-else-if="data?.data?.length! > 1" class="d-flex justify-center w-100">
+  <div v-else-if="dataRef?.data?.length! > 1" class="d-flex justify-center w-100">
     <VBtn
-      v-if="dataRef?.meta.hasMorePages"
+      v-if="dataRef?.meta?.nextPageUrl"
       variant="tonal"
+      :disabled="loadingMore"
       @click="
         () => {
           getMoreMessages()

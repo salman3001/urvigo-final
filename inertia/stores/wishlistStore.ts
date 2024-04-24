@@ -15,7 +15,6 @@ const wishlistStore = defineStore('wishlistStore', () => {
       ? wishlistItems?.value?.items.filter((i) => i.id === serviceId)
       : []
 
-    console.log(matchedItem)
     if (matchedItem.length > 0) {
       return true
     } else {

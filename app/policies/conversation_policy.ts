@@ -8,7 +8,7 @@ export default class ConversationPolicy extends BasePolicy {
   }
 
   async view(user: User, conversation: Conversation) {
-    if (conversation.participantOne.id === user.id || conversation.participantTwo.id === user.id) {
+    if (conversation.participantOneId === user.id || conversation.participantTwoId === user.id) {
       return true
     } else {
       return false
@@ -20,7 +20,7 @@ export default class ConversationPolicy extends BasePolicy {
   }
 
   async update(user: User, conversation: Conversation) {
-    if (conversation.participantOne.id === user.id || conversation.participantTwo.id === user.id) {
+    if (conversation.participantOneId === user.id || conversation.participantTwoId === user.id) {
       return true
     } else {
       return false

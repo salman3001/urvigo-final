@@ -1,5 +1,4 @@
 <script lang="ts">
-import ChatIndex from '~/components/Views/chat/ChatIndex.vue'
 import Layout from '~/layouts/default.vue'
 
 export default {
@@ -7,9 +6,12 @@ export default {
 }
 </script>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ChatIndex from '~/components/Views/chat/ChatIndex.vue'
+</script>
 
 <template>
+  <br />
   <br />
   <br />
   <br />

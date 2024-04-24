@@ -28,11 +28,12 @@ const props = withDefaults(defineProps<Props>(), {
       },
     ]"
   >
-    <Component
+    <!-- <Component
       :is="item.to ? Link : 'a'"
       v-bind="getComputedNavLinkToProp(item)"
       :class="{ 'router-link-active router-link-exact-active': isNavLinkActive(item, $router) }"
-    >
+    > -->
+    <Component :is="item.to ? Link : 'a'" v-bind="getComputedNavLinkToProp(item)">
       <Component
         :is="layoutConfig.app.iconRenderer || 'div'"
         class="nav-item-icon"

@@ -8,18 +8,16 @@ import ChatLog from './ChatLog.vue'
 import ChatUserProfileSidebarContent from './ChatUserProfileSidebarContent.vue'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { useResponsiveLeftSidebar } from '~/@core/composable/useResponsiveSidebar'
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { Ref, computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import { IPageProps } from '#helpers/types'
-import { usePage } from '@inertiajs/vue3'
+import { IPageProps, IPaginatedModel } from '#helpers/types'
+import { useForm, usePage } from '@inertiajs/vue3'
 import useSocket from '~/composables/useSocket'
 import { VNavigationDrawer } from 'vuetify/components'
 import { avatarText } from '~/@core/utils/formatters'
 import type Conversation from '#models/conversation'
 import type Message from '#models/message'
-import useApi from '~/composables/useApi'
 import routes from '~/utils/routes'
-import type User from '#models/user'
 
 // composables
 const vuetifyDisplays = useDisplay()
@@ -29,8 +27,8 @@ const user = computed(() => page.props?.user)
 const selectedConversation = ref<Conversation | null>(null)
 const getImageUrl = useGetImageUrl()
 
-const message = ref('')
 const newMessage = ref<null | Message>(null)
+const chatList = computed(() => page.props?.chatList) as Ref<IPaginatedModel<Conversation>>
 
 // Perfect scrollbar
 const chatLogPS = ref()
@@ -66,23 +64,17 @@ const chatContentContainerBg = computed(() => {
 
 const { connectSocket, disconnectSocket, socket } = useSocket()
 
-const { exec: execCreateMessage, processing: processingCreateMessage } = useApi(
-  routes('api.chat.create_message', [selectedConversation.value!.id]),
-  'post'
-)
+const messageForm = useForm({
+  body: '',
+})
 
 const createMessage = async () => {
-  if (message.value.length > 0) {
-    try {
-      await execCreateMessage({
-        data: {
-          body: message.value,
-        },
-      })
-      message.value = ''
-    } catch (error) {
-      console.log(error)
-    }
+  if (messageForm.body.length > 0) {
+    messageForm.post(routes('web.chat.create-masaage', [selectedConversation.value!?.id]), {
+      onSuccess: () => {
+        messageForm.reset()
+      },
+    })
   }
   nextTick(() => {
     scrollToBottomInChatLog()
@@ -99,9 +91,9 @@ const openChatOfConversation = async (conversation: Conversation) => {
 
 const selectedParticipant = computed(() => {
   if (selectedConversation.value?.participantOneId != user.value?.id) {
-    return selectedConversation.value?.participantOne?.user
+    return selectedConversation.value?.participantOne
   } else if (selectedConversation.value?.participantTwoId != user.value?.id) {
-    return selectedConversation.value?.participantTwo?.user
+    return selectedConversation.value?.participantTwo
   } else {
     return null
   }
@@ -110,6 +102,8 @@ const selectedParticipant = computed(() => {
 onMounted(() => {
   connectSocket('/chat/')
   socket?.value?.on('new-message', (message: Message) => {
+    console.log('new Kessage')
+
     newMessage.value = message
   })
 })
@@ -170,6 +164,7 @@ onUnmounted(() => {
         :selectedConversation="selectedConversation!"
         :new-message="newMessage"
         v-model:isDrawerOpen="isLeftSidebarOpen"
+        :chat-list="chatList.data"
         @open-chat-of-conversation="openChatOfConversation"
         @show-user-profile="isUserProfileSidebarOpen = true"
         @close="isLeftSidebarOpen = false"
@@ -264,7 +259,7 @@ onUnmounted(() => {
         <VForm class="chat-log-message-form mb-5 mx-5" @submit.prevent="createMessage">
           <VTextField
             :key="1"
-            v-model="message"
+            v-model="messageForm.body"
             variant="solo"
             density="default"
             class="chat-message-input"
@@ -279,7 +274,7 @@ onUnmounted(() => {
                 <IconBtn @click="refInputEl?.click()">
                   <VIcon icon="tabler-paperclip" size="22" />
                 </IconBtn>
-                <VBtn @click="createMessage">
+                <VBtn @click="createMessage" :disabled="messageForm.processing">
                   <template #append>
                     <VIcon icon="tabler-send" color="#fff" />
                   </template>
@@ -320,7 +315,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-@use '~/asstes/styles/variables/vuetify.scss';
+@use '~/assets/styles/variables/vuetify.scss';
 @use '~/@core/scss/base/mixins.scss';
 @use '~/@layouts/styles/mixins' as layoutsMixins;
 

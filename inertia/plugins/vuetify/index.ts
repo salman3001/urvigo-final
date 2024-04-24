@@ -11,7 +11,7 @@ import { cookieRef } from '~/@layouts/stores/config'
 import 'vuetify/styles'
 import '~/@core/scss/template/libs/vuetify/index.scss'
 import { resolveVuetifyTheme } from '~/@core/utils/vuetify'
-import { App } from 'vue'
+import type { App } from 'vue'
 
 export default function (app: App) {
   const cookieThemeValues = {

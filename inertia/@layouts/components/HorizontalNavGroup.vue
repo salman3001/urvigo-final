@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { layoutConfig } from '@layouts'
-import { HorizontalNavLink, HorizontalNavPopper } from '@layouts/components'
-import { canViewNavMenuGroup } from '@layouts/plugins/casl'
-import { useLayoutConfigStore } from '@layouts/stores/config'
-import type { NavGroup } from '@layouts/types'
-import { getDynamicI18nProps, isNavGroupActive } from '@layouts/utils'
+import { ref, watch } from 'vue'
+import { layoutConfig } from '~/@layouts'
+import { HorizontalNavLink, HorizontalNavPopper } from '~/@layouts/components'
+import { canViewNavMenuGroup } from '~/@layouts/plugins/casl'
+import { useLayoutConfigStore } from '~/@layouts/stores/config'
+import type { NavGroup } from '~/@layouts/types'
+import { getDynamicI18nProps, isNavGroupActive } from '~/@layouts/utils'
 
 interface Props {
   item: NavGroup
@@ -23,8 +24,6 @@ const props = withDefaults(defineProps<Props>(), {
   isSubItem: false,
 })
 
-const route = useRoute()
-const router = useRouter()
 const configStore = useLayoutConfigStore()
 
 const isGroupActive = ref(false)
@@ -34,11 +33,11 @@ const isGroupActive = ref(false)
 
   updates isActive & isOpen based on active state of group.
 */
-watch(() => route.path, () => {
-  const isActive = isNavGroupActive(props.item.children, router)
+// watch(() => route.path, () => {
+//   const isActive = isNavGroupActive(props.item.children, router)
 
-  isGroupActive.value = isActive
-}, { immediate: true })
+//   isGroupActive.value = isActive
+// }, { immediate: true })
 </script>
 
 <template>
@@ -48,12 +47,14 @@ watch(() => route.path, () => {
     class="nav-group"
     tag="li"
     content-container-tag="ul"
-    :class="[{
-      'active': isGroupActive,
-      'children-at-end': childrenAtEnd,
-      'sub-item': isSubItem,
-      'disabled': item.disable,
-    }]"
+    :class="[
+      {
+        'active': isGroupActive,
+        'children-at-end': childrenAtEnd,
+        'sub-item': isSubItem,
+        'disabled': item.disable,
+      },
+    ]"
     :popper-inline-end="childrenAtEnd"
   >
     <div class="nav-group-label">

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3'
-import { layoutConfig } from '@layouts'
-import { can } from '@layouts/plugins/casl'
-import { useLayoutConfigStore } from '@layouts/stores/config'
-import type { NavLink } from '@layouts/types'
-import { getComputedNavLinkToProp, getDynamicI18nProps, isNavLinkActive } from '@layouts/utils'
+import { layoutConfig } from '~/@layouts'
+import { can } from '~/@layouts/plugins/casl'
+import { useLayoutConfigStore } from '~/@layouts/stores/config'
+import type { NavLink } from '~/@layouts/types'
+import { getComputedNavLinkToProp, getDynamicI18nProps, isNavLinkActive } from '~/@layouts/utils'
 
 defineProps<{
   item: NavLink
@@ -16,11 +16,12 @@ const hideTitleAndBadge = configStore.isVerticalNavMini()
 
 <template>
   <li v-if="can(item.action, item.subject)" class="nav-link" :class="{ disabled: item.disable }">
-    <Component
+    <!-- <Component
       :is="item.to ? Link : 'a'"
       v-bind="getComputedNavLinkToProp(item)"
       :class="{ 'router-link-active router-link-exact-active': isNavLinkActive(item, $router) }"
-    >
+    > -->
+    <Component :is="item.to ? Link : 'a'" v-bind="getComputedNavLinkToProp(item)">
       <Component
         :is="layoutConfig.app.iconRenderer || 'div'"
         v-bind="item.icon || layoutConfig.verticalNav.defaultNavItemIconProps"

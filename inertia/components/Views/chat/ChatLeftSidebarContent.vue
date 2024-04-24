@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import Conversations from './Conversations.vue'
-import dummyAvatar from '!/assets/images/dummy-avatar.webp'
+import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { findObjectAndMoveToIndex0 } from '~/utils/helpers'
 import { computed, reactive, ref, watch } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import type Message from '#models/message'
 import type Conversation from '#models/conversation'
-import useApi from '~/composables/useApi'
-import routes from '~/utils/routes'
-import type { IPageProps, IPaginatedModel } from '#helpers/types'
-import { usePage } from '@inertiajs/vue3'
+import type { IPageProps } from '#helpers/types'
+import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
@@ -18,6 +16,7 @@ const props = defineProps<{
   isDrawerOpen: boolean
   newMessage: null | Message
   selectedConversation?: Conversation
+  chatList: Conversation[]
 }>()
 
 const emit = defineEmits<{
@@ -31,33 +30,30 @@ const getImageUrl = useGetImageUrl()
 const page = usePage<IPageProps<{}>>()
 const user = computed(() => page?.props?.user)
 
-const {
-  data: list,
-  exec: getChatList,
-  processing,
-} = useApi<IPaginatedModel<Conversation>>(routes('api.chat.index'), 'get')
-
 const query = reactive({
   page: 1,
   search: '',
 })
 
-if (page.props.query?.newConversationId) {
-  const existingConversation = list.value?.data.filter(
-    (c) => c.id == (page.props?.query.newConversationId as unknown as number)
-  )
-  if (existingConversation) {
-    emit('openChatOfConversation', existingConversation[0])
-  } else {
-    getChatList({})
+// if (page.props.query?.newConversationId) {
+//   const existingConversation = props.chatList.filter(
+//     (c) => c.id == (page.props?.query.newConversationId as unknown as number)
+//   )
+//   if (existingConversation) {
+//     emit('openChatOfConversation', existingConversation[0])
+//   } else {
+//     getChatList({})
+//   }
+// }
+
+const conversationsRef = ref(props.chatList)
+
+watch(
+  () => props.chatList,
+  () => {
+    conversationsRef.value = props.chatList
   }
-}
-
-const conversationsRef = ref(list.value?.data)
-
-watch(list, () => {
-  conversationsRef.value = list.value?.data
-})
+)
 
 watch(
   () => props.newMessage,
@@ -74,7 +70,12 @@ watch(
         conversationsRef.value = newData as Conversation[]
         conversationsRef.value[0].messages[0] = props.newMessage
       } else {
-        getChatList({})
+        router.reload({
+          only: ['chatList'],
+          data: {
+            page: 1,
+          },
+        })
       }
     }
   }
@@ -83,8 +84,9 @@ watch(
 watchDebounced(
   query,
   () => {
-    getChatList({
+    router.reload({
       data: query,
+      only: ['chatList'],
     })
   },
   {
@@ -129,7 +131,7 @@ watchDebounced(
     </li>
 
     <Conversations
-      v-for="conversation in list?.data"
+      v-for="conversation in chatList"
       :key="conversation.id"
       :conversation="conversation"
       :selected-conversation="selectedConversation"
@@ -141,7 +143,7 @@ watchDebounced(
     />
 
     <span
-      v-show="Array.isArray(list?.data) && list.data.length < 1"
+      v-show="Array.isArray(chatList) && chatList.length < 1"
       class="no-chat-items-text text-disabled"
       >No chats found</span
     >

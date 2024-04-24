@@ -1,7 +1,7 @@
 <!-- Thanks: https://markus.oberlehner.net/blog/transition-to-height-auto-with-vue/ -->
 
 <script lang="ts">
-import { Transition } from 'vue'
+import { Transition, defineComponent, h } from 'vue'
 
 export default defineComponent({
   name: 'TransitionExpand',
@@ -55,16 +55,17 @@ export default defineComponent({
       })
     }
 
-    return () => h(
-      h(Transition),
-      {
-        name: 'expand',
-        onEnter,
-        onAfterEnter,
-        onLeave,
-      },
-      () => slots.default?.(),
-    )
+    return () =>
+      h(
+        h(Transition),
+        {
+          name: 'expand',
+          onEnter,
+          onAfterEnter,
+          onLeave,
+        },
+        () => slots.default?.()
+      )
   },
 })
 </script>

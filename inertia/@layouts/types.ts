@@ -1,34 +1,41 @@
 import type { OffsetOptions } from '@floating-ui/dom'
-import type { RouteLocationRaw } from 'vue-router'
-import type { AppContentLayoutNav, ContentWidth, FooterType, HorizontalNavType, NavbarType } from '@layouts/enums'
+// import type { RouteLocationRaw } from 'vue-router'
+import type {
+  AppContentLayoutNav,
+  ContentWidth,
+  FooterType,
+  HorizontalNavType,
+  NavbarType,
+} from '@layouts/enums'
+import type { Component } from 'vue'
 
 export interface LayoutConfig {
   app: {
     title: Lowercase<string>
-    logo: VNode
-    contentWidth: typeof ContentWidth[keyof typeof ContentWidth]
-    contentLayoutNav: typeof AppContentLayoutNav[keyof typeof AppContentLayoutNav]
+    logo: any
+    contentWidth: (typeof ContentWidth)[keyof typeof ContentWidth]
+    contentLayoutNav: (typeof AppContentLayoutNav)[keyof typeof AppContentLayoutNav]
     overlayNavFromBreakpoint: number
 
     // isRTL: boolean
     i18n: {
       enable: boolean
     }
-    iconRenderer: Component
+    iconRenderer: any
   }
   navbar: {
-    type: typeof NavbarType[keyof typeof NavbarType]
+    type: (typeof NavbarType)[keyof typeof NavbarType]
     navbarBlur: boolean
   }
   footer: {
-    type: typeof FooterType[keyof typeof FooterType]
+    type: (typeof FooterType)[keyof typeof FooterType]
   }
   verticalNav: {
     isVerticalNavCollapsed: boolean
     defaultNavItemIconProps: unknown
   }
   horizontalNav: {
-    type: typeof HorizontalNavType[keyof typeof HorizontalNavType]
+    type: (typeof HorizontalNavType)[keyof typeof HorizontalNavType]
     transition: string | Component
     popoverOffset?: OffsetOptions
   }
@@ -70,7 +77,7 @@ declare type ATagRelAttrValues =
   | 'tag'
 
 export interface NavLinkProps {
-  to?: RouteLocationRaw | string | null
+  to?: any | string | null
   href?: string
   target?: ATagTargetAttrValues
   rel?: ATagRelAttrValues

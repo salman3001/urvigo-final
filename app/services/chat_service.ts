@@ -5,7 +5,6 @@ import { paginate } from '../helpers/common.js'
 import Message from '../models/message.js'
 import { conversationValidator, messageValidator } from '../validators/chat.js'
 import db from '@adonisjs/lucid/services/db'
-import ConversationParticipant from '../models/conversation_participant.js'
 import { DateTime } from 'luxon'
 import { IndexOption } from '../helpers/types.js'
 
@@ -20,23 +19,19 @@ export default class ChatService {
       .where('participant_one_id', auth.user!.id)
       .orWhere('participant_two_id', auth.user!.id)
       .preload('participantOne', (s) => {
-        s.preload('user', (u) => {
-          u.preload('profile', (p) => {
-            p.select('avatar')
-          })
+        s.preload('profile', (p) => {
+          p.select('avatar')
         })
       })
       .preload('participantTwo', (s) => {
-        s.preload('user', (u) => {
-          u.preload('profile', (p) => {
-            p.select('avatar')
-          })
+        s.preload('profile', (p) => {
+          p.select('avatar')
         })
       })
       .preload('messages', (m) => {
-        m.orderBy('created_at', 'desc').limit(1)
+        m.orderBy('created_at', 'desc').groupLimit(1)
       })
-      .orderBy('created_at', 'desc')
+      .orderBy('updated_at', 'desc')
 
     !opt?.disableFilter && conversationQuery.filter(request.qs())
     const conversations = await paginate(conversationQuery, request)
@@ -89,26 +84,14 @@ export default class ChatService {
 
     if (!conversation) {
       await db.transaction(async (trx) => {
-        conversation = await Conversation.create({ name: payload.name }, { client: trx })
-        const participantOne = await ConversationParticipant.create(
+        conversation = await Conversation.create(
           {
-            userId: auth!.user!.id,
+            name: payload.name,
+            participantOneId: auth!.user!.id,
+            participantTwoId: payload.participantId,
           },
           { client: trx }
         )
-
-        await conversation.related('participantOne').associate(participantOne)
-        await conversation.save()
-
-        const participantTwo = await ConversationParticipant.create(
-          {
-            userId: payload.participantId,
-          },
-          { client: trx }
-        )
-
-        await conversation.related('participantTwo').associate(participantTwo)
-        await conversation.save()
       })
     }
 

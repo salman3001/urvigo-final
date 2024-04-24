@@ -132,7 +132,8 @@ router
           .prefix('vendor-profile')
           .as('vendor-profile')
 
-        router.on('chat').renderInertia('chat/chat-index').as('chat.index')
+        router.get('chat', [WebPagesController, 'chat']).as('chat')
+        router.post('chat/:id', [WebPagesController, 'createChatMessage']).as('chat.create-masaage')
       })
       .use(middleware.auth({ guards: ['web'] }))
   })

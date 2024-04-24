@@ -1,8 +1,9 @@
 <script lang="ts">
-import type { PropType } from 'vue'
-import { VerticalNav } from '@layouts/components'
-import { useLayoutConfigStore } from '@layouts/stores/config'
-import type { VerticalNavItems } from '@layouts/types'
+import { syncRef, useToggle, useWindowSize } from '@vueuse/core'
+import { defineComponent, h, ref, toRef, watch, type PropType } from 'vue'
+import { VerticalNav } from '~/@layouts/components'
+import { useLayoutConfigStore } from '~/@layouts/stores/config'
+import type { VerticalNavItems } from '~/@layouts/types'
 
 export default defineComponent({
   props: {
@@ -115,7 +116,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use '~/@layouts/styles/_variables.scss' as variables;
+@use '@configured-variables' as variables;
 @use '@layouts/styles/placeholders';
 @use '@layouts/styles/mixins';
 

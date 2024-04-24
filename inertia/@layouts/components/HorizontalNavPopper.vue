@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { ReferenceElement } from '@floating-ui/dom'
 import { computePosition, flip, offset, shift } from '@floating-ui/dom'
+import { until, useEventListener } from '@vueuse/core'
+import { onMounted, ref, watch } from 'vue'
 import { useLayoutConfigStore } from '~/@layouts/stores/config'
 import { themeConfig } from '~/themeConfig'
 
@@ -92,9 +94,9 @@ onMounted(updatePopper)
 watch([() => configStore.isAppRTL, () => configStore.appContentWidth], updatePopper)
 
 // Watch for route changes and close popper content if route is changed
-const route = useRoute()
+// const route = useRoute()
 
-watch(() => route.fullPath, hideContent)
+// watch(() => route.fullPath, hideContent)
 </script>
 
 <template>

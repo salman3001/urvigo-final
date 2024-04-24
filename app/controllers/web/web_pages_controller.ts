@@ -7,6 +7,7 @@ import UserService from '../../services/user_service.js'
 import WishlstService from '../../services/wishlist_service.js'
 import notificationsService from '../../services/notification_service.js'
 import ReviewsService from '#services/review_service'
+import ChatService from '#services/chat_service'
 @inject()
 export default class WebPagesController {
   constructor(
@@ -16,7 +17,8 @@ export default class WebPagesController {
     protected fileService: FileService,
     protected wishlistService: WishlstService,
     protected notificationService: notificationsService,
-    protected reviewsService: ReviewsService
+    protected reviewsService: ReviewsService,
+    protected chatService: ChatService
   ) {}
 
   //auth
@@ -160,6 +162,17 @@ export default class WebPagesController {
       reviews: () => this.reviewsService.getVendorReviews(),
       vendor: () => this.userService.show(),
     })
+  }
+
+  async chat({ inertia }: HttpContext) {
+    return inertia.render('chat/chat-index', {
+      chatList: () => this.chatService.index(),
+    })
+  }
+
+  async createChatMessage({ response }: HttpContext) {
+    await this.chatService.createMessage()
+    return response.redirect().back()
   }
 
   async temp({ response }: HttpContext) {

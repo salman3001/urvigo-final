@@ -19,7 +19,7 @@ export default class ChatSocketController {
   }
 
   private async createChatRoom(user: User): Promise<string | null> {
-    return `${user.userType}-${user.id}-chats`
+    return `chat-room-${user.id}`
   }
 
   private async isAllowed(user: any): Promise<boolean> {

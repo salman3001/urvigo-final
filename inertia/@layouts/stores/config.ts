@@ -5,7 +5,8 @@ import { defineStore } from 'pinia'
 
 // ℹ️ We should not import themeConfig here but in urgency we are doing it for now
 import { layoutConfig } from '~/themeConfig'
-import { Ref, computed, inject, ref, unref, watch } from 'vue'
+import type { Ref } from 'vue'
+import { computed, inject, ref, unref, watch } from 'vue'
 import { useMediaQuery, useWindowScroll } from '@vueuse/core'
 import { useCookie } from '~/@core/composable/useCookie'
 

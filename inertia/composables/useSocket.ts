@@ -1,21 +1,19 @@
 import type { IPageProps } from '#helpers/types'
 import { usePage } from '@inertiajs/vue3'
 import { io, type Socket } from 'socket.io-client'
-import { ref } from 'vue'
-import { useCookie } from '~/@core/composable/useCookie'
+import { computed, ref } from 'vue'
 
 export default function useSocket() {
-  const socketToken = useCookie('socketToken')
   const socket = ref<Socket | null>(null)
-  const { user } = usePage<IPageProps<{}>>().props
+  const page = usePage<IPageProps<{}>>()
+  const user = computed(() => page.props?.user)
 
   const connectSocket = (url: string) => {
     if (!socket.value) {
       socket.value = io(url || '', {
         transports: ['websocket'],
         auth: {
-          'user-id': user?.id as unknown as string,
-          'socket-token': socketToken.value || '',
+          'user-id': user?.value!.id as unknown as string,
         },
       })
     }

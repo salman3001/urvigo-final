@@ -13,15 +13,15 @@ export type VideoType = {
 
 export type IPaginatedModel<T> = {
   meta: {
-    perPage: number
     currentPage: number
     firstPage: number
-    isEmpty: boolean
-    total: number
-    hasTotal: boolean
+    firstPageUrl: string
     lastPage: number
-    hasMorePages: boolean
-    hasPages: boolean
+    lastPageUrl: string
+    nextPageUrl: string
+    perPage: number
+    previousPageUrl: boolean
+    total: number
   }
   data: T[]
 }
