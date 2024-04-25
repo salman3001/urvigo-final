@@ -8,7 +8,6 @@ import '../@core/scss/template/index.scss'
 import '../assets/styles/styles.scss'
 import { createPinia } from 'pinia'
 import { registerPlugins } from '~/@core/utils/plugins'
-import 'vue3-perfect-scrollbar/style.css'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Urvigo'
 

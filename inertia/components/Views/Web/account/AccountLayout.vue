@@ -36,10 +36,10 @@ const tabs = [
     <div>
       <VTabs :model-value="activeTab" class="v-tabs-pill">
         <Link v-for="item in tabs" :key="item.icon" :href="item.href">
-          <VTab :value="item.title">
-            <VIcon size="20" start :icon="item.icon" />
-            {{ item.title }}
-          </VTab>
+        <VTab :value="item.title">
+          <VIcon size="20" start :icon="item.icon" />
+          {{ item.title }}
+        </VTab>
         </Link>
       </VTabs>
 
@@ -54,4 +54,3 @@ const tabs = [
     </div>
   </VContainer>
 </template>
-~/utils/routes-old

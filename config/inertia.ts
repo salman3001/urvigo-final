@@ -17,7 +17,7 @@ export default defineConfig({
       return ctx.auth.use('web').user
     },
     query: (ctx) => ctx.request.qs(),
-    params: (ctx) => ctx.request.param,
+    params: (ctx) => ctx.request.params(),
   },
 
   /**
