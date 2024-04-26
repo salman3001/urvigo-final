@@ -18,4 +18,8 @@ export default class ServiceFilter extends BaseModelFilter {
   serviceCategory(id: string): void {
     this.$query.where('service_category_id', id)
   }
+
+  serviceSubcategory(id: string): void {
+    this.$query.where('service_subcategory_id', id)
+  }
 }

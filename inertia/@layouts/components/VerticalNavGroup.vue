@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TransitionGroup, inject, ref, watch } from 'vue'
+import { TransitionGroup, computed, inject, ref, watch } from 'vue'
 import { layoutConfig } from '@layouts'
 import { TransitionExpand, VerticalNavLink } from '@layouts/components'
 import { canViewNavMenuGroup } from '@layouts/plugins/casl'
@@ -8,6 +8,8 @@ import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
 import type { NavGroup } from '@layouts/types'
 import { getDynamicI18nProps, isNavGroupActive, openGroups } from '@layouts/utils'
 import { useMounted } from '@vueuse/core'
+import { usePage } from '@inertiajs/vue3'
+import { IPageProps } from '../../../app/helpers/types'
 
 defineOptions({
   name: 'VerticalNavGroup',
@@ -69,18 +71,24 @@ const collapseChildren = (children: NavGroup['children']) => {
   })
 }
 
+
+
 /*
   Watch for route changes, more specifically route path. Do note that this won't trigger if route's query is updated.
 
   updates isActive & isOpen based on active state of group.
 */
-// watch(() => route.path, () => {
-//   const isActive = isNavGroupActive(props.item.children, router)
 
-//   // Don't open group if vertical nav is collapsed and window size is more than overlay nav breakpoint
-//   isGroupOpen.value = isActive && !configStore.isVerticalNavMini(isVerticalNavHovered).value
-//   isGroupActive.value = isActive
-// }, { immediate: true })
+const page = usePage<IPageProps<{}>>()
+const currenUrl = computed(() => page.url)
+
+watch(() => currenUrl, () => {
+  const isActive = isNavGroupActive(props.item.children, currenUrl.value)
+
+  // Don't open group if vertical nav is collapsed and window size is more than overlay nav breakpoint
+  isGroupOpen.value = isActive && !configStore.isVerticalNavMini(isVerticalNavHovered).value
+  isGroupActive.value = isActive
+}, { immediate: true })
 
 /*
   Watch for isGroupOpen
@@ -177,72 +185,43 @@ const isMounted = useMounted()
 </script>
 
 <template>
-  <li
-    v-if="canViewNavMenuGroup(item)"
-    class="nav-group"
-    :class="[
-      {
-        active: isGroupActive,
-        open: isGroupOpen,
-        disabled: item.disable,
-      },
-    ]"
-  >
+  <li v-if="canViewNavMenuGroup(item)" class="nav-group" :class="[
+    {
+      active: isGroupActive,
+      open: isGroupOpen,
+      disabled: item.disable,
+    },
+  ]">
     <div class="nav-group-label" @click="isGroupOpen = !isGroupOpen">
-      <Component
-        :is="layoutConfig.app.iconRenderer || 'div'"
-        v-bind="item.icon || layoutConfig.verticalNav.defaultNavItemIconProps"
-        class="nav-item-icon"
-      />
+      <Component :is="layoutConfig.app.iconRenderer || 'div'"
+        v-bind="item.icon || layoutConfig.verticalNav.defaultNavItemIconProps" class="nav-item-icon" />
       <!--
         ℹ️ isMounted is workaround of nuxt's hydration issue:
         https://github.com/vuejs/core/issues/6715
       -->
-      <Component
-        :is="isMounted ? TransitionGroup : 'div'"
-        name="transition-slide-x"
-        v-bind="!isMounted ? { class: 'd-flex align-center flex-grow-1' } : undefined"
-      >
+      <Component :is="isMounted ? TransitionGroup : 'div'" name="transition-slide-x"
+        v-bind="!isMounted ? { class: 'd-flex align-center flex-grow-1' } : undefined">
         <!-- 👉 Title -->
-        <Component
-          :is="layoutConfig.app.i18n.enable ? 'i18n-t' : 'span'"
-          v-bind="getDynamicI18nProps(item.title, 'span')"
-          v-show="!hideTitleAndBadge"
-          key="title"
-          class="nav-item-title"
-        >
+        <Component :is="layoutConfig.app.i18n.enable ? 'i18n-t' : 'span'"
+          v-bind="getDynamicI18nProps(item.title, 'span')" v-show="!hideTitleAndBadge" key="title"
+          class="nav-item-title">
           {{ item.title }}
         </Component>
 
         <!-- 👉 Badge -->
-        <Component
-          :is="layoutConfig.app.i18n.enable ? 'i18n-t' : 'span'"
-          v-bind="getDynamicI18nProps(item.badgeContent, 'span')"
-          v-show="!hideTitleAndBadge"
-          v-if="item.badgeContent"
-          key="badge"
-          class="nav-item-badge"
-          :class="item.badgeClass"
-        >
+        <Component :is="layoutConfig.app.i18n.enable ? 'i18n-t' : 'span'"
+          v-bind="getDynamicI18nProps(item.badgeContent, 'span')" v-show="!hideTitleAndBadge" v-if="item.badgeContent"
+          key="badge" class="nav-item-badge" :class="item.badgeClass">
           {{ item.badgeContent }}
         </Component>
-        <Component
-          :is="layoutConfig.app.iconRenderer || 'div'"
-          v-show="!hideTitleAndBadge"
-          v-bind="layoutConfig.icons.chevronRight"
-          key="arrow"
-          class="nav-group-arrow"
-        />
+        <Component :is="layoutConfig.app.iconRenderer || 'div'" v-show="!hideTitleAndBadge"
+          v-bind="layoutConfig.icons.chevronRight" key="arrow" class="nav-group-arrow" />
       </Component>
     </div>
     <TransitionExpand>
       <ul v-show="isGroupOpen" class="nav-group-children">
-        <Component
-          :is="'children' in child ? 'VerticalNavGroup' : VerticalNavLink"
-          v-for="child in item.children"
-          :key="child.title"
-          :item="child"
-        />
+        <Component :is="'children' in child ? 'VerticalNavGroup' : VerticalNavLink" v-for="child in item.children"
+          :key="child.title" :item="child" />
       </ul>
     </TransitionExpand>
   </li>

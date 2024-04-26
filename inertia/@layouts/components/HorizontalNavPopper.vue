@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import type { ReferenceElement } from '@floating-ui/dom'
 import { computePosition, flip, offset, shift } from '@floating-ui/dom'
+import { usePage } from '@inertiajs/vue3'
 import { until, useEventListener } from '@vueuse/core'
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useLayoutConfigStore } from '~/@layouts/stores/config'
 import { themeConfig } from '~/themeConfig'
+import { IPageProps } from '../../../app/helpers/types'
 
 interface Props {
   popperInlineEnd?: boolean
@@ -93,41 +95,28 @@ onMounted(updatePopper)
 // ℹ️ Recalculate popper position when it's triggerer changes its position
 watch([() => configStore.isAppRTL, () => configStore.appContentWidth], updatePopper)
 
-// Watch for route changes and close popper content if route is changed
-// const route = useRoute()
+const page = usePage<IPageProps<{}>>()
+const currenUrl = computed(() => page.url)
 
-// watch(() => route.fullPath, hideContent)
+watch(() => currenUrl, hideContent)
 </script>
 
 <template>
-  <div
-    class="nav-popper"
-    :class="[
-      {
-        'popper-inline-end': popperInlineEnd,
-        'show-content': isContentShown,
-      },
-    ]"
-  >
-    <div
-      ref="refPopperContainer"
-      class="popper-triggerer"
-      @mouseenter="showContent"
-      @mouseleave="hideContent"
-    >
+  <div class="nav-popper" :class="[
+    {
+      'popper-inline-end': popperInlineEnd,
+      'show-content': isContentShown,
+    },
+  ]">
+    <div ref="refPopperContainer" class="popper-triggerer" @mouseenter="showContent" @mouseleave="hideContent">
       <slot />
     </div>
 
     <!-- SECTION Popper Content -->
     <!-- 👉 Without transition -->
     <template v-if="!themeConfig.horizontalNav.transition">
-      <div
-        ref="refPopper"
-        class="popper-content"
-        :style="popperContentStyles"
-        @mouseenter="showContent"
-        @mouseleave="hideContent"
-      >
+      <div ref="refPopper" class="popper-content" :style="popperContentStyles" @mouseenter="showContent"
+        @mouseleave="hideContent">
         <div>
           <slot name="content" />
         </div>
@@ -135,16 +124,11 @@ watch([() => configStore.isAppRTL, () => configStore.appContentWidth], updatePop
     </template>
 
     <!-- 👉 CSS Transition -->
+
     <template v-else-if="typeof themeConfig.horizontalNav.transition === 'string'">
       <Transition :name="themeConfig.horizontalNav.transition">
-        <div
-          v-show="isContentShown"
-          ref="refPopper"
-          class="popper-content"
-          :style="popperContentStyles"
-          @mouseenter="showContent"
-          @mouseleave="hideContent"
-        >
+        <div v-show="isContentShown" ref="refPopper" class="popper-content" :style="popperContentStyles"
+          @mouseenter="showContent" @mouseleave="hideContent">
           <div>
             <slot name="content" />
           </div>
@@ -153,16 +137,11 @@ watch([() => configStore.isAppRTL, () => configStore.appContentWidth], updatePop
     </template>
 
     <!-- 👉 Transition Component -->
+
     <template v-else>
       <Component :is="themeConfig.horizontalNav.transition">
-        <div
-          v-show="isContentShown"
-          ref="refPopper"
-          class="popper-content"
-          :style="popperContentStyles"
-          @mouseenter="showContent"
-          @mouseleave="hideContent"
-        >
+        <div v-show="isContentShown" ref="refPopper" class="popper-content" :style="popperContentStyles"
+          @mouseenter="showContent" @mouseleave="hideContent">
           <div>
             <slot name="content" />
           </div>

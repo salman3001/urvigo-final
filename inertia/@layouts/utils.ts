@@ -20,7 +20,7 @@ export const getComputedNavLinkToProp = computed(() => (link: NavLink) => {
 
   // If route is string => it assumes string is route name => Create route object from route name
   // If route is not string => It assumes it's route object => returns passed route object
-  if (link.to) props.to = typeof link.to === 'string' ? { name: link.to } : link.to
+  if (link.to) props.href = typeof link.to === 'string' ? link.to : link.to
   else props.href = link.href
 
   return props
@@ -32,43 +32,30 @@ export const getComputedNavLinkToProp = computed(() => (link: NavLink) => {
  * IF link is object it will resolve the object and will return the link
  // @param {Object, String} link navigation link object/string
  */
-export const resolveNavLinkRouteName = (link: NavLink, router: any) => {
+export const resolveNavLinkRouteName = (link: NavLink) => {
   if (!link.to) return null
-
-  if (typeof link.to === 'string') return link.to
-
-  return router.resolve(link.to).name
+  return link.to
 }
 
 /**
  * Check if nav-link is active
  * @param {object} link nav-link object
  */
-export const isNavLinkActive = (link: NavLink, router: any) => {
-  // Matched routes array of current route
-  const matchedRoutes = router.currentRoute.value.matched
-
-  // Check if provided route matches route's matched route
-  const resolveRoutedName = resolveNavLinkRouteName(link, router)
-
-  if (!resolveRoutedName) return false
-
-  return matchedRoutes.some((route: any) => {
-    return route.name === resolveRoutedName || route.meta.navActiveLink === resolveRoutedName
-  })
+export const isNavLinkActive = (link: NavLink, currentUrl: string) => {
+  return link.to === currentUrl
 }
 
 /**
  * Check if nav group is active
  * @param {Array} children Group children
  */
-export const isNavGroupActive = (children: (NavLink | NavGroup)[], router: any): boolean =>
+export const isNavGroupActive = (children: (NavLink | NavGroup)[], currentUrl: string): boolean =>
   children.some((child) => {
     // If child have children => It's group => Go deeper(recursive)
-    if ('children' in child) return isNavGroupActive(child.children, router)
+    if ('children' in child) return isNavGroupActive(child.children, currentUrl)
 
     // else it's link => Check for matched Route
-    return isNavLinkActive(child, router)
+    return isNavLinkActive(child, currentUrl)
   })
 
 /**

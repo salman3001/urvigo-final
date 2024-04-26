@@ -29,6 +29,7 @@ export default class ServiceService {
     await bouncer.with('ServicePolicy').authorize('viewList')
 
     const serviceQuery = Service.query()
+      .where('is_active', true)
       .preload('serviceCategory', (s) => {
         s.select(['name'])
       })
@@ -70,9 +71,11 @@ export default class ServiceService {
   async myList(opt?: IndexOption) {
     const { request, response, bouncer, auth } = this.ctx
     await bouncer.with('ServicePolicy').authorize('myList')
+    const vendor = auth.user as User
+    await vendor.load('businessProfile')
 
     const serviceQuery = Service.query()
-      .where('vendor_user_id', auth.user!.id)
+      .where('business_profile_id', vendor.businessProfile.id)
       .preload('serviceCategory', (s) => {
         s.select(['name'])
       })
@@ -94,21 +97,31 @@ export default class ServiceService {
         'geo_location',
         'thumbnail',
         'avg_rating',
-        'vendor_user_id',
+        'business_profile_id',
         'service_category_id',
         'service_subcategory_id',
         'created_at',
       ])
+      .orderBy('created_at', 'desc')
 
     !opt?.disableFilter && serviceQuery.filter(request.qs())
     const services = await paginate(serviceQuery, request)
 
-    return response.custom({
-      code: 200,
-      data: services,
-      success: true,
-      message: null,
-    })
+    return services
+  }
+
+  async myAllList() {
+    const { bouncer, auth } = this.ctx
+    await bouncer.with('ServicePolicy').authorize('myList')
+    const vendor = auth.user as User
+    await vendor.load('businessProfile')
+
+    const serviceQuery = Service.query()
+      .where('business_profile_id', vendor.businessProfile.id)
+      .select(['id', 'name'])
+    const services = await serviceQuery.exec()
+
+    return services
   }
 
   async showBySlug() {
@@ -117,6 +130,39 @@ export default class ServiceService {
 
     const slug = params.slug
     const serviceQuery = Service.query()
+      .where('slug', slug)
+      .preload('variants')
+      .preload('businessProfile', (v) => {
+        v.preload('vendor')
+      })
+      .preload('reviews', (r) => {
+        r.preload('user', (u) => {
+          u.select(['first_name', 'last_name']).preload('profile', (p) => {
+            p.select('avatar')
+          })
+        })
+        r.limit(10)
+      })
+      .preload('faq')
+      .preload('seo')
+      .preload('tags')
+      .preload('images')
+      .withCount('reviews', (r) => {
+        r.as('reviews_count')
+      })
+
+    const service = await serviceQuery.first()
+
+    return service
+  }
+
+  async showBySlugActiveOnly() {
+    const { bouncer, params } = this.ctx
+    await bouncer.with('ServicePolicy').authorize('view')
+
+    const slug = params.slug
+    const serviceQuery = Service.query()
+      .where('is_active', true)
       .where('slug', slug)
       .preload('variants')
       .preload('businessProfile', (v) => {
@@ -152,6 +198,7 @@ export default class ServiceService {
 
     if (service) {
       services = await Service.query()
+        .where('is_active', true)
         .whereHas('serviceCategory', (s) => {
           s.where('id', service.serviceCategoryId)
         })

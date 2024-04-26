@@ -44,7 +44,7 @@ export default class WebPagesController {
 
   async services_show({ inertia }: HttpContext) {
     return inertia.render('services/service-show', {
-      service: () => this.serviceService.showBySlug(),
+      service: () => this.serviceService.showBySlugActiveOnly(),
       similarServices: () => this.serviceService.similarServices(),
     })
   }

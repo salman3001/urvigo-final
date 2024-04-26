@@ -15,6 +15,7 @@ const user = computed(() => page.props?.user)
 
 const props = defineProps<{
   variant: ServiceVariant
+  diableBookButton?: boolean
 }>()
 
 let discount = new BigNumber(0)
@@ -42,12 +43,7 @@ const decrementQty = () => {
   <VCard>
     <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
       <div class="ma-auto pa-2">
-        <VImg
-          :width="250"
-          aspect-ratio="16/9"
-          cover
-          :src="getImageUrl(variant.image?.thumbnailUrl)"
-        />
+        <VImg :width="250" aspect-ratio="16/9" cover :src="getImageUrl(variant.image?.thumbnailUrl)" />
       </div>
 
       <VDivider :vertical="$vuetify.display.mdAndUp" />
@@ -55,15 +51,11 @@ const decrementQty = () => {
       <div class="flex-grow-1">
         <VCardItem>
           <VCardTitle>{{ variant?.name }} </VCardTitle>
-          <VChip
-            color="error"
-            v-if="discount.gt(0) && variant.discountType === DiscountType.PERCENATAGE"
-            >{{ new BigNumber(variant.discountPercentage).toFixed(0) }}% off</VChip
-          >
+          <VChip color="error" v-if="discount.gt(0) && variant.discountType === DiscountType.PERCENATAGE">{{ new
+          BigNumber(variant.discountPercentage).toFixed(0) }}% off</VChip>
 
-          <VChip color="error" v-if="discount.gt(0) && variant.discountType === DiscountType.FLAT"
-            >&#x20B9;{{ variant.discountFlat }} off</VChip
-          >
+          <VChip color="error" v-if="discount.gt(0) && variant.discountType === DiscountType.FLAT">&#x20B9;{{
+          variant.discountFlat }} off</VChip>
         </VCardItem>
 
         <VCardText>
@@ -72,25 +64,20 @@ const decrementQty = () => {
 
         <VCardText class="text-subtitle-1">
           <span>Price :</span>
-          <span class="font-weight-medium"
-            >&#x20B9;{{ new BigNumber(variant?.price).minus(discount).toFixed(2) }}</span
-          >
+          <span class="font-weight-medium">&#x20B9;{{ new BigNumber(variant?.price).minus(discount).toFixed(2) }}</span>
         </VCardText>
 
         <VCardActions class="justify-space-between">
-          <Link
-            :href="
-              user
-                ? routes('web.booking.summary', [variant.id]) +
-                  `?serviceVariantId=${variant.id}&qty=1&couponId=`
-                : routes('web.auth.login') +
-                  `?next=${routes('web.booking.summary', [variant.id]) + `?serviceVarintId=${variant.id}&qty=1&couponId=`}`
-            "
-          >
-            <VBtn>
-              <VIcon icon="tabler-shopping-cart-plus" />
-              <span class="ms-2">Book Now</span>
-            </VBtn>
+          <Link :href="user
+            ? routes('web.booking.summary', [variant.id]) +
+            `?serviceVariantId=${variant.id}&qty=1&couponId=`
+            : routes('web.auth.login') +
+            `?next=${routes('web.booking.summary', [variant.id]) + `?serviceVarintId=${variant.id}&qty=1&couponId=`}`
+          ">
+          <VBtn v-if="!diableBookButton">
+            <VIcon icon="tabler-shopping-cart-plus" />
+            <span class="ms-2">Book Now</span>
+          </VBtn>
           </Link>
 
           <IconBtn color="secondary" icon="tabler-share" />

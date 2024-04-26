@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+import { computed, ref, watch } from 'vue'
 import { layoutConfig } from '~/@layouts'
 import { HorizontalNavLink, HorizontalNavPopper } from '~/@layouts/components'
 import { canViewNavMenuGroup } from '~/@layouts/plugins/casl'
 import { useLayoutConfigStore } from '~/@layouts/stores/config'
 import type { NavGroup } from '~/@layouts/types'
 import { getDynamicI18nProps, isNavGroupActive } from '~/@layouts/utils'
+import { IPageProps } from '../../../app/helpers/types'
 
 interface Props {
   item: NavGroup
@@ -33,59 +35,41 @@ const isGroupActive = ref(false)
 
   updates isActive & isOpen based on active state of group.
 */
-// watch(() => route.path, () => {
-//   const isActive = isNavGroupActive(props.item.children, router)
 
-//   isGroupActive.value = isActive
-// }, { immediate: true })
+const page = usePage<IPageProps<{}>>()
+const currenUrl = computed(() => page.url)
+
+watch(() => currenUrl, () => {
+  const isActive = isNavGroupActive(props.item.children, currenUrl.value)
+
+  isGroupActive.value = isActive
+}, { immediate: true })
 </script>
 
 <template>
-  <HorizontalNavPopper
-    v-if="canViewNavMenuGroup(item)"
-    :is-rtl="configStore.isAppRTL"
-    class="nav-group"
-    tag="li"
-    content-container-tag="ul"
-    :class="[
-      {
-        'active': isGroupActive,
-        'children-at-end': childrenAtEnd,
-        'sub-item': isSubItem,
-        'disabled': item.disable,
-      },
-    ]"
-    :popper-inline-end="childrenAtEnd"
-  >
+  <HorizontalNavPopper v-if="canViewNavMenuGroup(item)" :is-rtl="configStore.isAppRTL" class="nav-group" tag="li"
+    content-container-tag="ul" :class="[
+    {
+      'active': isGroupActive,
+      'children-at-end': childrenAtEnd,
+      'sub-item': isSubItem,
+      'disabled': item.disable,
+    },
+  ]" :popper-inline-end="childrenAtEnd">
     <div class="nav-group-label">
-      <Component
-        :is="layoutConfig.app.iconRenderer || 'div'"
-        class="nav-item-icon"
-        v-bind="item.icon || layoutConfig.verticalNav.defaultNavItemIconProps"
-      />
-      <Component
-        :is="layoutConfig.app.i18n.enable ? 'i18n-t' : 'span'"
-        v-bind="getDynamicI18nProps(item.title, 'span')"
-        class="nav-item-title"
-      >
+      <Component :is="layoutConfig.app.iconRenderer || 'div'" class="nav-item-icon"
+        v-bind="item.icon || layoutConfig.verticalNav.defaultNavItemIconProps" />
+      <Component :is="layoutConfig.app.i18n.enable ? 'i18n-t' : 'span'" v-bind="getDynamicI18nProps(item.title, 'span')"
+        class="nav-item-title">
         {{ item.title }}
       </Component>
-      <Component
-        v-bind="layoutConfig.icons.chevronDown"
-        :is="layoutConfig.app.iconRenderer || 'div'"
-        class="nav-group-arrow"
-      />
+      <Component v-bind="layoutConfig.icons.chevronDown" :is="layoutConfig.app.iconRenderer || 'div'"
+        class="nav-group-arrow" />
     </div>
 
     <template #content>
-      <Component
-        :is="'children' in child ? 'HorizontalNavGroup' : HorizontalNavLink"
-        v-for="child in item.children"
-        :key="child.title"
-        :item="child"
-        children-at-end
-        is-sub-item
-      />
+      <Component :is="'children' in child ? 'HorizontalNavGroup' : HorizontalNavLink" v-for="child in item.children"
+        :key="child.title" :item="child" children-at-end is-sub-item />
     </template>
   </HorizontalNavPopper>
 </template>
@@ -102,7 +86,7 @@ const isGroupActive = ref(false)
     .popper-content {
       z-index: 1;
 
-      > div {
+      >div {
         overflow: hidden auto;
       }
     }

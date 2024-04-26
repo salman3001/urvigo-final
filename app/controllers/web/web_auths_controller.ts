@@ -2,6 +2,7 @@ import User from '#models/user'
 import AuthService from '#services/auth_service'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
+import { userTypes } from '../../helpers/enums.js'
 
 @inject()
 export default class WebAuthsController {
@@ -21,6 +22,9 @@ export default class WebAuthsController {
       if (next) {
         return response.redirect().toPath(next)
       } else {
+        if (user.userType === userTypes.VENDER) {
+          return response.redirect().toRoute('vendor.dashboard')
+        }
         return response.redirect().toRoute('web.home')
       }
     } else {

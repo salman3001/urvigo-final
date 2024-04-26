@@ -1,4 +1,4 @@
-.tabler-lock, .tabler-lock-open, .tabler-circle, .tabler-chevron-up, .tabler-chevron-down, .tabler-chevron-right, .tabler-chevron-left, .tabler-x, .tabler-circle-dot, .tabler-minus, .tabler-plus, .tabler-search, .tabler-file-alert, .tabler-alert-circle, .tabler-upload, .tabler-language, .tabler-dots-vertical, .tabler-bell, .tabler-mail-opened, .tabler-circle-filled, .tabler-bold, .tabler-underline, .tabler-italic, .tabler-strikethrough, .tabler-align-left, .tabler-align-center, .tabler-align-right, .tabler-align-justified, .tabler-arrow-up, .tabler-layout-grid-add, .tabler-layout-grid, .tabler-sun, .tabler-device-desktop-analytics, .tabler-settings, .tabler-refresh, .tabler-color-picker, .tabler-code, .tabler-check, .tabler-copy, .tabler-brand-facebook-filled, .tabler-brand-twitter-filled, .tabler-brand-github-filled, .tabler-brand-google-filled, .tabler-brand-youtube-filled, .tabler-photo, .tabler-menu-2, .tabler-heart-filled, .tabler-heart, .tabler-calendar, .tabler-file-dollar, .tabler-user, .tabler-users, .tabler-sun-high, .tabler-chart-bar, .tabler-chart-donut-3, .tabler-shopping-cart, .tabler-typography, .tabler-info-triangle, .tabler-checkbox, .tabler-corner-down-left, .tabler-logout, .tabler-smart-home, .tabler-file, .tabler-eye-off, .tabler-eye, .tabler-star-filled, .tabler-star, .tabler-filter, .tabler-map-pin, .tabler-currency-dollar, .tabler-moon-stars {
+.tabler-lock, .tabler-lock-open, .tabler-circle, .tabler-chevron-up, .tabler-chevron-down, .tabler-chevron-right, .tabler-chevron-left, .tabler-x, .tabler-circle-dot, .tabler-minus, .tabler-plus, .tabler-search, .tabler-file-alert, .tabler-alert-circle, .tabler-upload, .tabler-language, .tabler-dots-vertical, .tabler-bell, .tabler-mail-opened, .tabler-circle-filled, .tabler-bold, .tabler-underline, .tabler-italic, .tabler-strikethrough, .tabler-align-left, .tabler-align-center, .tabler-align-right, .tabler-align-justified, .tabler-arrow-up, .tabler-layout-grid-add, .tabler-layout-grid, .tabler-sun, .tabler-device-desktop-analytics, .tabler-settings, .tabler-refresh, .tabler-color-picker, .tabler-code, .tabler-check, .tabler-copy, .tabler-brand-facebook-filled, .tabler-brand-twitter-filled, .tabler-brand-github-filled, .tabler-brand-google-filled, .tabler-brand-youtube-filled, .tabler-photo, .tabler-menu-2, .tabler-heart-filled, .tabler-heart, .tabler-calendar, .tabler-file-dollar, .tabler-user, .tabler-users, .tabler-sun-high, .tabler-chart-bar, .tabler-chart-donut-3, .tabler-shopping-cart, .tabler-typography, .tabler-info-triangle, .tabler-checkbox, .tabler-corner-down-left, .tabler-logout, .tabler-smart-home, .tabler-file, .tabler-eye-off, .tabler-eye, .tabler-star-filled, .tabler-star, .tabler-filter, .tabler-map-pin, .tabler-currency-dollar, .tabler-moon-stars, .tabler-brand-envato, .tabler-wallet, .tabler-gift-card, .tabler-brand-asana, .tabler-hand-grab, .tabler-adjustments-horizontal, .tabler-file-invoice, .tabler-share, .tabler-bookmarks {
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -293,6 +293,42 @@
 
 .tabler-moon-stars {
   --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992zm5 1a2 2 0 0 0 2 2a2 2 0 0 0-2 2a2 2 0 0 0-2-2a2 2 0 0 0 2-2m2 7h2m-1-1v2'/%3E%3C/svg%3E");
+}
+
+.tabler-brand-envato {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4.711 17.875c-.534-1.339-1.35-4.178.129-6.47c1.415-2.193 3.769-3.608 5.099-4.278L4.71 17.875zm15.004-5.367c-.54 3.409-2.094 6.156-4.155 7.348c-4.069 2.353-8.144.45-9.297-.188c.877-1.436 4.433-7.22 6.882-10.591C15.859 5.34 19.009 3.099 19.71 3c0 .201.03.55.071 1.03c.144 1.709.443 5.264-.066 8.478'/%3E%3C/svg%3E");
+}
+
+.tabler-wallet {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M17 8V5a1 1 0 0 0-1-1H6a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V6'/%3E%3Cpath d='M20 12v4h-4a2 2 0 0 1 0-4z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tabler-gift-card {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M3 8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z'/%3E%3Cpath d='m7 16l3-3l3 3m-5-3c-.789 0-2-.672-2-1.5S6.711 10 7.5 10c1.128-.02 2.077 1.17 2.5 3c.423-1.83 1.372-3.02 2.5-3c.789 0 1.5.672 1.5 1.5S12.789 13 12 13z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tabler-brand-asana {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M9 7a3 3 0 1 0 6 0a3 3 0 1 0-6 0m5 9a3 3 0 1 0 6 0a3 3 0 1 0-6 0M4 16a3 3 0 1 0 6 0a3 3 0 1 0-6 0'/%3E%3C/svg%3E");
+}
+
+.tabler-hand-grab {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M8 11V7.5a1.5 1.5 0 0 1 3 0V10m0-.5v-3a1.5 1.5 0 0 1 3 0V10m0-2.5a1.5 1.5 0 0 1 3 0V10'/%3E%3Cpath d='M17 9.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-2h.208a6 6 0 0 1-5.012-2.7L7 17q-.468-.718-3.286-5.728A1.5 1.5 0 0 1 4.25 9.25a1.87 1.87 0 0 1 2.28.28L8 11'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tabler-adjustments-horizontal {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 6a2 2 0 1 0 4 0a2 2 0 1 0-4 0M4 6h8m4 0h4M6 12a2 2 0 1 0 4 0a2 2 0 1 0-4 0m-2 0h2m4 0h10m-5 6a2 2 0 1 0 4 0a2 2 0 1 0-4 0M4 18h11m4 0h1'/%3E%3C/svg%3E");
+}
+
+.tabler-file-invoice {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M14 3v4a1 1 0 0 0 1 1h4'/%3E%3Cpath d='M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2M9 7h1m-1 6h6m-2 4h2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tabler-share {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M3 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0m12-6a3 3 0 1 0 6 0a3 3 0 1 0-6 0m0 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-6.3-7.3l6.6-3.4m-6.6 6l6.6 3.4'/%3E%3C/svg%3E");
+}
+
+.tabler-bookmarks {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M15 10v11l-5-3l-5 3V10a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3'/%3E%3Cpath d='M11 3h5a3 3 0 0 1 3 3v11'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 .mdi-close-circle, .mdi-language-javascript, .mdi-language-typescript {
