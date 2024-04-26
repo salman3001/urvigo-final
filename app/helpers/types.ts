@@ -85,3 +85,12 @@ export interface IbidBookingDetail {
 export interface IndexOption {
   disableFilter?: boolean
 }
+
+export interface IvariantFrom {
+  name: string
+  price: number
+  discountType: 'flat' | 'percentage'
+  discountFlat: number
+  discountPercentage: number
+  desc: string
+}

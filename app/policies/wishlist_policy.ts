@@ -7,12 +7,8 @@ export default class WishlistPolicy extends BasePolicy {
     return false
   }
 
-  async view(user: User) {
-    if (isUser(user)) {
-      return true
-    } else {
-      return false
-    }
+  async view() {
+    return true
   }
   async create() {
     // if (user && user instanceof User) {

@@ -1,0 +1,140 @@
+<script setup lang="ts">
+import { useForm } from '@inertiajs/vue3'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import { maxNumValidator, minNumValidator, requiredValidator } from '~/@core/utils/validators'
+import CustomForm from '../form/CustomForm.vue'
+import { ref } from 'vue'
+import { IvariantFrom } from '#helpers/types'
+import ModalBase from './ModalBase.vue'
+import AvatarInput from '../form/AvatarInput.vue'
+import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import { VBtn } from 'vuetify/components'
+
+const props = defineProps<{
+  variant?: IvariantFrom
+  variantThumbnailUrl: string
+}>()
+
+const model = defineModel<boolean>({ required: true })
+
+const form = useForm({
+  name: props.variant?.name || '',
+  price: props.variant?.price || '',
+  discountType: props.variant?.discountType || 'flat',
+  discountFlat: props.variant?.discountFlat || 0,
+  discountPercentage: props.variant?.discountPercentage || 0,
+  desc: props.variant?.desc || '',
+})
+
+const emits = defineEmits<{
+  (e: 'variant-added', opt: { variant: IvariantFrom; image: File | null }): void
+  (e: 'cancled'): void
+}>()
+
+const image = ref<null | File>(null)
+
+const emitAdd = () => {
+  console.log('ran')
+  emits('variant-added', {
+    variant: {
+      name: form.name,
+      desc: form.desc,
+      discountFlat: form.discountFlat,
+      discountPercentage: form.discountPercentage,
+      discountType: form.discountType,
+      price: Number(form.price),
+    },
+    image: image.value,
+  })
+}
+</script>
+<template>
+  <ModalBase v-model:is-visible="model" title="" subtitle="" persistent @close="$emit('cancled')">
+    <CustomForm @submit="emitAdd">
+      <VRow>
+        <VCol cols="12">
+          <div class="d-flex">
+            <AvatarInput
+              name="image"
+              @image="
+                (file: any) => {
+                  image = file
+                }
+              "
+              size="120"
+              :url="variantThumbnailUrl"
+            />
+          </div>
+        </VCol>
+        <VCol cols="12" md="6">
+          <AppTextField v-model="form.name" label="Name" :rules="[requiredValidator]" />
+        </VCol>
+        <VCol cols="12" md="6">
+          <AppTextField
+            type="number"
+            v-model="form.price"
+            label="Price"
+            :rules="[requiredValidator, (v: string) => minNumValidator(v, 1)]"
+          />
+        </VCol>
+        <VCol cols="12" md="6">
+          <p class="q-pl-sm">Discount Type</p>
+          <VRadioGroup
+            v-model="form.discountType"
+            @update:model-value="
+              (value: string) => {
+                if (value === 'flat') {
+                  form.discountPercentage = 0
+                }
+
+                if (value === 'percentage') {
+                  form.discountFlat = 0
+                }
+              }
+            "
+          >
+            <VRadio label="Flat" value="flat" />
+            <VRadio label="Percentage" value="percentage" />
+          </VRadioGroup>
+        </VCol>
+        <VCol cols="12" md="6">
+          <AppTextField
+            type="number"
+            v-model="form.discountFlat"
+            label="Flat Discount"
+            v-if="form.discountType === 'flat'"
+            :rules="[
+              (v: string) => minNumValidator(v, 0),
+              (value: string) => maxNumValidator(value, Number(form.price)),
+            ]"
+          />
+          <AppTextField
+            type="number"
+            v-model="form.discountPercentage"
+            label="Percentage Discount"
+            v-if="form.discountType === 'percentage'"
+            :rules="[
+              (v: string) => minNumValidator(v, 0),
+              (value: string) => maxNumValidator(value, 99),
+            ]"
+          />
+        </VCol>
+        <VCol cols="12">
+          <AppTextarea label="Short Description" v-model="form.desc" />
+        </VCol>
+        <VCol cols="12" class="d-flex justify-end gap-2">
+          <VBtn
+            variant="text"
+            @click="
+              () => {
+                $emit('cancled')
+              }
+            "
+            >Cancle</VBtn
+          >
+          <VBtn prepend-icon="tabler-plus" type="submit">Add Variant</VBtn>
+        </VCol>
+      </VRow>
+    </CustomForm>
+  </ModalBase>
+</template>

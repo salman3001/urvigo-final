@@ -6,13 +6,24 @@ defineProps<{
   subtitle: string
 }>()
 
+defineEmits<{
+  (e: 'close'): void
+}>()
+
 const isVisible = defineModel<boolean>('isVisible')
 </script>
 
 <template>
   <VDialog v-model="isVisible" :width="$vuetify.display.smAndDown ? 'auto' : 600">
     <!-- Dialog close btn -->
-    <DialogCloseBtn @click="isVisible = false" />
+    <DialogCloseBtn
+      @click="
+        () => {
+          isVisible = false
+          $emit('close')
+        }
+      "
+    />
 
     <VCard class="pa-2 pa-sm-10">
       <!-- 👉 Title -->

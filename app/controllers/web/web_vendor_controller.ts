@@ -44,7 +44,6 @@ export default class WebVendorController {
 
   async serviceCreate({ inertia }: HttpContext) {
     return inertia.render('vendor/services/service-create', {
-      service: () => this.serviceService.showBySlug(),
       categories: () => this.categoryService.index(),
       subcategories: () => this.subcategoryService.index(),
       tags: () => this.tagService.index(),
@@ -73,6 +72,15 @@ export default class WebVendorController {
     await this.serviceService.update()
     session.flash('flash', {
       message: 'Service Updated',
+      type: 'success',
+    })
+    return response.redirect().toRoute('vendor.service.index')
+  }
+
+  async serviceDelete({ response, session }: HttpContext) {
+    await this.serviceService.destroy()
+    session.flash('flash', {
+      message: 'Service Deleted',
       type: 'success',
     })
     return response.redirect().toRoute('vendor.service.index')
@@ -158,6 +166,15 @@ export default class WebVendorController {
     session.flash('flash', {
       type: 'success',
       message: 'Coupon Updated',
+    })
+    return response.redirect().toRoute('vendor.coupon.index')
+  }
+
+  async couponsDelete({ response, session }: HttpContext) {
+    await this.serviceService.destroy()
+    session.flash('flash', {
+      message: 'Coupon Deleted',
+      type: 'success',
     })
     return response.redirect().toRoute('vendor.coupon.index')
   }

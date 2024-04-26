@@ -1,4 +1,4 @@
-.tabler-lock, .tabler-lock-open, .tabler-circle, .tabler-chevron-up, .tabler-chevron-down, .tabler-chevron-right, .tabler-chevron-left, .tabler-x, .tabler-circle-dot, .tabler-minus, .tabler-plus, .tabler-search, .tabler-file-alert, .tabler-alert-circle, .tabler-upload, .tabler-language, .tabler-dots-vertical, .tabler-bell, .tabler-mail-opened, .tabler-circle-filled, .tabler-bold, .tabler-underline, .tabler-italic, .tabler-strikethrough, .tabler-align-left, .tabler-align-center, .tabler-align-right, .tabler-align-justified, .tabler-arrow-up, .tabler-layout-grid-add, .tabler-layout-grid, .tabler-sun, .tabler-device-desktop-analytics, .tabler-settings, .tabler-refresh, .tabler-color-picker, .tabler-code, .tabler-check, .tabler-copy, .tabler-brand-facebook-filled, .tabler-brand-twitter-filled, .tabler-brand-github-filled, .tabler-brand-google-filled, .tabler-brand-youtube-filled, .tabler-photo, .tabler-menu-2, .tabler-heart-filled, .tabler-heart, .tabler-calendar, .tabler-file-dollar, .tabler-user, .tabler-users, .tabler-sun-high, .tabler-chart-bar, .tabler-chart-donut-3, .tabler-shopping-cart, .tabler-typography, .tabler-info-triangle, .tabler-checkbox, .tabler-corner-down-left, .tabler-logout, .tabler-smart-home, .tabler-file, .tabler-eye-off, .tabler-eye, .tabler-star-filled, .tabler-star, .tabler-filter, .tabler-map-pin, .tabler-currency-dollar, .tabler-moon-stars, .tabler-brand-envato, .tabler-wallet, .tabler-gift-card, .tabler-brand-asana, .tabler-hand-grab, .tabler-adjustments-horizontal, .tabler-file-invoice, .tabler-share, .tabler-bookmarks {
+.tabler-lock, .tabler-lock-open, .tabler-circle, .tabler-chevron-up, .tabler-chevron-down, .tabler-chevron-right, .tabler-chevron-left, .tabler-x, .tabler-circle-dot, .tabler-minus, .tabler-plus, .tabler-search, .tabler-file-alert, .tabler-alert-circle, .tabler-upload, .tabler-language, .tabler-dots-vertical, .tabler-bell, .tabler-mail-opened, .tabler-circle-filled, .tabler-bold, .tabler-underline, .tabler-italic, .tabler-strikethrough, .tabler-align-left, .tabler-align-center, .tabler-align-right, .tabler-align-justified, .tabler-arrow-up, .tabler-layout-grid-add, .tabler-layout-grid, .tabler-sun, .tabler-device-desktop-analytics, .tabler-settings, .tabler-refresh, .tabler-color-picker, .tabler-code, .tabler-check, .tabler-copy, .tabler-brand-facebook-filled, .tabler-brand-twitter-filled, .tabler-brand-github-filled, .tabler-brand-google-filled, .tabler-brand-youtube-filled, .tabler-photo, .tabler-menu-2, .tabler-heart-filled, .tabler-heart, .tabler-calendar, .tabler-file-dollar, .tabler-user, .tabler-users, .tabler-sun-high, .tabler-chart-bar, .tabler-chart-donut-3, .tabler-shopping-cart, .tabler-typography, .tabler-info-triangle, .tabler-checkbox, .tabler-corner-down-left, .tabler-logout, .tabler-smart-home, .tabler-file, .tabler-eye-off, .tabler-eye, .tabler-star-filled, .tabler-star, .tabler-filter, .tabler-map-pin, .tabler-currency-dollar, .tabler-moon-stars, .tabler-brand-envato, .tabler-wallet, .tabler-gift-card, .tabler-brand-asana, .tabler-hand-grab, .tabler-adjustments-horizontal, .tabler-file-invoice, .tabler-share, .tabler-bookmarks, .tabler-trash, .tabler-edit, .tabler-pencil, .tabler-cloud-upload {
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -329,6 +329,22 @@
 
 .tabler-bookmarks {
   --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M15 10v11l-5-3l-5 3V10a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3'/%3E%3Cpath d='M11 3h5a3 3 0 0 1 3 3v11'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tabler-trash {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3'/%3E%3C/svg%3E");
+}
+
+.tabler-edit {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M7 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1'/%3E%3Cpath d='M20.385 6.585a2.1 2.1 0 0 0-2.97-2.97L9 12v3h3zM16 5l3 3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tabler-pencil {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16zm9.5-13.5l4 4'/%3E%3C/svg%3E");
+}
+
+.tabler-cloud-upload {
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5'%3E%3Cpath d='M7 18a4.6 4.4 0 0 1 0-9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1'/%3E%3Cpath d='m9 15l3-3l3 3m-3-3v9'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 .mdi-close-circle, .mdi-language-javascript, .mdi-language-typescript {

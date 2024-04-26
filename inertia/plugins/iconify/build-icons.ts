@@ -171,6 +171,9 @@ const sources: BundleScriptConfig = {
         'share',
         'bookmarks',
         'trash',
+        'edit',
+        'pencil',
+        'cloud-upload',
       ],
     },
     {

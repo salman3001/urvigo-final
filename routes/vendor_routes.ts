@@ -7,11 +7,12 @@ router
     router.get('dashboard', [WebVendorController, 'dashboard']).as('dashboard')
     // services
     router.get('services', [WebVendorController, 'serviceIndex']).as('service.index')
-    router.get('services/:slug', [WebVendorController, 'serviceShow']).as('service.show')
     router.get('services/create', [WebVendorController, 'serviceCreate']).as('service.create')
+    router.get('services/:slug', [WebVendorController, 'serviceShow']).as('service.show')
     router.post('services', [WebVendorController, 'serviceCreatePost']).as('service.create.post')
     router.get('services/:slug/edit', [WebVendorController, 'serviceEdit']).as('service.edit')
     router.post('services/:id/', [WebVendorController, 'serviceEditPost']).as('service.edit.post')
+    router.delete('services/:id/', [WebVendorController, 'serviceDelete']).as('service.delete')
     // bookings
     router.get('bookings', [WebVendorController, 'bookingIndex']).as('booking.index')
     router.get('bookings/:id', [WebVendorController, 'bookingShow']).as('booking.show')
@@ -35,6 +36,7 @@ router
     router.post('coupons', [WebVendorController, 'couponsCreatePost']).as('coupon.create.post')
     router.get('coupons/:id/edit', [WebVendorController, 'couponsEdit']).as('coupon.edit')
     router.post('coupons/:id/', [WebVendorController, 'couponsEditPost']).as('coupon.edit.post')
+    router.delete('coupons/:id/', [WebVendorController, 'couponsDelete']).as('coupon.delete')
   })
   .prefix('vendor')
   .as('vendor')
