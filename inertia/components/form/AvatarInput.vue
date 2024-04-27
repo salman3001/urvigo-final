@@ -5,6 +5,7 @@ const props = defineProps<{
   name?: string
   url?: string
   size?: string
+  helperText?: string
 }>()
 
 const urlRef = ref(props.url)
@@ -34,13 +35,7 @@ function previewSelectedImage() {
 
 <template>
   <!-- 👉 Avatar -->
-  <VAvatar
-    rounded
-    :size="size"
-    :image="urlRef"
-    class="me-4 cursor-pointer"
-    @click="refInputEl?.click()"
-  />
+  <VAvatar rounded :size="size" :image="urlRef" class="me-4 cursor-pointer" @click="refInputEl?.click()" />
 
   <!-- 👉 Upload Photo -->
   <form class="d-flex flex-column justify-center gap-4">
@@ -50,19 +45,11 @@ function previewSelectedImage() {
         <span class="d-none d-sm-block">Upload new photo</span>
       </VBtn>
 
-      <input
-        ref="refInputEl"
-        type="file"
-        :name="name"
-        accept=".jpeg,.png,.jpg,GIF"
-        hidden
-        @change="
-          (e) => {
-            file = e.target?.files[0]
-            previewSelectedImage()
-          }
-        "
-      />
+      <input ref="refInputEl" type="file" :name="name" accept=".jpeg,.png,.jpg,GIF" hidden @change="(e) => {
+    file = e.target?.files[0]
+    previewSelectedImage()
+  }
+    " />
 
       <!-- <VBtn
             type="reset"
@@ -76,6 +63,6 @@ function previewSelectedImage() {
           </VBtn> -->
     </div>
 
-    <p class="text-body-1 mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+    <p class="text-body-1 mb-0">{{ helperText || 'Allowed JPG, GIF or PNG. Max size of 800K' }}</p>
   </form>
 </template>

@@ -64,15 +64,18 @@ const decrementQty = () => {
 
         <VCardText class="text-subtitle-1">
           <span>Price :</span>
-          <span class="font-weight-medium">&#x20B9;{{ new BigNumber(variant?.price).minus(discount).toFixed(2) }}</span>
+          <span class="font-weight-medium">&#x20B9;{{ new BigNumber(variant?.price).minus(discount).toFixed(2)
+            }}</span>&nbsp;
+          <span class="font-weight-medium text-decoration-line-through" v-if="discount.gt(0)">&#x20B9;{{ new
+          BigNumber(variant?.price).toFixed(2) }}</span>
         </VCardText>
 
         <VCardActions class="justify-space-between">
           <Link :href="user
-            ? routes('web.booking.summary', [variant.id]) +
-            `?serviceVariantId=${variant.id}&qty=1&couponId=`
-            : routes('web.auth.login') +
-            `?next=${routes('web.booking.summary', [variant.id]) + `?serviceVarintId=${variant.id}&qty=1&couponId=`}`
+          ? routes('web.booking.summary', [variant.id]) +
+          `?serviceVariantId=${variant.id}&qty=1&couponId=`
+          : routes('web.auth.login') +
+          `?next=${routes('web.booking.summary', [variant.id]) + `?serviceVarintId=${variant.id}&qty=1&couponId=`}`
           ">
           <VBtn v-if="!diableBookButton">
             <VIcon icon="tabler-shopping-cart-plus" />

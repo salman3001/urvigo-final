@@ -56,16 +56,11 @@ watchDebounced(
       </div>
       <br />
       <div>
-        <TablePagination
-          :page="Number(query.page)"
-          :items-per-page="Number(services?.meta?.perPage)"
-          :total-items="Number(services?.meta?.total)"
-          @update:page="
-            (p) => {
-              query.page = p
-            }
-          "
-        />
+        <TablePagination :page="Number(query.page)" :items-per-page="Number(services?.meta?.perPage)"
+          :total-items="Number(services?.meta?.total)" @update:page="(p) => {
+          query.page = p
+        }
+          " />
       </div>
     </VCardItem>
   </VCard>

@@ -143,6 +143,8 @@ export default class ServiceService {
         })
         r.limit(10)
       })
+      .preload('serviceCategory')
+      .preload('serviceSubcategory')
       .preload('faq')
       .preload('seo')
       .preload('tags')
@@ -176,6 +178,8 @@ export default class ServiceService {
         })
         r.limit(10)
       })
+      .preload('serviceCategory')
+      .preload('serviceSubcategory')
       .preload('faq')
       .preload('seo')
       .preload('tags')
@@ -239,7 +243,7 @@ export default class ServiceService {
   }
 
   async vendorServices() {
-    const { bouncer, params } = this.ctx
+    const { bouncer, params, request } = this.ctx
     await bouncer.with('ServicePolicy').authorize('viewList')
 
     const vendor = await User.query()
@@ -252,7 +256,7 @@ export default class ServiceService {
     let services: Service[] = []
 
     if (vendor) {
-      services = await Service.query()
+      const serviceQuery = Service.query()
         .whereHas('businessProfile', (s) => {
           s.where('id', vendor?.businessProfile?.id)
         })
@@ -286,7 +290,8 @@ export default class ServiceService {
         .withAggregate('variants', (v) => {
           v.min('price').as('starting_from')
         })
-        .limit(config.get('common.rowsPerPage') || 20)
+
+      services = paginate(serviceQuery, request)
     }
 
     return services
@@ -342,6 +347,7 @@ export default class ServiceService {
 
           if (payload?.variantImages?.[index]) {
             variant.image = await this.fileService.uploadeImage(
+              // @ts-ignore
               payload?.variantImages?.[index],
               'services/variants'
             )
@@ -372,9 +378,11 @@ export default class ServiceService {
 
       if (payload.images) {
         for (const img of payload.images) {
-          await service
-            .related('images')
-            .create({ file: await this.fileService.uploadeImage(img, 'services/images') })
+          if (img) {
+            await service
+              .related('images')
+              .create({ file: await this.fileService.uploadeImage(img, 'services/images') })
+          }
         }
       }
 

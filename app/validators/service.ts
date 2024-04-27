@@ -101,18 +101,22 @@ export const createServiceValidator = vine.compile(
       .optional(),
     images: vine
       .array(
-        vine.file({
-          extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp', 'WEBP'],
-          size: '5mb',
-        })
+        vine
+          .file({
+            extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp', 'WEBP'],
+            size: '5mb',
+          })
+          .optional()
       )
       .optional(),
     variantImages: vine
       .array(
-        vine.file({
-          extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp', 'WEBP'],
-          size: '5mb',
-        })
+        vine
+          .file({
+            extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp', 'WEBP'],
+            size: '5mb',
+          })
+          .optional()
       )
       .optional(),
     thumbnail: vine

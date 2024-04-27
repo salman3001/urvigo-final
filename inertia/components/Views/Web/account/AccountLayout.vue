@@ -23,7 +23,7 @@ const tabs = [
     tab: 'wishlist',
     href: routes('web.account.wishlist'),
   },
-  { title: 'Settings', icon: 'tabler-tool', tab: 'settings', href: routes('web.account.settings') },
+  { title: 'Settings', icon: 'tabler-settings', tab: 'settings', href: routes('web.account.settings') },
 ]
 </script>
 

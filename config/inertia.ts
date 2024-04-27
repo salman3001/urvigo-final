@@ -26,6 +26,13 @@ export default defineConfig({
   ssr: {
     enabled: true,
     entrypoint: 'inertia/app/ssr.ts',
-    pages: (ctx, page) => page.startsWith('services') || page === '/',
+    pages: (ctx, page) =>
+      !page.startsWith('vendor') &&
+      !page.startsWith('admin') &&
+      !page.startsWith('account') &&
+      !page.startsWith('bookings') &&
+      !page.startsWith('service-requirements') &&
+      !page.startsWith('vendor-profile') &&
+      !page.startsWith('chat'),
   },
 })

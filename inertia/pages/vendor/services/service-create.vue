@@ -14,15 +14,16 @@ import type ServiceSubcategory from '#models/service_subcategory'
 import type ServiceTag from '#models/service_tag'
 import { Link, useForm } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
-import { VRadioGroup } from 'vuetify/components'
 import DropZone from '~/@core/components/DropZone.vue'
 import ProductDescriptionEditor from '~/@core/components/ProductDescriptionEditor.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
-import { maxNumValidator, minNumValidator, requiredValidator } from '~/@core/utils/validators'
+import { requiredValidator } from '~/@core/utils/validators'
 import dummyThumb from '~/assets/images/no-image.png'
 import AvatarInput from '~/components/form/AvatarInput.vue'
+import CustomForm from '~/components/form/CustomForm.vue'
+import ErrorAlert from '~/components/form/ErrorAlert.vue'
 import ModalAddVariant from '~/components/modal/ModalAddVariant.vue'
 
 defineProps<{
@@ -31,33 +32,6 @@ defineProps<{
   tags: ServiceTag[]
 }>()
 
-const activeTab = ref('Restock')
-const isTaxChargeToProduct = ref(true)
-
-const shippingList = [
-  {
-    desc: "You'll be responsible for product delivery.Any damage or delay during shipping may cost you a Damage fee",
-    title: 'Fulfilled by Seller',
-    value: 'Fulfilled by Seller',
-  },
-  {
-    desc: 'Your product, Our responsibility.For a measly fee, we will handle the delivery process for you.',
-    title: 'Fulfilled by Company name',
-    value: 'Fulfilled by Company name',
-  },
-] as const
-
-const shippingType = ref<(typeof shippingList)[number]['value']>('Fulfilled by Company name')
-const deliveryType = ref('Worldwide delivery')
-const selectedAttrs = ref(['Biodegradable', 'Expiry Date'])
-
-const inventoryTabsData = [
-  { icon: 'tabler-cube', title: 'Restock', value: 'Restock' },
-  { icon: 'tabler-car', title: 'Shipping', value: 'Shipping' },
-  { icon: 'tabler-map-pin', title: 'Global Delivery', value: 'Global Delivery' },
-  { icon: 'tabler-world', title: 'Attributes', value: 'Attributes' },
-  { icon: 'tabler-lock', title: 'Advanced', value: 'Advanced' },
-]
 
 const form = useForm({
   thumbnail: null,
@@ -127,7 +101,7 @@ const onVariantCancle = (index: number) => {
   }
 }
 
-const screenShotUrls = computed(() => {
+const imagesUrls = computed(() => {
   return form.images.map((img: File) => URL.createObjectURL(img))
 })
 
@@ -138,454 +112,220 @@ const serviceThumbnailUrl = computed(() => {
 const variantThumbnailUrl = computed(() => {
   return form.variantImages.map((v) => (v ? URL.createObjectURL(v) : dummyThumb))
 })
+
+const submit = () => {
+  if (form.variant.length < 1) {
+    alert('Please add a service variant')
+  } else {
+    form.post(routes('vendor.service.create.post'), {
+      forceFormData: true
+    })
+  }
+}
 </script>
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">Add a new product</h4>
-        <div class="text-body-1">Orders placed across your store</div>
-      </div>
+    <CustomForm @submit="submit">
+      <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
+        <div class="d-flex flex-column justify-center">
+          <h4 class="text-h4 font-weight-medium">Add a new service</h4>
+          <div class="text-body-1">Orders placed across your store</div>
+        </div>
 
-      <div class="d-flex gap-4 align-center flex-wrap">
-        <Link :href="routes('vendor.service.index')">
+        <div class="d-flex gap-4 align-center flex-wrap">
+          <Link :href="routes('vendor.service.index')">
           <VBtn variant="tonal" color="secondary"> Discard </VBtn>
-        </Link>
-        <VBtn variant="tonal" color="primary"> Save for later </VBtn>
-        <VBtn>Publish Service</VBtn>
+          </Link>
+          <!-- <VBtn variant="tonal" color="primary" > Save for later </VBtn> -->
+          <VBtn type="submit">Publish Service</VBtn>
+        </div>
       </div>
-    </div>
-
-    <VRow>
-      <VCol md="8">
-        <!-- 👉 Product Information -->
-        <VCard class="mb-6" title="Product Information">
-          <VCardText>
-            <VRow>
-              <VCol cols="12">
-                <AppTextField label="Name" placeholder="Service Name" />
-              </VCol>
-              <VCol cols="12" md="6">
-                <AppSelect
-                  v-model="form.service.serviceCategoryId"
-                  :items="categories"
-                  item-title="name"
-                  item-value="id"
-                  label="Select Category"
-                  style="min-inline-size: 260px"
-                />
-              </VCol>
-              <VCol cols="12" md="6">
-                <AppSelect
-                  v-model="form.service.serviceSubcategoryId"
-                  :items="subcategories"
-                  item-title="name"
-                  item-value="id"
-                  label="Select Sub Category"
-                  style="min-inline-size: 260px"
-                />
-              </VCol>
-              <VCol cols="12" md="6">
-                <AppSelect
-                  v-model="form.tags"
-                  :items="tags"
-                  item-title="name"
-                  item-value="id"
-                  label="Select Tags"
-                  chips
-                  multiple
-                  closable-chips
-                  style="min-inline-size: 260px"
-                />
-              </VCol>
-
-              <VCol cols="12" md="6">
-                <AppTextField
-                  label="Location"
-                  placeholder="FXSK123U"
-                  v-model="form.service.geoLocation"
-                />
-              </VCol>
-              <VCol cols="12">
-                <AppTextarea label="Short Description" v-model="form.service.shortDesc" />
-              </VCol>
-              <VCol cols="12">
-                <span class="mb-1">Description (optional)</span>
-                <ProductDescriptionEditor
-                  v-model="form.service.longDesc"
-                  placeholder="Product Description"
-                  class="border rounded"
-                />
-              </VCol>
-            </VRow>
-          </VCardText>
-        </VCard>
-
-        <!-- 👉 Media -->
-        <VCard class="mb-6">
-          <VCardItem>
-            <template #title> Product Image </template>
-            <template #append>
-              <span class="text-primary font-weight-medium text-sm cursor-pointer"
-                >Add Media from URL</span
-              >
-            </template>
-          </VCardItem>
-
-          <VCardText>
-            <DropZone :max="5" @change="(images) => (form.images = images.map((i) => i.file))" />
-          </VCardText>
-        </VCard>
-
-        <!-- 👉 Variants -->
-        <VCard title="Variants (Minimum 01 is required)" class="mb-6">
-          <VCardText>
-            <template v-for="(v, i) in form.variant" :key="i">
+      <VRow>
+        <VCol md="8">
+          <!-- 👉 service Information -->
+          <VCard class="mb-6" title="Service Information">
+            <ErrorAlert :errors="form.errors" v-if="form.errors" />
+            <VCardText>
               <VRow>
                 <VCol cols="12">
-                  <div class="d-flex align-center gap-2">
-                    <p class="text-subtitle1 text-bold">{{ v.name }}</p>
-                    <IconBtn
-                      @click="
-                        () => {
-                          variantModalEditMode = true
-                          variantModalRef[i] = true
-                        }
-                      "
-                    >
-                      <VIcon icon="tabler-pencil" />
-                    </IconBtn>
-
-                    <IconBtn @click="() => removeVariant(i)">
-                      <VIcon icon="tabler-trash" />
-                    </IconBtn>
-                  </div>
-                  <br />
+                  <AppTextField label="Name" placeholder="Service Name" v-model="form.service.name"
+                    :rules="[requiredValidator]" />
                 </VCol>
-                <!-- <div class="col-12 q-mb-xl">
-                  <div class="q-py-xs" style="font-weight: 500">Thumbnail</div>
 
-                  <AvatarInput
-                    name="inage"
-                    @image="
-                      (file: any) => {
-                        form.variantImages[i] = file
-                      }
-                    "
-                    width="10rem"
-                    height="8rem"
-                    style="max-width: 10rem"
-                    :url="variantThumbnailUrl[i]"
-                  />
-                </div>
-                 -->
-                <!-- <AppTextField v-model="v.name" label="Name" :rules="[requiredValidator]" />
-                <AppTextField
-                  type="number"
-                  v-model="v.price"
-                  label="Price"
-                  :rules="[requiredValidator, (v: string) => minNumValidator(v, 1)]"
-                />
-                <div class="col-12 col-sm-6 col-md-3">
-                  <p class="q-pl-sm">Discount Type</p>
-                  <VRadioGroup
-                    v-model="v.discountType"
-                    @update:model-value="
-                      (value) => {
-                        if (value === 'flat') {
-                          v.discountPercentage = 0
-                        }
-
-                        if (value === 'percentage') {
-                          v.discountFlat = 0
-                        }
-                      }
-                    "
-                  >
-                    <VRadio label="Flat" value="flat" />
-                    <VRadio label="Percentage" value="percentage" />
-                  </VRadioGroup>
-                </div>
-                <AppTextField
-                  type="number"
-                  v-model="v.price"
-                  label="Flat Discount"
-                  v-if="v.discountType === 'flat'"
-                  :rules="[
-                    (v: string) => minNumValidator(v, 0),
-                    (value: string) => maxNumValidator(value, v.price),
-                  ]"
-                />
-                <AppTextField
-                  type="number"
-                  v-model="v.price"
-                  label="Percentage Discount"
-                  v-if="v.discountType === 'percentage'"
-                  :rules="[
-                    (v: string) => minNumValidator(v, 0),
-                    (value: string) => maxNumValidator(value, 99),
-                  ]"
-                />
-                <AppTextarea label="Short Description" v-model="v.desc" /> -->
-                <ModalAddVariant
-                  v-model:isVisible="variantModalRef[i]"
-                  :variant="v"
-                  :variantThumbnailUrl="variantThumbnailUrl[i]"
-                  @cancled="() => onVariantCancle(i)"
-                  @variant-added="
-                    (opt) => {
-                      onVariantAdded(opt, i)
-                    }
-                  "
-                />
+                <VCol cols="12">
+                  <AppTextField label="Location" placeholder="FXSK123U" v-model="form.service.geoLocation"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12">
+                  <AppTextarea label="Short Description" v-model="form.service.shortDesc" />
+                </VCol>
+                <VCol cols="12">
+                  <span class="mb-1">Description (optional)</span>
+                  <ProductDescriptionEditor v-model="form.service.longDesc" placeholder="service Description"
+                    class="border rounded" />
+                </VCol>
               </VRow>
-            </template>
+            </VCardText>
+          </VCard>
 
-            <VBtn class="mt-6" prepend-icon="tabler-plus" @click="addVariant"> Add variant </VBtn>
-          </VCardText>
-        </VCard>
+          <!-- 👉 Variants -->
+          <VCard title="Variants (Minimum 01 is required)" class="mb-6">
+            <VCardText>
+              <VTable density="compact" class="text-no-wrap">
+                <thead>
+                  <tr>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Price
+                    </th>
+                    <th>
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
 
-        <!-- 👉 Inventory -->
-        <VCard title="Inventory" class="inventory-card">
-          <VCardText>
-            <VRow>
-              <VCol cols="12" md="4">
-                <div class="pe-3">
-                  <VTabs
-                    v-model="activeTab"
-                    direction="vertical"
-                    color="primary"
-                    class="v-tabs-pill"
-                  >
-                    <VTab v-for="(tab, index) in inventoryTabsData" :key="index">
-                      <VIcon :icon="tab.icon" class="me-2" />
-                      <div class="text-truncate font-weight-medium text-start">
-                        {{ tab.title }}
+                <tbody>
+                  <tr v-for="(v, i) in form.variant" :key="i">
+                    <td>
+                      {{ v.name }}
+                    </td>
+                    <td>
+                      {{ v.price }}
+                    </td>
+                    <td>
+                      <div class="d-flex align-center gap-2">
+                        <IconBtn @click="() => {
+      variantModalEditMode = true
+      variantModalRef[i] = true
+    }
+      ">
+                          <VIcon icon="tabler-pencil" />
+                        </IconBtn>
+
+                        <IconBtn @click="() => removeVariant(i)">
+                          <VIcon icon="tabler-trash" />
+                        </IconBtn>
                       </div>
-                    </VTab>
-                  </VTabs>
-                </div>
-              </VCol>
 
-              <VDivider :vertical="!$vuetify.display.smAndDown" />
+                      <ModalAddVariant v-model:isVisible="variantModalRef[i]" :variant="v"
+                        :variantThumbnailUrl="variantThumbnailUrl[i]" @cancled="() => onVariantCancle(i)"
+                        @variant-added="(opt) => {
+      onVariantAdded(opt, i)
+    }
+      " />
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
 
-              <VCol cols="12" md="8">
-                <VWindow v-model="activeTab" class="w-100" :touch="false">
-                  <VWindowItem value="Restock">
-                    <div class="d-flex flex-column gap-y-4 ps-3">
-                      <p class="mb-0">Options</p>
 
-                      <div class="d-flex gap-x-4 align-center">
-                        <AppTextField label="Add to Stock" placeholder="Quantity" />
-                        <VBtn class="align-self-end"> Confirm </VBtn>
-                      </div>
 
-                      <div>
-                        <div class="text-base text-high-emphasis pb-2">
-                          Product in stock now: 54
-                        </div>
-                        <div class="text-base text-high-emphasis pb-2">Product in transit: 390</div>
-                        <div class="text-base text-high-emphasis pb-2">
-                          Last time restocked: 24th June, 2022
-                        </div>
-                        <div class="text-base text-high-emphasis pb-2">
-                          Total stock over lifetime: 2,430
-                        </div>
-                      </div>
-                    </div>
-                  </VWindowItem>
+              <VBtn class="mt-6" prepend-icon="tabler-plus" @click="addVariant"> Add variant </VBtn>
+            </VCardText>
+          </VCard>
 
-                  <VWindowItem value="Shipping">
-                    <VRadioGroup v-model="shippingType" label="Shipping Type" class="ms-3">
-                      <VRadio
-                        v-for="item in shippingList"
-                        :key="item.value"
-                        :value="item.value"
-                        class="mb-4"
-                      >
-                        <template #label>
-                          <div>
-                            <div class="text-high-emphasis font-weight-medium mb-1">
-                              {{ item.title }}
-                            </div>
-                            <div class="text-sm">
-                              {{ item.desc }}
-                            </div>
-                          </div>
-                        </template>
-                      </VRadio>
-                    </VRadioGroup>
-                  </VWindowItem>
 
-                  <VWindowItem value="Global Delivery">
-                    <div class="ps-3">
-                      <h5 class="text-h5 mb-6">Global Delivery</h5>
+          <!-- 👉 Media -->
+          <VCard class="mb-6">
+            <VCardItem>
+              <template #title> Service Image </template>
 
-                      <VRadioGroup v-model="deliveryType" label="Global Delivery">
-                        <VRadio value="Worldwide delivery" class="mb-4">
-                          <template #label>
-                            <div>
-                              <div class="text-high-emphasis font-weight-medium mb-1">
-                                Worldwide delivery
-                              </div>
-                              <div class="text-sm">
-                                Only available with Shipping method:
-                                <span class="text-primary"> Fulfilled by Company name </span>
-                              </div>
-                            </div>
-                          </template>
-                        </VRadio>
+              <template #append>
+                <span class="text-primary font-weight-medium text-sm cursor-pointer">Add Media from URL</span>
+              </template>
+            </VCardItem>
 
-                        <VRadio value="Selected Countries" class="mb-4">
-                          <template #label>
-                            <div>
-                              <div class="text-high-emphasis font-weight-medium mb-1">
-                                Selected Countries
-                              </div>
-                              <VTextField placeholder="USA" style="min-inline-size: 200px" />
-                            </div>
-                          </template>
-                        </VRadio>
+            <VCardText>
+              <DropZone :max="5" @change="(images) => (form.images = images.map((i) => i.file))" />
+            </VCardText>
+          </VCard>
 
-                        <VRadio>
-                          <template #label>
-                            <div>
-                              <div class="text-high-emphasis font-weight-medium mb-1">
-                                Local delivery
-                              </div>
-                              <div class="text-sm">
-                                Deliver to your country of residence
-                                <span class="text-primary"> Change profile address </span>
-                              </div>
-                            </div>
-                          </template>
-                        </VRadio>
-                      </VRadioGroup>
-                    </div>
-                  </VWindowItem>
 
-                  <VWindowItem value="Attributes">
-                    <div class="ps-3">
-                      <div class="mb-6 text-h6">Attributes</div>
-                      <div class="d-flex flex-column gap-y-1">
-                        <VCheckbox
-                          v-model="selectedAttrs"
-                          label="Fragile Product"
-                          value="Fragile Product"
-                        />
-                        <VCheckbox
-                          v-model="selectedAttrs"
-                          value="Biodegradable"
-                          label="Biodegradable"
-                        />
-                        <VCheckbox v-model="selectedAttrs" value="Frozen Product">
-                          <template #label>
-                            <div class="d-flex flex-column mb-1">
-                              <div>Frozen Product</div>
-                              <VTextField
-                                placeholder="40 C"
-                                type="number"
-                                style="min-inline-size: 250px"
-                              />
-                            </div>
-                          </template>
-                        </VCheckbox>
-                        <VCheckbox v-model="selectedAttrs" value="Expiry Date">
-                          <template #label>
-                            <div class="d-flex flex-column mb-1">
-                              <div>Expiry Date of Product</div>
-                              <AppDateTimePicker
-                                model-value="2025-06-14"
-                                placeholder="Select a Date"
-                              />
-                            </div>
-                          </template>
-                        </VCheckbox>
-                      </div>
-                    </div>
-                  </VWindowItem>
+          <!-- 👉 Faqs -->
+          <VCard title="Frequently Asked Questions" class="inventory-card">
+            <VCardText>
 
-                  <VWindowItem value="Advanced">
-                    <div class="ps-3">
-                      <h5 class="text-h5 mb-6">Advanced</h5>
-                      <div
-                        class="d-flex flex-sm-row flex-column flex-wrap justify-space-between gap-x-6 gap-y-4"
-                      >
-                        <AppSelect
-                          label="Product ID Type"
-                          placeholder="Select Product Type"
-                          :items="['ISBN', 'UPC', 'EAN', 'JAN']"
-                        />
-                        <AppTextField label="Product Id" placeholder="100023" />
-                      </div>
-                    </div>
-                  </VWindowItem>
-                </VWindow>
-              </VCol>
-            </VRow>
-          </VCardText>
-        </VCard>
-      </VCol>
+              <div class="column q-gutter-sm">
+                <div v-for="(f, i) in form.faq" :key="i">
+                  <div class="d-flex justify-space-between align-center">
+                    <p class="text-bold">Faq - {{ i + 1 }}</p>
+                    <VTooltip text="Remove Faq">
 
-      <VCol md="4" cols="12">
-        <!-- 👉 Pricing -->
-        <VCard title="Pricing" class="mb-6">
-          <VCardText>
-            <AppTextField label="Best Price" placeholder="Price" class="mb-6" />
-            <AppTextField label="Discounted Price" placeholder="$499" class="mb-6" />
-
-            <VCheckbox v-model="isTaxChargeToProduct" label="Charge Tax on this product" />
-
-            <VDivider class="my-2" />
-
-            <div class="d-flex flex-raw align-center justify-space-between">
-              <span>In stock</span>
-              <VSwitch density="compact" />
-            </div>
-          </VCardText>
-        </VCard>
-
-        <!-- 👉 Organize -->
-        <VCard title="Organize">
-          <VCardText>
-            <div class="d-flex flex-column gap-y-4">
-              <AppSelect
-                placeholder="Select Vendor"
-                label="Vendor"
-                :items="['Men\'s Clothing', 'Women\'s Clothing', 'Kid\'s Clothing']"
-              />
-              <div>
-                <VLabel class="d-flex">
-                  <div class="d-flex text-sm justify-space-between w-100">
-                    <div class="text-high-emphasis">Category</div>
+                      <template v-slot:activator="{ props }">
+                        <IconBtn v-bind="props" @click="() => {
+      form.faq.splice(i, 1);
+    }
+      ">
+                          <VIcon icon="tabler-trash" />
+                        </IconBtn>
+                      </template>
+                    </VTooltip>
                   </div>
-                </VLabel>
 
-                <div class="d-flex gap-x-4">
-                  <AppSelect
-                    placeholder="Select Category"
-                    :items="['Household', 'Office', 'Electronics', 'Management', 'Automotive']"
-                  />
-                  <VBtn rounded icon="tabler-plus" variant="tonal" />
+                  <div>
+                    <AppTextField label="Question" placeholder="Add a Question" v-model="f.quest"
+                      :rules="[requiredValidator]" />
+                    <AppTextarea label="Answer" placeholder="Add answer" v-model="f.ans" :rules="[requiredValidator]" />
+                    <br />
+                  </div>
                 </div>
               </div>
-              <AppSelect
-                placeholder="Select Collection"
-                label="Collection"
-                :items="['Men\'s Clothing', 'Women\'s Clothing', 'Kid\'s Clothing']"
-              />
-              <AppSelect
-                placeholder="Select Status"
-                label="Status"
-                :items="['Published', 'Inactive', 'Scheduled']"
-              />
-              <AppTextField label="Tags" placeholder="Fashion, Trending, Summer" />
-            </div>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
+
+              <div class="q-pt-md">
+                <VBtn class="mt-6" prepend-icon="tabler-plus" @click="() => {
+
+      form.faq.push({
+        quest: '',
+        ans: '',
+      });
+    }
+      "> Add Faq </VBtn>
+              </div>
+            </VCardText>
+          </VCard>
+        </VCol>
+
+        <VCol md="4" cols="12">
+          <!-- 👉 Thumbnail -->
+          <VCard title=" Service Thumbnail" class="mb-6">
+            <VCardText>
+              <div class="d-flex ga-2">
+                <AvatarInput name="logo" @image="(f) => { form.thumbnail = f as unknown as null }"
+                  :url="serviceThumbnailUrl" helperText="Add a Thumbnail" size="120" />
+              </div>
+            </VCardText>
+          </VCard>
+
+          <!-- 👉 Categories -->
+          <VCard title="Categorize" class="mb-6">
+            <VCardText>
+              <div class="d-flex flex-column gap-y-4">
+                <AppSelect v-model="form.service.serviceCategoryId" :items="categories" item-title="name"
+                  item-value="id" label="Select Category" style="min-inline-size: 260px" />
+                <AppSelect v-model="form.service.serviceSubcategoryId" :items="subcategories" item-title="name"
+                  item-value="id" label="Select Sub Category" style="min-inline-size: 260px" />
+                <AppSelect v-model="form.tags" :items="tags" item-title="name" item-value="id" label="Select Tags" chips
+                  multiple closable-chips style="min-inline-size: 260px" />
+              </div>
+            </VCardText>
+          </VCard>
+
+          <!-- 👉 SEO -->
+          <VCard title="SEO">
+            <VCardText>
+              <div class="d-flex flex-column gap-y-4">
+                <AppTextField v-model="form.seo.metaTitle" label="Meta Title" />
+                <AppTextField v-model="form.seo.metaKeywords" label="Meta Keywords" />
+                <AppTextarea type="textarea" outlined v-model="form.seo.metaDesc" label="Meta Description" />
+              </div>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
+    </CustomForm>
   </div>
 </template>
 

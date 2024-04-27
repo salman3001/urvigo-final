@@ -1,5 +1,3 @@
-import { isUser } from '#helpers/permission_helpers'
-import User from '#models/user'
 import { BasePolicy } from '@adonisjs/bouncer'
 
 export default class WishlistPolicy extends BasePolicy {
@@ -10,6 +8,7 @@ export default class WishlistPolicy extends BasePolicy {
   async view() {
     return true
   }
+
   async create() {
     // if (user && user instanceof User) {
     //   return true
@@ -19,19 +18,11 @@ export default class WishlistPolicy extends BasePolicy {
     return false
   }
 
-  async update(user: User) {
-    if (isUser(user)) {
-      return true
-    } else {
-      return false
-    }
+  async update() {
+    return true
   }
 
-  async delete(user: User) {
-    if (isUser(user)) {
-      return true
-    } else {
-      return false
-    }
+  async delete() {
+    return true
   }
 }

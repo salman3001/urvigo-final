@@ -59,7 +59,7 @@ export default {
                         <VCard flat border>
                             <div class="px-2 pt-2 crousel-wrapper">
                                 <SwiperCrousel :images="service?.images?.length > 0
-                        ? service?.images?.map((i) => i?.file?.url)
+                        ? service?.images?.map((i) => getImageUrl(i?.file?.url))
                         : [
                             getImageUrl(service?.thumbnail?.url),
                             getImageUrl(service?.thumbnail?.url),
@@ -89,6 +89,18 @@ export default {
 
                                 <h5 class="text-h5 mb-4">Description</h5>
                                 <div v-html="service?.longDesc"></div>
+                                <br>
+                                <h5 class="text-h5 mb-4">Frequently Asked Questions</h5>
+                                <VExpansionPanels>
+                                    <VExpansionPanel v-for="faq in service?.faq" :key="faq.quest">
+                                        <VExpansionPanelTitle>
+                                            {{ faq.quest }}
+                                        </VExpansionPanelTitle>
+                                        <VExpansionPanelText>
+                                            {{ faq.ans }}
+                                        </VExpansionPanelText>
+                                    </VExpansionPanel>
+                                </VExpansionPanels>
 
                                 <VDivider class="my-6" />
 

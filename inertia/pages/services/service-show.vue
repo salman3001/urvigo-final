@@ -63,12 +63,12 @@ export default {
             <VCard flat border>
               <div class="px-2 pt-2 crousel-wrapper">
                 <SwiperCrousel :images="service?.images?.length > 0
-              ? service?.images?.map((i) => i?.file?.url)
-              : [
-                getImageUrl(service?.thumbnail?.url),
-                getImageUrl(service?.thumbnail?.url),
-                getImageUrl(service?.thumbnail?.url),
-              ]
+            ? service?.images?.map((i) => getImageUrl(i?.file?.url))
+            : [
+              getImageUrl(service?.thumbnail?.url),
+              getImageUrl(service?.thumbnail?.url),
+              getImageUrl(service?.thumbnail?.url),
+            ]
             " />
                 <!-- <VImg
                   :src="getImageUrl(service?.thumbnail?.url)"
@@ -93,6 +93,18 @@ export default {
 
                 <h5 class="text-h5 mb-4">Description</h5>
                 <div v-html="service?.longDesc"></div>
+                <br>
+                <h5 class="text-h5 mb-4">Frequently Asked Questions</h5>
+                <VExpansionPanels>
+                  <VExpansionPanel v-for="faq in service?.faq" :key="faq.quest">
+                    <VExpansionPanelTitle>
+                      {{ faq.quest }}
+                    </VExpansionPanelTitle>
+                    <VExpansionPanelText>
+                      {{ faq.ans }}
+                    </VExpansionPanelText>
+                  </VExpansionPanel>
+                </VExpansionPanels>
 
                 <VDivider class="my-6" />
 
@@ -126,12 +138,12 @@ export default {
           :rating="Number(service?.businessProfile.avgRating)">
           <div class="d-flex gap-2 flex-wrap">
             <VBtn @click="() => {
-              if (user) {
-                addReviewModal = true
-              } else {
-                router.visit(`${routes('web.auth.login')}?next=${page.url}`)
-              }
+            if (user) {
+              addReviewModal = true
+            } else {
+              router.visit(`${routes('web.auth.login')}?next=${page.url}`)
             }
+          }
             ">
               <VIcon size="24" class="cursor-pointer" icon="tabler-plus" />
               Add Review
@@ -158,9 +170,9 @@ export default {
       </VCol>
     </VRow>
     <ModalAddReview v-model:isVisible="addReviewModal" :service-id="service!.id" @submit="async () => {
-              router.reload({ only: ['service'] })
-              addReviewModal = false
-            }
+            router.reload({ only: ['service'] })
+            addReviewModal = false
+          }
             " />
   </VContainer>
 </template>

@@ -58,9 +58,10 @@ export default class FileService {
 
   async writeFile(folder: string = '', buffer: NodeJS.ArrayBufferView, extName: string) {
     // Ensure the output directory exists
-    const url = path.join(folder, Date.now() + cuid() + `.${extName}`)
-    const outputDir = app.makePath(commonConfig.uploadPath)
-    const outputPath = path.join(outputDir, url)
+    const fileName = Date.now() + cuid() + `.${extName}`
+    const url = path.join(folder, fileName)
+    const outputDir = path.join(app.makePath(commonConfig.uploadPath), folder)
+    const outputPath = path.join(outputDir, fileName)
     if (!existsSync(outputDir)) {
       mkdirSync(outputDir, { recursive: true })
     }
@@ -68,6 +69,6 @@ export default class FileService {
     // Write the resized image buffer to the file system
     writeFileSync(outputPath, buffer)
 
-    return path.posix.normalize(url)
+    return path.posix.normalize(url).replace(/\\/g, '/')
   }
 }

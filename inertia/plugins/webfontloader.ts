@@ -17,5 +17,7 @@ export async function loadFonts() {
 }
 
 export default function () {
-  loadFonts()
+  if (!import.meta.env.SSR) {
+    loadFonts()
+  }
 }
