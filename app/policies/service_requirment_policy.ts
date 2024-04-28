@@ -4,7 +4,7 @@ import { BasePolicy, action } from '@adonisjs/bouncer'
 
 export default class ServiceRequirmentPolicy extends BasePolicy {
   async myList(user: User) {
-    if (user instanceof User) {
+    if (user) {
       return true
     } else {
       return false
@@ -22,7 +22,7 @@ export default class ServiceRequirmentPolicy extends BasePolicy {
   }
 
   async create(user: User) {
-    if (user instanceof User) {
+    if (user) {
       return true
     } else {
       false
@@ -30,7 +30,7 @@ export default class ServiceRequirmentPolicy extends BasePolicy {
   }
 
   async update(user: User, serviceRequirement: ServiceRequirement) {
-    if (user instanceof User && serviceRequirement.userId === user.id) {
+    if (serviceRequirement.userId === user.id) {
       return true
     } else {
       return false
@@ -38,7 +38,7 @@ export default class ServiceRequirmentPolicy extends BasePolicy {
   }
 
   async delete(user: User, serviceRequirement: ServiceRequirement) {
-    if (user instanceof User && serviceRequirement.userId === user.id) {
+    if (serviceRequirement.userId === user.id) {
       return true
     } else {
       return false

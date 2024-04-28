@@ -46,4 +46,21 @@ export default class WebServiceRequirementsController {
     })
     return response.redirect().toRoute('web.service_requirement.list')
   }
+
+  async negotiate({ response, session }: HttpContext) {
+    const data = await this.serviceRequirementService.negotiate()
+    if (data === 'Last Request Pending') {
+      session.flash('flash', {
+        message: 'Last Negotiation Request  is still Pending',
+        type: 'error',
+      })
+      return response.redirect().back()
+    } else {
+      session.flash('flash', {
+        message: 'Negotiation request created',
+        type: 'success',
+      })
+      return response.redirect().back()
+    }
+  }
 }

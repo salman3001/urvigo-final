@@ -1,6 +1,6 @@
-import User from '#models/user'
-import { PageObject } from '@adonisjs/inertia/types'
-import ServiceVariant from '../models/service_variant.js'
+import type User from '#models/user'
+import type { PageObject } from '@adonisjs/inertia/types'
+import type ServiceVariant from '../models/service_variant.js'
 
 export type ImageType = {
   url: string

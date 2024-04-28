@@ -33,6 +33,7 @@ export default defineConfig({
       !page.startsWith('bookings') &&
       !page.startsWith('service-requirements') &&
       !page.startsWith('vendor-profile') &&
-      !page.startsWith('chat'),
+      !page.startsWith('chat') &&
+      !page.startsWith('custom-bookings'),
   },
 })

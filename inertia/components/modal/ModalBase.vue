@@ -2,8 +2,8 @@
 import DialogCloseBtn from '~/@core/components/DialogCloseBtn.vue'
 
 defineProps<{
-  title: string
-  subtitle: string
+  title?: string
+  subtitle?: string
 }>()
 
 defineEmits<{

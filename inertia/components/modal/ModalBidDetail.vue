@@ -6,12 +6,12 @@ import { Link } from '@inertiajs/vue3'
 import BigNumber from 'bignumber.js'
 import { ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import routes from '~/utils/routes'
 import ModalBidNegotiate from './ModalBidNegotiate.vue'
 import ModalBase from './ModalBase.vue'
 import RatingComponent from '../RatingComponent.vue'
+import routes from '~/utils/routes'
 
-const props = defineProps<{
+defineProps<{
   selectedBid: Bid
   acceptedBid: Bid
   serviceRequirement: ServiceRequirement
@@ -157,9 +157,14 @@ const getImageUrl = useGetImageUrl()
           "
           >Negotiate</VBtn
         >
-        <VBtn v-if="!serviceRequirement?.acceptedBidId" color="primary" :to="{}"
-          >Accept and Book</VBtn
+        <Link
+          :href="
+            routes('web.custom_booking.summary') +
+            `?requirementId=${serviceRequirement.id}&acceptedBidId=${selectedBid.id}`
+          "
         >
+          <VBtn v-if="!serviceRequirement?.acceptedBidId" color="primary">Accept and Book</VBtn>
+        </Link>
       </div>
     </VCardItem>
     <ModalBidNegotiate

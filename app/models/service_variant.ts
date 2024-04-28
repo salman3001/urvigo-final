@@ -24,7 +24,7 @@ export default class ServiceVariant extends BaseModel {
   declare discountPercentage: string | number
 
   @column()
-  declare desc: String
+  declare desc: string
 
   @column()
   declare order: number

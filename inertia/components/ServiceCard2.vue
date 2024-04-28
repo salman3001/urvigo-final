@@ -25,16 +25,24 @@ if (minPriceVariant.discountType === DiscountType.FLAT) {
 </script>
 
 <template>
-  <VCard :to="routes('web.services.show', [service.slug])">
+  <VCard density="compact" :to="routes('web.services.show', [service.slug])">
     <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column">
       <div class="ma-auto pa-1">
-        <VImg cover aspect-ratio="16/9" width="300" :src="getImageUrl(service.images?.[0]?.file?.thumbnailUrl)" />
+        <VImg
+          cover
+          aspect-ratio="16/9"
+          width="300"
+          :src="getImageUrl(service.images?.[0]?.file?.thumbnailUrl)"
+        />
       </div>
 
       <VDivider :vertical="$vuetify.display.mdAndUp" />
 
       <div>
         <VCardItem>
+          <VChip variant="tonal" color="info" size="small"
+            >{{ service?.serviceCategory?.name }}
+          </VChip>
           <VCardTitle> {{ service?.name }}</VCardTitle>
         </VCardItem>
 
@@ -42,24 +50,30 @@ if (minPriceVariant.discountType === DiscountType.FLAT) {
           <p class="line-clamp-3">
             {{ service?.shortDesc }}
           </p>
-        </VCardText>
-
-        <VCardText class="text-subtitle-1">
           <span>
-            <VChip color="error" v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.FLAT">&#x20B9;{{
-    minPriceVariant.discountFlat }} off</VChip>
-            <VChip color="error" v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.PERCENATAGE">{{
-    minPriceVariant.discountPercentage }}% off</VChip>
+            <VChip
+              color="error"
+              v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.FLAT"
+              >&#x20B9;{{ minPriceVariant.discountFlat }} off</VChip
+            >
+            <VChip
+              color="error"
+              v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.PERCENATAGE"
+              >{{ minPriceVariant.discountPercentage }}% off</VChip
+            >
           </span>
           <span class="font-weight-medium">
             <div class="d-flex justify-between">
               <div class="">
-                <span> {{ service.variants?.length ? 1 && 'Starting From' : '' }}</span><span class="text-bold text-h6">
-                  &#x20B9;{{
-    service.variants?.length > 1
-      ? service?.meta?.starting_from
-      : service?.variants[0]?.price
-  }}</span>
+                <span> {{ service.variants?.length ? 1 && 'Starting From ' : '' }}</span>
+                <span class="text-bold text-h6"
+                  >&#x20B9;{{
+                    new BigNumber(minPriceVariant.price).minus(discount).toFixed(2)
+                  }}</span
+                >
+                <span v-if="discount.gt(0)" class="text-bold text-h6 text-decoration-line-through"
+                  >&nbsp;&#x20B9;{{ new BigNumber(minPriceVariant.price).toFixed(2) }}</span
+                >
               </div>
             </div>
           </span>
@@ -78,4 +92,3 @@ if (minPriceVariant.discountType === DiscountType.FLAT) {
     </div>
   </VCard>
 </template>
-~/utils/routes-old

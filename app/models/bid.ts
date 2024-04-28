@@ -21,7 +21,7 @@ export default class Bid extends compose(BaseModel, Filterable) {
   @column()
   declare message: string
 
-  @column()
+  @column({ prepare: (v) => JSON.stringify(v) })
   declare negotiateHistory: {
     date_time: DateTime
     asked_price: string

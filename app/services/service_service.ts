@@ -514,8 +514,10 @@ export default class ServiceService {
   }
 
   async deleteImages() {
-    const { params } = this.ctx
-    const image = await Image.findOrFail(+params.id)
+    const { params, bouncer } = this.ctx
+    const service = await Service.findOrFail(+params.id)
+    await bouncer.with('ServicePolicy').authorize('update', service)
+    const image = await Image.findOrFail(+params.imageId)
     await image.delete()
     return image
   }

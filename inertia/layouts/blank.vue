@@ -24,4 +24,3 @@ useInjectToast()
   flex-direction: column;
 }
 </style>
-~/composables/useInjectToast

@@ -38,6 +38,35 @@ export default class ServiceRequirementService {
       .preload('tags', (t) => {
         t.select(['name'])
       })
+      .orderBy('created_at', 'desc')
+
+    const serviceRequirements = await paginate<typeof ServiceRequirement>(
+      serviceRequirementQuery,
+      request
+    )
+
+    return serviceRequirements
+  }
+
+  async listForVendor() {
+    const { bouncer, request } = this.ctx
+    await bouncer.with('ServiceRequirementPolicy').authorize('viewList')
+
+    const serviceRequirementQuery = ServiceRequirement.query()
+      .where('expires_at', '>', DateTime.now().toSQL())
+      .whereNull('accepted_bid_id')
+      .preload('user', (u) => {
+        u.select(['first_name', 'last_name']).preload('profile', (p) => {
+          p.select('avatar')
+        })
+      })
+      .preload('serviceCategory', (c) => {
+        c.select('name')
+      })
+      .preload('tags', (t) => {
+        t.select(['name'])
+      })
+      .orderBy('created_at', 'desc')
 
     const serviceRequirements = await paginate<typeof ServiceRequirement>(
       serviceRequirementQuery,
@@ -253,7 +282,7 @@ export default class ServiceRequirementService {
   }
 
   async negotiate() {
-    const { bouncer, request, response, params } = this.ctx
+    const { bouncer, request, params } = this.ctx
     const validationSchema = vine.compile(
       vine.object({
         bidId: vine.number(),
@@ -275,7 +304,7 @@ export default class ServiceRequirementService {
 
     const lastNegotiiate = bid.negotiateHistory[bid.negotiateHistory.length - 1]
 
-    if (lastNegotiiate.accepted === false) {
+    if (lastNegotiiate && lastNegotiiate.accepted === false) {
       return 'Last Request Pending'
     }
 

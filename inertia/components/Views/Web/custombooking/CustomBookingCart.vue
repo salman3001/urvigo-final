@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Bid from '#models/bid'
-import ServiceRequirement from '#models/service_requirement'
+import type Bid from '#models/bid'
+import type ServiceRequirement from '#models/service_requirement'
 import BigNumber from 'bignumber.js'
 
 const step = defineModel<number>('step', { required: true })
@@ -63,7 +63,7 @@ const decrementQty = () => {
                     ?.thumbnail?.url,
                 )
               "
-            /> 
+            />
           </div>-->
 
           <div class="d-flex w-100 flex-column flex-md-row flex-grow-1">
@@ -126,7 +126,9 @@ const decrementQty = () => {
           <div class="text-high-emphasis" v-if="acceptedBid">
             <div class="d-flex justify-space-between mb-2">
               <span>Bag Total</span>
-              <span class="text-medium-emphasis">&#x20B9;{{ acceptedBid?.offeredPrice }}</span>
+              <span class="text-medium-emphasis"
+                >&#x20B9;{{ new BigNumber(acceptedBid?.offeredPrice).times(qty).toFixed(2) }}</span
+              >
             </div>
 
             <div class="d-flex justify-space-between mb-2">

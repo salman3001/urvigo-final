@@ -44,15 +44,13 @@ export default {
         <VCard>
           <VCardItem :title="service?.name" class="pb-6">
             <template #subtitle>
-              <div class="text-body-1">
-                category.
-                <span class="text-h6 d-inline-block">{{ service?.serviceCategory?.name }}</span>
-              </div>
+              <div class="text-body-1"></div>
             </template>
 
             <template #append>
               <div class="d-flex gap-4 align-center">
-                <VChip variant="tonal" color="error" size="small">{{ service?.serviceCategory?.name }}
+                <VChip variant="tonal" color="error" size="small"
+                  >{{ service?.serviceCategory?.name }}
                 </VChip>
                 <VIcon size="24" class="cursor-pointer" icon="tabler-share" />
                 <VIcon size="24" class="cursor-pointer" icon="tabler-bookmarks" />
@@ -62,14 +60,17 @@ export default {
           <VCardText>
             <VCard flat border>
               <div class="px-2 pt-2 crousel-wrapper">
-                <SwiperCrousel :images="service?.images?.length > 0
-            ? service?.images?.map((i) => getImageUrl(i?.file?.url))
-            : [
-              getImageUrl(service?.thumbnail?.url),
-              getImageUrl(service?.thumbnail?.url),
-              getImageUrl(service?.thumbnail?.url),
-            ]
-            " />
+                <SwiperCrousel
+                  :images="
+                    service?.images?.length > 0
+                      ? service?.images?.map((i) => getImageUrl(i?.file?.url))
+                      : [
+                          getImageUrl(service?.thumbnail?.url),
+                          getImageUrl(service?.thumbnail?.url),
+                          getImageUrl(service?.thumbnail?.url),
+                        ]
+                  "
+                />
                 <!-- <VImg
                   :src="getImageUrl(service?.thumbnail?.url)"
                   :height="$vuetify.display.mdAndUp ? 440 : 250"
@@ -93,7 +94,7 @@ export default {
 
                 <h5 class="text-h5 mb-4">Description</h5>
                 <div v-html="service?.longDesc"></div>
-                <br>
+                <br />
                 <h5 class="text-h5 mb-4">Frequently Asked Questions</h5>
                 <VExpansionPanels>
                   <VExpansionPanel v-for="faq in service?.faq" :key="faq.quest">
@@ -110,18 +111,25 @@ export default {
 
                 <h5 class="text-h5 mb-4">Listed By</h5>
                 <div class="d-flex align-center gap-x-4">
-                  <VAvatar :image="getImageUrl(
-            service?.businessProfile.vendor?.profile?.avatar?.thumbnailUrl,
-            dummyAvatar
-          )
-            " size="38" />
+                  <VAvatar
+                    :image="
+                      getImageUrl(
+                        service?.businessProfile.vendor?.profile?.avatar?.thumbnailUrl,
+                        dummyAvatar
+                      )
+                    "
+                    size="38"
+                  />
                   <div>
-                    <Link :href="routes('web.vendor-profile.about', [service?.businessProfile.vendor?.id])
-            ">
-                    <h6 class="text-h6 mb-1">
-                      {{ service?.businessProfile.vendor?.firstName }}
-                      {{ service?.businessProfile.vendor?.lastName }}
-                    </h6>
+                    <Link
+                      :href="
+                        routes('web.vendor-profile.about', [service?.businessProfile.vendor?.id])
+                      "
+                    >
+                      <h6 class="text-h6 mb-1">
+                        {{ service?.businessProfile.vendor?.firstName }}
+                        {{ service?.businessProfile.vendor?.lastName }}
+                      </h6>
                     </Link>
                     <div class="text-body-2">
                       {{ service?.businessProfile.businessName }}
@@ -134,23 +142,27 @@ export default {
         </VCard>
         <br />
 
-        <ReviewsOverview :total-reviews="service?.businessProfile?.meta?.reviews_count || 0"
-          :rating="Number(service?.businessProfile.avgRating)">
+        <ReviewsOverview
+          :total-reviews="service?.businessProfile?.meta?.reviews_count || 0"
+          :rating="Number(service?.businessProfile.avgRating)"
+        >
           <div class="d-flex gap-2 flex-wrap">
-            <VBtn @click="() => {
-            if (user) {
-              addReviewModal = true
-            } else {
-              router.visit(`${routes('web.auth.login')}?next=${page.url}`)
-            }
-          }
-            ">
+            <VBtn
+              @click="
+                () => {
+                  if (user) {
+                    addReviewModal = true
+                  } else {
+                    router.visit(`${routes('web.auth.login')}?next=${page.url}`)
+                  }
+                }
+              "
+            >
               <VIcon size="24" class="cursor-pointer" icon="tabler-plus" />
               Add Review
             </VBtn>
             <VBtn>
-              <VIcon size=" 24" class="cursor-pointer" icon="tabler-eye" /> &nbsp;
-              View All
+              <VIcon size=" 24" class="cursor-pointer" icon="tabler-eye" /> &nbsp; View All
             </VBtn>
           </div>
         </ReviewsOverview>
@@ -169,11 +181,16 @@ export default {
         </div>
       </VCol>
     </VRow>
-    <ModalAddReview v-model:isVisible="addReviewModal" :service-id="service!.id" @submit="async () => {
-            router.reload({ only: ['service'] })
-            addReviewModal = false
-          }
-            " />
+    <ModalAddReview
+      v-model:isVisible="addReviewModal"
+      :service-id="service!.id"
+      @submit="
+        async () => {
+          router.reload({ only: ['service'] })
+          addReviewModal = false
+        }
+      "
+    />
   </VContainer>
 </template>
 

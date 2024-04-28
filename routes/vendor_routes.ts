@@ -11,8 +11,11 @@ router
     router.get('services/:slug', [WebVendorController, 'serviceShow']).as('service.show')
     router.post('services', [WebVendorController, 'serviceCreatePost']).as('service.create.post')
     router.get('services/:slug/edit', [WebVendorController, 'serviceEdit']).as('service.edit')
-    router.post('services/:id/', [WebVendorController, 'serviceEditPost']).as('service.edit.post')
+    router.put('services/:id/', [WebVendorController, 'serviceEditPost']).as('service.edit.post')
     router.delete('services/:id/', [WebVendorController, 'serviceDelete']).as('service.delete')
+    router
+      .delete('services/:id/delete-image/:imageId', [WebVendorController, 'serviceImageDelete'])
+      .as('service.image.delete')
     // bookings
     router.get('bookings', [WebVendorController, 'bookingIndex']).as('booking.index')
     router.get('bookings/:id', [WebVendorController, 'bookingShow']).as('booking.show')
@@ -29,13 +32,15 @@ router
     router.get('requirements/:id', [WebVendorController, 'requirementShow']).as('requirements.show')
     // bids
     router.get('my-bids', [WebVendorController, 'myBids']).as('my-bids.index')
+    router.post('create-bid', [WebVendorController, 'createBid']).as('bids.create')
+    router.post('bids/:id', [WebVendorController, 'acceptNegotiation']).as('bids.accept_negotiate')
     // coupons
     router.get('coupons', [WebVendorController, 'couponsIndex']).as('coupon.index')
     router.get('coupons/create', [WebVendorController, 'couponsCreate']).as('coupon.create')
     router.get('coupons/:slug', [WebVendorController, 'couponsShow']).as('coupon.show')
     router.post('coupons', [WebVendorController, 'couponsCreatePost']).as('coupon.create.post')
     router.get('coupons/:id/edit', [WebVendorController, 'couponsEdit']).as('coupon.edit')
-    router.post('coupons/:id/', [WebVendorController, 'couponsEditPost']).as('coupon.edit.post')
+    router.put('coupons/:id/', [WebVendorController, 'couponsEditPost']).as('coupon.edit.post')
     router.delete('coupons/:id/', [WebVendorController, 'couponsDelete']).as('coupon.delete')
   })
   .prefix('vendor')

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import Bid from '#models/bid'
-import ServiceRequirement from '#models/service_requirement'
+import type ServiceRequirement from '#models/service_requirement'
 import BigNumber from 'bignumber.js'
 import { ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
-const prop = defineProps<{
+defineProps<{
   serviceRequirement: ServiceRequirement
   acceptedBid: Bid
   qty: number
 }>()
 
-const step = defineModel<number>('step', { required: true })
+defineModel<number>('step', { required: true })
 defineEmits<{
   (e: 'paid'): void
 }>()

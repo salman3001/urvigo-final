@@ -4,6 +4,7 @@ import { AppContentLayoutNav } from '~/@layouts/enums'
 import { switchToVerticalNavOnLtOverlayNavBreakpoint } from '~/@layouts/utils'
 import { defineAsyncComponent } from 'vue'
 import { useSkins } from '~/@core/composable/useSkins'
+import useInjectToast from '~/composables/useInjectToast'
 
 const DefaultLayoutWithHorizontalNav = defineAsyncComponent(
   () => import('./components/DefaultLayoutWithHorizontalNav.vue')
@@ -21,14 +22,18 @@ switchToVerticalNavOnLtOverlayNavBreakpoint()
 const { layoutAttrs, injectSkinClasses } = useSkins()
 
 injectSkinClasses()
+useInjectToast()
 </script>
 
 <template>
-  <component v-bind="layoutAttrs" :is="
+  <component
+    v-bind="layoutAttrs"
+    :is="
       configStore.appContentLayoutNav === AppContentLayoutNav.Vertical
         ? DefaultLayoutWithVerticalNav
         : DefaultLayoutWithHorizontalNav
-    ">
+    "
+  >
     <slot />
   </component>
 </template>

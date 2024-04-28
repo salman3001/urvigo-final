@@ -86,6 +86,15 @@ export default class WebVendorController {
     return response.redirect().toRoute('vendor.service.index')
   }
 
+  async serviceImageDelete({ response, session }: HttpContext) {
+    await this.serviceService.deleteImages()
+    session.flash('flash', {
+      message: 'Image Deleted',
+      type: 'success',
+    })
+    return response.redirect().back()
+  }
+
   async bookingIndex({ inertia }: HttpContext) {
     return inertia.render('vendor/bookings/booking-index', {
       bookings: () => this.bookingService.myList(),
@@ -112,14 +121,49 @@ export default class WebVendorController {
 
   async requirementIndex({ inertia }: HttpContext) {
     return inertia.render('vendor/requirements/requirement-index', {
-      requirements: () => this.requirementService.index(),
+      requirements: () => this.requirementService.listForVendor(),
     })
   }
 
   async requirementShow({ inertia }: HttpContext) {
     return inertia.render('vendor/requirements/requirement-show', {
-      requirements: () => this.requirementService.show(),
+      requirement: () => this.requirementService.show(),
+      placedBid: () => this.requirementService.showVendorPlacedbid(),
     })
+  }
+
+  async createBid({ response, session }: HttpContext) {
+    const data = await this.bidService.store()
+    if (data === 'proposal exist') {
+      session.flash('flash', {
+        message: 'You have already placed bid',
+        type: 'error',
+      })
+      return response.redirect().back()
+    } else {
+      session.flash('flash', {
+        message: 'Bid Placed',
+        type: 'success',
+      })
+      return response.redirect().back()
+    }
+  }
+
+  async acceptNegotiation({ response, session }: HttpContext) {
+    const data = await this.bidService.acceptNegotiation()
+    if (data === 'Negotiation Not Requested') {
+      session.flash('flash', {
+        message: 'You have already placed bid',
+        type: 'error',
+      })
+      return response.redirect().back()
+    } else {
+      session.flash('flash', {
+        message: 'Negotiation accepted and bid price updated',
+        type: 'success',
+      })
+      return response.redirect().back()
+    }
   }
 
   async myBids({ inertia }: HttpContext) {

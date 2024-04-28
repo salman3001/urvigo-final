@@ -27,7 +27,7 @@ export default class BidService {
     const id = params.id
     const bid = await Bid.query().where('id', id).firstOrFail()
 
-    await bouncer.with('BidPolicy').authorize('view', bid)
+    await bouncer.with('BidPolicy').authorize('view')
 
     return bid
   }

@@ -32,7 +32,6 @@ defineProps<{
   tags: ServiceTag[]
 }>()
 
-
 const form = useForm({
   thumbnail: null,
   images: [] as File[],
@@ -62,43 +61,32 @@ const form = useForm({
   variant: [] as IvariantFrom[],
 })
 
-const variantModalRef = ref<boolean[]>([])
-const variantModalEditMode = ref(false)
-
-const addVariant = () => {
-  form.variant.push({
-    name: '',
-    price: 0,
-    discountType: 'flat',
-    discountFlat: 0,
-    discountPercentage: 0,
-    desc: '',
-  })
-  form.variantImages.push(null)
-  variantModalRef.value.push(true)
-}
+const variantModalRef = ref(false)
+const selectedVariant = ref<
+  | {
+      index: number
+      variant: IvariantFrom
+      variantThumbnailUrl: string
+    }
+  | undefined
+>(undefined)
 
 const removeVariant = (index: number) => {
-  variantModalRef.value.splice(index, 1)
   form.variantImages.splice(index, 1)
   form.variant.splice(index, 1)
 }
 
-const onVariantAdded = (opt: { variant: IvariantFrom; image: File | null }, index: number) => {
-  form.variant[index] = opt.variant
-  form.variantImages[index] = opt.image
-  variantModalRef.value[index] = false
+const onVariantAdded = (opt: { variant: IvariantFrom; image: File | null }) => {
+  console.log(opt)
+  form.variant.push(opt.variant)
+  form.variantImages.push(opt.image)
+  variantModalRef.value = false
 }
 
-const onVariantCancle = (index: number) => {
-  if (variantModalEditMode.value === false) {
-    variantModalRef.value.pop()
-    form.variantImages.pop()
-    form.variant.pop()
-  } else {
-    variantModalEditMode.value = false
-    variantModalRef.value[index] = false
-  }
+const onVariantEdited = (opt: { variant: IvariantFrom; image: File | null; index: number }) => {
+  form.variant[opt.index] = opt.variant
+  form.variantImages[opt.index] = opt.image
+  variantModalRef.value = false
 }
 
 const imagesUrls = computed(() => {
@@ -118,7 +106,7 @@ const submit = () => {
     alert('Please add a service variant')
   } else {
     form.post(routes('vendor.service.create.post'), {
-      forceFormData: true
+      forceFormData: true,
     })
   }
 }
@@ -135,7 +123,7 @@ const submit = () => {
 
         <div class="d-flex gap-4 align-center flex-wrap">
           <Link :href="routes('vendor.service.index')">
-          <VBtn variant="tonal" color="secondary"> Discard </VBtn>
+            <VBtn variant="tonal" color="secondary"> Discard </VBtn>
           </Link>
           <!-- <VBtn variant="tonal" color="primary" > Save for later </VBtn> -->
           <VBtn type="submit">Publish Service</VBtn>
@@ -149,21 +137,32 @@ const submit = () => {
             <VCardText>
               <VRow>
                 <VCol cols="12">
-                  <AppTextField label="Name" placeholder="Service Name" v-model="form.service.name"
-                    :rules="[requiredValidator]" />
+                  <AppTextField
+                    label="Name"
+                    placeholder="Service Name"
+                    v-model="form.service.name"
+                    :rules="[requiredValidator]"
+                  />
                 </VCol>
 
                 <VCol cols="12">
-                  <AppTextField label="Location" placeholder="FXSK123U" v-model="form.service.geoLocation"
-                    :rules="[requiredValidator]" />
+                  <AppTextField
+                    label="Location"
+                    placeholder="FXSK123U"
+                    v-model="form.service.geoLocation"
+                    :rules="[requiredValidator]"
+                  />
                 </VCol>
                 <VCol cols="12">
                   <AppTextarea label="Short Description" v-model="form.service.shortDesc" />
                 </VCol>
                 <VCol cols="12">
                   <span class="mb-1">Description (optional)</span>
-                  <ProductDescriptionEditor v-model="form.service.longDesc" placeholder="service Description"
-                    class="border rounded" />
+                  <ProductDescriptionEditor
+                    v-model="form.service.longDesc"
+                    placeholder="service Description"
+                    class="border rounded"
+                  />
                 </VCol>
               </VRow>
             </VCardText>
@@ -175,15 +174,9 @@ const submit = () => {
               <VTable density="compact" class="text-no-wrap">
                 <thead>
                   <tr>
-                    <th>
-                      Name
-                    </th>
-                    <th>
-                      Price
-                    </th>
-                    <th>
-                      Actions
-                    </th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
 
@@ -197,11 +190,25 @@ const submit = () => {
                     </td>
                     <td>
                       <div class="d-flex align-center gap-2">
-                        <IconBtn @click="() => {
-      variantModalEditMode = true
-      variantModalRef[i] = true
-    }
-      ">
+                        <IconBtn
+                          @click="
+                            () => {
+                              selectedVariant = {
+                                index: i,
+                                variant: {
+                                  desc: v.desc,
+                                  discountFlat: v.discountFlat as number,
+                                  discountPercentage: v.discountPercentage as number,
+                                  discountType: v.discountType,
+                                  name: v.name,
+                                  price: v.price as number,
+                                },
+                                variantThumbnailUrl: variantThumbnailUrl[i],
+                              }
+                              variantModalRef = true
+                            }
+                          "
+                        >
                           <VIcon icon="tabler-pencil" />
                         </IconBtn>
 
@@ -209,24 +216,25 @@ const submit = () => {
                           <VIcon icon="tabler-trash" />
                         </IconBtn>
                       </div>
-
-                      <ModalAddVariant v-model:isVisible="variantModalRef[i]" :variant="v"
-                        :variantThumbnailUrl="variantThumbnailUrl[i]" @cancled="() => onVariantCancle(i)"
-                        @variant-added="(opt) => {
-      onVariantAdded(opt, i)
-    }
-      " />
                     </td>
                   </tr>
                 </tbody>
               </VTable>
 
-
-
-              <VBtn class="mt-6" prepend-icon="tabler-plus" @click="addVariant"> Add variant </VBtn>
+              <VBtn
+                class="mt-6"
+                prepend-icon="tabler-plus"
+                @click="
+                  () => {
+                    selectedVariant = undefined
+                    variantModalRef = true
+                  }
+                "
+              >
+                Add variant
+              </VBtn>
             </VCardText>
           </VCard>
-
 
           <!-- 👉 Media -->
           <VCard class="mb-6">
@@ -234,7 +242,9 @@ const submit = () => {
               <template #title> Service Image </template>
 
               <template #append>
-                <span class="text-primary font-weight-medium text-sm cursor-pointer">Add Media from URL</span>
+                <span class="text-primary font-weight-medium text-sm cursor-pointer"
+                  >Add Media from URL</span
+                >
               </template>
             </VCardItem>
 
@@ -243,22 +253,23 @@ const submit = () => {
             </VCardText>
           </VCard>
 
-
           <!-- 👉 Faqs -->
           <VCard title="Frequently Asked Questions" class="inventory-card">
             <VCardText>
-
               <div class="column q-gutter-sm">
                 <div v-for="(f, i) in form.faq" :key="i">
                   <div class="d-flex justify-space-between align-center">
                     <p class="text-bold">Faq - {{ i + 1 }}</p>
                     <VTooltip text="Remove Faq">
-
                       <template v-slot:activator="{ props }">
-                        <IconBtn v-bind="props" @click="() => {
-      form.faq.splice(i, 1);
-    }
-      ">
+                        <IconBtn
+                          v-bind="props"
+                          @click="
+                            () => {
+                              form.faq.splice(i, 1)
+                            }
+                          "
+                        >
                           <VIcon icon="tabler-trash" />
                         </IconBtn>
                       </template>
@@ -266,23 +277,38 @@ const submit = () => {
                   </div>
 
                   <div>
-                    <AppTextField label="Question" placeholder="Add a Question" v-model="f.quest"
-                      :rules="[requiredValidator]" />
-                    <AppTextarea label="Answer" placeholder="Add answer" v-model="f.ans" :rules="[requiredValidator]" />
+                    <AppTextField
+                      label="Question"
+                      placeholder="Add a Question"
+                      v-model="f.quest"
+                      :rules="[requiredValidator]"
+                    />
+                    <AppTextarea
+                      label="Answer"
+                      placeholder="Add answer"
+                      v-model="f.ans"
+                      :rules="[requiredValidator]"
+                    />
                     <br />
                   </div>
                 </div>
               </div>
 
               <div class="q-pt-md">
-                <VBtn class="mt-6" prepend-icon="tabler-plus" @click="() => {
-
-      form.faq.push({
-        quest: '',
-        ans: '',
-      });
-    }
-      "> Add Faq </VBtn>
+                <VBtn
+                  class="mt-6"
+                  prepend-icon="tabler-plus"
+                  @click="
+                    () => {
+                      form.faq.push({
+                        quest: '',
+                        ans: '',
+                      })
+                    }
+                  "
+                >
+                  Add Faq
+                </VBtn>
               </div>
             </VCardText>
           </VCard>
@@ -293,8 +319,17 @@ const submit = () => {
           <VCard title=" Service Thumbnail" class="mb-6">
             <VCardText>
               <div class="d-flex ga-2">
-                <AvatarInput name="logo" @image="(f) => { form.thumbnail = f as unknown as null }"
-                  :url="serviceThumbnailUrl" helperText="Add a Thumbnail" size="120" />
+                <AvatarInput
+                  name="logo"
+                  @image="
+                    (f) => {
+                      form.thumbnail = f as unknown as null
+                    }
+                  "
+                  :url="serviceThumbnailUrl"
+                  helperText="Add a Thumbnail"
+                  size="120"
+                />
               </div>
             </VCardText>
           </VCard>
@@ -303,12 +338,33 @@ const submit = () => {
           <VCard title="Categorize" class="mb-6">
             <VCardText>
               <div class="d-flex flex-column gap-y-4">
-                <AppSelect v-model="form.service.serviceCategoryId" :items="categories" item-title="name"
-                  item-value="id" label="Select Category" style="min-inline-size: 260px" />
-                <AppSelect v-model="form.service.serviceSubcategoryId" :items="subcategories" item-title="name"
-                  item-value="id" label="Select Sub Category" style="min-inline-size: 260px" />
-                <AppSelect v-model="form.tags" :items="tags" item-title="name" item-value="id" label="Select Tags" chips
-                  multiple closable-chips style="min-inline-size: 260px" />
+                <AppSelect
+                  v-model="form.service.serviceCategoryId"
+                  :items="categories"
+                  item-title="name"
+                  item-value="id"
+                  label="Select Category"
+                  style="min-inline-size: 260px"
+                />
+                <AppSelect
+                  v-model="form.service.serviceSubcategoryId"
+                  :items="subcategories"
+                  item-title="name"
+                  item-value="id"
+                  label="Select Sub Category"
+                  style="min-inline-size: 260px"
+                />
+                <AppSelect
+                  v-model="form.tags"
+                  :items="tags"
+                  item-title="name"
+                  item-value="id"
+                  label="Select Tags"
+                  chips
+                  multiple
+                  closable-chips
+                  style="min-inline-size: 260px"
+                />
               </div>
             </VCardText>
           </VCard>
@@ -319,12 +375,31 @@ const submit = () => {
               <div class="d-flex flex-column gap-y-4">
                 <AppTextField v-model="form.seo.metaTitle" label="Meta Title" />
                 <AppTextField v-model="form.seo.metaKeywords" label="Meta Keywords" />
-                <AppTextarea type="textarea" outlined v-model="form.seo.metaDesc" label="Meta Description" />
+                <AppTextarea
+                  type="textarea"
+                  outlined
+                  v-model="form.seo.metaDesc"
+                  label="Meta Description"
+                />
               </div>
             </VCardText>
           </VCard>
         </VCol>
       </VRow>
+      <ModalAddVariant
+        v-model:isVisible="variantModalRef"
+        :selectedVariant="selectedVariant"
+        @variant-added="
+          (opt) => {
+            onVariantAdded(opt)
+          }
+        "
+        @variant-edited="
+          (opt) => {
+            onVariantEdited(opt)
+          }
+        "
+      />
     </CustomForm>
   </div>
 </template>

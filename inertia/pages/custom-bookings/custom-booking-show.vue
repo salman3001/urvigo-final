@@ -1,7 +1,7 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
 import { VDataTable } from 'vuetify/components'
-import BidBooking from '#models/bid_booking'
+import type BidBooking from '#models/bid_booking'
 
 export default {
   layout: Layout,
@@ -193,7 +193,7 @@ const headers = [
                   <div class="text-body-1">Customer ID: #47389</div>
                 </div>
               </div> -->
-              <!-- 
+              <!--
               <div class="d-flex gap-x-3 align-center">
                 <VAvatar variant="tonal" color="success">
                   <VIcon icon="tabler-shopping-cart" />

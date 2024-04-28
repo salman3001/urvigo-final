@@ -78,18 +78,13 @@ export default class BidBookingService {
   }
 
   async show() {
-    const { response, bouncer, params } = this.ctx
+    const { bouncer, params } = this.ctx
     const id = params.id
     const booking = await BidBooking.query().where('id', id).firstOrFail()
 
     await bouncer.with('BidBookingPolicy').authorize('view', booking)
 
-    return response.custom({
-      code: 200,
-      success: true,
-      message: null,
-      data: booking,
-    })
+    return booking
   }
 
   async store() {
@@ -102,7 +97,7 @@ export default class BidBookingService {
 
     const bid = await Bid.findOrFail(payload.acceptedBidId)
     await bid.load('vendor', (v) => {
-      v.select('id', 'business_profile_id').preload('businessProfile').select('id')
+      v.select('id').preload('businessProfile').select('id')
     })
 
     const price = new BigNumber(bid.offeredPrice).times(payload.qty)
@@ -149,7 +144,7 @@ export default class BidBookingService {
 
     await bidBooking!?.refresh()
 
-    return bidBooking
+    return bidBooking!
   }
 
   async updateStatus() {

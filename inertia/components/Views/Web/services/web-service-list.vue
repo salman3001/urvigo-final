@@ -129,6 +129,7 @@ watchDebounced(
         </VCol>
       </VRow>
     </div>
+    <br />
     <div>
       <TablePagination
         :page="Number(query.page)"

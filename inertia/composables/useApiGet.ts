@@ -12,7 +12,7 @@ export default function useApiGet<T>() {
 
   const exec = async (
     url: string,
-    config: AxiosRequestConfig,
+    config?: AxiosRequestConfig,
     opt?: { onSuccess?: () => void; onError?: () => void }
   ) => {
     processing.value = true

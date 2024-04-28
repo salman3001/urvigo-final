@@ -88,6 +88,9 @@ router
         router
           .get('custom-bookings/checkout/summary', [WebCustomBookingsController, 'summary'])
           .as('custom_booking.summary')
+        router
+          .post('custom-bookings/create', [WebCustomBookingsController, 'createBooking'])
+          .as('custom_booking.create')
 
         // service Requirements
         router
@@ -102,6 +105,9 @@ router
         router
           .get('service-requirements/:id', [WebServiceRequirementsController, 'show'])
           .as('service_requirement.show')
+        router
+          .post('requirements/:id/negotiate', [WebServiceRequirementsController, 'negotiate'])
+          .as('service_requirement.negotiate')
 
         // account
         router

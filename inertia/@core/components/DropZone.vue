@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDropZone, useFileDialog, useObjectUrl } from '@vueuse/core'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const dropZoneRef = ref<HTMLDivElement>()
 interface FileData {
@@ -11,6 +11,15 @@ interface FileData {
 const props = defineProps<{
   max: number
 }>()
+
+const maxRef = ref(props.max)
+
+watch(
+  () => props.max,
+  () => {
+    maxRef.value = props.max
+  }
+)
 
 const emit = defineEmits<{
   (e: 'change', files: FileData[]): void
@@ -28,7 +37,7 @@ function onDrop(DroppedFiles: File[] | null) {
       return
     }
 
-    const filesCanBeUploaded = props.max - fileData.value.length
+    const filesCanBeUploaded = maxRef.value - fileData.value.length
     if (filesCanBeUploaded > 0) {
       fileData.value.push({
         file,
@@ -44,7 +53,7 @@ onChange((selectedFiles) => {
   if (!selectedFiles) return
 
   for (const [index, file] of Object.entries(selectedFiles)) {
-    const filesCanBeUploaded = props.max - fileData.value.length
+    const filesCanBeUploaded = maxRef.value - fileData.value.length
 
     if (filesCanBeUploaded > 0) {
       fileData.value.push({
@@ -71,7 +80,7 @@ useDropZone(dropZoneRef, onDrop)
           <IconBtn variant="tonal" class="rounded-sm">
             <VIcon icon="tabler-upload" />
           </IconBtn>
-          <h4 class="text-h4">Drag and drop your image here.</h4>
+          <h4 class="text-h4">Drag and drop your image here.(max {{ maxRef }})</h4>
           <span class="text-disabled">or</span>
 
           <VBtn variant="tonal" size="small"> Browse Images </VBtn>

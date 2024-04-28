@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/vue3'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { maxNumValidator, minNumValidator, requiredValidator } from '~/@core/utils/validators'
 import CustomForm from '../form/CustomForm.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { IvariantFrom } from '#helpers/types'
 import ModalBase from './ModalBase.vue'
 import AvatarInput from '../form/AvatarInput.vue'
@@ -11,45 +11,74 @@ import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import { VBtn } from 'vuetify/components'
 
 const props = defineProps<{
-  variant?: IvariantFrom
-  variantThumbnailUrl: string
+  selectedVariant?: {
+    index: number
+    variant: IvariantFrom
+    variantThumbnailUrl: string
+  }
 }>()
 
 const model = defineModel<boolean>({ required: true })
 
 const form = useForm({
-  name: props.variant?.name || '',
-  price: props.variant?.price || '',
-  discountType: props.variant?.discountType || 'flat',
-  discountFlat: props.variant?.discountFlat || 0,
-  discountPercentage: props.variant?.discountPercentage || 0,
-  desc: props.variant?.desc || '',
+  name: '',
+  price: '',
+  discountType: 'flat',
+  discountFlat: 0,
+  discountPercentage: 0,
+  desc: '',
 })
 
 const emits = defineEmits<{
   (e: 'variant-added', opt: { variant: IvariantFrom; image: File | null }): void
-  (e: 'cancled'): void
+  (e: 'variant-edited', opt: { variant: IvariantFrom; image: File | null; index: number }): void
 }>()
 
 const image = ref<null | File>(null)
 
 const emitAdd = () => {
-  console.log('ran')
-  emits('variant-added', {
-    variant: {
-      name: form.name,
-      desc: form.desc,
-      discountFlat: form.discountFlat,
-      discountPercentage: form.discountPercentage,
-      discountType: form.discountType,
-      price: Number(form.price),
-    },
-    image: image.value,
-  })
+  if (props.selectedVariant) {
+    emits('variant-edited', {
+      variant: {
+        name: form.name,
+        desc: form.desc,
+        discountFlat: form.discountFlat,
+        discountPercentage: form.discountPercentage,
+        discountType: form.discountType,
+        price: Number(form.price),
+      },
+      image: image.value,
+      index: props.selectedVariant.index,
+    })
+  } else {
+    emits('variant-added', {
+      variant: {
+        name: form.name,
+        desc: form.desc,
+        discountFlat: form.discountFlat,
+        discountPercentage: form.discountPercentage,
+        discountType: form.discountType,
+        price: Number(form.price),
+      },
+      image: image.value,
+    })
+  }
 }
+
+watch(
+  () => props.selectedVariant,
+  () => {
+    ;(form.name = props.selectedVariant?.variant?.name || ''),
+      (form.price = (props.selectedVariant?.variant?.price as unknown as string) || '')
+    form.discountType = props.selectedVariant?.variant?.discountType || 'flat'
+    form.discountFlat = props.selectedVariant?.variant?.discountFlat || 0
+    form.discountPercentage = props.selectedVariant?.variant?.discountPercentage || 0
+    form.desc = props.selectedVariant?.variant?.desc || ''
+  }
+)
 </script>
 <template>
-  <ModalBase v-model:is-visible="model" title="" subtitle="" persistent @close="$emit('cancled')">
+  <ModalBase v-model:is-visible="model" title="" subtitle="" persistent>
     <CustomForm @submit="emitAdd">
       <VRow>
         <VCol cols="12">
@@ -62,7 +91,7 @@ const emitAdd = () => {
                 }
               "
               size="120"
-              :url="variantThumbnailUrl"
+              :url="selectedVariant?.variantThumbnailUrl"
             />
           </div>
         </VCol>
@@ -127,12 +156,14 @@ const emitAdd = () => {
             variant="text"
             @click="
               () => {
-                $emit('cancled')
+                model = false
               }
             "
             >Cancle</VBtn
           >
-          <VBtn prepend-icon="tabler-plus" type="submit">Add Variant</VBtn>
+          <VBtn prepend-icon="tabler-plus" type="submit">{{
+            selectedVariant ? 'Update' : 'Add Variant'
+          }}</VBtn>
         </VCol>
       </VRow>
     </CustomForm>

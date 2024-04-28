@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import adonisjs from '@adonisjs/vite/client'
 import vuetify from 'vite-plugin-vuetify'
 import svgLoader from 'vite-svg-loader'
+import inspect from 'vite-plugin-inspect'
 
 export default defineConfig({
   plugins: [
@@ -23,6 +24,7 @@ export default defineConfig({
       },
     }),
     svgLoader(),
+    inspect(),
   ],
   /**
    * Define aliases for importing modules from

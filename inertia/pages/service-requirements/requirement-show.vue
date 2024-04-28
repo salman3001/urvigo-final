@@ -18,8 +18,8 @@ import DropDown from '~/components/DropDown.vue'
 import RequirementCard from '~/components/RequirementCard.vue'
 import ModalBidDetail from '~/components/modal/ModalBidDetail.vue'
 import ProposalCard from '~/components/web/ProposalCard.vue'
-import useApi from '~/composables/useApi'
-import apiRoutes from '~/utils/apiRoutes'
+import useApiForm from '~/composables/useApiForm'
+import useApiGet from '~/composables/useApiGet'
 
 const props = defineProps<{
   requirement: ServiceRequirement
@@ -30,10 +30,7 @@ const {
   data: recivedBids,
   exec: getRecievedBids,
   processing: processingRecievedBids,
-} = useApi<IPaginatedModel<typeof Bid>>(
-  routes('api.requirements.show_bids', [props.requirement.id]),
-  'get'
-)
+} = useApiGet<IPaginatedModel<typeof Bid>>()
 
 const bidQuery = reactive({
   page: 1,
@@ -85,10 +82,28 @@ const refreshData = async () => {
 }
 
 watch(bidQuery, () => {
-  getRecievedBids({
+  getRecievedBids(routes('api.requirements.show_bids', [props.requirement.id]), {
     params: bidQuery,
   })
 })
+
+const creatChatForm = useApiForm({
+  name: '',
+  participantId: props.requirement.user.id,
+})
+
+const createChat = () => {
+  creatChatForm.participantId = props.acceptedBid?.vendor.id
+  creatChatForm.post(
+    routes('api.chat.store'),
+    {},
+    {
+      onSucess: () => {
+        router.visit(routes('web.chat'))
+      },
+    }
+  )
+}
 
 // const { form: creatChatForm, create } = useChatApi.cretae()
 // const createChat = async () => {
@@ -110,7 +125,7 @@ watch(bidQuery, () => {
 // }
 
 onMounted(() => {
-  getRecievedBids({
+  getRecievedBids(routes('api.requirements.show_bids', [props.requirement.id]), {
     params: bidQuery,
   })
 })
@@ -224,15 +239,13 @@ onMounted(() => {
       v-model="bidDetailModal"
       :accepted-bid="acceptedBid!"
       :service-requirement="requirement"
-      @create-chat="
-        () => {
-          // createChat
-        }
-      "
+      @create-chat="createChat"
       @negotiated="
         () => {
           bidDetailModal = false
-          getRecievedBids({})
+          getRecievedBids(routes('api.requirements.show_bids', [props.requirement.id]), {
+            params: bidQuery,
+          })
         }
       "
       :selected-bid="selectedBid!"

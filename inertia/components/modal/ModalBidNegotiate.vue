@@ -3,12 +3,13 @@ import type Bid from '#models/bid'
 import type ServiceRequirement from '#models/service_requirement'
 import { reactive } from 'vue'
 import useApi from '~/composables/useApi'
-import apiRoutes from '~/utils/apiRoutes'
 import ModalBase from './ModalBase.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import CustomForm from '../form/CustomForm.vue'
 import routes from '~/utils/routes'
+import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps<{
   selectedBid: Bid
@@ -21,25 +22,18 @@ const emits = defineEmits<{
 
 const model = defineModel<boolean>({ required: true })
 
-const form = reactive({
+const negotiateForm = useForm({
   bidId: props.selectedBid.id,
   price: '',
   message: '',
 })
 
-const negotiate = useApi(routes('api.bids.accept-negotiate', [props.selectedBid.id]), 'post')
-
 const submit = async () => {
-  negotiate.exec(
-    {
-      data: form,
+  negotiateForm.post(routes('web.service_requirement.negotiate', [props.serviceRequirement.id]), {
+    onSuccess: () => {
+      emits('negotiated')
     },
-    {
-      onSuccess: () => {
-        emits('negotiated')
-      },
-    }
-  )
+  })
 }
 </script>
 
@@ -49,18 +43,18 @@ const submit = async () => {
     title="Request a Negotiation"
     subtitle="Please ask a reasonable negotiation. Very high negotiations are most likely be rejected by the vendor"
   >
-    <CustomForm ref="formRef" @submit.prevent="submit">
-      <VCardItem class="column q-pa-lg">
+    <CustomForm @submit="submit">
+      <VCardItem>
         <AppTextField
           type="number"
-          v-model="form.price"
+          v-model="negotiateForm.price"
           label="Request a price"
           :rules="[requiredValidator]"
         />
-        <AppTextarea v-model="form.message" label="message" :rules="[requiredValidator]" />
+        <AppTextarea v-model="negotiateForm.message" label="message" :rules="[requiredValidator]" />
       </VCardItem>
-      <VCardItem class="row justify-end q-pa-lg">
-        <VBtn color="primary" type="submit">Submit Request</VBtn>
+      <VCardItem class="d-flex justify-end p-2">
+        <VBtn type="submit">Submit Request</VBtn>
       </VCardItem>
     </CustomForm>
   </ModalBase>
