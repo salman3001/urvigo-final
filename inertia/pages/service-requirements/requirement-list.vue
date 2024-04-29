@@ -108,16 +108,13 @@ watch(query, () => {
               <VICon icon="tabler-filter" />
               filtering by {{ filter }}
             </VChip>
-            <VChip
-              @click="
-                () => {
-                  filter = null
-                  router.reload({
-                    only: ['requirements'],
-                  })
-                }
-              "
-            >
+            <VChip @click="() => {
+              filter = null
+              router.reload({
+                only: ['requirements'],
+              })
+            }
+            ">
               <VIcon icon="tabler-x" />
             </VChip>
           </div>
@@ -135,37 +132,26 @@ watch(query, () => {
               <VSkeletonLoader type="list-item-three-line" />
             </div>
             <VRow v-else>
-              <VCol v-for="requirement in requirements?.data" cols="12" lg="6">
+              <VCol v-for="requirement in requirements?.data" cols="12">
                 <RequirementCard :requirement="requirement" />
               </VCol>
             </VRow>
             <br />
-            <TablePagination
-              :page="Number(query.page)"
-              :items-per-page="Number(query.perPage)"
-              :total-items="Number(requirements?.meta?.total)"
-              @update:page="
-                (p) => {
-                  query.page = p as unknown as string
-                }
-              "
-            />
+            <TablePagination :page="Number(query.page)" :items-per-page="Number(query.perPage)"
+              :total-items="Number(requirements?.meta?.total)" @update:page="(p) => {
+              query.page = p as unknown as string
+            }
+            " />
           </div>
         </div>
       </div>
     </div>
-    <ModalPostRequirement
-      :categories="categories"
-      :tags="tags"
-      v-model:is-visible="postModal"
-      @submit="
-        async () => {
-          router.reload({
-            only: ['requirements'],
-          })
-          postModal = false
-        }
-      "
-    />
+    <ModalPostRequirement :categories="categories" :tags="tags" v-model:is-visible="postModal" @submit="async () => {
+              router.reload({
+                only: ['requirements'],
+              })
+              postModal = false
+            }
+            " />
   </VContainer>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type Bid from '#models/bid'
 import BigNumber from 'bignumber.js'
+import { format } from 'date-fns';
 import { VBadge, VChip } from 'vuetify/components'
 
 defineProps<{
@@ -14,7 +15,7 @@ defineProps<{
     <VCardItem>
       <div class="d-flex justify-content-between gap-2 align-center">
         <span>
-          {{ new Date(bid?.createdAt as unknown as string).toDateString() }}
+          {{ format(bid?.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
         </span>
         <div>
           <VChip v-if="accepted" variant="tonal" color="success"> Accepted</VChip>
@@ -24,9 +25,7 @@ defineProps<{
       <br />
       <div>
         Price Offered
-        <span class="font-weight-bold"
-          >&#x20B9;{{ new BigNumber(bid?.offeredPrice || 0).toFixed(2) }}</span
-        >
+        <span class="font-weight-bold">&#x20B9;{{ new BigNumber(bid?.offeredPrice || 0).toFixed(2) }}</span>
       </div>
       <br />
       <div>

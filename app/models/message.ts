@@ -37,8 +37,12 @@ export default class Message extends BaseModel {
     const room2 = 'chat-room-' + message.conversation.participantTwoId
 
     if (ws.io) {
-      ws.io.of('/chat/').to(room1).emit(`new-message`, message)
-      ws.io.of('/chat/').to(room2).emit(`new-message`, message)
+      if (room1 === room2) {
+        ws.io.of('/chat/').to(room1).emit(`new-message`, message)
+      } else {
+        ws.io.of('/chat/').to(room1).emit(`new-message`, message)
+        ws.io.of('/chat/').to(room2).emit(`new-message`, message)
+      }
     }
   }
 }

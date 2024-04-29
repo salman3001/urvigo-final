@@ -95,7 +95,7 @@ const selectedParticipant = computed(() => {
   } else if (selectedConversation.value?.participantTwoId != user.value?.id) {
     return selectedConversation.value?.participantTwo
   } else {
-    return null
+    return selectedConversation.value?.participantOne
   }
 })
 
@@ -117,58 +117,26 @@ onUnmounted(() => {
 <template>
   <VLayout class="chat-app-layout">
     <!-- 👉 user profile sidebar -->
-    <VNavigationDrawer
-      v-model="isUserProfileSidebarOpen"
-      temporary
-      touchless
-      absolute
-      class="user-profile-sidebar"
-      location="start"
-      width="370"
-    >
-      <ChatUserProfileSidebarContent
-        :selectedConversation="selectedConversation"
-        :selectedParticipant="selectedParticipant"
-        @close="isUserProfileSidebarOpen = false"
-      />
+    <VNavigationDrawer v-model="isUserProfileSidebarOpen" temporary touchless absolute class="user-profile-sidebar"
+      location="start" width="370">
+      <ChatUserProfileSidebarContent :selectedConversation="selectedConversation"
+        :selectedParticipant="selectedParticipant" @close="isUserProfileSidebarOpen = false" />
     </VNavigationDrawer>
 
     <!-- 👉 Active Chat sidebar -->
-    <VNavigationDrawer
-      v-model="isActiveChatUserProfileSidebarOpen"
-      width="374"
-      absolute
-      temporary
-      location="end"
-      touchless
-      class="active-chat-user-profile-sidebar"
-    >
-      <ChatActiveChatUserProfileSidebarContent
-        :selected-participant="selectedParticipant!"
-        @close="isActiveChatUserProfileSidebarOpen = false"
-      />
+    <VNavigationDrawer v-model="isActiveChatUserProfileSidebarOpen" width="374" absolute temporary location="end"
+      touchless class="active-chat-user-profile-sidebar">
+      <ChatActiveChatUserProfileSidebarContent :selected-participant="selectedParticipant!"
+        @close="isActiveChatUserProfileSidebarOpen = false" />
     </VNavigationDrawer>
 
     <!-- 👉 Left sidebar   -->
-    <VNavigationDrawer
-      v-model="isLeftSidebarOpen"
-      absolute
-      touchless
-      location="start"
-      width="370"
-      :temporary="$vuetify.display.smAndDown"
-      class="chat-list-sidebar"
-      :permanent="$vuetify.display.mdAndUp"
-    >
-      <ChatLeftSidebarContent
-        :selectedConversation="selectedConversation!"
-        :new-message="newMessage"
-        v-model:isDrawerOpen="isLeftSidebarOpen"
-        :chat-list="chatList.data"
-        @open-chat-of-conversation="openChatOfConversation"
-        @show-user-profile="isUserProfileSidebarOpen = true"
-        @close="isLeftSidebarOpen = false"
-      />
+    <VNavigationDrawer v-model="isLeftSidebarOpen" absolute touchless location="start" width="370"
+      :temporary="$vuetify.display.smAndDown" class="chat-list-sidebar" :permanent="$vuetify.display.mdAndUp">
+      <ChatLeftSidebarContent :selectedConversation="selectedConversation!" :new-message="newMessage"
+        v-model:isDrawerOpen="isLeftSidebarOpen" :chat-list="chatList.data"
+        @open-chat-of-conversation="openChatOfConversation" @show-user-profile="isUserProfileSidebarOpen = true"
+        @close="isLeftSidebarOpen = false" />
     </VNavigationDrawer>
 
     <!-- 👉 Chat content -->
@@ -176,32 +144,21 @@ onUnmounted(() => {
       <!-- 👉 Right content: Active Chat -->
       <div v-if="selectedConversation" class="d-flex flex-column">
         <!-- 👉 Active chat header -->
-        <div
-          class="active-chat-header d-flex align-center text-medium-emphasis bg-surface"
-          v-if="selectedParticipant"
-        >
+        <div class="active-chat-header d-flex align-center text-medium-emphasis bg-surface" v-if="selectedParticipant">
           <!-- Sidebar toggler -->
           <IconBtn class="d-md-none me-3" @click="isLeftSidebarOpen = true">
             <VIcon icon="tabler-menu-2" />
           </IconBtn>
 
           <!-- avatar -->
-          <div
-            class="d-flex align-center cursor-pointer"
-            @click="isActiveChatUserProfileSidebarOpen = true"
-          >
+          <div class="d-flex align-center cursor-pointer" @click="isActiveChatUserProfileSidebarOpen = true">
             <VBadge dot location="bottom right" offset-x="3" offset-y="0" :color="''" bordered>
               <VAvatar size="40" :variant="'tonal'" :color="''" class="cursor-pointer">
-                <VImg
-                  v-if="selectedParticipant?.profile?.avatar"
-                  :src="
-                    getImageUrl(selectedParticipant?.profile?.avatar?.thumbnailUrl, dummyAvatar)
-                  "
-                  :alt="selectedParticipant.firstName + ' ' + selectedParticipant.lastName"
-                />
+                <VImg v-if="selectedParticipant?.profile?.avatar" :src="getImageUrl(selectedParticipant?.profile?.avatar?.thumbnailUrl, dummyAvatar)
+      " :alt="selectedParticipant.firstName + ' ' + selectedParticipant.lastName" />
                 <span v-else>{{
-                  avatarText(selectedParticipant.firstName + ' ' + selectedParticipant.lastName)
-                }}</span>
+      avatarText(selectedParticipant.firstName + ' ' + selectedParticipant.lastName)
+    }}</span>
               </VAvatar>
             </VBadge>
 
@@ -237,35 +194,16 @@ onUnmounted(() => {
         <VDivider />
 
         <!-- Chat log -->
-        <PerfectScrollbar
-          ref="chatLogPS"
-          tag="ul"
-          :options="{ wheelPropagation: false }"
-          min
-          class="flex-grow-1 d-flex flex-column-reverse"
-          style="height: 65vh"
-          @ps-x-reach-start="() => {}"
-        >
-          <ChatLog
-            v-if="selectedConversation && selectedParticipant"
-            :selectedConversation="selectedConversation!"
-            :socket="socket"
-            :newMessage="newMessage"
-            :selectedParticipant="selectedParticipant"
-          />
+        <PerfectScrollbar ref="chatLogPS" tag="ul" :options="{ wheelPropagation: false }"
+          class="flex-grow-1 d-flex flex-column-reverse" style="height: 65vh">
+          <ChatLog v-if="selectedConversation && selectedParticipant" :selectedConversation="selectedConversation!"
+            :socket="socket" :newMessage="newMessage" :selectedParticipant="selectedParticipant" />
         </PerfectScrollbar>
 
         <!-- Message form -->
         <VForm class="chat-log-message-form mb-5 mx-5" @submit.prevent="createMessage">
-          <VTextField
-            :key="1"
-            v-model="messageForm.body"
-            variant="solo"
-            density="default"
-            class="chat-message-input"
-            placeholder="Type your message..."
-            autofocus
-          >
+          <VTextField :key="1" v-model="messageForm.body" variant="solo" density="default" class="chat-message-input"
+            placeholder="Type your message..." autofocus>
             <template #append-inner>
               <div class="d-flex gap-1">
                 <IconBtn>
@@ -289,11 +227,7 @@ onUnmounted(() => {
       </div>
 
       <!-- 👉 Start conversation -->
-      <div
-        v-else
-        class="d-flex h-100 align-center justify-center flex-column"
-        style="min-height: 65vh"
-      >
+      <div v-else class="d-flex h-100 align-center justify-center flex-column" style="min-height: 65vh">
         <VAvatar size="98" variant="tonal" color="primary" class="mb-4">
           <VIcon size="50" class="rounded-0" icon="tabler-message-2" />
         </VAvatar>
@@ -302,11 +236,7 @@ onUnmounted(() => {
           Start Conversation
         </VBtn>
 
-        <p
-          v-else
-          style="max-inline-size: 40ch; text-wrap: balance"
-          class="text-center text-disabled"
-        >
+        <p v-else style="max-inline-size: 40ch; text-wrap: balance" class="text-center text-disabled">
           Start connecting with the people by selecting one of the contact on left
         </p>
       </div>

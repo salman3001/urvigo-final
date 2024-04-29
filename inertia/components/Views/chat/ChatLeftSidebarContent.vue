@@ -101,19 +101,13 @@ watchDebounced(
   <div v-if="user" class="chat-list-header">
     <VBadge dot location="bottom right" offset-x="3" offset-y="3" :color="'success'" bordered>
       <VAvatar size="40" class="cursor-pointer" @click="$emit('showUserProfile')">
-        <VImg
-          :src="getImageUrl(user.profile?.avatar?.thumbnailUrl, dummyAvatar)"
-          :alt="user.firstName + user.lastName"
-        />
+        <VImg :src="getImageUrl(user.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+          :alt="user.firstName + user.lastName" />
       </VAvatar>
     </VBadge>
 
-    <AppTextField
-      v-model="query.search"
-      placeholder="Search..."
-      prepend-inner-icon="tabler-search"
-      class="ms-4 me-1 chat-list-search"
-    />
+    <AppTextField v-model="query.search" placeholder="Search..." prepend-inner-icon="tabler-search"
+      class="ms-4 me-1 chat-list-search" />
 
     <IconBtn v-if="$vuetify.display.smAndDown" @click="$emit('close')">
       <VIcon icon="tabler-x" class="text-medium-emphasis" />
@@ -121,32 +115,20 @@ watchDebounced(
   </div>
   <VDivider />
 
-  <PerfectScrollbar
-    tag="ul"
-    class="d-flex flex-column gap-y-1 chat-contacts-list px-3 py-2 list-none"
-    :options="{ wheelPropagation: false }"
-  >
+  <PerfectScrollbar tag="ul" class="d-flex flex-column gap-y-1 chat-contacts-list px-3 py-2 list-none"
+    :options="{ wheelPropagation: false }">
     <li class="list-none">
       <h5 class="chat-contact-header text-primary text-h5">Chats</h5>
     </li>
 
-    <Conversations
-      v-for="conversation in chatList"
-      :key="conversation.id"
-      :conversation="conversation"
-      :selected-conversation="selectedConversation"
-      @click="
-        () => {
-          $emit('openChatOfConversation', conversation)
-        }
-      "
-    />
+    <Conversations v-for="conversation in chatList" :key="conversation.id" :conversation="conversation"
+      :selected-conversation="selectedConversation" @click="() => {
+    $emit('openChatOfConversation', conversation)
+  }
+    " />
 
-    <span
-      v-show="Array.isArray(chatList) && chatList.length < 1"
-      class="no-chat-items-text text-disabled"
-      >No chats found</span
-    >
+    <span v-show="Array.isArray(chatList) && chatList.length < 1" class="no-chat-items-text text-disabled">No chats
+      found</span>
   </PerfectScrollbar>
 </template>
 

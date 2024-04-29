@@ -2,7 +2,7 @@
 import type ServiceRequirement from '#models/service_requirement'
 import { Link, usePage } from '@inertiajs/vue3'
 import BigNumber from 'bignumber.js'
-import { differenceInMinutes } from 'date-fns'
+import { differenceInMinutes, format } from 'date-fns'
 import { computed } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
@@ -24,9 +24,9 @@ const getImageUrls = useGetImageUrl()
     <VRow no-gutters>
       <VCol>
         <VCardItem>
-          <VCardTitle
-            ><h3>{{ requirement.title }}</h3></VCardTitle
-          >
+          <VCardTitle>
+            <h3>{{ requirement.title }}</h3>
+          </VCardTitle>
         </VCardItem>
 
         <VCardText>
@@ -50,16 +50,9 @@ const getImageUrls = useGetImageUrl()
               <div class="d-flex gap-2">
                 <VChip v-if="requirement.urgent" color="error">Urgent Requirment</VChip>
                 <VChip color="warning" v-if="!requirement.acceptedBidId">Active</VChip>
-                <VChip v-else-if="requirement.acceptedBidId != null" color="success"
-                  >Accepted</VChip
-                >
-                <VChip
-                  color="error"
-                  v-else-if="
-                    differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
-                  "
-                  >Expired</VChip
-                >
+                <VChip v-else-if="requirement.acceptedBidId != null" color="success">Accepted</VChip>
+                <VChip color="error" v-else-if="differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
+              ">Expired</VChip>
               </div>
             </div>
 
@@ -67,11 +60,11 @@ const getImageUrls = useGetImageUrl()
               <ClientOnly>
                 <div>
                   Posted on:
-                  {{ new Date(requirement.createdAt as unknown as string).toDateString() }}
+                  {{ format(requirement.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
                 </div>
                 <div>
                   Expired on:
-                  {{ new Date(requirement.expiresAt as unknown as string).toDateString() }}
+                  {{ format(requirement.expiresAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
                 </div>
               </ClientOnly>
             </div>
@@ -90,26 +83,23 @@ const getImageUrls = useGetImageUrl()
           <VDivider v-if="$vuetify.display.smAndUp" vertical inset />
 
           <div class="d-flex flex-wrap justify-end gap-2 pa-2 flex-grow-1">
-            <VChip color="secondary"
-              ><VIcon icon="tabler-message" />&nbsp; Bids&nbsp;
-              <span>{{ requirement?.meta?.recievedBids_count }}</span></VChip
-            >
+            <VChip color="secondary">
+              <VIcon icon="tabler-message" />&nbsp; Bids&nbsp;
+              <span>{{ requirement?.meta?.recievedBids_count }}</span>
+            </VChip>
             <VChip color="secondary">
               <VIcon icon="tabler-moneybag" /> &nbsp;Avg. Price
               <span>
                 &nbsp; &#x20B9;
-                {{ new BigNumber(requirement.meta?.avgBidPrice || 0).toFixed(2) }}</span
-              >
+                {{ new BigNumber(requirement.meta?.avgBidPrice || 0).toFixed(2) }}</span>
             </VChip>
-            <VChip color="secondary"
-              ><VIcon icon="tabler-circle-check" />&nbsp;Accepted Bid&nbsp;
-              <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span></VChip
-            >
-            <Link
-              :href="routes('web.service_requirement.show', [requirement.id])"
-              v-if="currentUrl != routes('web.service_requirement.show', [requirement.id])"
-            >
-              <VBtn color="primary"> View Detail </VBtn>
+            <VChip color="secondary">
+              <VIcon icon="tabler-circle-check" />&nbsp;Accepted Bid&nbsp;
+              <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span>
+            </VChip>
+            <Link :href="routes('web.service_requirement.show', [requirement.id])"
+              v-if="currentUrl != routes('web.service_requirement.show', [requirement.id])">
+            <VBtn color="primary"> View Detail </VBtn>
             </Link>
           </div>
         </VCardText>

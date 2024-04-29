@@ -15,7 +15,10 @@ export default class BidService {
     const { request, bouncer, auth } = this.ctx
     await bouncer.with('BidPolicy').authorize('viewList')
 
-    const bidsQuery = Bid.query().where('user_id', auth.user!.id)
+    const bidsQuery = Bid.query()
+      .where('user_id', auth.user!.id)
+      .preload('serviceRequirement')
+      .orderBy('created_at', 'desc')
 
     const bids = await paginate<typeof Bid>(bidsQuery, request)
 

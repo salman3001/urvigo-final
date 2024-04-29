@@ -21,37 +21,43 @@ export default class BookingPolicy extends BasePolicy {
     }
   }
 
-  async view(user: User, booking: Booking) {
-    if (isAdmin(user) && (await hasPermission(user, permissions.MANAGE_BOOKINGS))) {
-      return true
-    } else if (isUser(user) && user.id === booking.userId) {
+  async vendorList(user: User) {
+    if (isVendor(user)) {
       return true
     } else {
       return false
     }
   }
 
+  async view(user: User, booking: Booking) {
+    if (booking.userId === user.id) {
+      return true
+    } else if (isVendor(user)) {
+      await user.load('businessProfile')
+      return user.businessProfile.id === booking.businessProfileId
+    } else {
+      return false
+    }
+  }
+
   async create(user: User) {
-    if (isUser(user)) {
+    if (user) {
       return true
     } else {
       return false
     }
   }
   async update(user: User, booking: Booking) {
-    if (isAdmin(user) && (await hasPermission(user, permissions.MANAGE_BOOKINGS))) {
+    if (booking.userId === user.id) {
       return true
-    } else if (isVendor(user) && user.id === booking.userId) {
-      return true
+    } else if (isVendor(user)) {
+      await user.load('businessProfile')
+      return user.businessProfile.id === booking.businessProfileId
     } else {
       return false
     }
   }
-  async delete(user: User) {
-    if (isAdmin(user) && (await hasPermission(user, permissions.MANAGE_BOOKINGS))) {
-      return true
-    } else {
-      return false
-    }
+  async delete() {
+    return false
   }
 }

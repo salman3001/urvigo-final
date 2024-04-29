@@ -76,31 +76,6 @@ export default class ServiceRequirementService {
     return serviceRequirements
   }
 
-  async show() {
-    const { bouncer, params } = this.ctx
-    const serviceRequirement = await ServiceRequirement.query()
-      .where('id', +params.id)
-      .preload('serviceCategory', (s) => {
-        s.select('name')
-      })
-      .preload('user', (u) => {
-        u.preload('profile')
-      })
-      .withCount('recievedBids')
-      .withAggregate('recievedBids', (b) => {
-        b.avg('offered_price').as('avgBidPrice')
-      })
-      .preload('images')
-      .preload('tags', (t) => {
-        t.select(['name'])
-      })
-      .firstOrFail()
-
-    await bouncer.with('ServiceRequirementPolicy').authorize('view')
-
-    return serviceRequirement
-  }
-
   async myList() {
     const { auth, bouncer, request } = this.ctx
     await bouncer.with('ServiceRequirementPolicy').authorize('myList')
@@ -131,6 +106,31 @@ export default class ServiceRequirementService {
     )
 
     return serviceRequirements
+  }
+
+  async show() {
+    const { bouncer, params } = this.ctx
+    const serviceRequirement = await ServiceRequirement.query()
+      .where('id', +params.id)
+      .preload('serviceCategory', (s) => {
+        s.select('name')
+      })
+      .preload('user', (u) => {
+        u.preload('profile')
+      })
+      .withCount('recievedBids')
+      .withAggregate('recievedBids', (b) => {
+        b.avg('offered_price').as('avgBidPrice')
+      })
+      .preload('images')
+      .preload('tags', (t) => {
+        t.select(['name'])
+      })
+      .firstOrFail()
+
+    await bouncer.with('ServiceRequirementPolicy').authorize('view')
+
+    return serviceRequirement
   }
 
   async showAcceptedBid() {
@@ -188,7 +188,7 @@ export default class ServiceRequirementService {
   }
 
   async showBids() {
-    const { bouncer, params, response, request } = this.ctx
+    const { bouncer, params, request } = this.ctx
     const serviceRequirement = await ServiceRequirement.findOrFail(+params.id)
 
     await bouncer.with('ServiceRequirementPolicy').authorize('view')

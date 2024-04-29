@@ -30,34 +30,21 @@ const computedParticipant = computed(() => {
   } else if (props.conversation.participantTwoId != user.value?.id) {
     return props.conversation.participantTwo
   } else {
-    return null
+    return props.conversation.participantOne
   }
 })
 </script>
 
 <template>
-  <li
-    class="chat-contact cursor-pointer d-flex align-center"
-    :class="{ 'chat-contact-active': isChatContactActive }"
-  >
-    <VBadge
-      dot
-      location="bottom right"
-      offset-x="3"
-      offset-y="0"
-      :color="'success'"
-      bordered
-      :model-value="true"
-    >
+  <li class="chat-contact cursor-pointer d-flex align-center" :class="{ 'chat-contact-active': isChatContactActive }">
+    <VBadge dot location="bottom right" offset-x="3" offset-y="0" :color="'success'" bordered :model-value="true">
       <VAvatar size="40" :variant="'tonal'">
-        <VImg
-          v-if="computedParticipant?.profile?.avatar"
+        <VImg v-if="computedParticipant?.profile?.avatar"
           :src="getImageUrl(computedParticipant?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
-          :alt="computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName"
-        />
+          :alt="computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName" />
         <span v-else>{{
-          avatarText(computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName)
-        }}</span>
+    avatarText(computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName)
+  }}</span>
       </VAvatar>
     </VBadge>
     <div class="flex-grow-1 ms-4 overflow-hidden">
@@ -72,20 +59,12 @@ const computedParticipant = computed(() => {
       </p>
     </div>
     <div v-if="conversation?.messages?.length > 0" class="d-flex flex-column align-self-start">
-      <div
-        v-if="conversation?.messages[0]?.createdAt"
-        class="text-body-2 text-disabled whitespace-no-wrap"
-      >
+      <div v-if="conversation?.messages[0]?.createdAt" class="text-body-2 text-disabled whitespace-no-wrap">
         {{ formatDateToMonthShort(conversation?.messages[0]?.createdAt as unknown as string) }}
       </div>
       <div v-if="conversation.messages[0]">
-        <VBadge
-          v-if="conversation.meta?.unread_messages && conversation.meta?.unread_messages > 0"
-          color="error"
-          inline
-          :content="conversation.meta?.unread_messages"
-          class="ms-auto"
-        />
+        <VBadge v-if="conversation.meta?.unread_messages && conversation.meta?.unread_messages > 0" color="error" inline
+          :content="conversation.meta?.unread_messages" class="ms-auto" />
       </div>
     </div>
   </li>

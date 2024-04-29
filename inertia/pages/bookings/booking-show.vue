@@ -1,6 +1,7 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
 import { VDataTable } from 'vuetify/components'
+import { format } from 'date-fns'
 
 export default {
   layout: Layout,
@@ -60,7 +61,7 @@ const headers = [
             </div>
           </div>
           <div class="text-body-1">
-            {{ new Date(booking?.createdAt as unknown as string).toDateString() }}
+            {{ format(booking?.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
           </div>
         </div>
 
@@ -88,20 +89,13 @@ const headers = [
             </VCardItem>
 
             <VDivider />
-            <VDataTable
-              :headers="headers"
-              :items="bookingData"
-              item-value="productName"
-              show-select
-              class="text-no-wrap"
-            >
+            <VDataTable :headers="headers" :items="bookingData" item-value="productName" show-select
+              class="text-no-wrap">
+
               <template #item.service_variant="{ item }">
                 <div class="d-flex gap-x-3 align-center">
-                  <VAvatar
-                    size="34"
-                    :image="getImagesUrl(booking?.bookingDetail?.service_variant?.image?.url)"
-                    :rounded="0"
-                  />
+                  <VAvatar size="34" :image="getImagesUrl(booking?.bookingDetail?.service_variant?.image?.url)"
+                    :rounded="0" />
 
                   <div class="d-flex flex-column align-start">
                     <h6 class="text-h6">
@@ -176,26 +170,15 @@ const headers = [
           <!-- 👉 Shipping Activity -->
           <VCard title="Booking Activity">
             <VCardText>
-              <VTimeline
-                truncate-line="both"
-                line-inset="9"
-                align="start"
-                side="end"
-                line-color="primary"
-                density="compact"
-              >
-                <VTimelineItem
-                  v-for="(h, i) in booking?.history"
-                  :key="i"
-                  dot-color="primary"
-                  size="x-small"
-                >
+              <VTimeline truncate-line="both" line-inset="9" align="start" side="end" line-color="primary"
+                density="compact">
+                <VTimelineItem v-for="(h, i) in booking?.history" :key="i" dot-color="primary" size="x-small">
                   <div class="d-flex justify-space-between align-center">
                     <div class="app-timeline-title">
                       {{ h.event }}
                     </div>
                     <div class="app-timeline-meta">
-                      {{ new Date(h.date_time as string).toDateString() }}
+                      {{ format(h.date_time as unknown as string, 'dd/MM/yyyy HH:mm') }}
                     </div>
                   </div>
                   <p class="app-timeline-text mb-0 mt-3">

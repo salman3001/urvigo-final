@@ -36,17 +36,12 @@ watch(query, () => {
 </script>
 
 <template>
-  <br />
   <div class="d-flex align-center justify-end gap-2">
-    <IconBtn
-      v-if="filter"
-      @click="
-        () => {
-          filter = null
-          // refresh();
-        }
-      "
-    >
+    <IconBtn v-if="filter" @click="() => {
+      filter = null
+      // refresh();
+    }
+      ">
       <VIcon icon="tabler-filter" />
     </IconBtn>
     <VTooltip text="Fliters">
@@ -57,55 +52,41 @@ watch(query, () => {
       </template>
     </VTooltip>
   </div>
-  <br />
   <div>
     <div v-if="!requirements" v-for="n in 5">
       <VSkeletonLoader type="card" />
     </div>
-    <div v-else class="row q-col-gutter-md">
-      <div class="col-12 col-sm-6 col-md-4" v-for="requirement in requirements?.data">
+    <VRow v-else>
+      <VCol v-for="requirement in requirements?.data" cols="12">
         <VendorRequirementCard :requirement="requirement" />
-      </div>
-    </div>
+      </VCol>
+    </VRow>
+
     <br />
-    <TablePagination
-      :page="Number(query.page)"
-      :items-per-page="Number(requirements?.meta?.perPage)"
-      :total-items="Number(requirements?.meta?.total)"
-      @update:page="
-        (p) => {
-          query.page = p
-        }
-      "
-    />
+    <TablePagination :page="Number(query.page)" :items-per-page="Number(requirements?.meta?.perPage)"
+      :total-items="Number(requirements?.meta?.total)" @update:page="(p) => {
+      query.page = p
+    }
+      " />
     <ModalBase v-model:is-visible="filterModal" title="Filter requirements">
-      <VCard>
-        <VCardItem>
-          <div>
-            <h6>Sorty By</h6>
-            <div class="q-gutter-sm">
-              <VRadioGroup v-model="query.orderBy">
-                <VRadio label="Latest" value="created_at:desc" />
-              </VRadioGroup>
-            </div>
-          </div>
-          <div class="row justify-end">
-            <VBtn
-              label="Apply"
-              color="primary"
-              @click="
-                () => {
-                  router.reload({
-                    data: { ...query, page: 1 },
-                  })
-                  filterModal = false
-                }
-              "
-              >Apply</VBtn
-            >
-          </div>
-        </VCardItem>
-      </VCard>
+
+      <VCardItem>
+        <h3>Sorty By</h3>
+        <div class="my-1">
+          <VRadioGroup v-model="query.orderBy">
+            <VRadio label="Latest" value="created_at:desc" />
+          </VRadioGroup>
+        </div>
+        <div class="d-flex justify-end">
+          <VBtn label="Apply" color="primary" @click="() => {
+      router.reload({
+        data: { ...query, page: 1 },
+      })
+      filterModal = false
+    }
+      ">Apply</VBtn>
+        </div>
+      </VCardItem>
     </ModalBase>
   </div>
 </template>

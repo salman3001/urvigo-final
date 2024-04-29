@@ -21,25 +21,37 @@ export default class BidBookingPolicy extends BasePolicy {
     }
   }
 
-  async view(user: User, bidBooking: BidBooking) {
-    if (user instanceof User && bidBooking.userId === user.id) {
-      return true
-    } else if (isVendor(user) && bidBooking.userId === user.id) {
+  async vendorList(user: User) {
+    if (isVendor(user)) {
       return true
     } else {
       return false
     }
   }
+
+  async view(user: User, bidBooking: BidBooking) {
+    if (bidBooking.userId === user.id) {
+      return true
+    } else if (isVendor(user)) {
+      await user.load('businessProfile')
+      return user.businessProfile.id === bidBooking.businessProfileId
+    } else {
+      return false
+    }
+  }
   async create(user: User) {
-    if (isUser(user)) {
+    if (user) {
       return true
     } else {
       return false
     }
   }
   async update(user: User, bidBooking: BidBooking) {
-    if (isVendor(user) && bidBooking.userId === user.id) {
+    if (bidBooking.userId === user.id) {
       return true
+    } else if (isVendor(user)) {
+      await user.load('businessProfile')
+      return user.businessProfile.id === bidBooking.businessProfileId
     } else {
       return false
     }

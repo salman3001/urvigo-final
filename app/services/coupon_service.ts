@@ -86,7 +86,7 @@ export default class CouponService {
     const { auth, bouncer, request } = this.ctx
     await bouncer.with('CouponPolicy').authorize('create')
 
-    const payload = await request.validateUsing(createCouponValidator)
+    const { serviceIds, ...payload } = await request.validateUsing(createCouponValidator)
 
     const user = auth.user!
 
@@ -99,6 +99,8 @@ export default class CouponService {
         businessProfileId: user.businessProfile.id,
         couponType: CouponType.VENDOR,
       })
+
+      await coupon.related('services').attach(serviceIds)
     }
 
     if (user.userType === userTypes.ADMIN) {
@@ -116,9 +118,13 @@ export default class CouponService {
     const coupon = await Coupon.findOrFail(+params.id)
     await bouncer.with('CouponPolicy').authorize('update', coupon)
 
-    const payload = await request.validateUsing(updateCouponValidator)
+    const { serviceIds, ...payload } = await request.validateUsing(updateCouponValidator)
 
     coupon.merge(payload)
+    if (serviceIds) {
+      await coupon.related('services').detach()
+      await coupon.related('services').attach(serviceIds)
+    }
     await coupon.save()
     return coupon
   }

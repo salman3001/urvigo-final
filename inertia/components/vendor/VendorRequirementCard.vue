@@ -8,6 +8,7 @@ import routes from '~/utils/routes'
 import dummyThumb from '~/assets/images/dummy-avatar.webp'
 import LightBox from '../LightBox.vue'
 import ClientOnly from '../client-only.vue'
+import { format } from 'date-fns'
 
 defineProps<{
   requirement: ServiceRequirement
@@ -22,9 +23,9 @@ const getImageUrls = useGetImageUrl()
 <template>
   <VCard density="compact">
     <VCardItem>
-      <VCardTitle
-        ><h3>{{ requirement.title }}</h3></VCardTitle
-      >
+      <VCardTitle>
+        <h3>{{ requirement.title }}</h3>
+      </VCardTitle>
     </VCardItem>
 
     <VCardText>
@@ -45,10 +46,7 @@ const getImageUrls = useGetImageUrl()
       <div class="d-flex flex-wrap justify-space-between gap-3">
         <div class="d-flex flex-column gap-2">
           <div class="d-flex gap-2">
-            <VAvatar
-              :image="getImageUrls(requirement?.user?.profile?.avatar?.thumbnailUrl, dummyThumb)"
-              size="48"
-            >
+            <VAvatar :image="getImageUrls(requirement?.user?.profile?.avatar?.thumbnailUrl, dummyThumb)" size="48">
             </VAvatar>
             <div>
               <div>
@@ -67,11 +65,11 @@ const getImageUrls = useGetImageUrl()
           <ClientOnly>
             <div>
               Posted on:
-              {{ new Date(requirement.createdAt as unknown as string).toDateString() }}
+              {{ format(requirement?.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
             </div>
             <div>
               Expired on:
-              {{ new Date(requirement.expiresAt as unknown as string).toDateString() }}
+              {{ format(requirement?.expiresAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
             </div>
           </ClientOnly>
         </div>
@@ -90,26 +88,23 @@ const getImageUrls = useGetImageUrl()
       <VDivider v-if="$vuetify.display.smAndUp" vertical inset />
 
       <div class="d-flex flex-wrap justify-end gap-2 pa-2 flex-grow-1">
-        <VChip color="secondary"
-          ><VIcon icon="tabler-message" />&nbsp; Bids&nbsp;
-          <span>{{ requirement?.meta?.recievedBids_count }}</span></VChip
-        >
+        <VChip color="secondary">
+          <VIcon icon="tabler-message" />&nbsp; Bids&nbsp;
+          <span>{{ requirement?.meta?.recievedBids_count }}</span>
+        </VChip>
         <VChip color="secondary">
           <VIcon icon="tabler-moneybag" /> &nbsp;Avg. Price
           <span>
             &nbsp; &#x20B9;
-            {{ new BigNumber(requirement.meta?.avgBidPrice || 0).toFixed(2) }}</span
-          >
+            {{ new BigNumber(requirement.meta?.avgBidPrice || 0).toFixed(2) }}</span>
         </VChip>
-        <VChip color="secondary"
-          ><VIcon icon="tabler-circle-check" />&nbsp;Accepted Bid&nbsp;
-          <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span></VChip
-        >
-        <Link
-          :href="routes('vendor.requirements.show', [requirement.id])"
-          v-if="currentUrl != routes('vendor.requirements.show', [requirement.id])"
-        >
-          <VBtn color="primary"> View Detail </VBtn>
+        <VChip color="secondary">
+          <VIcon icon="tabler-circle-check" />&nbsp;Accepted Bid&nbsp;
+          <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span>
+        </VChip>
+        <Link :href="routes('vendor.requirements.show', [requirement.id])"
+          v-if="currentUrl != routes('vendor.requirements.show', [requirement.id])">
+        <VBtn color="primary"> View Detail </VBtn>
         </Link>
       </div>
     </VCardText>

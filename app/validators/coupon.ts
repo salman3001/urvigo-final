@@ -17,7 +17,7 @@ export const createCouponValidator = vine.compile(
     discountPercentage: vine.number().min(0).max(99).optional(),
     maxUsers: vine.number(),
     minPurchaseAmount: vine.number().min(0),
-    // serviceIds: vine.array().members(vine.number()),
+    serviceIds: vine.array(vine.number()),
     validFrom: vine.date({ formats: 'DD/MM/YYYY HH:mm' }).after(() => {
       return DateTime.now().plus({ minute: 1 }).toFormat('dd/LL/yyyy HH:mm')
     }),
@@ -34,7 +34,7 @@ export const updateCouponValidator = vine.compile(
     discountPercentage: vine.number().min(0).max(99).optional().optional(),
     maxUsers: vine.number().optional(),
     minPurchaseAmount: vine.number().min(0).optional(),
-    // serviceIds: vine.array().members(vine.number()),
+    serviceIds: vine.array(vine.number()).optional(),
     validFrom: vine.date({ formats: 'DD/MM/YYYY HH:mm' }).after(() => {
       return DateTime.now().plus({ minute: 1 }).toFormat('dd/LL/yyyy HH:mm')
     }),
