@@ -1,6 +1,5 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
-import { IResType } from '#helpers/types'
 import { useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
 import type ServiceRequirement from '#models/service_requirement'

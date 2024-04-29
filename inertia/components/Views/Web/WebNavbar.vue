@@ -13,7 +13,7 @@ import NavSearchBar from '~//layouts/components/NavSearchBar.vue'
 import routes from '~/utils/routes'
 import { computed, ref, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
-import { IPageProps } from '#helpers/types'
+import type { IPageProps } from '#helpers/types'
 
 const display = useDisplay()
 const page = usePage<IPageProps<{}>>()

@@ -9,7 +9,7 @@ export default {
 
 <script setup lang="ts">
 import { IvariantFrom } from '#helpers/types'
-import Service from '#models/service'
+import type Service from '#models/service'
 import type ServiceCategory from '#models/service_category'
 import type ServiceSubcategory from '#models/service_subcategory'
 import type ServiceTag from '#models/service_tag'

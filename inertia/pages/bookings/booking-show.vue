@@ -9,13 +9,8 @@ export default {
 </script>
 
 <script setup lang="ts">
-import avatar1 from '@images/avatars/avatar-1.png'
-import product21 from '@images/ecommerce-images/product-21.png'
-import product22 from '@images/ecommerce-images/product-22.png'
-import product23 from '@images/ecommerce-images/product-23.png'
-import product24 from '@images/ecommerce-images/product-24.png'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import Booking from '../../../app/models/booking'
+import type Booking from '../../../app/models/booking'
 import { computed } from 'vue'
 
 // const isConfirmDialogVisible = ref(false);
@@ -89,13 +84,20 @@ const headers = [
             </VCardItem>
 
             <VDivider />
-            <VDataTable :headers="headers" :items="bookingData" item-value="productName" show-select
-              class="text-no-wrap">
-
+            <VDataTable
+              :headers="headers"
+              :items="bookingData"
+              item-value="productName"
+              show-select
+              class="text-no-wrap"
+            >
               <template #item.service_variant="{ item }">
                 <div class="d-flex gap-x-3 align-center">
-                  <VAvatar size="34" :image="getImagesUrl(booking?.bookingDetail?.service_variant?.image?.url)"
-                    :rounded="0" />
+                  <VAvatar
+                    size="34"
+                    :image="getImagesUrl(booking?.bookingDetail?.service_variant?.image?.url)"
+                    :rounded="0"
+                  />
 
                   <div class="d-flex flex-column align-start">
                     <h6 class="text-h6">
@@ -170,9 +172,20 @@ const headers = [
           <!-- 👉 Shipping Activity -->
           <VCard title="Booking Activity">
             <VCardText>
-              <VTimeline truncate-line="both" line-inset="9" align="start" side="end" line-color="primary"
-                density="compact">
-                <VTimelineItem v-for="(h, i) in booking?.history" :key="i" dot-color="primary" size="x-small">
+              <VTimeline
+                truncate-line="both"
+                line-inset="9"
+                align="start"
+                side="end"
+                line-color="primary"
+                density="compact"
+              >
+                <VTimelineItem
+                  v-for="(h, i) in booking?.history"
+                  :key="i"
+                  dot-color="primary"
+                  size="x-small"
+                >
                   <div class="d-flex justify-space-between align-center">
                     <div class="app-timeline-title">
                       {{ h.event }}

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type Bid from '#models/bid'
 import type ServiceRequirement from '#models/service_requirement'
-import { reactive } from 'vue'
-import useApi from '~/composables/useApi'
 import ModalBase from './ModalBase.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'

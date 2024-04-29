@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Service from '#models/service'
+import type Service from '#models/service'
 import { Link } from '@inertiajs/vue3'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import ReviewsCard from '~/components/ReviewsCard.vue'

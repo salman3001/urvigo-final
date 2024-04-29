@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type Bid from '#models/bid'
 import BigNumber from 'bignumber.js'
-import { format } from 'date-fns';
-import { VBadge, VChip } from 'vuetify/components'
+import { format } from 'date-fns'
+import { VChip } from 'vuetify/components'
 
 defineProps<{
   accepted: boolean
@@ -25,7 +25,9 @@ defineProps<{
       <br />
       <div>
         Price Offered
-        <span class="font-weight-bold">&#x20B9;{{ new BigNumber(bid?.offeredPrice || 0).toFixed(2) }}</span>
+        <span class="font-weight-bold"
+          >&#x20B9;{{ new BigNumber(bid?.offeredPrice || 0).toFixed(2) }}</span
+        >
       </div>
       <br />
       <div>

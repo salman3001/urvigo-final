@@ -1,6 +1,5 @@
 <script lang="ts">
 import Layout from '~/layouts/blank.vue'
-import wishlistStore from '~/stores/wishlistStore'
 
 export default {
   layout: Layout,
@@ -27,7 +26,6 @@ import AuthProvider from '~/components/Views/Web/AuthProvider.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 
 const loading = ref(false)
-const wishlist = wishlistStore()
 
 const isPasswordVisible = ref(false)
 
@@ -49,12 +47,12 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
 <template>
   <Link :href="routes('web.home')">
-  <div class="auth-logo d-flex align-center gap-x-3">
-    <VNodeRenderer :nodes="themeConfig.app.logo" />
-    <h1 class="auth-title">
-      {{ themeConfig.app.title }}
-    </h1>
-  </div>
+    <div class="auth-logo d-flex align-center gap-x-3">
+      <VNodeRenderer :nodes="themeConfig.app.logo" />
+      <h1 class="auth-title">
+        {{ themeConfig.app.title }}
+      </h1>
+    </div>
   </Link>
 
   <VRow no-gutters class="auth-wrapper bg-surface">
@@ -64,7 +62,13 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
           <VImg max-width="613" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
         </div>
 
-        <img class="auth-footer-mask" :src="authThemeMask" alt="auth-footer-mask" height="280" width="100" />
+        <img
+          class="auth-footer-mask"
+          :src="authThemeMask"
+          alt="auth-footer-mask"
+          height="280"
+          width="100"
+        />
       </div>
     </VCol>
 
@@ -79,33 +83,47 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
         </VCardText>
 
         <VCardText>
-          <CustomForm @submit="() => {
-    form.post(routes('web.auth.login'), {
-      // onSuccess: () => {
-      //   wishlist.fetchWishlist({})
-      // }
-    })
-  }
-    ">
+          <CustomForm
+            @submit="
+              () => {
+                form.post(routes('web.auth.login'), {
+                  // onSuccess: () => {
+                  //   wishlist.fetchWishlist({})
+                  // }
+                })
+              }
+            "
+          >
             <ErrorAlert v-if="form?.errors" :errors="form?.errors" />
             <VRow>
               <!-- email -->
               <VCol cols="12">
-                <AppTextField v-model="form.email" autofocus label="Email" type="email" placeholder="johndoe@email.com"
-                  :rules="[requiredValidator, emailValidator]" />
+                <AppTextField
+                  v-model="form.email"
+                  autofocus
+                  label="Email"
+                  type="email"
+                  placeholder="johndoe@email.com"
+                  :rules="[requiredValidator, emailValidator]"
+                />
               </VCol>
 
               <!-- password -->
               <VCol cols="12">
-                <AppTextField v-model="form.password" label="Password" placeholder="············"
+                <AppTextField
+                  v-model="form.password"
+                  label="Password"
+                  placeholder="············"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible" :rules="[requiredValidator]" />
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                  :rules="[requiredValidator]"
+                />
 
                 <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
                   <!-- <VCheckbox v-model="form.remember" label="Remember me" /> -->
                   <Link class="text-primary ms-2 mb-1" :href="routes('web.auth.forgot-password')">
-                  Forgot Password?
+                    Forgot Password?
                   </Link>
                 </div>
 
@@ -117,7 +135,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                 <span>New on our platform?</span>
 
                 <Link class="text-primary ms-2" :href="routes('web.auth.signup')">
-                Create an account
+                  Create an account
                 </Link>
               </VCol>
               <VCol cols="12" class="d-flex align-center">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DiscountType } from '#helpers/enums'
-import Service from '#models/service'
+import type Service from '#models/service'
 import BigNumber from 'bignumber.js'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'

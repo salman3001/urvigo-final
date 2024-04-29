@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPageProps, IPaginatedModel } from '#helpers/types'
+import type { IPageProps, IPaginatedModel } from '#helpers/types'
 import type Service from '#models/service'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
@@ -56,11 +56,16 @@ watchDebounced(
       </div>
       <br />
       <div>
-        <TablePagination :page="Number(query.page)" :items-per-page="Number(services?.meta?.perPage)"
-          :total-items="Number(services?.meta?.total)" @update:page="(p) => {
-          query.page = p
-        }
-          " />
+        <TablePagination
+          :page="Number(query.page)"
+          :items-per-page="Number(services?.meta?.perPage)"
+          :total-items="Number(services?.meta?.total)"
+          @update:page="
+            (p) => {
+              query.page = p
+            }
+          "
+        />
       </div>
     </VCardItem>
   </VCard>

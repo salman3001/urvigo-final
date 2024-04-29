@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPageProps, IPaginatedModel } from '#helpers/types'
+import type { IPageProps, IPaginatedModel } from '#helpers/types'
 import type Review from '#models/review'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'

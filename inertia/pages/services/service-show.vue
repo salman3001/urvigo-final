@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { IPageProps } from '#helpers/types'
-import Service from '#models/service'
+import type { IPageProps } from '#helpers/types'
+import type Service from '#models/service'
 import { Link, router, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { ref } from 'vue'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Review from '#models/review'
-import { format } from 'date-fns';
+import type Review from '#models/review'
+import { format } from 'date-fns'
 import { VCardSubtitle } from 'vuetify/components'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
@@ -19,8 +19,11 @@ const getImageUrl = useGetImageUrl()
       <VCardText class="">
         <!-- User Avatar -->
         <div class="d-flex gap-2">
-          <VAvatar size="50" class="avatar-center"
-            :image="getImageUrl(review?.user?.profile?.avatar?.thumbnailUrl, dummyAvatar)" />
+          <VAvatar
+            size="50"
+            class="avatar-center"
+            :image="getImageUrl(review?.user?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+          />
           <div class="me-2 mb-2">
             <VCardTitle class="pa-0">
               {{ review?.user?.firstName + ' ' + review?.user?.lastName }}

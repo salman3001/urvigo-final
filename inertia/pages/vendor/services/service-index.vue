@@ -5,7 +5,7 @@ import TablePagination from '~/@core/components/TablePagination.vue'
 import type Service from '../../../../app/models/service'
 import type { IPaginatedModel } from '../../../../app/helpers/types'
 import type ServiceCategory from '../../../../app/models/service_category'
-import ServiceSubcategory from '../../../../app/models/service_subcategory'
+import type ServiceSubcategory from '../../../../app/models/service_subcategory'
 import ModalConfirm from '~/components/modal/ModalConfirm.vue'
 import { format } from 'date-fns'
 
@@ -89,16 +89,36 @@ const updateStatusForm = useForm({
         <!-- 👉 Filters -->
         <VCardText>
           <div class="d-flex justify-sm-space-between justify-start flex-wrap gap-4">
-            <AppTextField v-model="query.search" placeholder="Search Service"
-              style="max-inline-size: 200px; min-inline-size: 200px" label="Search" />
+            <AppTextField
+              v-model="query.search"
+              placeholder="Search Service"
+              style="max-inline-size: 200px; min-inline-size: 200px"
+              label="Search"
+            />
 
             <div class="d-flex gap-x-4 align-center">
-              <AppSelect v-model="query.serviceCategoryId" :items="[...categories, { name: 'None', id: '' }]"
-                item-title="name" item-value="id" label="Categories" style="min-inline-size: 260px" />
-              <AppSelect v-model="query.serviceSubcategoryId" :items="[...subcategories, { name: 'None', id: '' }]"
-                item-title="name" item-value="id" label="Sub Categories" style="min-inline-size: 260px" />
-              <AppSelect v-model="query.perPage" style="min-inline-size: 6.25rem" :items="[5, 10, 20, 50, 100]"
-                label="Per Page" />
+              <AppSelect
+                v-model="query.serviceCategoryId"
+                :items="[...categories, { name: 'None', id: '' }]"
+                item-title="name"
+                item-value="id"
+                label="Categories"
+                style="min-inline-size: 260px"
+              />
+              <AppSelect
+                v-model="query.serviceSubcategoryId"
+                :items="[...subcategories, { name: 'None', id: '' }]"
+                item-title="name"
+                item-value="id"
+                label="Sub Categories"
+                style="min-inline-size: 260px"
+              />
+              <AppSelect
+                v-model="query.perPage"
+                style="min-inline-size: 6.25rem"
+                :items="[5, 10, 20, 50, 100]"
+                label="Per Page"
+              />
               <!-- <VBtn
               variant="tonal"
               color="secondary"
@@ -112,9 +132,16 @@ const updateStatusForm = useForm({
         <VDivider />
 
         <!-- 👉 Order Table -->
-        <VDataTableServer v-model:items-per-page="query.perPage!" v-model:page="query.page" :headers="headers"
-          :items="services?.data" item-value="order" :items-length="services?.meta?.total!" show-select
-          class="text-no-wrap">
+        <VDataTableServer
+          v-model:items-per-page="query.perPage!"
+          v-model:page="query.page"
+          :headers="headers"
+          :items="services?.data"
+          item-value="order"
+          :items-length="services?.meta?.total!"
+          show-select
+          class="text-no-wrap"
+        >
           <!-- Order ID -->
           <template #item.id="{ item }">
             <Link :href="routes('web.booking.show', [item.id])"> #{{ item.id }} </Link>
@@ -154,7 +181,14 @@ const updateStatusForm = useForm({
           <!-- tags -->
 
           <template #item.tags="{ item }">
-            <VChip v-for="tag in item?.tags" label size="small" :text="tag.name" color="info" :key="tag.id" />
+            <VChip
+              v-for="tag in item?.tags"
+              label
+              size="small"
+              :text="tag.name"
+              color="info"
+              :key="tag.id"
+            />
           </template>
 
           <!-- Status -->
@@ -171,29 +205,33 @@ const updateStatusForm = useForm({
               <VMenu activator="parent">
                 <VList class="text-primary">
                   <Link :href="routes('vendor.service.show', [item.slug])">
-                  <VListItem value="view">
-                    <VIcon icon="tabler-eye" />&nbsp; View
-                  </VListItem>
+                    <VListItem value="view"> <VIcon icon="tabler-eye" />&nbsp; View </VListItem>
                   </Link>
                   <Link :href="routes('vendor.service.edit', [item.slug])">
-                  <VListItem value="view">
-                    <VIcon icon="tabler-eye" />&nbsp; Edit
-                  </VListItem>
+                    <VListItem value="view"> <VIcon icon="tabler-eye" />&nbsp; Edit </VListItem>
                   </Link>
-                  <VListItem :value="item.isActive === true ? 'Deactivate' : 'Activate'" @click="() => {
-                updateStatusForm.service.isActive = item.isActive === true ? false : true
-                selectedServiceId = item.id
-                confirmModal = true
-              }
-              ">
+                  <VListItem
+                    :value="item.isActive === true ? 'Deactivate' : 'Activate'"
+                    @click="
+                      () => {
+                        updateStatusForm.service.isActive = item.isActive === true ? false : true
+                        selectedServiceId = item.id
+                        confirmModal = true
+                      }
+                    "
+                  >
                     <VIcon icon="tabler-alert-circle" />&nbsp;
                     {{ item.isActive === true ? 'Deactivate' : 'Activate' }}
                   </VListItem>
-                  <VListItem value="delete" @click="() => {
-                selectedServiceId = item.id
-                deletModal = true
-              }
-              ">
+                  <VListItem
+                    value="delete"
+                    @click="
+                      () => {
+                        selectedServiceId = item.id
+                        deletModal = true
+                      }
+                    "
+                  >
                     <VIcon icon="tabler-trash" />&nbsp; Delete
                   </VListItem>
                 </VList>
@@ -204,38 +242,53 @@ const updateStatusForm = useForm({
           <!-- pagination -->
 
           <template #bottom>
-            <TablePagination :page="Number(query.page)" :items-per-page="Number(services?.meta?.perPage)"
-              :total-items="Number(services?.meta?.total)" @update:page="(p) => {
-                query.page = p
-              }
-              " />
+            <TablePagination
+              :page="Number(query.page)"
+              :items-per-page="Number(services?.meta?.perPage)"
+              :total-items="Number(services?.meta?.total)"
+              @update:page="
+                (p) => {
+                  query.page = p
+                }
+              "
+            />
           </template>
         </VDataTableServer>
       </VCard>
     </div>
-    <ModalConfirm v-model:is-visible="confirmModal" title="Update Status"
-      message="Change status of the service are your sure? " @confirmed="() => {
-                updateStatusForm.put(routes('vendor.service.edit.post', [selectedServiceId || 0]), {
-                  onSuccess: () => {
-                    router.reload({
-                      only: ['services'],
-                      data: query,
-                      replace: true,
-                    })
-                    confirmModal = false
-                  },
-                })
-              }
-              " />
-    <ModalConfirm v-model:is-visible="deletModal" title="Delete Service"
-      message="Deleting this service, are your sure? " @confirmed="() => {
-                router.visit(routes('vendor.service.destroy', [selectedServiceId || 0]), {
-                  only: ['services'],
-                  method: 'delete',
-                  replace: true,
-                })
-              }
-              " />
+    <ModalConfirm
+      v-model:is-visible="confirmModal"
+      title="Update Status"
+      message="Change status of the service are your sure? "
+      @confirmed="
+        () => {
+          updateStatusForm.put(routes('vendor.service.edit.post', [selectedServiceId || 0]), {
+            onSuccess: () => {
+              router.reload({
+                only: ['services'],
+                data: query,
+                replace: true,
+              })
+              confirmModal = false
+            },
+          })
+        }
+      "
+    />
+    <ModalConfirm
+      v-model:is-visible="deletModal"
+      title="Delete Service"
+      message="Deleting this service, are your sure? "
+      @confirmed="
+        () => {
+          router.visit(routes('vendor.service.destroy', [selectedServiceId || 0]), {
+            only: ['services'],
+            method: 'delete',
+            replace: true,
+          })
+        }
+      "
+    />
   </VContainer>
   <br />
   <br />

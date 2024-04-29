@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPageProps } from '#helpers/types'
+import type { IPageProps } from '#helpers/types'
 import { usePage } from '@inertiajs/vue3'
 import { computed, onMounted } from 'vue'
 import { useTheme } from 'vuetify'

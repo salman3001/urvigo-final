@@ -8,9 +8,9 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { IPaginatedModel } from '#helpers/types'
+import type { IPaginatedModel } from '#helpers/types'
 import type Bid from '#models/bid'
-import ServiceRequirement from '#models/service_requirement'
+import type ServiceRequirement from '#models/service_requirement'
 import { router } from '@inertiajs/vue3'
 import { onMounted, reactive, ref, watch } from 'vue'
 import TablePagination from '~/@core/components/TablePagination.vue'
@@ -135,13 +135,21 @@ onMounted(() => {
             <p>You haven't accepted any bid yet. Please accept a bid</p>
             <br />
           </div>
-          <ProposalCard v-else :accepted="true" :bid="acceptedBid" @create-chat="createChat"
-            :any-bid-accepted="acceptedBid ? true : false" :requirement-id="requirement.id" @bid-rejected="refreshData"
-            @review="(v) => {
-        selectedBid = v
-        bidDetailModal = true
-      }
-        " />
+          <ProposalCard
+            v-else
+            :accepted="true"
+            :bid="acceptedBid"
+            @create-chat="createChat"
+            :any-bid-accepted="acceptedBid ? true : false"
+            :requirement-id="requirement.id"
+            @bid-rejected="refreshData"
+            @review="
+              (v) => {
+                selectedBid = v
+                bidDetailModal = true
+              }
+            "
+          />
         </div>
         <br />
         <br />
@@ -151,8 +159,12 @@ onMounted(() => {
               <h3 class="text-bold">Bids Recieved</h3>
             </div>
             <div class="d-flex items-center gap-2">
-              <VChip color="primary" v-if="bidQuery.orderby_avg_rating == '1'">Sorting by Top Rating</VChip>
-              <VChip color="primary" v-if="bidQuery.orderby_lowest_price == '1'">Sorting by Lowest Price</VChip>
+              <VChip color="primary" v-if="bidQuery.orderby_avg_rating == '1'"
+                >Sorting by Top Rating</VChip
+              >
+              <VChip color="primary" v-if="bidQuery.orderby_lowest_price == '1'"
+                >Sorting by Lowest Price</VChip
+              >
 
               <DropDown name="Filter" left-icon="tabler-filter">
                 <v-list-item @click="sortByVendorRating">
@@ -173,32 +185,51 @@ onMounted(() => {
             <div v-else-if="recivedBids?.data!?.length < 1">No Bids Recieved..</div>
             <VRow v-else class="row gap-100">
               <VCol v-for="bid in recivedBids?.data" cols="12" sm="6" md="4" lg="3">
-                <ProposalCard :accepted="false" :bid="bid" :any-bid-accepted="acceptedBid ? true : false"
-                  @bid-accpted="refreshData" @create-chat="" @review="(v) => {
-        selectedBid = v
-        bidDetailModal = true
-      }
-        " />
+                <ProposalCard
+                  :accepted="false"
+                  :bid="bid"
+                  :any-bid-accepted="acceptedBid ? true : false"
+                  @bid-accpted="refreshData"
+                  @create-chat=""
+                  @review="
+                    (v) => {
+                      selectedBid = v
+                      bidDetailModal = true
+                    }
+                  "
+                />
               </VCol>
             </VRow>
             <br />
             <br />
-            <TablePagination :page="Number(bidQuery.page)" :items-per-page="Number(bidQuery?.perPage)"
-              :total-items="Number(recivedBids?.meta?.total)" @update:page="(p) => {
-        bidQuery.page = p
-      }
-        " />
+            <TablePagination
+              :page="Number(bidQuery.page)"
+              :items-per-page="Number(bidQuery?.perPage)"
+              :total-items="Number(recivedBids?.meta?.total)"
+              @update:page="
+                (p) => {
+                  bidQuery.page = p
+                }
+              "
+            />
           </div>
         </div>
       </div>
     </div>
-    <ModalBidDetail v-model="bidDetailModal" :accepted-bid="acceptedBid!" :service-requirement="requirement"
-      @create-chat="createChat" @negotiated="() => {
-        bidDetailModal = false
-        getRecievedBids(routes('api.requirements.show_bids', [props.requirement.id]), {
-          params: bidQuery,
-        })
-      }
-        " :selected-bid="selectedBid!" />
+    <ModalBidDetail
+      v-model="bidDetailModal"
+      :accepted-bid="acceptedBid!"
+      :service-requirement="requirement"
+      @create-chat="createChat"
+      @negotiated="
+        () => {
+          bidDetailModal = false
+          getRecievedBids(routes('api.requirements.show_bids', [props.requirement.id]), {
+            params: bidQuery,
+          })
+        }
+      "
+      :selected-bid="selectedBid!"
+    />
   </VContainer>
 </template>

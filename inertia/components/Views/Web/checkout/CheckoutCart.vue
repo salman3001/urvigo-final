@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import BigNumber from 'bignumber.js'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import { Prop } from '../../../../../app/helpers/types';
-import WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller';
-
+import { Prop } from '../../../../../app/helpers/types'
+import type WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller'
 
 const emits = defineEmits<{
   (e: 'apply-coupon'): void
@@ -35,7 +34,13 @@ const decrementQty = () => {
   <VRow>
     <VCol cols="12" lg="8">
       <!-- 👉 Offers alert -->
-      <VAlert type="success" variant="tonal" icon="tabler-percentage" title="Available Offer" closable>
+      <VAlert
+        type="success"
+        variant="tonal"
+        icon="tabler-percentage"
+        title="Available Offer"
+        closable
+      >
         <template #text>
           <p class="mb-0">
             - 0% Instant Discount on Bank of America Corp Bank Debit and Credit cards
@@ -49,14 +54,22 @@ const decrementQty = () => {
 
       <!-- 👉 Cart items -->
       <div class="border rounded" v-if="summary">
-        <div class="d-flex align-center gap-4 pa-6 position-relative flex-column flex-sm-row flex-grow-1">
-          <IconBtn class="checkout-item-remove-btn" @click="() => { }">
+        <div
+          class="d-flex align-center gap-4 pa-6 position-relative flex-column flex-sm-row flex-grow-1"
+        >
+          <IconBtn class="checkout-item-remove-btn" @click="() => {}">
             <VIcon size="18" icon="tabler-x" class="text-disabled" />
           </IconBtn>
 
           <div>
-            <VImg width="140"
-              :src="getImageUrl(summary?.bookingDetail?.service_variant?.image?.breakpoints?.thumbnail?.url)" />
+            <VImg
+              width="140"
+              :src="
+                getImageUrl(
+                  summary?.bookingDetail?.service_variant?.image?.breakpoints?.thumbnail?.url
+                )
+              "
+            />
           </div>
 
           <div class="d-flex w-100 flex-column flex-md-row flex-grow-1">
@@ -68,15 +81,20 @@ const decrementQty = () => {
                 <div class="text-disabled">
                   Category
                   <span class="d-inline-block text-primary">
-                    {{ summary?.bookingDetail?.service_variant?.service?.name }}</span>
+                    {{ summary?.bookingDetail?.service_variant?.service?.name }}</span
+                  >
                 </div>
               </div>
               <div>
                 <VChip :color="'success'" label size="small"> Avilable </VChip>
               </div>
 
-              <VRating density="compact" :model-value="summary?.bookingDetail?.service_variant?.service?.avgRating"
-                size="24" readonly />
+              <VRating
+                density="compact"
+                :model-value="summary?.bookingDetail?.service_variant?.service?.avgRating"
+                size="24"
+                readonly
+              />
               <div>
                 <IconBtn color="secondary" icon="tabler-minus" @click="decrementQty" />
                 {{ qty }}
@@ -86,12 +104,18 @@ const decrementQty = () => {
 
             <VSpacer />
 
-            <div class="d-flex flex-column mt-5 text-start text-md-end"
-              :class="$vuetify.display.mdAndDown ? 'gap-2' : 'gap-4'">
+            <div
+              class="d-flex flex-column mt-5 text-start text-md-end"
+              :class="$vuetify.display.mdAndDown ? 'gap-2' : 'gap-4'"
+            >
               <div class="d-flex text-base align-self-md-end">
-                <div class="text-primary">&#x20B9;{{ summary?.bookingDetail?.totalAfterDiscount }}</div>
-                <div v-if="new BigNumber(summary?.bookingDetail?.vendorDiscount).gt(0)"
-                  class="text-decoration-line-through">
+                <div class="text-primary">
+                  &#x20B9;{{ summary?.bookingDetail?.totalAfterDiscount }}
+                </div>
+                <div
+                  v-if="new BigNumber(summary?.bookingDetail?.vendorDiscount).gt(0)"
+                  class="text-decoration-line-through"
+                >
                   &#x20B9;{{ summary?.bookingDetail?.totalWithoutDiscount }}
                 </div>
               </div>
@@ -117,7 +141,9 @@ const decrementQty = () => {
           <div class="text-high-emphasis" v-if="summary">
             <div class="d-flex justify-space-between mb-2">
               <span>Bag Total</span>
-              <span class="text-medium-emphasis">&#x20B9;{{ summary?.bookingDetail?.totalWithoutDiscount }}</span>
+              <span class="text-medium-emphasis"
+                >&#x20B9;{{ summary?.bookingDetail?.totalWithoutDiscount }}</span
+              >
             </div>
 
             <div class="d-flex justify-space-between mb-2">
@@ -128,14 +154,16 @@ const decrementQty = () => {
             <div class="d-flex justify-space-between mb-2">
               <span>Coupon Discount</span>
               <span v-if="new BigNumber(summary?.bookingDetail?.couponDiscount).gt(0)">{{
-        summary?.bookingDetail?.couponDiscount
-      }}</span>
+                summary?.bookingDetail?.couponDiscount
+              }}</span>
               <a href="#" v-else @click.prevent="$emit('apply-coupon')">Apply Coupon</a>
             </div>
 
             <div class="d-flex justify-space-between mb-2">
               <span>Order Total</span>
-              <span class="text-medium-emphasis">&#x20B9;{{ summary?.bookingDetail?.grandTotal }}</span>
+              <span class="text-medium-emphasis"
+                >&#x20B9;{{ summary?.bookingDetail?.grandTotal }}</span
+              >
             </div>
 
             <div class="d-flex justify-space-between">

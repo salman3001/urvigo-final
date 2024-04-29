@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Coupon from '#models/coupon'
+import type Coupon from '#models/coupon'
 import BigNumber from 'bignumber.js'
 
 defineProps<{

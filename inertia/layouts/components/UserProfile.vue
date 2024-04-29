@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
 import avatar from '~/assets/images/dummy-avatar.webp'
 import useAuth from '~/composables/useAuth'
 import useGetImageUrl from '~/composables/useGetImageUrl'
@@ -32,104 +32,98 @@ const { user, isVendor } = useAuth()
             <VListItemTitle class="font-weight-semibold">
               {{ user?.firstName + ' ' + user?.lastName }}
             </VListItemTitle>
-            <VListItemSubtitle><span class="normalcase">{{ user?.userType }}</span></VListItemSubtitle>
+            <VListItemSubtitle
+              ><span class="normalcase">{{ user?.userType }}</span></VListItemSubtitle
+            >
           </VListItem>
 
           <VDivider class="my-2" />
 
           <!-- 👉 dashboard -->
           <Link :href="routes('vendor.dashboard')" v-if="isVendor()">
-          <VListItem link>
-
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-brand-envato" size="22" />
-            </template>
-            <VListItemTitle>Dashboard</VListItemTitle>
-          </VListItem>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-brand-envato" size="22" />
+              </template>
+              <VListItemTitle>Dashboard</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 Profile -->
           <Link :href="routes('web.account.profile')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-user" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-user" size="22" />
-            </template>
-
-            <VListItemTitle>Profile</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Profile</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 chat -->
           <Link :href="routes('web.chat')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-mail-opened" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-mail-opened" size="22" />
-            </template>
-
-            <VListItemTitle>Messages</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Messages</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 Settings -->
           <Link :href="routes('web.account.settings')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-settings" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-settings" size="22" />
-            </template>
-
-            <VListItemTitle>Settings</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Settings</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 Bookings -->
           <Link :href="routes('web.booking.list')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-shopping-cart" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-shopping-cart" size="22" />
-            </template>
-
-            <VListItemTitle>Booking</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Booking</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 Custom Bookings -->
           <Link :href="routes('web.custom_booking.list')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-shopping-cart" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-shopping-cart" size="22" />
-            </template>
-
-            <VListItemTitle>Custom Booking</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Custom Booking</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 Wishlist -->
           <Link :href="routes('web.account.wishlist')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-heart" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-heart" size="22" />
-            </template>
-
-            <VListItemTitle>Wishlist</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Wishlist</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- 👉 Notification -->
           <Link :href="routes('web.account.notifications')">
-          <VListItem link>
+            <VListItem link>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-bell" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-bell" size="22" />
-            </template>
-
-            <VListItemTitle>Notification</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Notification</VListItemTitle>
+            </VListItem>
           </Link>
 
           <!-- Divider -->
@@ -137,14 +131,13 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Logout -->
           <Link :href="routes('web.auth.logout')">
-          <VListItem>
+            <VListItem>
+              <template #prepend>
+                <VIcon class="me-2" icon="tabler-logout" size="22" />
+              </template>
 
-            <template #prepend>
-              <VIcon class="me-2" icon="tabler-logout" size="22" />
-            </template>
-
-            <VListItemTitle>Logout</VListItemTitle>
-          </VListItem>
+              <VListItemTitle>Logout</VListItemTitle>
+            </VListItem>
           </Link>
         </VList>
       </VMenu>

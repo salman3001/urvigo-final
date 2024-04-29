@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BigNumber from 'bignumber.js'
+import { ref } from 'vue'
 import routes from '~/utils/routes'
 const qty = ref(1)
 

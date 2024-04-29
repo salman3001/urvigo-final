@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { IPageProps, IPaginatedModel } from '#helpers/types'
-import Service from '#models/service'
-import ServiceCategory from '#models/service_category'
+import type { IPageProps, IPaginatedModel } from '#helpers/types'
+import type Service from '#models/service'
+import type ServiceCategory from '#models/service_category'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 import { computed, reactive } from 'vue'

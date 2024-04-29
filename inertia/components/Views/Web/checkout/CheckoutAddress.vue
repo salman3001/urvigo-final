@@ -6,12 +6,11 @@ import googleHome from '~/assets/images/pages/google-home.png'
 import iphone11 from '~/assets/images/pages/iphone-11.png'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import { Prop } from '../../../../../app/helpers/types'
-import WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller'
+import type WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller'
 
 interface Props {
   summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
 }
-
 
 const getImageUrl = useGetImageUrl()
 
@@ -111,8 +110,11 @@ const resolveDeliveryBadgeData: any = {
       <h6 class="text-h6 mb-4">Select your preferable address</h6>
 
       <!-- 👉 Address custom input -->
-      <CustomRadios v-model:selected-radio="checkoutData.deliveryAddress" :radio-content="checkoutData.addresses"
-        :grid-column="{ cols: '12', sm: '6' }">
+      <CustomRadios
+        v-model:selected-radio="checkoutData.deliveryAddress"
+        :radio-content="checkoutData.addresses"
+        :grid-column="{ cols: '12', sm: '6' }"
+      >
         <template #default="{ item }">
           <div class="w-100">
             <div class="d-flex justify-space-between mb-3">
@@ -120,7 +122,12 @@ const resolveDeliveryBadgeData: any = {
                 {{ item.title }}
               </h6>
 
-              <VChip :color="resolveAddressBadgeColor[item.value]" label size="small" class="text-capitalize">
+              <VChip
+                :color="resolveAddressBadgeColor[item.value]"
+                label
+                size="small"
+                class="text-capitalize"
+              >
                 {{ item.value }}
               </VChip>
             </div>
@@ -139,7 +146,11 @@ const resolveDeliveryBadgeData: any = {
       </CustomRadios>
 
       <!-- 👉 Add New Address -->
-      <VBtn variant="tonal" class="mt-4 mb-6" @click="isEditAddressDialogVisible = !isEditAddressDialogVisible">
+      <VBtn
+        variant="tonal"
+        class="mt-4 mb-6"
+        @click="isEditAddressDialogVisible = !isEditAddressDialogVisible"
+      >
         Add New Address
       </VBtn>
 
@@ -147,18 +158,20 @@ const resolveDeliveryBadgeData: any = {
       <h6 class="text-h6 mb-4">Choose Delivery Speed</h6>
 
       <!-- 👉 Delivery options custom input -->
-      <CustomRadiosWithIcon v-model:selected-radio="checkoutData.deliverySpeed" :radio-content="deliveryOptions"
-        :grid-column="{ cols: '12', sm: '4' }">
-
+      <CustomRadiosWithIcon
+        v-model:selected-radio="checkoutData.deliverySpeed"
+        :radio-content="deliveryOptions"
+        :grid-column="{ cols: '12', sm: '4' }"
+      >
         <template #default="{ item }">
           <div class="d-flex flex-column align-center gap-2 w-100">
             <div class="d-flex justify-end w-100 mb-n3">
               <VChip :color="resolveDeliveryBadgeData[item.value].color" size="small" label>
                 {{
-        resolveDeliveryBadgeData[item.value].price === 'Free'
-          ? resolveDeliveryBadgeData[item.value].price
-          : `$${resolveDeliveryBadgeData[item.value].price}`
-      }}
+                  resolveDeliveryBadgeData[item.value].price === 'Free'
+                    ? resolveDeliveryBadgeData[item.value].price
+                    : `$${resolveDeliveryBadgeData[item.value].price}`
+                }}
               </VChip>
             </div>
 
@@ -183,11 +196,17 @@ const resolveDeliveryBadgeData: any = {
 
           <VList class="card-list">
             <VListItem>
-
               <template #prepend>
-                <img height="70" width="60"
-                  :src="getImageUrl(summary?.bookingDetail.service_variant?.image?.breakpoints?.thumbnail?.url)"
-                  class="me-4" />
+                <img
+                  height="70"
+                  width="60"
+                  :src="
+                    getImageUrl(
+                      summary?.bookingDetail.service_variant?.image?.breakpoints?.thumbnail?.url
+                    )
+                  "
+                  class="me-4"
+                />
               </template>
 
               <div class="text-body-1">
@@ -218,7 +237,9 @@ const resolveDeliveryBadgeData: any = {
                 <div class="text-decoration-line-through text-disabled me-2">&#x20B9;5.00</div>
                 <VChip size="small" color="success"> FREE </VChip>
               </div>
-              <span v-else>&#x20B9;{{ resolveDeliveryBadgeData[checkoutData.deliverySpeed].price }}.00</span>
+              <span v-else
+                >&#x20B9;{{ resolveDeliveryBadgeData[checkoutData.deliverySpeed].price }}.00</span
+              >
             </div>
           </div>
         </VCardText>
@@ -227,7 +248,9 @@ const resolveDeliveryBadgeData: any = {
 
         <VCardText class="d-flex align-center justify-space-between text-high-emphasis">
           <span class="text-base font-weight-medium">Total</span>
-          <span class="text-base font-weight-medium"> &#x20B9;{{ summary?.bookingDetail?.grandTotal }} </span>
+          <span class="text-base font-weight-medium">
+            &#x20B9;{{ summary?.bookingDetail?.grandTotal }}
+          </span>
         </VCardText>
       </VCard>
 

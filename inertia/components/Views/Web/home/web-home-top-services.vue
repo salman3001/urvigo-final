@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Service from '#models/service'
+import type Service from '#models/service'
 import { Link } from '@inertiajs/vue3'
 import ServiceCard from '~/components/ServiceCard.vue'
 import routes from '~/utils/routes'

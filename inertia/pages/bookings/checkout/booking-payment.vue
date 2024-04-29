@@ -7,8 +7,8 @@ export default {
 
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
-import WebBookingsController from '../../../../app/controllers/web/web_bookings_controller'
-import { Prop } from '../../../../app/helpers/types'
+import type WebBookingsController from '../../../../app/controllers/web/web_bookings_controller'
+import type { Prop } from '../../../../app/helpers/types'
 import routes from '~/utils/routes'
 import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
 import CheckoutPayment from '~/components/Views/Web/checkout/CheckoutPayment.vue'

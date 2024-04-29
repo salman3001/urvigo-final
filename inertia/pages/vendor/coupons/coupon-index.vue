@@ -1,6 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/VendorLayout.vue'
-import { VDataTableServer, VImg } from 'vuetify/components'
+import { VDataTableServer } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import type { IPaginatedModel } from '../../../../app/helpers/types'
 import ModalConfirm from '~/components/modal/ModalConfirm.vue'
@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 import type Coupon from '../../../../app/models/coupon'
 
 export default {
-    layout: Layout,
+  layout: Layout,
 }
 </script>
 
@@ -21,185 +21,206 @@ import { Link, router } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 
 defineProps<{
-    coupons: IPaginatedModel<Coupon>
+  coupons: IPaginatedModel<Coupon>
 }>()
 
 const selectedCoupnId = ref<number>()
 const deletModal = ref(false)
 
 const query = reactive({
-    perPage: 20,
-    page: 1,
-    orderBy: 'created_at:desc',
-    search: '',
+  perPage: 20,
+  page: 1,
+  orderBy: 'created_at:desc',
+  search: '',
 })
-
 
 // Data table Headers
 const headers = [
-    { title: 'id', key: 'id' },
-    { title: 'name', key: 'name' },
-    { title: 'Discount Type', key: 'discountType' },
-    { title: 'Discount Flat', key: 'discountFlat' },
-    { title: 'Discount Percentage', key: 'discountPercentage' },
-    { title: 'Expired At ', key: 'expiredAt' },
-    { title: 'Valid From', key: 'status' },
-    { title: 'Action', key: 'actions' },
+  { title: 'id', key: 'id' },
+  { title: 'name', key: 'name' },
+  { title: 'Discount Type', key: 'discountType' },
+  { title: 'Discount Flat', key: 'discountFlat' },
+  { title: 'Discount Percentage', key: 'discountPercentage' },
+  { title: 'Expired At ', key: 'expiredAt' },
+  { title: 'Valid From', key: 'status' },
+  { title: 'Action', key: 'actions' },
 ]
 
 watchDebounced(
-    query,
-    () => {
-        router.reload({
-            data: query,
-            replace: true,
-        })
-    },
-    {
-        debounce: 500,
-        maxWait: 1000,
-    }
+  query,
+  () => {
+    router.reload({
+      data: query,
+      replace: true,
+    })
+  },
+  {
+    debounce: 500,
+    maxWait: 1000,
+  }
 )
-
 </script>
 
 <template>
-    <VContainer>
-        <div>
-            <VCard>
-                <!-- 👉 Filters -->
-                <VCardText>
-                    <div class="d-flex justify-sm-space-between justify-start flex-wrap gap-4">
-                        <AppTextField v-model="query.search" placeholder="Search Coupons"
-                            style="max-inline-size: 200px; min-inline-size: 200px" label="Search" />
+  <VContainer>
+    <div>
+      <VCard>
+        <!-- 👉 Filters -->
+        <VCardText>
+          <div class="d-flex justify-sm-space-between justify-start flex-wrap gap-4">
+            <AppTextField
+              v-model="query.search"
+              placeholder="Search Coupons"
+              style="max-inline-size: 200px; min-inline-size: 200px"
+              label="Search"
+            />
 
-                        <div class="d-flex gap-x-4 align-center">
-                            <AppSelect v-model="query.perPage" style="min-inline-size: 6.25rem"
-                                :items="[5, 10, 20, 50, 100]" label="Per Page" />
-                            <!-- <VBtn
+            <div class="d-flex gap-x-4 align-center">
+              <AppSelect
+                v-model="query.perPage"
+                style="min-inline-size: 6.25rem"
+                :items="[5, 10, 20, 50, 100]"
+                label="Per Page"
+              />
+              <!-- <VBtn
               variant="tonal"
               color="secondary"
               prepend-icon="tabler-upload"
               text="Export"
             /> -->
-                        </div>
-                    </div>
-                </VCardText>
+            </div>
+          </div>
+        </VCardText>
 
-                <VDivider />
+        <VDivider />
 
-                <!-- 👉 Order Table -->
-                <VDataTableServer v-model:items-per-page="query.perPage!" v-model:page="query.page" :headers="headers"
-                    :items="coupons?.data" item-value="order" :items-length="coupons?.meta?.total!" show-select
-                    class="text-no-wrap">
-                    <!-- Order ID -->
-                    <template #item.id="{ item }">
-                        <Link :href="routes('web.booking.show', [item.id])"> #{{ item.id }} </Link>
-                    </template>
+        <!-- 👉 Order Table -->
+        <VDataTableServer
+          v-model:items-per-page="query.perPage!"
+          v-model:page="query.page"
+          :headers="headers"
+          :items="coupons?.data"
+          item-value="order"
+          :items-length="coupons?.meta?.total!"
+          show-select
+          class="text-no-wrap"
+        >
+          <!-- Order ID -->
+          <template #item.id="{ item }">
+            <Link :href="routes('web.booking.show', [item.id])"> #{{ item.id }} </Link>
+          </template>
 
-                    <!-- name -->
+          <!-- name -->
 
-                    <template #item.name="{ item }">
-                        <div class="d-flex align-center gap-2 justify-start">
-                            <!-- <div style="height: 30px; width: 50px">
+          <template #item.name="{ item }">
+            <div class="d-flex align-center gap-2 justify-start">
+              <!-- <div style="height: 30px; width: 50px">
                 <VImg :src="getImageUrl(item.thumbnail?.thumbnailUrl)" width="100%" />
               </div> -->
-                            <span>
-                                {{ item.name }}
-                            </span>
-                        </div>
-                    </template>
+              <span>
+                {{ item.name }}
+              </span>
+            </div>
+          </template>
 
+          <!-- expire -->
 
-                    <!-- expire -->
+          <template #item.expiredAt="{ item }">
+            {{ format(item.expiredAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
+          </template>
 
-                    <template #item.expiredAt="{ item }">
-                        {{ format(item.expiredAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
-                    </template>
+          <!-- valid -->
 
+          <template #item.validFrom="{ item }">
+            {{ format(item.validFrom as unknown as string, 'dd/MM/yyyy HH:mm') }}
+          </template>
 
-                    <!-- valid -->
+          <!-- discount Type -->
 
-                    <template #item.validFrom="{ item }">
-                        {{ format(item.validFrom as unknown as string, 'dd/MM/yyyy HH:mm') }}
-                    </template>
+          <template #item.subcategory="{ item }">
+            <VChip label size="small" :text="item.discountType" color="info" />
+          </template>
 
-                    <!-- discount Type -->
+          <!-- discount Flat -->
 
-                    <template #item.subcategory="{ item }">
-                        <VChip label size="small" :text="item.discountType" color="info" />
-                    </template>
+          <template #item.discountFlat="{ item }"> &#x20B9;{{ item.discountFlat }} </template>
 
-                    <!-- discount Flat -->
+          <!-- discount Percentage -->
 
-                    <template #item.discountFlat="{ item }">
-                        &#x20B9;{{ item.discountFlat }}
-                    </template>
+          <template #item.discountPercentage="{ item }">
+            &#x20B9;{{ item.discountPercentage }}%
+          </template>
 
-                    <!-- discount Percentage -->
+          <!-- Actions -->
 
-                    <template #item.discountPercentage="{ item }">
-                        &#x20B9;{{ item.discountPercentage }}%
-                    </template>
+          <template #item.actions="{ item }">
+            <IconBtn>
+              <VIcon icon="tabler-dots-vertical" />
+              <VMenu activator="parent">
+                <VList class="text-primary">
+                  <Link :href="routes('vendor.coupon.edit', [item.id])">
+                    <VListItem value="view"> <VIcon icon="tabler-eye" />&nbsp; Edit </VListItem>
+                  </Link>
 
-                    <!-- Actions -->
+                  <VListItem
+                    value="delete"
+                    @click="
+                      () => {
+                        selectedCoupnId = item.id
+                        deletModal = true
+                      }
+                    "
+                  >
+                    <VIcon icon="tabler-trash" />&nbsp; Delete
+                  </VListItem>
+                </VList>
+              </VMenu>
+            </IconBtn>
+          </template>
 
-                    <template #item.actions="{ item }">
-                        <IconBtn>
-                            <VIcon icon="tabler-dots-vertical" />
-                            <VMenu activator="parent">
-                                <VList class="text-primary">
-                                    <Link :href="routes('vendor.coupon.edit', [item.id])">
-                                    <VListItem value="view">
-                                        <VIcon icon="tabler-eye" />&nbsp; Edit
-                                    </VListItem>
-                                    </Link>
+          <!-- pagination -->
 
-                                    <VListItem value="delete" @click="() => {
-                            selectedCoupnId = item.id
-                            deletModal = true
-                        }
-                            ">
-                                        <VIcon icon="tabler-trash" />&nbsp; Delete
-                                    </VListItem>
-                                </VList>
-                            </VMenu>
-                        </IconBtn>
-                    </template>
-
-                    <!-- pagination -->
-
-                    <template #bottom>
-                        <TablePagination :page="Number(query.page)" :items-per-page="Number(coupons?.meta?.perPage)"
-                            :total-items="Number(coupons?.meta?.total)" @update:page="(p) => {
-                            query.page = p
-                        }
-                            " />
-                    </template>
-                </VDataTableServer>
-            </VCard>
-        </div>
-        <ModalConfirm v-model:is-visible="deletModal" title="Delete Service"
-            message="Deleting this service, are your sure? " @confirmed="() => {
-                            router.visit(routes('vendor.coupon.delete', [selectedCoupnId || 0]), {
-                                only: ['coupons'],
-                                method: 'delete',
-                                replace: true,
-                            })
-                        }
-                            " />
-    </VContainer>
-    <br />
-    <br />
+          <template #bottom>
+            <TablePagination
+              :page="Number(query.page)"
+              :items-per-page="Number(coupons?.meta?.perPage)"
+              :total-items="Number(coupons?.meta?.total)"
+              @update:page="
+                (p) => {
+                  query.page = p
+                }
+              "
+            />
+          </template>
+        </VDataTableServer>
+      </VCard>
+    </div>
+    <ModalConfirm
+      v-model:is-visible="deletModal"
+      title="Delete Service"
+      message="Deleting this service, are your sure? "
+      @confirmed="
+        () => {
+          router.visit(routes('vendor.coupon.delete', [selectedCoupnId || 0]), {
+            only: ['coupons'],
+            method: 'delete',
+            replace: true,
+          })
+        }
+      "
+    />
+  </VContainer>
+  <br />
+  <br />
 </template>
 
 <style lang="scss" scoped>
 .customer-title:hover {
-    color: rgba(var(--v-theme-primary)) !important;
+  color: rgba(var(--v-theme-primary)) !important;
 }
 
 .product-widget {
-    border-block-end: 1px solid rgba(var(--v-theme-on-surface), var(--v-border-opacity));
-    padding-block-end: 1rem;
+  border-block-end: 1px solid rgba(var(--v-theme-on-surface), var(--v-border-opacity));
+  padding-block-end: 1rem;
 }
 </style>

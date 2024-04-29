@@ -2,7 +2,7 @@
 import Layout from '~/layouts/default.vue'
 import { VDataTableServer } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
-import BidBooking from '#models/bid_booking'
+import type BidBooking from '#models/bid_booking'
 import { format } from 'date-fns'
 
 export default {
@@ -13,7 +13,7 @@ export default {
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { OrderStatus } from '../../../app/helpers/enums'
-import { IPaginatedModel } from '../../../app/helpers/types'
+import type { IPaginatedModel } from '../../../app/helpers/types'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import routes from '~/utils/routes'
@@ -83,11 +83,18 @@ watchDebounced(query, () => {
         <!-- 👉 Filters -->
         <VCardText>
           <div class="d-flex justify-sm-space-between justify-start flex-wrap gap-4">
-            <AppTextField v-model="query.search" placeholder="Search Booking"
-              style="max-inline-size: 200px; min-inline-size: 200px" />
+            <AppTextField
+              v-model="query.search"
+              placeholder="Search Booking"
+              style="max-inline-size: 200px; min-inline-size: 200px"
+            />
 
             <div class="d-flex gap-x-4 align-center">
-              <AppSelect v-model="query.perPage" style="min-inline-size: 6.25rem" :items="[5, 10, 20, 50, 100]" />
+              <AppSelect
+                v-model="query.perPage"
+                style="min-inline-size: 6.25rem"
+                :items="[5, 10, 20, 50, 100]"
+              />
               <!-- <VBtn
               variant="tonal"
               color="secondary"
@@ -101,9 +108,16 @@ watchDebounced(query, () => {
         <VDivider />
 
         <!-- 👉 Order Table -->
-        <VDataTableServer v-model:items-per-page="query.perPage!" v-model:page="query.page" :headers="headers"
-          :items="bookings?.data" item-value="order" :items-length="bookings?.meta?.total!" show-select
-          class="text-no-wrap">
+        <VDataTableServer
+          v-model:items-per-page="query.perPage!"
+          v-model:page="query.page"
+          :headers="headers"
+          :items="bookings?.data"
+          item-value="order"
+          :items-length="bookings?.meta?.total!"
+          show-select
+          class="text-no-wrap"
+        >
           <!-- Order ID -->
           <template #item.id="{ item }">
             <Link :href="routes('web.custom_booking.show', [item.id])"> #{{ item.id }} </Link>
@@ -129,11 +143,15 @@ watchDebounced(query, () => {
 
               <div class="d-flex flex-column">
                 <div class="text-body-1 font-weight-medium">
-                  <Link :href="routes('web.service_requirement.show', [
-              item.bookingDetail?.serviceRequirement.id,
-            ])
-              " class="text-link">
-                  {{ item.bookingDetail?.serviceRequirement.title }}
+                  <Link
+                    :href="
+                      routes('web.service_requirement.show', [
+                        item.bookingDetail?.serviceRequirement.id,
+                      ])
+                    "
+                    class="text-link"
+                  >
+                    {{ item.bookingDetail?.serviceRequirement.title }}
                   </Link>
                 </div>
               </div>
@@ -143,8 +161,10 @@ watchDebounced(query, () => {
           <!-- Payments -->
 
           <template #item.paymentDetail="{ item }">
-            <div :class="`text-${resolvePaymentStatus(item.paymentDetail?.paymentStatus)?.color}`"
-              class="font-weight-medium d-flex align-center gap-x-2">
+            <div
+              :class="`text-${resolvePaymentStatus(item.paymentDetail?.paymentStatus)?.color}`"
+              class="font-weight-medium d-flex align-center gap-x-2"
+            >
               <VIcon icon="tabler-circle-filled" size="10" />
               <div style="line-height: 22px">
                 {{ resolvePaymentStatus(item?.paymentDetail?.paymentStatus)?.text }}
@@ -181,7 +201,7 @@ watchDebounced(query, () => {
               <VMenu activator="parent">
                 <VList>
                   <Link :href="routes('web.custom_booking.show', [item.id])">
-                  <VListItem value="view"> View </VListItem>
+                    <VListItem value="view"> View </VListItem>
                   </Link>
                 </VList>
               </VMenu>
@@ -191,11 +211,16 @@ watchDebounced(query, () => {
           <!-- pagination -->
 
           <template #bottom>
-            <TablePagination :page="Number(query.page)" :items-per-page="Number(bookings?.meta?.perPage)"
-              :total-items="Number(bookings?.meta?.total)" @update:page="(p) => {
-              query.page = p
-            }
-              " />
+            <TablePagination
+              :page="Number(query.page)"
+              :items-per-page="Number(bookings?.meta?.perPage)"
+              :total-items="Number(bookings?.meta?.total)"
+              @update:page="
+                (p) => {
+                  query.page = p
+                }
+              "
+            />
           </template>
         </VDataTableServer>
       </VCard>
