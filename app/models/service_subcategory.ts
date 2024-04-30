@@ -50,3 +50,6 @@ export default class ServiceSubcategory extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+
+
+export type IServiceSubcategory = ServiceSubcategorys

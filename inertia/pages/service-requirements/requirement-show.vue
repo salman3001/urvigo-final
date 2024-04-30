@@ -9,8 +9,8 @@ export default {
 
 <script setup lang="ts">
 import type { IPaginatedModel } from '#helpers/types'
-import type Bid from '#models/bid'
-import type ServiceRequirement from '#models/service_requirement'
+import type { IBid } from '#models/bid'
+import type { IServiceRequirement } from '#models/service_requirement'
 import { router } from '@inertiajs/vue3'
 import { onMounted, reactive, ref, watch } from 'vue'
 import TablePagination from '~/@core/components/TablePagination.vue'
@@ -22,15 +22,15 @@ import useApiForm from '~/composables/useApiForm'
 import useApiGet from '~/composables/useApiGet'
 
 const props = defineProps<{
-  requirement: ServiceRequirement
-  acceptedBid: Bid
+  requirement: IServiceRequirement
+  acceptedBid: IBid
 }>()
 
 const {
   data: recivedBids,
   exec: getRecievedBids,
   processing: processingRecievedBids,
-} = useApiGet<IPaginatedModel<typeof Bid>>()
+} = useApiGet<IPaginatedModel<IBid>>()
 
 const bidQuery = reactive({
   page: 1,
@@ -41,7 +41,7 @@ const bidQuery = reactive({
 })
 
 const bidDetailModal = ref(false)
-const selectedBid = ref<Bid | null>(null)
+const selectedBid = ref<IBid | null>(null)
 
 const sortByVendorRating = () => {
   const newQuery = {

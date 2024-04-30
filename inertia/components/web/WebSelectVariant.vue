@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DiscountType } from '#helpers/enums'
-import type ServiceVariant from '#models/service_variant'
+import type { IServiceVariant } from '#models/service_variant'
 import { Link, usePage } from '@inertiajs/vue3'
 import BigNumber from 'bignumber.js'
 import { computed, ref } from 'vue'
@@ -14,7 +14,7 @@ const page = usePage<IPageProps<{}>>()
 const user = computed(() => page.props?.user)
 
 const props = defineProps<{
-  variant: ServiceVariant
+  variant: IServiceVariant
   diableBookButton?: boolean
 }>()
 

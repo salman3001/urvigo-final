@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type User from '#models/user'
 import { useForm } from '@inertiajs/vue3'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { emailValidator, requiredValidator } from '~/@core/utils/validators'
@@ -8,9 +7,10 @@ import AvatarInput from '~/components/form/AvatarInput.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
+import type { IUser } from '#models/user'
 
 const props = defineProps<{
-  user: User
+  user: IUser
 }>()
 
 const getImageUrl = useGetImageUrl()

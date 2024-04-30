@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import type { IUser } from '#models/user'
 
 export default {
   layout: Layout,
@@ -7,12 +8,11 @@ export default {
 </script>
 
 <script setup lang="ts">
-import type User from '#models/user'
 import AccountLayout from '~/components/Views/Web/account/AccountLayout.vue'
 import AccountProfile from '~/components/Views/Web/account/AccountProfile.vue'
 
 defineProps<{
-  user: User
+  user: IUser
 }>()
 </script>
 

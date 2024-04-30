@@ -41,3 +41,5 @@ export default class BlogCategory extends compose(BaseModel, Filterable) {
   @manyToMany(() => Blog, { pivotTable: 'blog_categories_pivot' })
   declare blogs: ManyToMany<typeof Blog>
 }
+
+export type IBlogCategory= BlogCategory

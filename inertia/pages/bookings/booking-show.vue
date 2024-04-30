@@ -10,7 +10,7 @@ export default {
 
 <script setup lang="ts">
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import type Booking from '../../../app/models/booking'
+import type { IBooking } from '../../../app/models/booking'
 import { computed } from 'vue'
 
 // const isConfirmDialogVisible = ref(false);
@@ -19,7 +19,7 @@ import { computed } from 'vue'
 const getImagesUrl = useGetImageUrl()
 
 const props = defineProps<{
-  booking: Booking
+  booking: IBooking
 }>()
 
 const bookingData = computed(() => (props.booking ? [props.booking] : []))

@@ -43,3 +43,5 @@ export default class ServiceVariant extends BaseModel {
   })
   declare additionalProperties: Object
 }
+
+export type IServiceVariant = ServiceVariant

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type User from '#models/user'
 import { Link } from '@inertiajs/vue3'
 import VendorProfileHeader from './VendorProfileHeader.vue'
 import routes from '~/utils/routes'
 import { VTabs } from 'vuetify/components'
+import type { IUser } from '#models/user'
 
 defineProps<{
-  vendor: User
+  vendor: IUser
   activeTab: 'profile' | 'services' | 'reviews'
 }>()
 </script>

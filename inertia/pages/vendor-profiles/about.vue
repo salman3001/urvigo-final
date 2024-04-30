@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import type { IUser } from '#models/user'
 
 export default {
   layout: Layout,
@@ -7,12 +8,11 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import type User from '#models/user'
 import VendorProfileAbout from '~/components/Views/Web/vendor-profile/VendorProfileAbout.vue'
 import VendorProfileLayout from '~/components/Views/Web/vendor-profile/VendorProfileLayout.vue'
 
 defineProps<{
-  vendor: User
+  vendor: IUser
 }>()
 </script>
 

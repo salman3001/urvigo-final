@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type ServiceRequirement from '#models/service_requirement'
+import type { IServiceRequirement } from '#models/service_requirement'
 import { Link, usePage } from '@inertiajs/vue3'
 import BigNumber from 'bignumber.js'
 import { differenceInMinutes, format } from 'date-fns'
@@ -10,7 +10,7 @@ import ClientOnly from './client-only.vue'
 import LightBox from './LightBox.vue'
 
 defineProps<{
-  requirement: ServiceRequirement
+  requirement: IServiceRequirement
 }>()
 
 const page = usePage()
@@ -50,9 +50,16 @@ const getImageUrls = useGetImageUrl()
               <div class="d-flex gap-2">
                 <VChip v-if="requirement.urgent" color="error">Urgent Requirment</VChip>
                 <VChip color="warning" v-if="!requirement.acceptedBidId">Active</VChip>
-                <VChip v-else-if="requirement.acceptedBidId != null" color="success">Accepted</VChip>
-                <VChip color="error" v-else-if="differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
-              ">Expired</VChip>
+                <VChip v-else-if="requirement.acceptedBidId != null" color="success"
+                  >Accepted</VChip
+                >
+                <VChip
+                  color="error"
+                  v-else-if="
+                    differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
+                  "
+                  >Expired</VChip
+                >
               </div>
             </div>
 
@@ -91,15 +98,18 @@ const getImageUrls = useGetImageUrl()
               <VIcon icon="tabler-moneybag" /> &nbsp;Avg. Price
               <span>
                 &nbsp; &#x20B9;
-                {{ new BigNumber(requirement.meta?.avgBidPrice || 0).toFixed(2) }}</span>
+                {{ new BigNumber(requirement.meta?.avgBidPrice || 0).toFixed(2) }}</span
+              >
             </VChip>
             <VChip color="secondary">
               <VIcon icon="tabler-circle-check" />&nbsp;Accepted Bid&nbsp;
               <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span>
             </VChip>
-            <Link :href="routes('web.service_requirement.show', [requirement.id])"
-              v-if="currentUrl != routes('web.service_requirement.show', [requirement.id])">
-            <VBtn color="primary"> View Detail </VBtn>
+            <Link
+              :href="routes('web.service_requirement.show', [requirement.id])"
+              v-if="currentUrl != routes('web.service_requirement.show', [requirement.id])"
+            >
+              <VBtn color="primary"> View Detail </VBtn>
             </Link>
           </div>
         </VCardText>

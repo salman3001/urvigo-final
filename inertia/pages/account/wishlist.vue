@@ -7,12 +7,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import type Wishlist from '#models/wishlist'
+import type { IWishlist } from '#models/wishlist'
 import AccountLayout from '~/components/Views/Web/account/AccountLayout.vue'
 import AccountWishlist from '~/components/Views/Web/account/AccountWishlist.vue'
 
 defineProps<{
-  wishlist: Wishlist
+  wishlist: IWishlist
 }>()
 </script>
 

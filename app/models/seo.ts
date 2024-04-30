@@ -28,3 +28,5 @@ export default class Seo extends BaseModel {
   @column()
   declare vendorProfileId: number
 }
+
+export type ISeo = Seo

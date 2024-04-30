@@ -58,3 +58,5 @@ export default class Coupon extends compose(BaseModel, Filterable) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+
+export type ICoupon = Coupon

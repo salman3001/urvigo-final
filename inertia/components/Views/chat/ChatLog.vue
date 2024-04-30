@@ -1,23 +1,23 @@
 <script lang="ts" setup>
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { Socket } from 'socket.io-client'
-import type Message from '#models/message'
-import type User from '#models/user'
-import type Conversation from '#models/conversation'
+import type { IMessage } from '#models/message'
+import type { IConversation } from '#models/conversation'
 import { usePage } from '@inertiajs/vue3'
-import { IPageProps, IPaginatedModel } from '#helpers/types'
+import type { IPageProps, IPaginatedModel } from '#helpers/types'
 import { computed, onMounted, reactive, ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
 import { watch } from 'vue'
 import { formatDistance } from 'date-fns'
 import useApiGet from '~/composables/useApiGet'
+import type { IUser } from '#models/user'
 
 const props = defineProps<{
-  selectedConversation: Conversation
-  selectedParticipant: User
+  selectedConversation: IConversation
+  selectedParticipant: IUser
   socket: Socket | null
-  newMessage: null | Message
+  newMessage: null | IMessage
 }>()
 
 const page = usePage<IPageProps<{}>>()
@@ -26,20 +26,20 @@ const user = computed(() => page.props?.user)
 // const { fetcher } = useFetchRef()
 const getImageUrl = useGetImageUrl()
 
-const { data, processing, exec: getMessages } = useApiGet<IPaginatedModel<Message>>()
+const { data, processing, exec: getMessages } = useApiGet<IPaginatedModel<IMessage>>()
 
 const {
   data: newData,
   processing: loadingMore,
   exec: getNewMessages,
-} = useApiGet<IPaginatedModel<Message>>()
+} = useApiGet<IPaginatedModel<IMessage>>()
 
 const query = reactive({
   page: 1,
   orderBy: 'createdAt:desc',
 })
 
-const dataRef = ref<IPaginatedModel<Message> | null>(null)
+const dataRef = ref<IPaginatedModel<IMessage> | null>(null)
 
 watch(data, () => {
   dataRef.value = data.value

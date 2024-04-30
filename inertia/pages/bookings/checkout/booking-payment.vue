@@ -7,14 +7,14 @@ export default {
 
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
-import type WebBookingsController from '../../../../app/controllers/web/web_bookings_controller'
+import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 import type { Prop } from '../../../../app/helpers/types'
 import routes from '~/utils/routes'
 import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
 import CheckoutPayment from '~/components/Views/Web/checkout/CheckoutPayment.vue'
 
 const props = defineProps<{
-  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
 }>()
 
 const form = useForm({

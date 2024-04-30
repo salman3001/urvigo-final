@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IPaginatedModel } from '#helpers/types'
-import type Service from '#models/service'
+import type { IService } from '#models/service'
 import WebHomeBanner from '~/components/Views/Web/home/web-home-banner.vue'
 import WebHomeContactUs from '~/components/Views/Web/home/web-home-contact-us.vue'
 import WebHomeCustomersReview from '~/components/Views/Web/home/web-home-customers-review.vue'
@@ -11,10 +11,8 @@ import WebHomeOurTeam from '~/components/Views/Web/home/web-home-our-team.vue'
 import WebHomePricingPlans from '~/components/Views/Web/home/web-home-pricing-plans.vue'
 import WebHomeTopServices from '~/components/Views/Web/home/web-home-top-services.vue'
 
-
-
 defineProps<{
-  topServices: IPaginatedModel<Service>
+  topServices: IPaginatedModel<IService>
 }>()
 </script>
 

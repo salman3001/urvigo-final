@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type Bid from '#models/bid'
-import type ServiceRequirement from '#models/service_requirement'
+import type { IBid } from '#models/bid'
+import type { IServiceRequirement } from '#models/service_requirement'
 import BigNumber from 'bignumber.js'
 
 const step = defineModel<number>('step', { required: true })
 const qty = defineModel<number>('qty', { required: true })
 
-defineProps<{ serviceRequirement?: ServiceRequirement; acceptedBid: Bid }>()
+defineProps<{ serviceRequirement?: IServiceRequirement; acceptedBid: IBid }>()
 
 const nextStep = () => {
   step.value = step.value + 1

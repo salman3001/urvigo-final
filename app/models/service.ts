@@ -132,3 +132,6 @@ export default class Service extends compose(BaseModel, Filterable) {
     }
   }
 }
+
+
+export type IService = Service

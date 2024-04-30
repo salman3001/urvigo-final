@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type Coupon from '#models/coupon'
+import type { ICoupon } from '#models/coupon'
 import CouponCard from '../CouponCard.vue'
 import ModalBase from './ModalBase.vue'
 
 const isVisible = defineModel<boolean>('isVisible')
 
 defineProps<{
-  couponList: Coupon[]
+  couponList: ICoupon[]
 }>()
 
 const emit = defineEmits<{

@@ -1,11 +1,11 @@
-import type Wishlist from '#models/wishlist'
+import type { IWishlist } from '#models/wishlist'
 import { defineStore } from 'pinia'
 import useApi from '~/composables/useApi'
 import routes from '~/utils/routes'
 // import { useWishlistApi } from '~/composables/api/useWishlistApi'
 
 const wishlistStore = defineStore('wishlistStore', () => {
-  const { data: wishlistItems, exec: fetchWishlist } = useApi<Wishlist>(
+  const { data: wishlistItems, exec: fetchWishlist } = useApi<IWishlist>(
     routes('api.wishlist.index'),
     'get'
   )

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import BigNumber from 'bignumber.js'
-import Service from '#models/service'
+import type { IService } from '#models/service'
 import wishlistStore from '~/stores/wishlistStore'
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { DiscountType } from '#helpers/enums'
 import routes from '~/utils/routes'
 import { Link, useForm } from '@inertiajs/vue3'
 import { VBtn, VCard, VChip } from 'vuetify/components'
 
 const props = defineProps<{
-  service: Service
+  service: IService
 }>()
 
 const getImageUrl = useGetImageUrl()

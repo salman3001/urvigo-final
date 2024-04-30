@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type Review from '#models/review'
+import type { IReview } from '#models/review'
 import { format } from 'date-fns'
 import { VCardSubtitle } from 'vuetify/components'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
 defineProps<{
-  review: Review
+  review: IReview
 }>()
 
 const getImageUrl = useGetImageUrl()

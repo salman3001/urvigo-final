@@ -11,16 +11,14 @@ export const couponIndexValidator = vine.compile(
 export const createCouponValidator = vine.compile(
   vine.object({
     name: vine.string().maxLength(50).escape(),
-    desc: vine.string().maxLength(256).escape(),
+    desc: vine.string().maxLength(256).escape().optional(),
     discountType: vine.enum(Object.values(DiscountType)),
     discountFlat: vine.number().min(0).optional(),
     discountPercentage: vine.number().min(0).max(99).optional(),
     maxUsers: vine.number(),
     minPurchaseAmount: vine.number().min(0),
     serviceIds: vine.array(vine.number()),
-    validFrom: vine.date({ formats: 'DD/MM/YYYY HH:mm' }).after(() => {
-      return DateTime.now().plus({ minute: 1 }).toFormat('dd/LL/yyyy HH:mm')
-    }),
+    validFrom: vine.date({ formats: 'DD/MM/YYYY HH:mm' }),
     expiredAt: vine.date({ formats: 'DD/MM/YYYY HH:mm' }).afterField('validFrom'),
   })
 )

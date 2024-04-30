@@ -2,7 +2,7 @@
 import BigNumber from 'bignumber.js'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import { Prop } from '../../../../../app/helpers/types'
-import type WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller'
+import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 
 const emits = defineEmits<{
   (e: 'apply-coupon'): void
@@ -12,7 +12,7 @@ const emits = defineEmits<{
 }>()
 
 defineProps<{
-  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
   qty: number
 }>()
 const getImageUrl = useGetImageUrl()

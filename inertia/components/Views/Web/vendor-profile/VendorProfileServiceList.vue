@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IPageProps, IPaginatedModel } from '#helpers/types'
-import type Service from '#models/service'
+import type { IService } from '#models/service'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 import { reactive } from 'vue'
@@ -11,7 +11,7 @@ import ServiceCard from '~/components/ServiceCard.vue'
 const page = usePage<IPageProps<{}>>()
 
 defineProps<{
-  services: IPaginatedModel<Service>
+  services: IPaginatedModel<IService>
 }>()
 
 const query = reactive({

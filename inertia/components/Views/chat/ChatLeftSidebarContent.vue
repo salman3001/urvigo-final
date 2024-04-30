@@ -5,8 +5,8 @@ import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { findObjectAndMoveToIndex0 } from '~/utils/helpers'
 import { computed, reactive, ref, watch } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import type Message from '#models/message'
-import type Conversation from '#models/conversation'
+import type { IMessage } from '#models/message'
+import type { IConversation } from '#models/conversation'
 import type { IPageProps } from '#helpers/types'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
@@ -14,13 +14,13 @@ import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
 const props = defineProps<{
   isDrawerOpen: boolean
-  newMessage: null | Message
-  selectedConversation?: Conversation
-  chatList: Conversation[]
+  newMessage: null | IMessage
+  selectedConversation?: IConversation
+  chatList: IConversation[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'openChatOfConversation', conversation: Conversation): void
+  (e: 'openChatOfConversation', conversation: IConversation): void
   (e: 'showUserProfile'): void
   (e: 'close'): void
   (e: 'update:search', value: string): void
@@ -67,7 +67,7 @@ watch(
           'conversationId'
         )
 
-        conversationsRef.value = newData as Conversation[]
+        conversationsRef.value = newData as IConversation[]
         conversationsRef.value[0].messages[0] = props.newMessage
       } else {
         router.reload({

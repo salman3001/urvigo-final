@@ -1,5 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import type { IUser } from '#models/user'
 
 export default {
   layout: Layout,
@@ -8,14 +9,13 @@ export default {
 
 <script lang="ts" setup>
 import type { IPaginatedModel } from '#helpers/types'
-import type Review from '#models/review'
-import type User from '#models/user'
+import type { IReview } from '#models/review'
 import VendorProfileLayout from '~/components/Views/Web/vendor-profile/VendorProfileLayout.vue'
 import VendorProfileReviews from '~/components/Views/Web/vendor-profile/VendorProfileReviews.vue'
 
 defineProps<{
-  vendor: User
-  reviews: IPaginatedModel<Review>
+  vendor: IUser
+  reviews: IPaginatedModel<IReview>
 }>()
 </script>
 

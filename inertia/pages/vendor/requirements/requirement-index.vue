@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { IPaginatedModel } from '#helpers/types'
-import type ServiceRequirement from '#models/service_requirement'
+import type { IServiceRequirement } from '#models/service_requirement'
 import { router } from '@inertiajs/vue3'
 import { reactive, ref, watch } from 'vue'
 import { VBtn, VRadio, VRadioGroup, VSkeletonLoader, VTooltip } from 'vuetify/components'
@@ -20,7 +20,7 @@ const filterModal = ref(false)
 const filter = ref(null)
 
 defineProps<{
-  requirements: IPaginatedModel<ServiceRequirement>
+  requirements: IPaginatedModel<IServiceRequirement>
 }>()
 
 const query = reactive({
@@ -37,11 +37,15 @@ watch(query, () => {
 
 <template>
   <div class="d-flex align-center justify-end gap-2">
-    <IconBtn v-if="filter" @click="() => {
-      filter = null
-      // refresh();
-    }
-      ">
+    <IconBtn
+      v-if="filter"
+      @click="
+        () => {
+          filter = null
+          // refresh();
+        }
+      "
+    >
       <VIcon icon="tabler-filter" />
     </IconBtn>
     <VTooltip text="Fliters">
@@ -63,13 +67,17 @@ watch(query, () => {
     </VRow>
 
     <br />
-    <TablePagination :page="Number(query.page)" :items-per-page="Number(requirements?.meta?.perPage)"
-      :total-items="Number(requirements?.meta?.total)" @update:page="(p) => {
-      query.page = p
-    }
-      " />
+    <TablePagination
+      :page="Number(query.page)"
+      :items-per-page="Number(requirements?.meta?.perPage)"
+      :total-items="Number(requirements?.meta?.total)"
+      @update:page="
+        (p) => {
+          query.page = p
+        }
+      "
+    />
     <ModalBase v-model:is-visible="filterModal" title="Filter requirements">
-
       <VCardItem>
         <h3>Sorty By</h3>
         <div class="my-1">
@@ -78,13 +86,19 @@ watch(query, () => {
           </VRadioGroup>
         </div>
         <div class="d-flex justify-end">
-          <VBtn label="Apply" color="primary" @click="() => {
-      router.reload({
-        data: { ...query, page: 1 },
-      })
-      filterModal = false
-    }
-      ">Apply</VBtn>
+          <VBtn
+            label="Apply"
+            color="primary"
+            @click="
+              () => {
+                router.reload({
+                  data: { ...query, page: 1 },
+                })
+                filterModal = false
+              }
+            "
+            >Apply</VBtn
+          >
         </div>
       </VCardItem>
     </ModalBase>

@@ -71,9 +71,7 @@ export default class CouponService {
 
     await user?.load('businessProfile')
 
-    const couponQuery = Coupon.query()
-      .where('business_profile_id', user.businessProfile.id)
-      .where('coupon_type', CouponType.VENDOR)
+    const couponQuery = Coupon.query().where('business_profile_id', user.businessProfile.id)
 
     !opt?.disableFilter && couponQuery.filter(request.qs())
 

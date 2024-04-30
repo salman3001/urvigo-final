@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type ServiceCategory from '#models/service_category'
-import type ServiceTag from '#models/service_tag'
+import type { IServiceCategory } from '#models/service_category'
+import type { IServiceTag } from '#models/service_tag'
 import { useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
 import ModalBase from './ModalBase.vue'
@@ -16,8 +16,8 @@ import { addDays, format } from 'date-fns'
 
 const isVisible = defineModel<boolean>('isVisible')
 defineProps<{
-  categories: ServiceCategory[]
-  tags: ServiceTag[]
+  categories: IServiceCategory[]
+  tags: IServiceTag[]
 }>()
 
 const emit = defineEmits<{

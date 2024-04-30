@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type Bid from '#models/bid'
-import type ServiceRequirement from '#models/service_requirement'
+import type { IBid } from '#models/bid'
+import type { IServiceRequirement } from '#models/service_requirement'
 import ModalBase from './ModalBase.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
@@ -10,8 +10,8 @@ import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps<{
-  selectedBid: Bid
-  serviceRequirement: ServiceRequirement
+  selectedBid: IBid
+  serviceRequirement: IServiceRequirement
 }>()
 
 const emits = defineEmits<{

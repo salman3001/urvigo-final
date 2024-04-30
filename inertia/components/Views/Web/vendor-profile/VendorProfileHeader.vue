@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import User from '#models/user'
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import cover from '~/assets/images/pages/user-profile-header-bg.png'
 import useGetImageUrl from '~/composables/useGetImageUrl'
+import type { IUser } from '#models/user'
 
 const getImageUrl = useGetImageUrl()
 defineProps<{
-  profileHeaderData: User
+  profileHeaderData: IUser
 }>()
 
 // const { data, error } = await useApi<ProfileHeader>('/pages/profile/header')
@@ -27,8 +27,12 @@ defineProps<{
 
     <VCardText class="d-flex align-bottom flex-sm-row flex-column justify-center gap-x-6">
       <div class="d-flex h-0">
-        <VAvatar rounded size="130" :image="getImageUrl(profileHeaderData?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
-          class="user-profile-avatar mx-auto" />
+        <VAvatar
+          rounded
+          size="130"
+          :image="getImageUrl(profileHeaderData?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
+          class="user-profile-avatar mx-auto"
+        />
       </div>
 
       <div class="user-profile-info w-100 mt-16 pt-6 pt-sm-0 mt-sm-0">

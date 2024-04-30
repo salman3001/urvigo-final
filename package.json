@@ -99,6 +99,7 @@
     "date-fns": "^3.6.0",
     "destr": "^2.0.3",
     "edge.js": "^6.0.2",
+    "flatpickr": "^4.6.13",
     "luxon": "^3.4.4",
     "pg": "^8.11.5",
     "pinia": "^2.1.7",
@@ -129,11 +130,11 @@
   "prettier": "@adonisjs/prettier-config",
   "hotHook": {
     "boundaries": [
-      "../app/**/*.ts",
-      "../database/**/*.ts",
-      "../config/**/*.ts",
-      "../routes/*.ts",
-      "../resources/*.ts"
+      "./app/controllers/**/*.ts",
+      "./app/middleware/**/*.ts",
+      "./app/policies/**/*.ts",
+      "./database/**/*.ts",
+      "./resources/*.ts"
     ]
   }
 }

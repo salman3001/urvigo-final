@@ -2,7 +2,7 @@
 import Layout from '~/layouts/default.vue'
 import { VDataTableServer } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
-import type BidBooking from '#models/bid_booking'
+import type { IBidBooking } from '#models/bid_booking'
 import { format } from 'date-fns'
 
 export default {
@@ -29,7 +29,7 @@ import { watchDebounced } from '@vueuse/core'
 // const paypal = useGenerateImageVariant(paypalLight, paypalDark);
 
 defineProps<{
-  bookings: IPaginatedModel<BidBooking>
+  bookings: IPaginatedModel<IBidBooking>
 }>()
 
 const query = reactive({

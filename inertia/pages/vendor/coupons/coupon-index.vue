@@ -5,7 +5,7 @@ import TablePagination from '~/@core/components/TablePagination.vue'
 import type { IPaginatedModel } from '../../../../app/helpers/types'
 import ModalConfirm from '~/components/modal/ModalConfirm.vue'
 import { format } from 'date-fns'
-import type Coupon from '../../../../app/models/coupon'
+import type { ICoupon } from '../../../../app/models/coupon'
 
 export default {
   layout: Layout,
@@ -21,7 +21,7 @@ import { Link, router } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 
 defineProps<{
-  coupons: IPaginatedModel<Coupon>
+  coupons: IPaginatedModel<ICoupon>
 }>()
 
 const selectedCoupnId = ref<number>()
@@ -41,8 +41,8 @@ const headers = [
   { title: 'Discount Type', key: 'discountType' },
   { title: 'Discount Flat', key: 'discountFlat' },
   { title: 'Discount Percentage', key: 'discountPercentage' },
+  { title: 'Valid From', key: 'validFrom' },
   { title: 'Expired At ', key: 'expiredAt' },
-  { title: 'Valid From', key: 'status' },
   { title: 'Action', key: 'actions' },
 ]
 
@@ -159,7 +159,7 @@ watchDebounced(
               <VMenu activator="parent">
                 <VList class="text-primary">
                   <Link :href="routes('vendor.coupon.edit', [item.id])">
-                    <VListItem value="view"> <VIcon icon="tabler-eye" />&nbsp; Edit </VListItem>
+                    <VListItem value="view"> <VIcon icon="tabler-edit" />&nbsp; Edit </VListItem>
                   </Link>
 
                   <VListItem

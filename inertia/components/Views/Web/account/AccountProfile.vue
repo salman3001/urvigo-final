@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import AccountEdit from './AccountEdit.vue'
-import type User from '#models/user'
+import type { IUser } from '#models/user'
 
 defineProps<{
-  user: User
+  user: IUser
 }>()
 
 const isConfirmDialogOpen = ref(false)

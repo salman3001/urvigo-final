@@ -64,3 +64,6 @@ export default class Bid extends compose(BaseModel, Filterable) {
     })
   }
 }
+
+
+export type IBid = Bid

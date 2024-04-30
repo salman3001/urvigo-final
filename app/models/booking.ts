@@ -55,3 +55,5 @@ export default class Booking extends compose(BaseModel, Filterable) {
   @belongsTo(() => ServiceVariant)
   declare serviceVariant: BelongsTo<typeof ServiceVariant>
 }
+
+export type IBooking = Booking

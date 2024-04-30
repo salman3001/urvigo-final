@@ -55,3 +55,6 @@ export default class ServiceCategory extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+
+
+export type IServiceCategory = ServiceCategory

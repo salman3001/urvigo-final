@@ -39,3 +39,6 @@ export default class Notification extends BaseModel {
   //   // Ws.io.of('/notifications/').to(room).emit('new-notification', notification)
   // }
 }
+
+
+export type INotification = Notification

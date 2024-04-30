@@ -1,8 +1,9 @@
 <script lang="ts">
 import Layout from '~/layouts/VendorLayout.vue'
 import routes from '~/utils/routes'
-import type Service from '../../../../app/models/service'
+import type { IService } from '../../../../app/models/service'
 import AppDateTimePicker from '~/@core/components/app-form-elements/AppDateTimePicker.vue'
+import { ref } from 'vue'
 
 export default {
   layout: Layout,
@@ -19,7 +20,7 @@ import CustomForm from '~/components/form/CustomForm.vue'
 import ErrorAlert from '~/components/form/ErrorAlert.vue'
 
 defineProps<{
-  services: Service[]
+  services: IService[]
 }>()
 
 const form = useForm({
@@ -35,7 +36,12 @@ const form = useForm({
   serviceIds: [] as number[],
 })
 
+const dateRange = ref<null | string>(null)
+
 const submit = () => {
+  const [validFrom, expiredAt] = dateRange.value!.split(' to ')
+  form.validFrom = validFrom
+  form.expiredAt = expiredAt
   form.post(routes('vendor.coupon.create.post'))
 }
 </script>
@@ -56,29 +62,21 @@ const submit = () => {
             <VBtn variant="tonal" color="secondary"> Discard </VBtn>
           </Link>
           <!-- <VBtn variant="tonal" color="primary" > Save for later </VBtn> -->
-          <VBtn type="submit">Add Coupon</VBtn>
+          <VBtn type="submit" :disabled="form.processing">Add Coupon</VBtn>
         </div>
       </div>
       <VRow>
         <VCol md="8">
           <!-- 👉 service Information -->
-          <VCard class="mb-6" title="Service Information">
+          <VCard class="mb-6" title="Coupon Information">
             <ErrorAlert :errors="form.errors" v-if="form.errors" />
             <VCardText>
               <VRow>
                 <VCol cols="12">
                   <AppTextField
                     label="Name"
-                    placeholder="Service Name"
+                    placeholder="Coupon Name"
                     v-model="form.name"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6">
-                  <AppSelect
-                    label="Discount Type"
-                    v-model="form.discountType"
-                    :items="['flat', 'percentage']"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -110,8 +108,6 @@ const submit = () => {
                     v-if="form.discountType === 'flat'"
                     :rules="[(v: string) => minNumValidator(v, 0)]"
                   />
-                </VCol>
-                <VCol cols="12" md="6">
                   <AppTextField
                     type="number"
                     v-model="form.discountPercentage"
@@ -141,32 +137,11 @@ const submit = () => {
                 </VCol>
                 <VCol cols="12" md="6">
                   <AppDateTimePicker
-                    v-model="form.validFrom"
-                    label="Valid from"
-                    placeholder="Select date and time"
-                    :config="{
-                      enableTime: true,
-                      dateFormat: 'd/m/Y H:i',
-                    }"
-                  />
-                </VCol>
-                <VCol cols="12" md="6">
-                  <AppDateTimePicker
-                    v-model="form.expiredAt"
-                    label="Expires At"
-                    placeholder="Select date and time"
-                    :config="{
-                      enableTime: true,
-                      dateFormat: 'd/m/Y H:i',
-                    }"
-                  />
-                </VCol>
-                <VCol cols="12">
-                  <span class="mb-1">Description (optional)</span>
-                  <ProductDescriptionEditor
-                    v-model="form.desc"
-                    placeholder="service Description"
-                    class="border rounded"
+                    v-model="dateRange"
+                    label="Select Date range"
+                    placeholder="Select date range"
+                    :config="{ enableTime: true, dateFormat: 'd/m/Y H:i', mode: 'range' }"
+                    :rules="[requiredValidator]"
                   />
                 </VCol>
               </VRow>
@@ -181,13 +156,26 @@ const submit = () => {
               <div class="d-flex flex-column gap-y-4">
                 <AppSelect
                   v-model="form.serviceIds"
+                  multiple
+                  chips
                   :items="services"
                   item-title="name"
                   item-value="id"
                   label="Select Services"
                   style="min-inline-size: 260px"
+                  :rules="[requiredValidator]"
                 />
               </div>
+            </VCardText>
+          </VCard>
+          <!-- description -->
+          <VCard title="Description (optional)" class="mb-6">
+            <VCardText>
+              <ProductDescriptionEditor
+                v-model="form.desc"
+                placeholder="service Description"
+                class="border rounded"
+              />
             </VCardText>
           </VCard>
         </VCol>

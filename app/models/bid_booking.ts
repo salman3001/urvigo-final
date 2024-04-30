@@ -69,3 +69,5 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
     })
   }
 }
+
+export interface IBidBooking extends BidBooking {}

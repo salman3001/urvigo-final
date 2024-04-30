@@ -1,6 +1,6 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
-import type WebBookingsController from '#controllers/web/web_bookings_controller'
+import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 import type { Prop } from '#helpers/types'
 import { router } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
@@ -14,7 +14,7 @@ export default {
 
 <script setup lang="ts">
 defineProps<{
-  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
 }>()
 </script>
 

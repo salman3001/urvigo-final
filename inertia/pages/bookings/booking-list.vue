@@ -14,7 +14,7 @@ import { reactive } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import { OrderStatus } from '../../../app/helpers/enums'
 import type { IPaginatedModel } from '../../../app/helpers/types'
-import type Booking from '../../../app/models/booking'
+import type { IBooking } from '../../../app/models/booking'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import routes from '~/utils/routes'
@@ -30,7 +30,7 @@ import { watchDebounced } from '@vueuse/core'
 // const paypal = useGenerateImageVariant(paypalLight, paypalDark);
 
 defineProps<{
-  bookings: IPaginatedModel<Booking>
+  bookings: IPaginatedModel<IBooking>
 }>()
 
 const getImageUrl = useGetImageUrl()

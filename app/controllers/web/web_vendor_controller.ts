@@ -9,6 +9,7 @@ import BidBookingService from '../../services/bid_booking_service.js'
 import ServiceRequirementService from '../../services/service_requirement_service.js'
 import BidService from '../../services/bid_service.js'
 import CouponService from '../../services/coupon_service.js'
+
 @inject()
 export default class WebVendorController {
   constructor(
@@ -174,7 +175,7 @@ export default class WebVendorController {
 
   async couponsIndex({ inertia }: HttpContext) {
     return inertia.render('vendor/coupons/coupon-index', {
-      coupons: this.couponService.vendorCoupons(),
+      coupons: () => this.couponService.vendorCoupons(),
     })
   }
 
@@ -215,7 +216,7 @@ export default class WebVendorController {
   }
 
   async couponsDelete({ response, session }: HttpContext) {
-    await this.serviceService.destroy()
+    await this.couponService.destroy()
     session.flash('flash', {
       message: 'Coupon Deleted',
       type: 'success',

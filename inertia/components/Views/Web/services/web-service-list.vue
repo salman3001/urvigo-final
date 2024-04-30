@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IPageProps, IPaginatedModel } from '#helpers/types'
-import type Service from '#models/service'
-import type ServiceCategory from '#models/service_category'
+import type { IService } from '#models/service'
+import type { IServiceCategory } from '#models/service_category'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 import { computed, reactive } from 'vue'
@@ -15,8 +15,8 @@ import routes from '~/utils/routes'
 
 const page = usePage<
   IPageProps<{
-    services: IPaginatedModel<Service>
-    categories: ServiceCategory[]
+    services: IPaginatedModel<IService>
+    categories: IServiceCategory[]
   }>
 >()
 

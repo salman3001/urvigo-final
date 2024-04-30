@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type Bid from '#models/bid'
+import type { IBid } from '#models/bid'
 import BigNumber from 'bignumber.js'
 import { format } from 'date-fns'
 import { VChip } from 'vuetify/components'
 
 defineProps<{
   accepted: boolean
-  bid: Bid
+  bid: IBid
 }>()
 </script>
 

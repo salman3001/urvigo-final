@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import Bid from '#models/bid'
-import type ServiceRequirement from '#models/service_requirement'
+import { IBid } from '#models/bid'
+import type { IServiceRequirement } from '#models/service_requirement'
 import BigNumber from 'bignumber.js'
 import { ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
 defineProps<{
-  serviceRequirement: ServiceRequirement
-  acceptedBid: Bid
+  serviceRequirement: IServiceRequirement
+  acceptedBid: IBid
   qty: number
 }>()
 

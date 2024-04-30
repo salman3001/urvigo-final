@@ -7,12 +7,12 @@ export default {
 
 <script setup lang="ts">
 import CheckoutConfirmation from '~/components/Views/Web/checkout/CheckoutConfirmation.vue'
-import type WebBookingsController from '../../../../app/controllers/web/web_bookings_controller'
+import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 import type { Prop } from '../../../../app/helpers/types'
 import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
 
 defineProps<{
-  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
 }>()
 </script>
 

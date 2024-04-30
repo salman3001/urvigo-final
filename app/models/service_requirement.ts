@@ -96,3 +96,5 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
     }
   }
 }
+
+export type IServiceRequirement =ServiceRequirement

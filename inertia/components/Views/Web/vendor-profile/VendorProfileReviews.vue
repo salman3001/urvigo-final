@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IPageProps, IPaginatedModel } from '#helpers/types'
-import type Review from '#models/review'
+import type { IReview } from '#models/review'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 import { reactive } from 'vue'
@@ -12,7 +12,7 @@ defineProps<{
   vendorId: number
   avg_rating: number
   reviews_count: number
-  reviews: IPaginatedModel<Review>
+  reviews: IPaginatedModel<IReview>
 }>()
 
 const page = usePage<IPageProps<{}>>()

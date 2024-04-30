@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFocus } from '@vueuse/core'
 import { PropType, computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
-import FlatPickr from 'vue-flatpickr-component'
+import FlatPickr from '../../../../node_modules/vue-flatpickr-component/dist/esm/component'
 import { useTheme } from 'vuetify'
 
 // @ts-expect-error There won't be declaration file for it

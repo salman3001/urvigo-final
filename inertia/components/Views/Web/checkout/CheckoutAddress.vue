@@ -6,10 +6,10 @@ import googleHome from '~/assets/images/pages/google-home.png'
 import iphone11 from '~/assets/images/pages/iphone-11.png'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import { Prop } from '../../../../../app/helpers/types'
-import type WebBookingsController from '../../../../../app/controllers/web/web_bookings_controller'
+import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 
 interface Props {
-  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
+  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
 }
 
 const getImageUrl = useGetImageUrl()

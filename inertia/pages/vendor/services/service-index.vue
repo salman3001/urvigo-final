@@ -2,10 +2,10 @@
 import Layout from '~/layouts/VendorLayout.vue'
 import { VDataTableServer, VImg } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
-import type Service from '../../../../app/models/service'
+import type { IService } from '../../../../app/models/service'
 import type { IPaginatedModel } from '../../../../app/helpers/types'
-import type ServiceCategory from '../../../../app/models/service_category'
-import type ServiceSubcategory from '../../../../app/models/service_subcategory'
+import type { IServiceCategory } from '../../../../app/models/service_category'
+import type { IServiceSubcategory } from '../../../../app/models/service_subcategory'
 import ModalConfirm from '~/components/modal/ModalConfirm.vue'
 import { format } from 'date-fns'
 
@@ -25,9 +25,9 @@ import { watchDebounced } from '@vueuse/core'
 import { ref } from 'vue'
 
 defineProps<{
-  services: IPaginatedModel<Service>
-  categories: ServiceCategory[]
-  subcategories: ServiceSubcategory[]
+  services: IPaginatedModel<IService>
+  categories: IServiceCategory[]
+  subcategories: IServiceSubcategory[]
 }>()
 
 const getImageUrl = useGetImageUrl()
@@ -281,7 +281,7 @@ const updateStatusForm = useForm({
       message="Deleting this service, are your sure? "
       @confirmed="
         () => {
-          router.visit(routes('vendor.service.destroy', [selectedServiceId || 0]), {
+          router.visit(routes('vendor.service.delete', [selectedServiceId || 0]), {
             only: ['services'],
             method: 'delete',
             replace: true,

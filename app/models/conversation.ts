@@ -41,3 +41,5 @@ export default class Conversation extends compose(BaseModel, Filterable) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+
+export type IConversation = Conversation

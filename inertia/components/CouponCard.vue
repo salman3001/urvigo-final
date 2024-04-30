@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type Coupon from '#models/coupon'
+import type { ICoupon } from '#models/coupon'
 import BigNumber from 'bignumber.js'
 
 defineProps<{
-  coupon: Coupon
+  coupon: ICoupon
 }>()
 </script>
 

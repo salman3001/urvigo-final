@@ -9,10 +9,10 @@ export default {
 
 <script setup lang="ts">
 import { IvariantFrom } from '#helpers/types'
-import type Service from '#models/service'
-import type ServiceCategory from '#models/service_category'
-import type ServiceSubcategory from '#models/service_subcategory'
-import type ServiceTag from '#models/service_tag'
+import type { IService } from '#models/service'
+import type { IServiceCategory } from '#models/service_category'
+import type { IServiceSubcategory } from '#models/service_subcategory'
+import type { IServiceTag } from '#models/service_tag'
 import { Link, router, useForm } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import DropZone from '~/@core/components/DropZone.vue'
@@ -30,10 +30,10 @@ import ModalAddVariant from '~/components/modal/ModalAddVariant.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
 const props = defineProps<{
-  service: Service
-  categories: ServiceCategory[]
-  subcategories: ServiceSubcategory[]
-  tags: ServiceTag[]
+  service: IService
+  categories: IServiceCategory[]
+  subcategories: IServiceSubcategory[]
+  tags: IServiceTag[]
 }>()
 
 const form = useForm({
@@ -155,7 +155,7 @@ const submit = () => {
             <VBtn variant="tonal" color="secondary"> Discard </VBtn>
           </Link>
           <!-- <VBtn variant="tonal" color="primary" > Save for later </VBtn> -->
-          <VBtn type="submit">Publish Service</VBtn>
+          <VBtn type="submit" :disabled="form.processing">Publish Service</VBtn>
         </div>
       </div>
       <VRow>

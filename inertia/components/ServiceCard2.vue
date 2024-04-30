@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { DiscountType } from '#helpers/enums'
-import type Service from '#models/service'
+import type { IService } from '#models/service'
 import BigNumber from 'bignumber.js'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
 
 const getImageUrl = useGetImageUrl()
 
-const props = defineProps<{ service: Service }>()
+const props = defineProps<{ service: IService }>()
 
 const minPriceVariant = props.service.variants.reduce((prev, current) =>
   prev.price < current.price ? prev : current

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import User from '#models/user'
+import type { IUser } from '#models/user'
 
 interface Props {
-  vendor: User
+  vendor: IUser
 }
 defineProps<Props>()
 </script>

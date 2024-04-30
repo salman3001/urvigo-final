@@ -1,7 +1,7 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
 import { VDataTable } from 'vuetify/components'
-import type BidBooking from '#models/bid_booking'
+import type { IBidBooking } from '#models/bid_booking'
 import { format } from 'date-fns'
 
 export default {
@@ -17,7 +17,7 @@ import { computed } from 'vue'
 // const isEditAddressDialogVisible = ref(false);
 
 const props = defineProps<{
-  booking: BidBooking
+  booking: IBidBooking
 }>()
 
 const bookingData = computed(() => (props.booking ? [props.booking] : []))
@@ -80,9 +80,13 @@ const headers = [
             </VCardItem>
 
             <VDivider />
-            <VDataTable :headers="headers" :items="bookingData" item-value="productName" show-select
-              class="text-no-wrap">
-
+            <VDataTable
+              :headers="headers"
+              :items="bookingData"
+              item-value="productName"
+              show-select
+              class="text-no-wrap"
+            >
               <template #item.service_requirement="{ item }">
                 <div class="d-flex gap-x-3 align-center">
                   <div class="d-flex flex-column align-start">
@@ -146,9 +150,20 @@ const headers = [
           <!-- 👉 Shipping Activity -->
           <VCard title="Booking Activity">
             <VCardText>
-              <VTimeline truncate-line="both" line-inset="9" align="start" side="end" line-color="primary"
-                density="compact">
-                <VTimelineItem v-for="(h, i) in booking?.history" :key="i" dot-color="primary" size="x-small">
+              <VTimeline
+                truncate-line="both"
+                line-inset="9"
+                align="start"
+                side="end"
+                line-color="primary"
+                density="compact"
+              >
+                <VTimelineItem
+                  v-for="(h, i) in booking?.history"
+                  :key="i"
+                  dot-color="primary"
+                  size="x-small"
+                >
                   <div class="d-flex justify-space-between align-center">
                     <div class="app-timeline-title">
                       {{ h.event }}

@@ -1,6 +1,6 @@
 <script lang="ts">
-import type Bid from '#models/bid'
-import type ServiceRequirement from '#models/service_requirement'
+import type { IBid } from '#models/bid'
+import type { IServiceRequirement } from '#models/service_requirement'
 import { router, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { VCardItem, VChip, VProgressCircular } from 'vuetify/components'
@@ -23,10 +23,9 @@ export default {
 
 <script setup lang="ts">
 const props = defineProps<{
-  requirement: ServiceRequirement
-  placedBid: Bid
+  requirement: IServiceRequirement
+  placedBid: IBid
 }>()
-
 
 const placeBidModal = ref(false)
 const negotiateModal = ref(false)
@@ -100,16 +99,30 @@ const acceptNegotiate = (placedBidId: number) => {
       <div v-else>
         <h4 class="text-bold">Placed Bid</h4>
         <br />
-        <VendorPlacedBidCard :bid="placedBid" :accepted="requirement?.acceptedBidId == placedBid?.id" />
+        <VendorPlacedBidCard
+          :bid="placedBid"
+          :accepted="requirement?.acceptedBidId == placedBid?.id"
+        />
       </div>
       <br />
       <div v-if="placedBid && placedBid.negotiateHistory?.length > 0">
         <h4 class="text-bold">Negotiate history</h4>
         <br />
         <div>
-          <VTimeline truncate-line="both" line-inset="9" align="start" side="end" line-color="primary"
-            density="compact">
-            <VTimelineItem v-for="(h, i) in placedBid?.negotiateHistory" :key="i" dot-color="primary" size="x-small">
+          <VTimeline
+            truncate-line="both"
+            line-inset="9"
+            align="start"
+            side="end"
+            line-color="primary"
+            density="compact"
+          >
+            <VTimelineItem
+              v-for="(h, i) in placedBid?.negotiateHistory"
+              :key="i"
+              dot-color="primary"
+              size="x-small"
+            >
               <div class="d-flex justify-space-between align-center">
                 <p>customer has offered &#x20B9;{{ h.asked_price }}</p>
                 <p>
@@ -137,27 +150,43 @@ const acceptNegotiate = (placedBidId: number) => {
     <ModalBase v-model:is-visible="placeBidModal" title="Place a bid">
       <VCardItem>
         <CustomForm class="q-gutter-y-sm" @submit="createBid">
-          <AppTextField type="number" v-model="createBidForm.offeredPrice" label="Offer a price"
-            :rules="[requiredValidator]" />
-          <AppTextarea v-model="createBidForm.message" label="Message" :rules="[requiredValidator]" />
+          <AppTextField
+            type="number"
+            v-model="createBidForm.offeredPrice"
+            label="Offer a price"
+            :rules="[requiredValidator]"
+          />
+          <AppTextarea
+            v-model="createBidForm.message"
+            label="Message"
+            :rules="[requiredValidator]"
+          />
           <div class="d-flex gap-2 justify-end pt-4">
-            <VBtn v-if="createBidForm.processing" disabled>
-              <VProgressCircular /> Processing
-            </VBtn>
+            <VBtn v-if="createBidForm.processing" disabled> <VProgressCircular /> Processing </VBtn>
             <VBtn type="submit" :disabled="createBidForm.processing" v-else>Submit</VBtn>
           </div>
         </CustomForm>
       </VCardItem>
     </ModalBase>
-    <ModalBase v-model="negotiateModal" title="Negotiate Price"
-      subtitle="You can accept the customer offered price or propose a new price">
+    <ModalBase
+      v-model="negotiateModal"
+      title="Negotiate Price"
+      subtitle="You can accept the customer offered price or propose a new price"
+    >
       <VCardItem>
-        <CustomForm @submit="() => {
-      acceptNegotiate(placedBid!.id)
-    }
-      ">
-          <AppTextField type="number" v-model="acceptNegotiaionForm.newPrice" label="New Price"
-            :rules="[requiredValidator]" />
+        <CustomForm
+          @submit="
+            () => {
+              acceptNegotiate(placedBid!.id)
+            }
+          "
+        >
+          <AppTextField
+            type="number"
+            v-model="acceptNegotiaionForm.newPrice"
+            label="New Price"
+            :rules="[requiredValidator]"
+          />
           <br />
           <div class="d-flex justify-end">
             <VBtn v-if="acceptNegotiaionForm.processing" disabled>

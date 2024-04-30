@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import type User from '#models/user'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { avatarText } from '~/@core/utils/formatters'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
+import type { IUser } from '#models/user'
 
 defineEmits<{
   (e: 'close'): void
 }>()
 
 defineProps<{
-  selectedParticipant?: User
+  selectedParticipant?: IUser
 }>()
 
 const getImageUrl = useGetImageUrl()

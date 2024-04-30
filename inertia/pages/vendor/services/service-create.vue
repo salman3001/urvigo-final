@@ -9,9 +9,9 @@ export default {
 
 <script setup lang="ts">
 import { IvariantFrom } from '#helpers/types'
-import type ServiceCategory from '#models/service_category'
-import type ServiceSubcategory from '#models/service_subcategory'
-import type ServiceTag from '#models/service_tag'
+import type { IServiceCategory } from '#models/service_category'
+import type { IServiceSubcategory } from '#models/service_subcategory'
+import type { IServiceTag } from '#models/service_tag'
 import { Link, useForm } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import DropZone from '~/@core/components/DropZone.vue'
@@ -27,9 +27,9 @@ import ErrorAlert from '~/components/form/ErrorAlert.vue'
 import ModalAddVariant from '~/components/modal/ModalAddVariant.vue'
 
 defineProps<{
-  categories: ServiceCategory[]
-  subcategories: ServiceSubcategory[]
-  tags: ServiceTag[]
+  categories: IServiceCategory[]
+  subcategories: IServiceSubcategory[]
+  tags: IServiceTag[]
 }>()
 
 const form = useForm({
@@ -126,7 +126,7 @@ const submit = () => {
             <VBtn variant="tonal" color="secondary"> Discard </VBtn>
           </Link>
           <!-- <VBtn variant="tonal" color="primary" > Save for later </VBtn> -->
-          <VBtn type="submit">Publish Service</VBtn>
+          <VBtn type="submit" :disabled="form.processing">Publish Service</VBtn>
         </div>
       </div>
       <VRow>

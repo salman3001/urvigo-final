@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Service from '#models/service'
+import type { IService } from '#models/service'
 import { Link } from '@inertiajs/vue3'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import ReviewsCard from '~/components/ReviewsCard.vue'
@@ -10,7 +10,7 @@ import WebSelectVariant from '~/components/web/WebSelectVariant.vue'
 const getImageUrl = useGetImageUrl()
 
 defineProps<{
-  service: Service
+  service: IService
 }>()
 </script>
 

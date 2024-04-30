@@ -1,10 +1,10 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
-import type WebBookingsController from '#controllers/web/web_bookings_controller'
+import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 import type { Prop } from '#helpers/types'
 import { router } from '@inertiajs/vue3'
 import ModalApplyCoupon from '~/components/modal/ModalApplyCoupon.vue'
-import type Coupon from '../../../../app/models/coupon'
+import type { ICoupon } from '../../../../app/models/coupon'
 import CheckoutCart from '~/components/Views/Web/checkout/CheckoutCart.vue'
 import { watch } from 'vue'
 import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
@@ -19,8 +19,8 @@ export default {
 import { reactive, ref } from 'vue'
 
 const props = defineProps<{
-  summary: Awaited<Prop<WebBookingsController['summary']>['summary']>
-  couponList: Coupon[]
+  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
+  couponList: ICoupon[]
   query: {
     serviceVariantId: number
     qty: number

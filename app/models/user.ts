@@ -118,3 +118,5 @@ export default class User extends compose(BaseModel, AuthFinder, Filterable) {
     await user.related('wishlist').create({})
   }
 }
+
+export type IUser = User

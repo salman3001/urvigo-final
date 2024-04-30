@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IPageProps } from '#helpers/types'
-import type Service from '#models/service'
+import type { IService } from '#models/service'
 import { Link, router, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { ref } from 'vue'
@@ -18,8 +18,8 @@ const page = usePage<IPageProps<{}>>()
 const user = computed(() => page.props?.user)
 
 defineProps<{
-  service: Service
-  similarServices: Service[]
+  service: IService
+  similarServices: IService[]
 }>()
 </script>
 

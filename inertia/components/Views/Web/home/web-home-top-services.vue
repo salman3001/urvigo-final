@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type Service from '#models/service'
+import type { IService } from '#models/service'
 import { Link } from '@inertiajs/vue3'
 import ServiceCard from '~/components/ServiceCard.vue'
 import routes from '~/utils/routes'
 
 defineProps<{
-  topServices: Service[]
+  topServices: IService[]
 }>()
 </script>
 

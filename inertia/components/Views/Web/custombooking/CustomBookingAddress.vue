@@ -2,15 +2,15 @@
 import googleHome from '~/assets/images/pages/google-home.png'
 import iphone11 from '~/assets/images/pages/iphone-11.png'
 import BigNumber from 'bignumber.js'
-import type ServiceRequirement from '#models/service_requirement'
-import type Bid from '#models/bid'
+import type { IServiceRequirement } from '#models/service_requirement'
+import type { IBid } from '#models/bid'
 import { ref } from 'vue'
 import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import CustomRadiosWithIcon from '~/@core/components/app-form-elements/CustomRadiosWithIcon.vue'
 
 interface Props {
-  serviceRequirement: ServiceRequirement
-  acceptedBid: Bid
+  serviceRequirement: IServiceRequirement
+  acceptedBid: IBid
   qty: number
 }
 

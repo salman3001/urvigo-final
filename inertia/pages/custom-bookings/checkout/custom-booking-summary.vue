@@ -2,9 +2,9 @@
 import Layout from '~/layouts/default.vue'
 import { useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
-import type ServiceRequirement from '#models/service_requirement'
+import type { IServiceRequirement } from '#models/service_requirement'
 import useApiGet from '~/composables/useApiGet'
-import type Bid from '#models/bid'
+import type { IBid } from '#models/bid'
 import CustomBookingCart from '~/components/Views/Web/custombooking/CustomBookingCart.vue'
 import CheckoutConfirmation from '~/components/Views/Web/checkout/CheckoutConfirmation.vue'
 import AppStepper from '~/@core/components/AppStepper.vue'
@@ -34,7 +34,7 @@ const currentStep = ref(0)
 const isActiveStepValid = ref(true)
 
 const { data: acceptedBid, exec: getAcceptedBid } = useApiGet<Bid>()
-const { data: requirement, exec: getRequirement } = useApiGet<ServiceRequirement>()
+const { data: requirement, exec: getRequirement } = useApiGet<IServiceRequirement>()
 
 const form = useForm({
   serviceRequirementId: '' as string | number,

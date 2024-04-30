@@ -46,3 +46,5 @@ export default class Message extends BaseModel {
     }
   }
 }
+
+export type IMessage = Message

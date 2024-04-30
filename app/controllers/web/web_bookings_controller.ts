@@ -99,3 +99,5 @@ export default class WebBookingsController {
     })
   }
 }
+
+export type IWebBookingController = WebBookingsController

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type Wishlist from '#models/wishlist'
+import type { IWishlist } from '#models/wishlist'
 import ServiceCard from '~/components/ServiceCard.vue'
 
 defineProps<{
-  wishlist: Wishlist
+  wishlist: IWishlist
 }>()
 </script>
 

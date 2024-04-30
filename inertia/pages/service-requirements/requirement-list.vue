@@ -8,9 +8,9 @@ export default {
 
 <script setup lang="ts">
 import type { IPaginatedModel } from '#helpers/types'
-import type ServiceCategory from '#models/service_category'
-import type ServiceRequirement from '#models/service_requirement'
-import type ServiceTag from '#models/service_tag'
+import type { IServiceCategory } from '#models/service_category'
+import type { IServiceRequirement } from '#models/service_requirement'
+import type { IServiceTag } from '#models/service_tag'
 import { router } from '@inertiajs/vue3'
 import { format } from 'date-fns'
 import { reactive, ref, watch } from 'vue'
@@ -24,9 +24,9 @@ const filter = ref(null)
 const postModal = ref(false)
 
 const props = defineProps<{
-  requirements: IPaginatedModel<ServiceRequirement>
-  categories: ServiceCategory[]
-  tags: ServiceTag[]
+  requirements: IPaginatedModel<IServiceRequirement>
+  categories: IServiceCategory[]
+  tags: IServiceTag[]
   query: {
     where_active: string
     acepted: boolean | undefined
@@ -108,13 +108,16 @@ watch(query, () => {
               <VICon icon="tabler-filter" />
               filtering by {{ filter }}
             </VChip>
-            <VChip @click="() => {
-              filter = null
-              router.reload({
-                only: ['requirements'],
-              })
-            }
-            ">
+            <VChip
+              @click="
+                () => {
+                  filter = null
+                  router.reload({
+                    only: ['requirements'],
+                  })
+                }
+              "
+            >
               <VIcon icon="tabler-x" />
             </VChip>
           </div>
@@ -137,21 +140,32 @@ watch(query, () => {
               </VCol>
             </VRow>
             <br />
-            <TablePagination :page="Number(query.page)" :items-per-page="Number(query.perPage)"
-              :total-items="Number(requirements?.meta?.total)" @update:page="(p) => {
-              query.page = p as unknown as string
-            }
-            " />
+            <TablePagination
+              :page="Number(query.page)"
+              :items-per-page="Number(query.perPage)"
+              :total-items="Number(requirements?.meta?.total)"
+              @update:page="
+                (p) => {
+                  query.page = p as unknown as string
+                }
+              "
+            />
           </div>
         </div>
       </div>
     </div>
-    <ModalPostRequirement :categories="categories" :tags="tags" v-model:is-visible="postModal" @submit="async () => {
-              router.reload({
-                only: ['requirements'],
-              })
-              postModal = false
-            }
-            " />
+    <ModalPostRequirement
+      :categories="categories"
+      :tags="tags"
+      v-model:is-visible="postModal"
+      @submit="
+        async () => {
+          router.reload({
+            only: ['requirements'],
+          })
+          postModal = false
+        }
+      "
+    />
   </VContainer>
 </template>

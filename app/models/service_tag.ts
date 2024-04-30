@@ -40,3 +40,5 @@ export default class ServiceTag extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+
+export type IServiceTag = ServiceTag

@@ -18,3 +18,6 @@ export default class Wishlist extends BaseModel {
   })
   declare items: ManyToMany<typeof Service>
 }
+
+
+export type IWishlist = Wishlist
