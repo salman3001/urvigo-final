@@ -10,6 +10,7 @@ import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { paginate } from '../helpers/common.js'
 import { IndexOption } from '../helpers/types.js'
+import { DateTime } from 'luxon'
 
 @inject()
 export default class CouponService {
@@ -30,8 +31,9 @@ export default class CouponService {
     const serviceIds = serviceVariant?.service?.id as number
 
     const coupons = await Coupon.query()
-      //   .where('expired_at', '>', DateTime.local().plus({ minute: 10 }).toSQL())
-      //   .where('valid_from', '<', DateTime.local().toSQL())
+      .where('valid_from', '<', DateTime.now().toSQL())
+      .where('expired_at', '>', DateTime.now().toSQL())
+      .whereColumn('total_used', '<', 'max_users')
       .whereHas('services', (service) => {
         service.where('services.id', serviceIds)
       })
@@ -57,7 +59,12 @@ export default class CouponService {
   async show() {
     const { bouncer, params } = this.ctx
     const id = params.id
-    const coupon = await Coupon.query().where('id', id).firstOrFail()
+    const coupon = await Coupon.query()
+      .where('id', id)
+      .preload('services', (s) => {
+        s.select('id')
+      })
+      .firstOrFail()
 
     await bouncer.with('CouponPolicy').authorize('view', coupon)
 

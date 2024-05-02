@@ -29,7 +29,7 @@ export const createUserValidator = vine.compile(
       .maxLength(255)
       .email()
       .normalizeEmail()
-      .unique(async (db, value, field) => {
+      .unique(async (db, value) => {
         const user = await db.from('users').where('email', value).first()
         return !user
       }),
@@ -70,7 +70,7 @@ export const createVendorValidator = vine.compile(
       .maxLength(255)
       .email()
       .normalizeEmail()
-      .unique(async (db, value, field) => {
+      .unique(async (db, value) => {
         const user = await db.from('users').where('email', value).first()
         return !user
       }),
@@ -83,7 +83,7 @@ export const createVendorValidator = vine.compile(
       businessName: vine
         .string()
         .maxLength(100)
-        .unique(async (db, value, field) => {
+        .unique(async (db, value) => {
           const businessProfile = await db
             .from('business_profiles')
             .where('business_name', value)
@@ -102,7 +102,7 @@ export const vendorFromExistingUserValidator = vine.compile(
       businessName: vine
         .string()
         .maxLength(100)
-        .unique(async (db, value, field) => {
+        .unique(async (db, value) => {
           const businessProfile = await db
             .from('business_profiles')
             .where('business_name', value)

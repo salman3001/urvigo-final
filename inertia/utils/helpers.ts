@@ -1,3 +1,5 @@
+import { OrderStatus, PaymentMode, PaymentStatus } from '#helpers/enums'
+
 export function findObjectAndMoveToIndex0(
   array: Record<string, any>[],
   object: Record<string, any>,
@@ -36,4 +38,28 @@ export function pickKeysFromReference(source: Record<any, any>, reference: Recor
 
 export const isEmptyObject = (obj: Object) => {
   return Object.keys(obj).length === 0
+}
+
+export const resolveStatus = (status: OrderStatus) => {
+  if (status === OrderStatus.COMPLETED) return { text: 'Completed', color: 'success' }
+  if (status === OrderStatus.COMPLETION_REQUESTED)
+    return { text: 'Completion Requested', color: 'info' }
+  if (status === OrderStatus.PLACED) return { text: 'Placed', color: 'warning' }
+  if (status === OrderStatus.CONFIRMED) return { text: 'Confirmed', color: 'info' }
+  if (status === OrderStatus.REJECTED) return { text: 'Rejected', color: 'error' }
+  if (status === OrderStatus.CANCLED) return { text: 'Canceled', color: 'error' }
+}
+
+export const resolvePaymentStatus = (status: PaymentStatus) => {
+  if (status === PaymentStatus.PENDING) return { text: 'Pending', color: 'warning' }
+  if (status === PaymentStatus.PARTIAL_PAIID) return { text: 'Partial Paid', color: 'info' }
+  if (status === PaymentStatus.PAID) return { text: 'Paid', color: 'success' }
+  if (status === PaymentStatus.REFUND_REQUESTED)
+    return { text: 'Refund Requested', color: 'warning' }
+  if (status === PaymentStatus.REFUNDED) return { text: 'Refunded', color: 'success' }
+}
+
+export const resolvePaymentMode = (status: PaymentMode) => {
+  if (status === PaymentMode.COD) return { text: 'COD', color: 'info' }
+  if (status === PaymentMode.ONLINE) return { text: 'Online', color: 'info' }
 }

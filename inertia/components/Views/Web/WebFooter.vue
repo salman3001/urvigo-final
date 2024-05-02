@@ -258,4 +258,3 @@ const demoList = [
   }
 }
 </style>
-~/utils/routes-old

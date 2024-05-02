@@ -1,5 +1,5 @@
 import { permissions } from '#helpers/enums'
-import { hasPermission, isAdmin, isUser, isVendor } from '#helpers/permission_helpers'
+import { hasPermission, isAdmin, isVendor } from '#helpers/permission_helpers'
 import Booking from '#models/booking'
 import User from '#models/user'
 import { BasePolicy } from '@adonisjs/bouncer'

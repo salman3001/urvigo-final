@@ -56,5 +56,4 @@ export default class ServiceCategory extends BaseModel {
   declare updatedAt: DateTime
 }
 
-
 export type IServiceCategory = ServiceCategory

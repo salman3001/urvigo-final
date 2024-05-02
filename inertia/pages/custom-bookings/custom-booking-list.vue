@@ -4,6 +4,7 @@ import { VDataTableServer } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import type { IBidBooking } from '#models/bid_booking'
 import { format } from 'date-fns'
+import { resolvePaymentMode, resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
 
 export default {
   layout: Layout,
@@ -12,21 +13,12 @@ export default {
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { OrderStatus } from '../../../app/helpers/enums'
 import type { IPaginatedModel } from '../../../app/helpers/types'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import routes from '~/utils/routes'
 import { Link, router } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
-
-// import masterCardDark from "@images/icons/payments/img/master-dark.png";
-// import masterCardLight from "@images/icons/payments/img/mastercard.png";
-// import paypalDark from "@images/icons/payments/img/paypal-dark.png";
-// import paypalLight from "@images/icons/payments/img/paypal-light.png";
-
-// const mastercard = useGenerateImageVariant(masterCardLight, masterCardDark);
-// const paypal = useGenerateImageVariant(paypalLight, paypalDark);
 
 defineProps<{
   bookings: IPaginatedModel<IBidBooking>
@@ -44,24 +36,14 @@ const headers = [
   { title: 'id', key: 'id' },
   { title: 'Date', key: 'createdAt' },
   { title: 'Service Requirement', key: 'bookingDetail' },
+  { title: 'Service Price', key: 'servicePrice', sortable: false },
+  { title: 'Qty', key: 'qty', sortable: false },
+  { title: 'Total', key: 'total', sortable: false },
   { title: 'Payment', key: 'paymentDetail', sortable: false },
+  { title: 'Payment Method', key: 'method', sortable: false },
   { title: 'Status', key: 'status' },
-  { title: 'Method', key: 'method', sortable: false },
   { title: 'Action', key: 'actions', sortable: false },
 ]
-
-const resolveStatus = (status: string) => {
-  if (status === OrderStatus.DELIVERED) return { text: 'Delivered', color: 'success' }
-  if (status === OrderStatus.PLACED) return { text: 'Placed', color: 'warning' }
-  if (status === OrderStatus.CONFIRMED) return { text: 'Confirmed', color: 'secondary' }
-  if (status === OrderStatus.REJECTED) return { text: 'Rejected', color: 'error' }
-  if (status === OrderStatus.CANCLED) return { text: 'Canceled', color: 'error' }
-}
-
-const resolvePaymentStatus = (status: string) => {
-  if (status === 'paid') return { text: 'Paid', color: 'success' }
-  if (status === 'pending') return { text: 'Pending', color: 'warning' }
-}
 
 watchDebounced(query, () => {
   router.reload({
@@ -158,6 +140,22 @@ watchDebounced(query, () => {
             </div>
           </template>
 
+          <!-- Service Price -->
+
+          <template #item.servicePrice="{ item }">
+            &#x20B9;{{ item.bookingDetail?.acceptedBid.offeredPrice }}
+          </template>
+
+          <!-- Qty -->
+
+          <template #item.qty="{ item }">
+            {{ item?.qty }}
+          </template>
+
+          <!-- total -->
+
+          <template #item.total="{ item }"> &#x20B9;{{ item?.price }} </template>
+
           <!-- Payments -->
 
           <template #item.paymentDetail="{ item }">
@@ -179,19 +177,13 @@ watchDebounced(query, () => {
           </template>
 
           <!-- Method -->
-          <!-- <template #item.method="{ item }">
-          <div class="d-flex align-center">
-            <img
-              :src="item.method === 'mastercard' ? mastercard : paypal"
-              height="18"
+          <template #item.method="{ item }">
+            <VChip
+              v-bind="resolvePaymentMode(item?.paymentDetail?.paymentMode)"
+              label
+              size="small"
             />
-            <div class="text-body-1">
-              ...{{
-                item.method === "mastercard" ? item.methodNumber : "@gmail.com"
-              }}
-            </div>
-          </div>
-        </template> -->
+          </template>
 
           <!-- Actions -->
 
@@ -240,4 +232,3 @@ watchDebounced(query, () => {
   padding-block-end: 1rem;
 }
 </style>
-~/utils/routes-old

@@ -33,4 +33,3 @@ defineProps<{
   <br />
   <br />
 </template>
-~/utils/routes-old

@@ -69,7 +69,8 @@ export default class ServiceService {
   }
 
   async myList(opt?: IndexOption) {
-    const { request, response, bouncer, auth } = this.ctx
+    const { request, bouncer, auth } = this.ctx
+    // @ts-ignore
     await bouncer.with('ServicePolicy').authorize('myList')
     const vendor = auth.user as User
     await vendor.load('businessProfile')
@@ -112,6 +113,7 @@ export default class ServiceService {
 
   async myAllList() {
     const { bouncer, auth } = this.ctx
+    // @ts-ignore
     await bouncer.with('ServicePolicy').authorize('myList')
     const vendor = auth.user as User
     await vendor.load('businessProfile')
@@ -291,7 +293,7 @@ export default class ServiceService {
           v.min('price').as('starting_from')
         })
 
-      services = paginate(serviceQuery, request)
+      services = await paginate(serviceQuery, request)
     }
 
     return services
@@ -321,7 +323,7 @@ export default class ServiceService {
 
   async store() {
     const { request, bouncer, auth } = this.ctx
-
+    // @ts-ignore
     await bouncer.with('ServicePolicy').authorize('create')
 
     const user = auth.user!

@@ -15,19 +15,50 @@ export default {
 </script>
 
 <script setup lang="ts">
-const page = ref(1)
 const filterModal = ref(false)
-const filter = ref(null)
+const filter = ref<string | null>(null)
 
-defineProps<{
+const props = defineProps<{
   requirements: IPaginatedModel<IServiceRequirement>
+  query: {
+    page: number
+    orderBy: number
+  }
 }>()
 
 const query = reactive({
-  page: page.value,
-  orderBy: 'created_at:desc',
+  page: props?.query?.page || 1,
+  orderBy: props?.query?.page || 'created_at:desc',
 })
 
+watch(filter, (newFilterValue) => {
+  if (newFilterValue == 'Heighest Price') {
+    const newQuery = {
+      page: 1,
+      orderBy: 'budget:asc',
+    }
+
+    Object.assign(query, newQuery)
+  }
+
+  if (newFilterValue == 'Lowest Price') {
+    const newQuery = {
+      page: 1,
+      orderBy: 'budget:desc',
+    }
+
+    Object.assign(query, newQuery)
+  }
+
+  if (newFilterValue == '') {
+    const newQuery = {
+      page: 1,
+      orderBy: 'created_at:desc',
+    }
+
+    Object.assign(query, newQuery)
+  }
+})
 watch(query, () => {
   router.reload({
     data: query,
@@ -37,25 +68,30 @@ watch(query, () => {
 
 <template>
   <div class="d-flex align-center justify-end gap-2">
-    <IconBtn
-      v-if="filter"
-      @click="
-        () => {
-          filter = null
-          // refresh();
-        }
-      "
-    >
-      <VIcon icon="tabler-filter" />
-    </IconBtn>
-    <VTooltip text="Fliters">
-      <template #activator="{ props }">
-        <IconBtn v-bind="props" @click="filterModal = true">
-          <VIcon icon="tabler-filter" />
-        </IconBtn>
-      </template>
-    </VTooltip>
+    <div class="d-flex flex-wrap justify-end gap-2">
+      <div class="normalcase" v-if="filter">
+        <VChip color="info">
+          <VICon icon="tabler-filter" />
+          filtering by {{ filter }}
+        </VChip>
+        <VTooltip text="Clear Filters">
+          <template #activator="{ props }">
+            <IconBtn v-bind="props" @click="filter = ''">
+              <VIcon icon="tabler-x" />
+            </IconBtn>
+          </template>
+        </VTooltip>
+      </div>
+      <VTooltip text="Filters">
+        <template #activator="{ props }">
+          <IconBtn v-bind="props" @click="filterModal = true">
+            <VIcon icon="tabler-filter" />
+          </IconBtn>
+        </template>
+      </VTooltip>
+    </div>
   </div>
+  <br />
   <div>
     <div v-if="!requirements" v-for="n in 5">
       <VSkeletonLoader type="card" />
@@ -81,8 +117,9 @@ watch(query, () => {
       <VCardItem>
         <h3>Sorty By</h3>
         <div class="my-1">
-          <VRadioGroup v-model="query.orderBy">
-            <VRadio label="Latest" value="created_at:desc" />
+          <VRadioGroup v-model="filter">
+            <VRadio label="Heighest Price" value="Heighest Price" />
+            <VRadio label="Lowest Price" value="Lowest Price" />
           </VRadioGroup>
         </div>
         <div class="d-flex justify-end">

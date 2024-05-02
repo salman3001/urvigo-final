@@ -1,5 +1,13 @@
 import type { PluginOptionsByType } from 'chart.js'
-import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from 'chart.js'
 import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
 import { Bar } from 'vue-chartjs'
@@ -31,7 +39,7 @@ export default defineComponent({
     },
     plugins: {
       type: Array as PropType<PluginOptionsByType<'bar'>[]>,
-      default: () => ([]),
+      default: () => [],
     },
     chartData: {
       type: Object,

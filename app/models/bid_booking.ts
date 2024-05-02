@@ -70,4 +70,5 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface IBidBooking extends BidBooking {}

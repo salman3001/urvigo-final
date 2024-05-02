@@ -50,7 +50,11 @@ const formSubmit = async () => {
 </script>
 
 <template>
-  <ModalBase v-model:is-visible="isVisible" title="Add Review" subtitle="Share your thoughts about this service">
+  <ModalBase
+    v-model:is-visible="isVisible"
+    title="Add Review"
+    subtitle="Share your thoughts about this service"
+  >
     <CustomForm fast-fail @submit="() => formSubmit()" ref="formRef">
       <ErrorAlert v-if="serviceReviewForm.errors" :errors="serviceReviewForm.errors" />
       <ErrorAlert v-if="vendorReviewForm.errors" :errors="vendorReviewForm.errors" />
@@ -58,17 +62,34 @@ const formSubmit = async () => {
       <VRow>
         <!-- 👉 Card Number -->
         <VCol cols="12" class="d-flex justify-center">
-          <VRating v-if="serviceId" v-model="serviceReviewForm.rating" label="Rating" :rules="[requiredValidator]" />
-          <VRating v-if="businessProfileId" v-model="vendorReviewForm.rating" label="Rating"
-            :rules="[requiredValidator]" />
+          <VRating
+            v-if="serviceId"
+            v-model="serviceReviewForm.rating"
+            label="Rating"
+            :rules="[requiredValidator]"
+          />
+          <VRating
+            v-if="businessProfileId"
+            v-model="vendorReviewForm.rating"
+            label="Rating"
+            :rules="[requiredValidator]"
+          />
         </VCol>
 
         <!-- 👉 Card Name -->
         <VCol cols="12" md="12">
-          <AppTextarea v-if="serviceId" v-model="serviceReviewForm.message" label="Message"
-            :rules="[requiredValidator]" />
-          <AppTextarea v-if="businessProfileId" v-model="vendorReviewForm.message" label="Message"
-            :rules="[requiredValidator]" />
+          <AppTextarea
+            v-if="serviceId"
+            v-model="serviceReviewForm.message"
+            label="Message"
+            :rules="[requiredValidator]"
+          />
+          <AppTextarea
+            v-if="businessProfileId"
+            v-model="vendorReviewForm.message"
+            label="Message"
+            :rules="[requiredValidator]"
+          />
         </VCol>
         <!-- 👉 Card actions -->
         <VCol cols="12" class="text-center">
@@ -79,4 +100,3 @@ const formSubmit = async () => {
     </CustomForm>
   </ModalBase>
 </template>
-~/utils/routes-old

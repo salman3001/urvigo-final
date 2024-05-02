@@ -27,3 +27,9 @@ export const UpdateBookingStatusValidator = vine.compile(
     remarks: vine.string().maxLength(255).optional(),
   })
 )
+
+export const requestBookingCompletionValidator = vine.compile(
+  vine.object({
+    remarks: vine.string().maxLength(255).optional(),
+  })
+)

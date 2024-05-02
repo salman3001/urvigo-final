@@ -1,6 +1,4 @@
 import vine from '@vinejs/vine'
-import { DiscountType } from '../helpers/enums.js'
-import { numberLessThan } from '../../bin/validationRules.js'
 
 export const CreateReviewValidator = vine.compile(
   vine.object({

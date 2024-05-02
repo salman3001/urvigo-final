@@ -14,6 +14,7 @@ import FileService from './file_service.js'
 import vine from '@vinejs/vine'
 import { BigNumber } from 'bignumber.js'
 import { DateTime } from 'luxon'
+import { IndexOption } from '#helpers/types'
 
 @inject()
 export default class ServiceRequirementService {
@@ -22,7 +23,7 @@ export default class ServiceRequirementService {
     protected fileservice: FileService
   ) {}
 
-  async index() {
+  async index(opt?: IndexOption) {
     const { bouncer, request } = this.ctx
     await bouncer.with('ServiceRequirementPolicy').authorize('viewList')
 
@@ -40,6 +41,8 @@ export default class ServiceRequirementService {
       })
       .orderBy('created_at', 'desc')
 
+    !opt?.disableFilter && serviceRequirementQuery.filter(request.qs())
+
     const serviceRequirements = await paginate<typeof ServiceRequirement>(
       serviceRequirementQuery,
       request
@@ -48,7 +51,7 @@ export default class ServiceRequirementService {
     return serviceRequirements
   }
 
-  async listForVendor() {
+  async listForVendor(opt?: IndexOption) {
     const { bouncer, request } = this.ctx
     await bouncer.with('ServiceRequirementPolicy').authorize('viewList')
 
@@ -68,6 +71,8 @@ export default class ServiceRequirementService {
       })
       .orderBy('created_at', 'desc')
 
+    !opt?.disableFilter && serviceRequirementQuery.filter(request.qs())
+
     const serviceRequirements = await paginate<typeof ServiceRequirement>(
       serviceRequirementQuery,
       request
@@ -76,7 +81,7 @@ export default class ServiceRequirementService {
     return serviceRequirements
   }
 
-  async myList() {
+  async myList(opt?: IndexOption) {
     const { auth, bouncer, request } = this.ctx
     await bouncer.with('ServiceRequirementPolicy').authorize('myList')
 
@@ -99,6 +104,8 @@ export default class ServiceRequirementService {
       .preload('tags', (t) => {
         t.select(['name'])
       })
+
+    !opt?.disableFilter && serviceRequirementQuery.filter(request.qs())
 
     const serviceRequirements = await paginate<typeof ServiceRequirement>(
       serviceRequirementQuery,
@@ -157,7 +164,7 @@ export default class ServiceRequirementService {
   }
 
   async showVendorPlacedbid() {
-    const { bouncer, params, response, auth } = this.ctx
+    const { bouncer, params, auth } = this.ctx
     const isVendor = auth.user?.userType === userTypes.VENDER
     if (!isVendor) {
       return 'Unautorized'
@@ -226,6 +233,7 @@ export default class ServiceRequirementService {
 
   async store() {
     const { auth, bouncer, request } = this.ctx
+    // @ts-ignore
     await bouncer.with('ServiceRequirementPolicy').authorize('create')
 
     const { keywords, images, ...payload } = await request.validateUsing(

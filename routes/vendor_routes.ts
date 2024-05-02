@@ -1,5 +1,6 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '../start/kernel.js'
+import { userTypes } from '#helpers/enums'
 const WebVendorController = () => import('#controllers/web/web_vendor_controller')
 
 router
@@ -19,6 +20,15 @@ router
     // bookings
     router.get('bookings', [WebVendorController, 'bookingIndex']).as('booking.index')
     router.get('bookings/:id', [WebVendorController, 'bookingShow']).as('booking.show')
+    router
+      .post('bookings/:id/update-status', [WebVendorController, 'updateBookingStatus'])
+      .as('booking.update-status')
+    router
+      .post('bookings/:id/request-completion', [WebVendorController, 'requestBookingCompletion'])
+      .as('booking.request-completion')
+    router
+      .post('bookings/:id/accept-completion', [WebVendorController, 'acceptBookingCompletion'])
+      .as('booking.accept-completion')
     // custom bookings
     router
       .get('custom-bookings', [WebVendorController, 'customBookingIndex'])
@@ -26,8 +36,23 @@ router
     router
       .get('custom-bookings/:id', [WebVendorController, 'customBookingShow'])
       .as('custom-booking.show')
+    router
+      .post('custom-bookings/:id/update-status', [WebVendorController, 'updateCustomBookingStatus'])
+      .as('custom-booking.update-status')
+    router
+      .post('custom-bookings/:id/request-completion', [
+        WebVendorController,
+        'requestCustomBookingCompletion',
+      ])
+      .as('custom-booking.request-completion')
+    router
+      .post('custom-bookings/:id/accept-completion', [
+        WebVendorController,
+        'acceptCustomBookingCompletion',
+      ])
+      .as('custom-booking.accept-completion')
 
-    // custom bookings
+    // requirements
     router.get('requirements', [WebVendorController, 'requirementIndex']).as('requirements.index')
     router.get('requirements/:id', [WebVendorController, 'requirementShow']).as('requirements.show')
     // bids
@@ -45,4 +70,4 @@ router
   })
   .prefix('vendor')
   .as('vendor')
-  .use([middleware.auth({ guards: ['web'] }), middleware.role('vendor')])
+  .use([middleware.auth({ guards: ['web'] }), middleware.role(userTypes.VENDER)])

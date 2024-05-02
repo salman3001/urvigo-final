@@ -1,6 +1,8 @@
-import { CookieParseOptions, CookieSerializeOptions, parse, serialize } from 'cookie-es'
+import type { CookieParseOptions, CookieSerializeOptions } from 'cookie-es'
+import { parse, serialize } from 'cookie-es'
 import { destr } from 'destr'
-import { Ref, ref, watch } from 'vue'
+import type { Ref } from 'vue'
+import { ref, watch } from 'vue'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type _CookieOptions = Omit<CookieSerializeOptions & CookieParseOptions, 'decode' | 'encode'>

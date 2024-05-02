@@ -22,7 +22,7 @@ export default class ChatSocketController {
     return `chat-room-${user.id}`
   }
 
-  private async isAllowed(user: any): Promise<boolean> {
+  private async isAllowed(_user: any): Promise<boolean> {
     // if (this.conversation && this.ticket.userId === user.id) {
     //   return true
     // }

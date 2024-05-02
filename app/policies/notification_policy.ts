@@ -1,4 +1,3 @@
-import { isAdmin } from '#helpers/permission_helpers'
 import Notification from '#models/notification'
 import { BasePolicy } from '@adonisjs/bouncer'
 

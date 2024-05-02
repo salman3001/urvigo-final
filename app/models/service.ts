@@ -25,6 +25,8 @@ import BusinessProfile from './business_profile.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import ServiceFilter from './filters/service_filter.js'
+import { DeliveryOptions } from '#helpers/enums'
+import WeeklyServiceTimeslot from './weekly_service_timeslot.js'
 
 export default class Service extends compose(BaseModel, Filterable) {
   static $filter = () => ServiceFilter
@@ -49,10 +51,13 @@ export default class Service extends compose(BaseModel, Filterable) {
   declare isActive: boolean
 
   @column()
-  declare locationSpecific: boolean
+  declare geoLocation: string
 
   @column()
-  declare geoLocation: string
+  declare address: string
+
+  @column()
+  declare deliveryOptions: DeliveryOptions
 
   @column({
     serialize: (v) => new BigNumber(v || 0).toFixed(1),
@@ -106,6 +111,9 @@ export default class Service extends compose(BaseModel, Filterable) {
   @manyToMany(() => Coupon, { pivotTable: 'service_coupons' })
   declare coupons: ManyToMany<typeof Coupon>
 
+  @hasMany(() => WeeklyServiceTimeslot)
+  declare weeklyServiceTimeslot: HasMany<typeof WeeklyServiceTimeslot>
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -132,6 +140,5 @@ export default class Service extends compose(BaseModel, Filterable) {
     }
   }
 }
-
 
 export type IService = Service

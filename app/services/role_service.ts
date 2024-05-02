@@ -57,12 +57,12 @@ export default class RoleService {
     await bouncer.with('RolePolicy').authorize('update')
     const role = await Role.findOrFail(+params.id)
 
-    const permissions = request.input('permissions') || []
+    const permissionsPayload = request.input('permissions') || []
 
     const isActive = request.input('isActive')
 
     role.isActive = isActive
-    role.permissions = permissions
+    role.permissions = permissionsPayload
     await role.save()
 
     return role
@@ -72,9 +72,9 @@ export default class RoleService {
     const { bouncer } = this.ctx
     await bouncer.with('RolePolicy').authorize('viewList')
 
-    const permissionsArray: string[] = []
+    const permissionsArray: number[] = []
 
-    for (const perm of Object.values(permissions)) {
+    for (const perm of Object.values(permissions) as number[]) {
       permissionsArray.push(perm)
     }
 

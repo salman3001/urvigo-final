@@ -4,7 +4,7 @@ import { VDataTableServer } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import type { IPaginatedModel } from '../../../../app/helpers/types'
 import ModalConfirm from '~/components/modal/ModalConfirm.vue'
-import { format } from 'date-fns'
+import { format, differenceInMinutes } from 'date-fns'
 import type { ICoupon } from '../../../../app/models/coupon'
 
 export default {
@@ -41,10 +41,22 @@ const headers = [
   { title: 'Discount Type', key: 'discountType' },
   { title: 'Discount Flat', key: 'discountFlat' },
   { title: 'Discount Percentage', key: 'discountPercentage' },
+  { title: 'Min. Purchase', key: 'minPurchaseAmount' },
+  { title: 'Max. Users', key: 'maxUsers' },
+  { title: 'Total Used', key: 'totalUsed' },
   { title: 'Valid From', key: 'validFrom' },
   { title: 'Expired At ', key: 'expiredAt' },
+  { title: 'Stautus', key: 'status' },
   { title: 'Action', key: 'actions' },
 ]
+
+const resolveCouponStatus = (validFrom: string | Date, expiredAt: string | Date) => {
+  const isValidFromValid = differenceInMinutes(validFrom, Date.now()) < 0
+  const isExpiredAtValid = differenceInMinutes(expiredAt, Date.now()) > 0
+  if (isValidFromValid && isExpiredAtValid) return { text: 'Active', color: 'success' }
+  if (!isValidFromValid && isExpiredAtValid) return { text: 'Waiting', color: 'warning' }
+  if (isValidFromValid && !isExpiredAtValid) return { text: 'Expired', color: 'error' }
+}
 
 watchDebounced(
   query,
@@ -147,8 +159,16 @@ watchDebounced(
 
           <!-- discount Percentage -->
 
-          <template #item.discountPercentage="{ item }">
-            &#x20B9;{{ item.discountPercentage }}%
+          <template #item.discountPercentage="{ item }"> {{ item.discountPercentage }}% </template>
+
+          <!-- Status -->
+
+          <template #item.status="{ item }">
+            <VChip
+              v-bind="resolveCouponStatus(item.validFrom, item.expiredAt)"
+              label
+              size="small"
+            />
           </template>
 
           <!-- Actions -->

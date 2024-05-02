@@ -475,4 +475,3 @@ const isPageActive = computed(() =>
   inset-inline-end: 1rem;
 }
 </style>
-~/utils/routes-old

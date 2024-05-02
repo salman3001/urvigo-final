@@ -2,6 +2,9 @@
 import Layout from '~/layouts/default.vue'
 import { VDataTable } from 'vuetify/components'
 import { format } from 'date-fns'
+import { OrderStatus } from '#helpers/enums'
+import BookingStatusUpdate from '~/components/BookingStatusUpdate.vue'
+import { resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
 
 export default {
   layout: Layout,
@@ -10,7 +13,7 @@ export default {
 
 <script setup lang="ts">
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import type { IBooking } from '../../../app/models/booking'
+import type { IBooking } from '#models/booking'
 import { computed } from 'vue'
 
 // const isConfirmDialogVisible = ref(false);
@@ -46,27 +49,26 @@ const headers = [
         <div>
           <div class="d-flex gap-2 align-center mb-2 flex-wrap">
             <h5 class="text-h5">Order #{{ booking?.id }}</h5>
-            <div class="d-flex gap-x-2 normalcase">
-              <VChip variant="tonal" color="success" label size="small">
-                {{ booking?.status }}
-              </VChip>
-              <VChip variant="tonal" color="info" label size="small">
-                Payment {{ booking?.paymentDetail?.paymentStatus }}
-              </VChip>
-            </div>
+            <VChip v-bind="resolveStatus(booking.status)" label size="small" />
           </div>
+          <div class="d-flex gap-2 align-center mb-2 flex-wrap">
+            <h6 class="text-h6">Payment Status</h6>
+            <VChip
+              v-bind="resolvePaymentStatus(booking?.paymentDetail?.paymentStatus)"
+              label
+              size="small"
+            />
+          </div>
+
           <div class="text-body-1">
             {{ format(booking?.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
           </div>
         </div>
-
-        <!-- <VBtn
-          variant="tonal"
-          color="error"
-          @click="isConfirmDialogVisible = !isConfirmDialogVisible"
-        >
-          Cancle Booking
-        </VBtn> -->
+        <BookingStatusUpdate
+          :booking="booking"
+          booking-type="normal"
+          :allowed-options="[OrderStatus.CANCLED, OrderStatus.COMPLETED]"
+        />
       </div>
 
       <VRow>
@@ -216,7 +218,7 @@ const headers = [
                   <div class="text-body-1">Customer ID: #47389</div>
                 </div>
               </div> -->
-              <!-- 
+              <!--
               <div class="d-flex gap-x-3 align-center">
                 <VAvatar variant="tonal" color="success">
                   <VIcon icon="tabler-shopping-cart" />

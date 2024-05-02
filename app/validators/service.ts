@@ -159,7 +159,7 @@ export const createServiceValidator = vine.compile(
       vine.object({
         name: vine.string().maxLength(100),
         price: vine.number(),
-        discountType: vine.enum(Object.values(DiscountType)),
+        discountType: vine.enum(DiscountType),
         discountFlat: vine.number().positive().optional(),
         discountPercentage: vine.number().positive().max(99).optional(),
         desc: vine.string().optional(),
@@ -246,7 +246,7 @@ export const updateServiceValidator = vine
           vine.object({
             name: vine.string().maxLength(100),
             price: vine.number(),
-            discountType: vine.enum(Object.values(DiscountType)),
+            discountType: vine.enum(DiscountType),
             discountFlat: vine.number().positive().optional(),
             discountPercentage: vine.number().positive().max(99).optional(),
             desc: vine.string().optional(),

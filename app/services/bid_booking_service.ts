@@ -7,10 +7,13 @@ import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import config from '@adonisjs/core/services/config'
 import db from '@adonisjs/lucid/services/db'
-import vine from '@vinejs/vine'
 import { BigNumber } from 'bignumber.js'
 import { DateTime } from 'luxon'
 import { IndexOption } from '../helpers/types.js'
+import {
+  UpdateBookingStatusValidator,
+  requestBookingCompletionValidator,
+} from '#validators/booking'
 
 @inject()
 export default class BidBookingService {
@@ -18,6 +21,7 @@ export default class BidBookingService {
 
   async index(opt?: IndexOption) {
     const { bouncer, request } = this.ctx
+    // @ts-ignore
     await bouncer.with('BidBookingPolicy').authorize('viewList')
     const bookingQuery = BidBooking.query()
       .preload('user', (u) => {
@@ -112,7 +116,7 @@ export default class BidBookingService {
           status: OrderStatus.PLACED,
           userId: auth.user?.id,
           businessProfileId: bid.vendor.businessProfile.id,
-          paymentDetail: payload.paymentdetail,
+          paymentDetail: payload.paymentdetail as any,
           history: [
             {
               date_time: DateTime.now(),
@@ -149,28 +153,123 @@ export default class BidBookingService {
 
   async updateStatus() {
     const { bouncer, request, params } = this.ctx
-    const bidBooking = await BidBooking.findOrFail(+params.id)
+    const booking = await BidBooking.findOrFail(+params.id)
+    await bouncer.with('BidBookingPolicy').authorize('update', booking)
 
-    await bouncer.with('BidBookingPolicy').authorize('update', bidBooking)
+    const payload = await request.validateUsing(UpdateBookingStatusValidator)
 
-    const validationSchema = vine.compile(
-      vine.object({
-        status: vine.enum(Object.values(OrderStatus)),
-        remarks: vine.string().optional(),
+    console.log('ran')
+    if (payload.status === OrderStatus.CONFIRMED) {
+      if (booking.status !== OrderStatus.PLACED) {
+        return 'Invalid Status'
+      } else {
+        await db.transaction(async (trx) => {
+          booking.useTransaction(trx)
+          booking.merge({ status: payload.status })
+          booking.history.push({
+            date_time: DateTime.now(),
+            event: `Booking ${payload.status}`,
+            remarks: payload?.remarks || '',
+          })
+          await booking.save()
+        })
+      }
+    }
+
+    if (payload.status === OrderStatus.CANCLED) {
+      if (
+        booking.status === OrderStatus.REJECTED ||
+        booking.status === OrderStatus.COMPLETED ||
+        booking.status === OrderStatus.COMPLETION_REQUESTED
+      ) {
+        return 'Invalid Status'
+      } else {
+        await db.transaction(async (trx) => {
+          booking.useTransaction(trx)
+          booking.merge({ status: payload.status })
+          booking.history.push({
+            date_time: DateTime.now(),
+            event: `Booking ${payload.status}`,
+            remarks: payload?.remarks || '',
+          })
+          await booking.save()
+        })
+      }
+    }
+
+    if (payload.status === OrderStatus.REJECTED) {
+      if (
+        booking.status === OrderStatus.CANCLED ||
+        booking.status === OrderStatus.COMPLETED ||
+        booking.status === OrderStatus.COMPLETION_REQUESTED
+      ) {
+        return 'Invalid Status'
+      } else {
+        await db.transaction(async (trx) => {
+          booking.useTransaction(trx)
+          booking.merge({ status: payload.status })
+          booking.history.push({
+            date_time: DateTime.now(),
+            event: `Booking ${payload.status}`,
+            remarks: payload?.remarks || '',
+          })
+          await booking.save()
+        })
+      }
+    }
+
+    await booking.refresh()
+
+    return booking
+  }
+
+  async requestCompletion() {
+    const { bouncer, request, params } = this.ctx
+    const booking = await BidBooking.findOrFail(+params.id)
+    await bouncer.with('BidBookingPolicy').authorize('update', booking)
+
+    const payload = await request.validateUsing(requestBookingCompletionValidator)
+
+    if (booking.status === OrderStatus.CONFIRMED) {
+      await db.transaction(async (trx) => {
+        booking.useTransaction(trx)
+        booking.merge({ status: OrderStatus.COMPLETION_REQUESTED })
+        booking.history.push({
+          date_time: DateTime.now(),
+          event: 'Booking completion requested',
+          remarks: payload?.remarks || '',
+        })
+        await booking.save()
       })
-    )
 
-    const payload = await request.validateUsing(validationSchema)
+      return booking
+    } else {
+      return 'Invalid Request'
+    }
+  }
 
-    bidBooking.merge({ status: payload.status })
-    bidBooking.history.push({
-      date_time: DateTime.now(),
-      event: `Booking ${payload.status}`,
-      remarks: payload?.remarks || '',
-    })
+  async acceptBookingCompleted() {
+    const { bouncer, request, params } = this.ctx
+    const booking = await BidBooking.findOrFail(+params.id)
+    await bouncer.with('BidBookingPolicy').authorize('update', booking)
 
-    await bidBooking.save()
+    const payload = await request.validateUsing(requestBookingCompletionValidator)
 
-    return bidBooking
+    if (booking.status === OrderStatus.COMPLETION_REQUESTED) {
+      await db.transaction(async (trx) => {
+        booking.useTransaction(trx)
+        booking.merge({ status: OrderStatus.COMPLETED })
+        booking.history.push({
+          date_time: DateTime.now(),
+          event: 'Booking completed',
+          remarks: payload?.remarks || '',
+        })
+        await booking.save()
+      })
+
+      return booking
+    } else {
+      return 'Invalid Request'
+    }
   }
 }

@@ -11,17 +11,19 @@ import supportTicketFactory from '#database/factories/support_ticket_factory'
 import templateFactory from '#database/factories/template_factory'
 import userFactory from '#database/factories/user_factory'
 import { TicketStatus, permissions, userTypes } from '#helpers/enums'
+import app from '@adonisjs/core/services/app'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
-  private async runSeeder(Seeder: { default: typeof BaseSeeder }) {
-    // if (
-    //   (!Seeder.default.environment.includes('development') && Application.inDev) ||
-    //   (!Seeder.default.environment.includes('testing') && Application.inTest) ||
-    //   (!Seeder.default.environment.includes('serviceion') && Application.inProduction)
-    // ) {
-    //   return
-    // }
+  // @ts-ignore
+  private async seed(Seeder: { default: typeof BaseSeeder }) {
+    if (
+      !Seeder.default.environment ||
+      (!Seeder.default.environment.includes('development') && app.inDev) ||
+      (!Seeder.default.environment.includes('testing') && app.inTest)
+    ) {
+      return
+    }
     await new Seeder.default(this.client).run()
   }
   async run() {

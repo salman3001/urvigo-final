@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "build:icons": "tsx inertia/plugins/iconify/build-icons.ts"
+    "build:icons": "tsx inertia/plugins/iconify/build-icons.ts",
+    "prepare": "husky install"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -49,7 +50,9 @@
     "@typescript-eslint/parser": "^7.7.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "^8.57.0",
-    "hot-hook": "^0.2.2",
+    "hot-hook": "^0.2.4",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "pino-pretty": "^11.0.0",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.1.2",
@@ -132,9 +135,24 @@
     "boundaries": [
       "./app/controllers/**/*.ts",
       "./app/middleware/**/*.ts",
-      "./app/policies/**/*.ts",
       "./database/**/*.ts",
       "./resources/*.ts"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && pnpm run typecheck"
+    }
+  },
+  "lint-staged": {
+    "./**/*.js": [
+      "eslint . --fix"
+    ],
+    "./**/*.ts": [
+      "eslint . --fix"
+    ],
+    "inertia/**/*.vue": [
+      "eslint . --fix"
     ]
   }
 }

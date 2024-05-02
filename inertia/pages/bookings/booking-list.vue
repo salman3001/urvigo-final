@@ -3,6 +3,8 @@ import Layout from '~/layouts/default.vue'
 import { VDataTableServer } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import { format } from 'date-fns'
+import { resolvePaymentMode, resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
+import BigNumber from 'bignumber.js'
 
 export default {
   layout: Layout,
@@ -12,7 +14,6 @@ export default {
 <script setup lang="ts">
 import { reactive } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import { OrderStatus } from '../../../app/helpers/enums'
 import type { IPaginatedModel } from '../../../app/helpers/types'
 import type { IBooking } from '../../../app/models/booking'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
@@ -20,14 +21,6 @@ import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import routes from '~/utils/routes'
 import { Link, router } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
-
-// import masterCardDark from "@images/icons/payments/img/master-dark.png";
-// import masterCardLight from "@images/icons/payments/img/mastercard.png";
-// import paypalDark from "@images/icons/payments/img/paypal-dark.png";
-// import paypalLight from "@images/icons/payments/img/paypal-light.png";
-
-// const mastercard = useGenerateImageVariant(masterCardLight, masterCardDark);
-// const paypal = useGenerateImageVariant(paypalLight, paypalDark);
 
 defineProps<{
   bookings: IPaginatedModel<IBooking>
@@ -47,24 +40,16 @@ const headers = [
   { title: 'id', key: 'id' },
   { title: 'Date', key: 'createdAt' },
   { title: 'Service', key: 'bookingDetail' },
-  { title: 'Payment', key: 'paymentDetail', sortable: false },
+  { title: 'Service Price', key: 'servicePrice', sortable: false },
+  { title: 'Qty', key: 'qty', sortable: false },
+  { title: 'Discount', key: 'vendorDiscount', sortable: false },
+  { title: 'Coupon Discount', key: 'couponDiscount', sortable: false },
+  { title: 'Total', key: 'total', sortable: false },
   { title: 'Status', key: 'status' },
-  { title: 'Method', key: 'method', sortable: false },
+  { title: 'Payment', key: 'paymentDetail', sortable: false },
+  { title: 'Payment Method', key: 'method', sortable: false },
   { title: 'Action', key: 'actions', sortable: false },
 ]
-
-const resolveStatus = (status: string) => {
-  if (status === OrderStatus.DELIVERED) return { text: 'Delivered', color: 'success' }
-  if (status === OrderStatus.PLACED) return { text: 'Placed', color: 'warning' }
-  if (status === OrderStatus.CONFIRMED) return { text: 'Confirmed', color: 'secondary' }
-  if (status === OrderStatus.REJECTED) return { text: 'Rejected', color: 'error' }
-  if (status === OrderStatus.CANCLED) return { text: 'Canceled', color: 'error' }
-}
-
-const resolvePaymentStatus = (status: string) => {
-  if (status === 'paid') return { text: 'Paid', color: 'success' }
-  if (status === 'pending') return { text: 'Pending', color: 'warning' }
-}
 
 watchDebounced(query, () => {
   router.reload({
@@ -163,6 +148,44 @@ watchDebounced(query, () => {
             </div>
           </template>
 
+          <!-- Service Price -->
+
+          <template #item.servicePrice="{ item }">
+            &#x20B9;{{ item.bookingDetail?.service_variant?.price }}
+          </template>
+
+          <!-- vendor discount -->
+
+          <template #item.vendorDiscount="{ item }">
+            <span
+              :class="{ 'text-success': new BigNumber(item.bookingDetail?.vendorDiscount).gt(0) }"
+            >
+              &#x20B9;{{ item.bookingDetail?.vendorDiscount }}
+            </span>
+          </template>
+
+          <!-- Coupon disocunt -->
+
+          <template #item.couponDiscount="{ item }">
+            <span
+              :class="{ 'text-success': new BigNumber(item.bookingDetail?.couponDiscount).gt(0) }"
+            >
+              &#x20B9;{{ item.bookingDetail?.couponDiscount }}
+            </span>
+          </template>
+
+          <!-- Qty -->
+
+          <template #item.qty="{ item }">
+            {{ item?.bookingDetail?.qty }}
+          </template>
+
+          <!-- total -->
+
+          <template #item.total="{ item }">
+            &#x20B9;{{ item?.bookingDetail?.grandTotal }}
+          </template>
+
           <!-- Payments -->
 
           <template #item.paymentDetail="{ item }">
@@ -184,19 +207,13 @@ watchDebounced(query, () => {
           </template>
 
           <!-- Method -->
-          <!-- <template #item.method="{ item }">
-          <div class="d-flex align-center">
-            <img
-              :src="item.method === 'mastercard' ? mastercard : paypal"
-              height="18"
+          <template #item.method="{ item }">
+            <VChip
+              v-bind="resolvePaymentMode(item?.paymentDetail?.paymentMode)"
+              label
+              size="small"
             />
-            <div class="text-body-1">
-              ...{{
-                item.method === "mastercard" ? item.methodNumber : "@gmail.com"
-              }}
-            </div>
-          </div>
-        </template> -->
+          </template>
 
           <!-- Actions -->
 
@@ -245,4 +262,3 @@ watchDebounced(query, () => {
   padding-block-end: 1rem;
 }
 </style>
-~/utils/routes-old

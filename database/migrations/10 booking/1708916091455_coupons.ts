@@ -14,6 +14,7 @@ export default class extends BaseSchema {
       table.decimal('discount_flat', 10, 2).defaultTo(0)
       table.decimal('discount_percentage', 4, 2).defaultTo(0)
       table.integer('max_users').notNullable().defaultTo(0)
+      table.integer('total_used').notNullable().defaultTo(0)
       table.decimal('min_purchase_amount', 10, 2)
       table.dateTime('valid_from').notNullable()
       table.dateTime('expired_at').notNullable()

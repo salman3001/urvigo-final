@@ -145,4 +145,3 @@ const { user, isVendor } = useAuth()
     </VAvatar>
   </VBadge>
 </template>
-~/utils/routes-old

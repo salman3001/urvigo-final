@@ -35,6 +35,9 @@ export default class Coupon extends compose(BaseModel, Filterable) {
   declare maxUsers: number
 
   @column()
+  declare totalUsed: number
+
+  @column()
   declare minPurchaseAmount: number
 
   @column({ consume: (v: string) => new Date(v) })

@@ -269,4 +269,3 @@ body .v-layout .v-application__wrap {
   }
 }
 </style>
-~/utils/routes-old

@@ -51,5 +51,4 @@ export default class ServiceSubcategory extends BaseModel {
   declare updatedAt: DateTime
 }
 
-
-export type IServiceSubcategory = ServiceSubcategorys
+export type IServiceSubcategory = ServiceCategory

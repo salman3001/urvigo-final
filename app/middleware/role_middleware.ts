@@ -1,3 +1,4 @@
+import { userTypes } from '#helpers/enums'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 
@@ -11,7 +12,7 @@ export default class RoleMiddleware {
    */
   redirectTo = '/denied'
 
-  async handle(ctx: HttpContext, next: NextFn, role: 'admin' | 'vendor' | 'user') {
+  async handle(ctx: HttpContext, next: NextFn, role: userTypes) {
     const user = ctx.auth.user
     if (user && user.userType === role) {
       return next()

@@ -1,13 +1,11 @@
 import routes from '~/utils/routes'
 
 export default [
-  { heading: 'Analytics' },
   {
     title: 'Dashboard',
     icon: { icon: 'tabler-brand-envato' },
     children: [{ title: 'Analytics', to: routes('vendor.dashboard') }],
   },
-  { heading: 'Services & Coupons' },
   {
     title: 'Services',
     icon: { icon: 'tabler-brand-asana' },
@@ -36,7 +34,6 @@ export default [
       },
     ],
   },
-  { heading: 'Bids & Requirements' },
   {
     title: 'Bids & Requirements ',
     icon: { icon: 'tabler-hand-grab' },
@@ -56,8 +53,6 @@ export default [
       },
     ],
   },
-
-  { heading: 'Bookings' },
   {
     title: 'My Bookings',
     icon: { icon: 'tabler-shopping-cart' },
@@ -74,7 +69,6 @@ export default [
       },
     ],
   },
-  { heading: 'Payments' },
 
   {
     title: 'Wallet & Payments',
@@ -89,16 +83,5 @@ export default [
         to: routes('web.home'),
       },
     ],
-  },
-  { heading: 'Settings' },
-  {
-    title: 'Settings Page 1',
-    icon: { icon: 'tabler-shopping-cart' },
-    to: routes('web.home'),
-  },
-  {
-    title: 'Settings Page 2',
-    icon: { icon: 'web.home' },
-    to: routes('web.home'),
   },
 ]

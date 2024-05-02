@@ -2,7 +2,7 @@ import app from '@adonisjs/core/services/app'
 import Ws from '#services/ws'
 import wsAuth from '#middleware/ws_auth'
 import NotificationSocketController from '#controllers/ws/notification_socket_controller'
-import ChatSocketController from '#controllers/ws/chat_socket_Controller'
+import ChatSocketController from '#controllers/ws/chat_socket_controller'
 
 app.ready(() => {
   Ws.boot()

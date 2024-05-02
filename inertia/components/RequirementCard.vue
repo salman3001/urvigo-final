@@ -30,7 +30,10 @@ const getImageUrls = useGetImageUrl()
         </VCardItem>
 
         <VCardText>
-          {{ requirement.desc }}
+          <p>
+            {{ requirement.desc }}
+          </p>
+          <VChip>&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip>
         </VCardText>
         <VCardItem v-if="requirement?.images">
           <h3>Images</h3>
@@ -51,7 +54,7 @@ const getImageUrls = useGetImageUrl()
                 <VChip v-if="requirement.urgent" color="error">Urgent Requirment</VChip>
                 <VChip color="warning" v-if="!requirement.acceptedBidId">Active</VChip>
                 <VChip v-else-if="requirement.acceptedBidId != null" color="success"
-                  >Accepted</VChip
+                  >Completed</VChip
                 >
                 <VChip
                   color="error"
@@ -117,4 +120,3 @@ const getImageUrls = useGetImageUrl()
     </VRow>
   </VCard>
 </template>
-~/utils/routes-old

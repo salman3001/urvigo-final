@@ -34,4 +34,3 @@ defineProps<{
     </div>
   </VContainer>
 </template>
-~/utils/routes-old

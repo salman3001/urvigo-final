@@ -1,16 +1,234 @@
 <script lang="ts">
 import Layout from '~/layouts/VendorLayout.vue'
+import { VDataTableServer } from 'vuetify/components'
+import TablePagination from '~/@core/components/TablePagination.vue'
+import type { IBidBooking } from '#models/bid_booking'
+import { format } from 'date-fns'
+import { resolvePaymentMode, resolveStatus } from '~/utils/helpers'
 
 export default {
-    layout: Layout,
+  layout: Layout,
 }
 </script>
 
 <script setup lang="ts">
+import { reactive } from 'vue'
+import type { IPaginatedModel } from '#helpers/types'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
+import routes from '~/utils/routes'
+import { Link, router } from '@inertiajs/vue3'
+import { watchDebounced } from '@vueuse/core'
+
+defineProps<{
+  bookings: IPaginatedModel<IBidBooking>
+}>()
+
+const query = reactive({
+  perPage: 20,
+  page: 1,
+  orderBy: 'created_at:desc',
+  search: '',
+})
+
+// Data table Headers
+const headers = [
+  { title: 'id', key: 'id' },
+  { title: 'Date', key: 'createdAt' },
+  { title: 'Service Requirement', key: 'bookingDetail' },
+  { title: 'Service Price', key: 'servicePrice', sortable: false },
+  { title: 'Qty', key: 'qty', sortable: false },
+  { title: 'Total', key: 'total', sortable: false },
+  { title: 'Payment', key: 'paymentDetail', sortable: false },
+  { title: 'Payment Method', key: 'method', sortable: false },
+  { title: 'Status', key: 'status' },
+  { title: 'Action', key: 'actions', sortable: false },
+]
+
+const resolvePaymentStatus = (status: string) => {
+  if (status === 'paid') return { text: 'Paid', color: 'success' }
+  if (status === 'pending') return { text: 'Pending', color: 'warning' }
+}
+
+watchDebounced(query, () => {
+  router.reload({
+    data: query,
+    replace: true,
+  })
+})
 </script>
 
 <template>
-    <div>custom booking-index
+  <VContainer>
+    <div>
+      <VCard>
+        <!-- 👉 Filters -->
+        <VCardText>
+          <div class="d-flex justify-sm-space-between justify-start flex-wrap gap-4">
+            <AppTextField
+              v-model="query.search"
+              placeholder="Search Booking"
+              style="max-inline-size: 200px; min-inline-size: 200px"
+            />
 
+            <div class="d-flex gap-x-4 align-center">
+              <AppSelect
+                v-model="query.perPage"
+                style="min-inline-size: 6.25rem"
+                :items="[5, 10, 20, 50, 100]"
+              />
+              <!-- <VBtn
+              variant="tonal"
+              color="secondary"
+              prepend-icon="tabler-upload"
+              text="Export"
+            /> -->
+            </div>
+          </div>
+        </VCardText>
+
+        <VDivider />
+
+        <!-- 👉 Order Table -->
+        <VDataTableServer
+          v-model:items-per-page="query.perPage!"
+          v-model:page="query.page"
+          :headers="headers"
+          :items="bookings?.data"
+          item-value="order"
+          :items-length="bookings?.meta?.total!"
+          show-select
+          class="text-no-wrap"
+        >
+          <!-- Order ID -->
+          <template #item.id="{ item }">
+            <Link :href="routes('web.custom_booking.show', [item.id])"> #{{ item.id }} </Link>
+          </template>
+
+          <!-- Date -->
+
+          <template #item.createdAt="{ item }">
+            {{ format(item.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
+          </template>
+
+          <!-- Customers  -->
+
+          <template #item.bookingDetail="{ item }">
+            <div class="d-flex align-center gap-x-3">
+              <!-- <VAvatar
+                size="34"
+                :color="item?.bookingDetail?.service_variant.image?.url ? 'primary' : ''"
+                :variant="'tonal'"
+              >
+                <VImg :src="getImageUrl(item?.bookingDetail?.service_variant.image?.thumb_url)" />
+              </VAvatar> -->
+
+              <div class="d-flex flex-column">
+                <div class="text-body-1 font-weight-medium">
+                  <Link
+                    :href="
+                      routes('vendor.requirements.show', [
+                        item.bookingDetail?.serviceRequirement.id,
+                      ])
+                    "
+                    class="text-link"
+                  >
+                    {{ item.bookingDetail?.serviceRequirement.title }}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Service Price -->
+
+          <template #item.servicePrice="{ item }">
+            &#x20B9;{{ item.bookingDetail?.acceptedBid.offeredPrice }}
+          </template>
+
+          <!-- Qty -->
+
+          <template #item.qty="{ item }">
+            {{ item?.qty }}
+          </template>
+
+          <!-- total -->
+
+          <template #item.total="{ item }"> &#x20B9;{{ item?.price }} </template>
+
+          <!-- Payments -->
+
+          <template #item.paymentDetail="{ item }">
+            <div
+              :class="`text-${resolvePaymentStatus(item.paymentDetail?.paymentStatus)?.color}`"
+              class="font-weight-medium d-flex align-center gap-x-2"
+            >
+              <VIcon icon="tabler-circle-filled" size="10" />
+              <div style="line-height: 22px">
+                {{ resolvePaymentStatus(item?.paymentDetail?.paymentStatus)?.text }}
+              </div>
+            </div>
+          </template>
+
+          <!-- Status -->
+
+          <template #item.status="{ item }">
+            <VChip v-bind="resolveStatus(item.status)" label size="small" />
+          </template>
+
+          <!-- Method -->
+          <template #item.method="{ item }">
+            <VChip
+              v-bind="resolvePaymentMode(item?.paymentDetail?.paymentMode)"
+              label
+              size="small"
+            />
+          </template>
+
+          <!-- Actions -->
+
+          <template #item.actions="{ item }">
+            <IconBtn>
+              <VIcon icon="tabler-dots-vertical" />
+              <VMenu activator="parent">
+                <VList>
+                  <Link :href="routes('vendor.custom-booking.show', [item.id])">
+                    <VListItem value="view"> View </VListItem>
+                  </Link>
+                </VList>
+              </VMenu>
+            </IconBtn>
+          </template>
+
+          <!-- pagination -->
+
+          <template #bottom>
+            <TablePagination
+              :page="Number(query.page)"
+              :items-per-page="Number(bookings?.meta?.perPage)"
+              :total-items="Number(bookings?.meta?.total)"
+              @update:page="
+                (p) => {
+                  query.page = p
+                }
+              "
+            />
+          </template>
+        </VDataTableServer>
+      </VCard>
     </div>
+  </VContainer>
+  <br />
+  <br />
 </template>
+
+<style lang="scss" scoped>
+.customer-title:hover {
+  color: rgba(var(--v-theme-primary)) !important;
+}
+
+.product-widget {
+  border-block-end: 1px solid rgba(var(--v-theme-on-surface), var(--v-border-opacity));
+  padding-block-end: 1rem;
+}
+</style>

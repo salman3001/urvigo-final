@@ -312,4 +312,3 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('~/@core/components/A
   }
 }
 </style>
-~/utils/routes-old

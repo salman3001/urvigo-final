@@ -104,8 +104,56 @@ export default class WebVendorController {
 
   async bookingShow({ inertia }: HttpContext) {
     return inertia.render('vendor/bookings/booking-show', {
-      bookings: () => this.bookingService.show(),
+      booking: () => this.bookingService.show(),
     })
+  }
+
+  async updateBookingStatus({ response, session }: HttpContext) {
+    const data = await this.bookingService.updateStatus()
+    if (data === 'Invalid Status') {
+      session.flash('flash', {
+        message: 'Invalid Booking Status',
+        type: 'error',
+      })
+    } else {
+      session.flash('flash', {
+        message: 'Booking Status updated',
+        type: 'success',
+      })
+    }
+    return response.redirect().back()
+  }
+
+  async requestBookingCompletion({ response, session }: HttpContext) {
+    const data = await this.bookingService.requestCompletion()
+    if (data === 'Invalid Request') {
+      session.flash('flash', {
+        message: 'Invalid Request',
+        type: 'error',
+      })
+    } else {
+      session.flash('flash', {
+        message: 'Booking Completion request created',
+        type: 'success',
+      })
+    }
+    return response.redirect().back()
+  }
+
+  async acceptBookingCompletion({ response, session }: HttpContext) {
+    const data = await this.bookingService.acceptBookingCompleted()
+    if (data === 'Invalid Request') {
+      session.flash('flash', {
+        message: 'Invalid Request',
+        type: 'error',
+      })
+    } else {
+      session.flash('flash', {
+        message: 'Booking Completion accepted',
+        type: 'success',
+      })
+    }
+    return response.redirect().back()
   }
 
   async customBookingIndex({ inertia }: HttpContext) {
@@ -116,8 +164,58 @@ export default class WebVendorController {
 
   async customBookingShow({ inertia }: HttpContext) {
     return inertia.render('vendor/custom-bookings/custom-booking-show', {
-      bookings: () => this.bidbookingService.show(),
+      booking: () => this.bidbookingService.show(),
     })
+  }
+
+  async updateCustomBookingStatus({ response, session }: HttpContext) {
+    console.log('ran controller')
+
+    const data = await this.bidbookingService.updateStatus()
+    if (data === 'Invalid Status') {
+      session.flash('flash', {
+        message: 'Invalid Booking Status',
+        type: 'error',
+      })
+    } else {
+      session.flash('flash', {
+        message: 'Booking Status updated',
+        type: 'success',
+      })
+    }
+    return response.redirect().back()
+  }
+
+  async requestCustomBookingCompletion({ response, session }: HttpContext) {
+    const data = await this.bidbookingService.requestCompletion()
+    if (data === 'Invalid Request') {
+      session.flash('flash', {
+        message: 'Invalid Request',
+        type: 'error',
+      })
+    } else {
+      session.flash('flash', {
+        message: 'Booking Completion request created',
+        type: 'success',
+      })
+    }
+    return response.redirect().back()
+  }
+
+  async acceptCustomBookingCompletion({ response, session }: HttpContext) {
+    const data = await this.bidbookingService.acceptBookingCompleted()
+    if (data === 'Invalid Request') {
+      session.flash('flash', {
+        message: 'Invalid Request',
+        type: 'error',
+      })
+    } else {
+      session.flash('flash', {
+        message: 'Booking Completion accepted',
+        type: 'success',
+      })
+    }
+    return response.redirect().back()
   }
 
   async requirementIndex({ inertia }: HttpContext) {
@@ -203,6 +301,7 @@ export default class WebVendorController {
   async couponsEdit({ inertia }: HttpContext) {
     return inertia.render('vendor/coupons/coupon-edit', {
       coupon: () => this.couponService.show(),
+      services: () => this.serviceService.myAllList(),
     })
   }
 

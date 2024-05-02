@@ -159,4 +159,3 @@ const getImageUrl = useGetImageUrl()
     />
   </ModalBase>
 </template>
-~/utils/routes-old

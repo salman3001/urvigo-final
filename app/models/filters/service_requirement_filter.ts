@@ -11,17 +11,19 @@ export default class ServiceRequirementFilter extends BaseModelFilter {
   }
 
   orderBy(value: string): void {
+    console.log(value)
+
     const [orderBy, direction] = value.split(':')
     this.$query.orderBy(orderBy, (direction as 'desc') || 'asc')
   }
 
-  Accetped(value: string): void {
+  completed(value: string): void {
     if (value) {
       this.$query.whereNotNull('accepted_bid_id')
     }
   }
 
-  Active(value: string): void {
+  active(value: string): void {
     if (value) {
       this.$query.whereNull('accepted_bid_id')
     }

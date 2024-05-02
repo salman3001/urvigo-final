@@ -103,5 +103,4 @@ export default class Review extends BaseModel {
   // }
 }
 
-
 export type IReview = Review

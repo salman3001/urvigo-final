@@ -149,4 +149,3 @@ const form = useForm({
 <style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
 </style>
-~/utils/routes-old

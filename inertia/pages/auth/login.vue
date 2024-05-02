@@ -159,4 +159,3 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 <style lang="scss">
 @use '~/@core/scss/template/pages/page-auth.scss';
 </style>
-~/utils/routes-old

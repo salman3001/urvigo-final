@@ -1,10 +1,11 @@
 <script lang="ts">
 import Layout from '~/layouts/VendorLayout.vue'
 import routes from '~/utils/routes'
-import type { IService } from '../../../../app/models/service'
+import type { IService } from '#models/service'
 import AppDateTimePicker from '~/@core/components/app-form-elements/AppDateTimePicker.vue'
 import { ref } from 'vue'
-import { ICoupon } from '../../../../app/models/coupon'
+import { ICoupon } from '#models/coupon'
+import { DiscountType } from '#helpers/enums'
 
 export default {
   layout: Layout,
@@ -19,6 +20,7 @@ import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { maxNumValidator, minNumValidator, requiredValidator } from '~/@core/utils/validators'
 import CustomForm from '~/components/form/CustomForm.vue'
 import ErrorAlert from '~/components/form/ErrorAlert.vue'
+import { format } from 'date-fns'
 
 const props = defineProps<{
   services: IService[]
@@ -26,25 +28,38 @@ const props = defineProps<{
 }>()
 
 const form = useForm({
-  name: porps?.coupon?.name || '',
-  desc: porps?.coupon?.desc ||'',
-  discountType:porps?.coupon?.discountType ||'' 'flat',
-  discountFlat: porps?.coupon?.discountFlat || 0,
-  discountPercentage: porps?.coupon?.discountPercentage || 0,
-  maxUsers: porps?.coupon?.maxUsers || 0,
-  minPurchaseAmount: porps?.coupon?.minPurchaseAmount || 0,
-  validFrom: porps?.coupon?.validFrom || 0,
-  expiredAt: porps?.coupon?.expiredAt || 0,
-  serviceIds: [] as number[],
+  name: props?.coupon?.name || '',
+  desc: props?.coupon?.desc || '',
+  discountType: props?.coupon?.discountType || 'flat',
+  discountFlat: props?.coupon?.discountFlat || 0,
+  discountPercentage: props?.coupon?.discountPercentage || 0,
+  maxUsers: props?.coupon?.maxUsers || 0,
+  minPurchaseAmount: props?.coupon?.minPurchaseAmount || 10,
+  validFrom: (props?.coupon?.validFrom || 0) as unknown as string,
+  expiredAt: (props?.coupon?.expiredAt || 0) as unknown as string,
+  serviceIds: props?.coupon?.services?.map((s) => s.id) || [],
 })
 
-const dateRange = ref<string>((porps?.coupon?.validFrom))
+const dateRange = ref<string>(
+  format(props?.coupon?.validFrom, 'dd/MM/yyyy HH:mm') +
+    ' to ' +
+    format(props?.coupon?.expiredAt, 'dd/MM/yyyy HH:mm')
+)
 
 const submit = () => {
   const [validFrom, expiredAt] = dateRange.value!.split(' to ')
   form.validFrom = validFrom
   form.expiredAt = expiredAt
-  form.post(routes('vendor.coupon.create.post'))
+  form.put(routes('vendor.coupon.edit.post', [props.coupon.id]))
+}
+
+const minPurchaseValidator = (v: string) => {
+  if (form.discountType === DiscountType.FLAT) {
+    return minNumValidator(v, form.discountFlat)
+  }
+  if (form.discountType === DiscountType.PERCENATAGE) {
+    return minNumValidator(v, 10)
+  }
 }
 </script>
 
@@ -53,7 +68,7 @@ const submit = () => {
     <CustomForm @submit="submit">
       <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
         <div class="d-flex flex-column justify-center">
-          <h4 class="text-h4 font-weight-medium">Add a new Discount Coupon</h4>
+          <h4 class="text-h4 font-weight-medium">Update Discount Coupon</h4>
           <div class="text-body-1">
             You can add coupons to providers customers special discount on checkout
           </div>
@@ -64,7 +79,7 @@ const submit = () => {
             <VBtn variant="tonal" color="secondary"> Discard </VBtn>
           </Link>
           <!-- <VBtn variant="tonal" color="primary" > Save for later </VBtn> -->
-          <VBtn type="submit" :disabled="form.processing">Add Coupon</VBtn>
+          <VBtn type="submit" :disabled="form.processing">Update Coupon</VBtn>
         </div>
       </div>
       <VRow>
@@ -134,7 +149,7 @@ const submit = () => {
                     type="number"
                     v-model="form.minPurchaseAmount"
                     label="Minimum purchase amount"
-                    :rules="[(v: string) => minNumValidator(v, 0)]"
+                    :rules="[requiredValidator, minPurchaseValidator]"
                   />
                 </VCol>
                 <VCol cols="12" md="6">

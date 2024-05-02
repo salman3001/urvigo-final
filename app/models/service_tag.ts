@@ -5,7 +5,6 @@ import Faq from './faq.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Seo from './seo.js'
 
-
 export default class ServiceTag extends BaseModel {
   @column({ isPrimary: true })
   declare id: number

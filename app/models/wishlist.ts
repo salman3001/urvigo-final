@@ -10,7 +10,7 @@ export default class Wishlist extends BaseModel {
   @column()
   declare userId: number
 
-  @belongsTo(()=>User)
+  @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
   @manyToMany(() => Service, {
@@ -18,6 +18,5 @@ export default class Wishlist extends BaseModel {
   })
   declare items: ManyToMany<typeof Service>
 }
-
 
 export type IWishlist = Wishlist

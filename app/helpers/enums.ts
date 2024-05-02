@@ -1,7 +1,7 @@
 export enum TicketStatus {
-  OPEN = 'Open',
-  CLOSED = 'Closed',
-  RESPONDED = 'Responded',
+  OPEN = 1,
+  CLOSED = 2,
+  RESPONDED = 3,
 }
 
 export enum ServiceLocationType {
@@ -11,33 +11,33 @@ export enum ServiceLocationType {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export enum permissions {
-  MANAGE_ADMIN_USERS = 'Manage Admin Users',
-  MANAGE_BLOGS = 'Manage Blogs',
-  MANAGE_CAMPAIGNS = 'Manage Campains',
-  MANAGE_SUBSCRIBERS = 'Manage Subscribers',
-  MANAGE_INTERESTS = 'Manage Intrests',
-  MANAGE_TEMPLATES = 'Manage Templates',
-  MANAGE_CONTACT_MESSAGES = 'Manage Cotact Messages',
-  MANAGE_KNOWLEDGEBASE = 'Manage Knowledgebase',
-  MANAGE_TICKETS = 'Manage Support Tickets',
-  MANAGE_PRODUCT = 'Manage Services',
-  MANAGE_SERVICE = 'Manage Services',
-  MANAGE_USER = 'Manage Users',
-  MANAGE_LOCATION = 'Manage Location',
-  MANAGE_ROLES = 'Manage Roles',
-  MANAGE_MEDIA = 'Manage Media',
-  MANAGE_BUSINESS = 'Manage Business',
-  MANAGE_BOOKINGS = 'Manage Bookings',
-  MANAGE_BID_BOOKINGS = 'Manage Bid Bookings',
-  MANAGE_COUPONS = 'Manage Coupons',
+  MANAGE_ADMIN_USERS = 1,
+  MANAGE_BLOGS = 2,
+  MANAGE_CAMPAIGNS = 3,
+  MANAGE_SUBSCRIBERS = 4,
+  MANAGE_INTERESTS = 5,
+  MANAGE_TEMPLATES = 6,
+  MANAGE_CONTACT_MESSAGES = 7,
+  MANAGE_KNOWLEDGEBASE = 8,
+  MANAGE_TICKETS = 9,
+  MANAGE_PRODUCT = 10,
+  MANAGE_SERVICE = 11,
+  MANAGE_USER = 12,
+  MANAGE_LOCATION = 13,
+  MANAGE_ROLES = 14,
+  MANAGE_MEDIA = 15,
+  MANAGE_BUSINESS = 16,
+  MANAGE_BOOKINGS = 17,
+  MANAGE_BID_BOOKINGS = 18,
+  MANAGE_COUPONS = 19,
 }
 
 export enum NotificationTypes {
-  NEW_SUPPORT_TICKET = 'new-support-ticket',
-  BOOKING_CREATED = 'booking-created',
-  BOOKING_RECIEVED = 'booking-recieved',
-  SERVICE_REQUIREMENT_ADDED = 'service_requirement-added',
-  BID_RECIEVED = 'bid-recieved',
+  NEW_SUPPORT_TICKET = 1,
+  BOOKING_CREATED = 2,
+  BOOKING_RECIEVED = 3,
+  SERVICE_REQUIREMENT_ADDED = 4,
+  BID_RECIEVED = 5,
 }
 
 export enum MediaTypes {
@@ -46,32 +46,66 @@ export enum MediaTypes {
 }
 
 export enum OrderStatus {
-  PLACED = 'placed',
-  CONFIRMED = 'confirmed',
-  COMPLETED = 'completed',
-  DELIVERED = 'delivered',
-  CANCLED = 'cancled',
-  REJECTED = 'rejected',
+  PLACED = 1,
+  CONFIRMED = 2,
+  COMPLETION_REQUESTED = 3,
+  COMPLETED = 4,
+  CANCLED = 5,
+  REJECTED = 6,
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export enum userTypes {
-  USER = 'user',
-  ADMIN = 'admin',
-  VENDER = 'vendor',
+  USER = 1,
+  ADMIN = 2,
+  VENDER = 3,
 }
 
 export enum CouponType {
-  VENDOR = 'vendor',
-  ADMIN = 'admin',
+  VENDOR = 1,
+  ADMIN = 2,
 }
 
 export enum DiscountType {
-  FLAT = 'flat',
-  PERCENATAGE = 'percentage',
+  FLAT = 1,
+  PERCENATAGE = 2,
 }
 
 export enum BudgetType {
   HOURLY = 'hourly',
   FIXED = 'fixed',
+}
+
+export enum PaymentStatus {
+  PENDING = 1,
+  PARTIAL_PAIID = 2,
+  PAID = 3,
+  REFUND_REQUESTED = 4,
+  REFUNDED = 5,
+}
+
+export enum PaymentMode {
+  COD = 1,
+  ONLINE = 2,
+}
+
+export enum DeliveryOptions {
+  HOME_SERVICE = 1,
+  WALK_IN = 2,
+  BOTH = 3,
+}
+
+export enum TimeSlotStatus {
+  BOOKED = 1,
+  AVAILABLE = 2,
+}
+
+export enum WeekDays {
+  MONDAY = 1,
+  TUESDAY = 2,
+  WEDNESDAY = 3,
+  THURSDAY = 4,
+  FRIDAY = 5,
+  SATURDAY = 6,
+  SUNDAY = 7,
 }

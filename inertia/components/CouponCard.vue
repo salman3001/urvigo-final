@@ -8,15 +8,16 @@ defineProps<{
 </script>
 
 <template>
-  <VCard :color="'primary'" hover class="cursor-pointer">
-    <VCardItem>
-      <p>{{ coupon.name }}</p>
-      <p v-if="coupon.discountType == 'percentage'">
-        {{ new BigNumber(coupon.discountPercentage).toFixed() }}% off
-      </p>
-      <p v-if="coupon.discountType == 'flat'" class="text-h6">
-        &#8377;{{ coupon.discountFlat }} flat off
-      </p>
-    </VCardItem>
-  </VCard>
+  <VCardItem class="cursor-pointer bg-primary rounded">
+    <p>{{ coupon.name }}</p>
+    <p v-if="coupon.discountType == 'percentage'">
+      {{ new BigNumber(coupon.discountPercentage).toFixed() }}% off on minimum purchase of &#8377;{{
+        coupon.minPurchaseAmount
+      }}
+    </p>
+    <p v-if="coupon.discountType == 'flat'" class="text-h6">
+      &#8377;{{ coupon.discountFlat }} flat off on minimum purchase of
+      {{ coupon.minPurchaseAmount }}
+    </p>
+  </VCardItem>
 </template>

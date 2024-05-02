@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { column, BaseModel, afterCreate } from '@adonisjs/lucid/orm'
+import { column, BaseModel } from '@adonisjs/lucid/orm'
 import { NotificationTypes } from '#helpers/enums'
 
 export default class Notification extends BaseModel {
@@ -39,6 +39,5 @@ export default class Notification extends BaseModel {
   //   // Ws.io.of('/notifications/').to(room).emit('new-notification', notification)
   // }
 }
-
 
 export type INotification = Notification

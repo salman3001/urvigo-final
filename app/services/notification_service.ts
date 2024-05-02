@@ -5,7 +5,7 @@ import { paginate } from '../helpers/common.js'
 import db from '@adonisjs/lucid/services/db'
 
 @inject()
-export default class notificationsService {
+export default class NotificationsService {
   constructor(protected ctx: HttpContext) {}
   async index() {
     const { auth, request, bouncer } = this.ctx

@@ -3,6 +3,9 @@ import Layout from '~/layouts/default.vue'
 import { VDataTable } from 'vuetify/components'
 import type { IBidBooking } from '#models/bid_booking'
 import { format } from 'date-fns'
+import BookingStatusUpdate from '~/components/BookingStatusUpdate.vue'
+import { OrderStatus } from '#helpers/enums'
+import { resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
 
 export default {
   layout: Layout,
@@ -42,27 +45,26 @@ const headers = [
         <div>
           <div class="d-flex gap-2 align-center mb-2 flex-wrap">
             <h5 class="text-h5">Order #{{ booking?.id }}</h5>
-            <div class="d-flex gap-x-2 normalcase">
-              <VChip variant="tonal" color="success" label size="small">
-                {{ booking?.status }}
-              </VChip>
-              <VChip variant="tonal" color="info" label size="small">
-                Payment {{ booking?.paymentDetail?.paymentStatus }}
-              </VChip>
-            </div>
+            <VChip v-bind="resolveStatus(booking.status)" label size="small" />
           </div>
+          <div class="d-flex gap-2 align-center mb-2 flex-wrap">
+            <h6 class="text-h6">Payment Status</h6>
+            <VChip
+              v-bind="resolvePaymentStatus(booking?.paymentDetail?.paymentStatus)"
+              label
+              size="small"
+            />
+          </div>
+
           <div class="text-body-1">
-            {{ format(booking.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
+            {{ format(booking?.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
           </div>
         </div>
-
-        <!-- <VBtn
-          variant="tonal"
-          color="error"
-          @click="isConfirmDialogVisible = !isConfirmDialogVisible"
-        >
-          Cancle Booking
-        </VBtn> -->
+        <BookingStatusUpdate
+          :booking="booking"
+          booking-type="custom"
+          :allowed-options="[OrderStatus.CANCLED, OrderStatus.COMPLETED]"
+        />
       </div>
 
       <VRow>

@@ -1,6 +1,7 @@
 import type User from '#models/user'
 import type { PageObject } from '@adonisjs/inertia/types'
 import type ServiceVariant from '../models/service_variant.js'
+import { PaymentMode, PaymentStatus } from './enums.js'
 
 export type ImageType = {
   url: string
@@ -51,8 +52,8 @@ export type Prop<T extends (...args: any[]) => Promise<string | PageObject>> = E
 >['props']
 
 export interface PaymentDetail {
-  paymentMode: 'cod' | 'online'
-  paymentStatus: 'pending' | 'paid'
+  paymentMode: PaymentMode
+  paymentStatus: PaymentStatus
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

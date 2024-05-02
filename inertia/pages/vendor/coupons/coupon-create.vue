@@ -4,6 +4,7 @@ import routes from '~/utils/routes'
 import type { IService } from '../../../../app/models/service'
 import AppDateTimePicker from '~/@core/components/app-form-elements/AppDateTimePicker.vue'
 import { ref } from 'vue'
+import { DiscountType } from '#helpers/enums'
 
 export default {
   layout: Layout,
@@ -43,6 +44,15 @@ const submit = () => {
   form.validFrom = validFrom
   form.expiredAt = expiredAt
   form.post(routes('vendor.coupon.create.post'))
+}
+
+const minPurchaseValidator = (v: string) => {
+  if (form.discountType === DiscountType.FLAT) {
+    return minNumValidator(v, form.discountFlat)
+  }
+  if (form.discountType === DiscountType.PERCENATAGE) {
+    return minNumValidator(v, 10)
+  }
 }
 </script>
 
@@ -132,7 +142,7 @@ const submit = () => {
                     type="number"
                     v-model="form.minPurchaseAmount"
                     label="Minimum purchase amount"
-                    :rules="[(v: string) => minNumValidator(v, 0)]"
+                    :rules="[requiredValidator, minPurchaseValidator]"
                   />
                 </VCol>
                 <VCol cols="12" md="6">

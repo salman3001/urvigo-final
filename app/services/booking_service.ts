@@ -6,6 +6,7 @@ import {
   BookingSummaryValidator,
   CreateBookingValidator,
   UpdateBookingStatusValidator,
+  requestBookingCompletionValidator,
 } from '#validators/booking'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -92,18 +93,24 @@ export default class BookingService {
     const { bouncer, request } = this.ctx
     await bouncer.with('BookingPolicy').authorize('create')
     const payload = await request.validateUsing(BookingSummaryValidator)
-    return await this.getBookingData(payload.serviceVariantId, payload.qty, payload?.couponId)
+    return await this.getBookingData({
+      serviceVariantId: payload.serviceVariantId,
+      qty: payload.qty,
+      couponId: payload?.couponId,
+      alterMaxUsers: false,
+    })
   }
 
   async store() {
     const { bouncer, request, auth } = this.ctx
     await bouncer.with('BookingPolicy').authorize('create')
     const payload = await request.validateUsing(CreateBookingValidator)
-    const booking = await this.getBookingData(
-      payload.serviceVariantId,
-      payload.qty,
-      payload?.couponId
-    )
+    const booking = await this.getBookingData({
+      serviceVariantId: payload.serviceVariantId,
+      qty: payload.qty,
+      couponId: payload?.couponId,
+      alterMaxUsers: true,
+    })
 
     return await Booking.create({
       userId: auth.user!.id,
@@ -115,7 +122,7 @@ export default class BookingService {
           remarks: '',
         },
       ],
-      paymentDetail: payload.paymentdetail,
+      paymentDetail: payload.paymentdetail as any,
       ...booking,
     })
   }
@@ -127,24 +134,127 @@ export default class BookingService {
 
     const payload = await request.validateUsing(UpdateBookingStatusValidator)
 
-    await db.transaction(async (trx) => {
-      booking.useTransaction(trx)
-      booking.merge({ status: payload.status })
-      booking.history.push({
-        date_time: DateTime.now(),
-        event: `Booking ${payload.status}`,
-        remarks: payload?.remarks || '',
-      })
-      await booking.save()
-    })
+    if (payload.status === OrderStatus.CONFIRMED) {
+      if (booking.status !== OrderStatus.PLACED) {
+        return 'Invalid Status'
+      } else {
+        await db.transaction(async (trx) => {
+          booking.useTransaction(trx)
+          booking.merge({ status: payload.status })
+          booking.history.push({
+            date_time: DateTime.now(),
+            event: `Booking ${payload.status}`,
+            remarks: payload?.remarks || '',
+          })
+          await booking.save()
+        })
+      }
+    }
+
+    if (payload.status === OrderStatus.CANCLED) {
+      if (
+        booking.status === OrderStatus.REJECTED ||
+        booking.status === OrderStatus.COMPLETED ||
+        booking.status === OrderStatus.COMPLETION_REQUESTED
+      ) {
+        return 'Invalid Status'
+      } else {
+        await db.transaction(async (trx) => {
+          booking.useTransaction(trx)
+          booking.merge({ status: payload.status })
+          booking.history.push({
+            date_time: DateTime.now(),
+            event: `Booking ${payload.status}`,
+            remarks: payload?.remarks || '',
+          })
+          await booking.save()
+        })
+      }
+    }
+
+    if (payload.status === OrderStatus.REJECTED) {
+      if (
+        booking.status === OrderStatus.CANCLED ||
+        booking.status === OrderStatus.COMPLETED ||
+        booking.status === OrderStatus.COMPLETION_REQUESTED
+      ) {
+        return 'Invalid Status'
+      } else {
+        await db.transaction(async (trx) => {
+          booking.useTransaction(trx)
+          booking.merge({ status: payload.status })
+          booking.history.push({
+            date_time: DateTime.now(),
+            event: `Booking ${payload.status}`,
+            remarks: payload?.remarks || '',
+          })
+          await booking.save()
+        })
+      }
+    }
 
     await booking.refresh()
 
     return booking
   }
 
-  async getBookingData(serviceVariantId: number, qty: number, couponId?: number) {
-    const serviceVariant = await ServiceVariant.findOrFail(serviceVariantId)
+  async requestCompletion() {
+    const { bouncer, request, params } = this.ctx
+    const booking = await Booking.findOrFail(+params.id)
+    await bouncer.with('BookingPolicy').authorize('update', booking)
+
+    const payload = await request.validateUsing(requestBookingCompletionValidator)
+
+    if (booking.status === OrderStatus.CONFIRMED) {
+      await db.transaction(async (trx) => {
+        booking.useTransaction(trx)
+        booking.merge({ status: OrderStatus.COMPLETION_REQUESTED })
+        booking.history.push({
+          date_time: DateTime.now(),
+          event: 'Booking completion requested',
+          remarks: payload?.remarks || '',
+        })
+        await booking.save()
+      })
+
+      return booking
+    } else {
+      return 'Invalid Request'
+    }
+  }
+
+  async acceptBookingCompleted() {
+    const { bouncer, request, params } = this.ctx
+    const booking = await Booking.findOrFail(+params.id)
+    await bouncer.with('BookingPolicy').authorize('update', booking)
+
+    const payload = await request.validateUsing(requestBookingCompletionValidator)
+
+    if (booking.status === OrderStatus.COMPLETION_REQUESTED) {
+      await db.transaction(async (trx) => {
+        booking.useTransaction(trx)
+        booking.merge({ status: OrderStatus.COMPLETED })
+        booking.history.push({
+          date_time: DateTime.now(),
+          event: 'Booking completed',
+          remarks: payload?.remarks || '',
+        })
+        await booking.save()
+      })
+
+      return booking
+    } else {
+      return 'Invalid Request'
+    }
+  }
+
+  async getBookingData(opt: {
+    serviceVariantId: number
+    qty: number
+    couponId?: number
+    alterMaxUsers: boolean
+  }) {
+    const serviceVariant = await ServiceVariant.findOrFail(opt?.serviceVariantId)
 
     await serviceVariant.load('service', (service) => {
       service.preload('businessProfile', (b) => {
@@ -154,25 +264,28 @@ export default class BookingService {
       })
     })
 
-    const totalWithoutDiscount = new BigNumber(serviceVariant.price).times(qty)
+    const totalWithoutDiscount = new BigNumber(serviceVariant.price).times(opt.qty)
     let vendorDiscount = new BigNumber(0)
 
     if (serviceVariant.discountType === DiscountType.FLAT) {
-      vendorDiscount = vendorDiscount.plus(new BigNumber(serviceVariant.discountFlat).times(qty))
+      vendorDiscount = vendorDiscount.plus(
+        new BigNumber(serviceVariant.discountFlat).times(opt?.qty)
+      )
     } else if (serviceVariant.discountPercentage) {
       const percentage = new BigNumber(serviceVariant.discountPercentage)
       vendorDiscount = vendorDiscount.plus(
-        percentage.dividedBy(100).times(serviceVariant.price).times(qty)
+        percentage.dividedBy(100).times(serviceVariant.price).times(opt?.qty)
       )
     }
     const totalAfterDiscount = totalWithoutDiscount.minus(vendorDiscount)
 
-    const couponDiscount = couponId
-      ? await this.applyCoupon(
-          couponId,
-          totalAfterDiscount,
-          serviceVariant.service.businessProfile.vendor.id
-        )
+    const couponDiscount = opt?.couponId
+      ? await this.applyCoupon({
+          couponId: opt?.couponId,
+          total_amount: totalAfterDiscount,
+          vendor_user_id: serviceVariant.service.businessProfile.vendor.id,
+          alter_max_user: opt.alterMaxUsers,
+        })
       : 0
 
     const grandTotal = totalAfterDiscount.minus(couponDiscount)
@@ -180,10 +293,10 @@ export default class BookingService {
     const booking = {
       businessProfileId: serviceVariant.service.businessProfile.id,
       bookingDetail: {
-        couponId,
+        couponId: opt?.couponId,
         vendorUserId: serviceVariant.service.businessProfile.vendor.id,
         service_variant: serviceVariant,
-        qty: qty,
+        qty: opt?.qty,
         totalWithoutDiscount: totalWithoutDiscount.toFixed(2),
         vendorDiscount: vendorDiscount.toFixed(2),
         totalAfterDiscount: totalAfterDiscount.toFixed(2),
@@ -195,24 +308,25 @@ export default class BookingService {
     return booking
   }
 
-  async applyCoupon(
-    couponId: number | undefined,
-    total_amount: BigNumber,
+  async applyCoupon(opt: {
+    couponId: number | undefined
+    total_amount: BigNumber
     vendor_user_id: number
-  ): Promise<BigNumber> {
+    alter_max_user?: boolean
+  }): Promise<BigNumber> {
     const coupon = await Coupon.query()
-      .where('id', couponId || '')
+      .where('id', opt?.couponId || '')
       .preload('businessProfile', (b) => {
-        b.preload('vendor').select(['id'])
+        b.preload('vendor').select(['id', 'user_id'])
       })
       .first()
 
     let coupanDiscountAmount = new BigNumber(0)
 
-    if (coupon) {
+    if (coupon && opt.total_amount.gte(coupon.minPurchaseAmount)) {
       if (
         coupon?.couponType === CouponType.VENDOR &&
-        coupon.businessProfile.vendor.id === vendor_user_id
+        coupon.businessProfile.vendor.id === opt?.vendor_user_id
       ) {
         if (coupon.discountType === DiscountType.FLAT) {
           coupanDiscountAmount = coupanDiscountAmount.plus(coupon.discountFlat)
@@ -221,7 +335,7 @@ export default class BookingService {
         if (coupon.discountType === DiscountType.PERCENATAGE) {
           const percentage = new BigNumber(coupon.discountPercentage)
           coupanDiscountAmount = coupanDiscountAmount.plus(
-            percentage.dividedBy(100).times(total_amount)
+            percentage.dividedBy(100).times(opt?.total_amount)
           )
         }
       } else if (coupon.couponType === CouponType.ADMIN) {
@@ -232,8 +346,15 @@ export default class BookingService {
         if (coupon.discountType === DiscountType.PERCENATAGE) {
           const percentage = new BigNumber(coupon.discountPercentage)
           coupanDiscountAmount = coupanDiscountAmount.plus(
-            percentage.dividedBy(100).times(total_amount)
+            percentage.dividedBy(100).times(opt?.total_amount)
           )
+        }
+      }
+
+      if (opt?.alter_max_user) {
+        if (coupon.totalUsed < coupon.maxUsers) {
+          coupon.totalUsed += 1
+          await coupon.save()
         }
       }
     }

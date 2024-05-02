@@ -42,4 +42,4 @@ export default class BlogCategory extends compose(BaseModel, Filterable) {
   declare blogs: ManyToMany<typeof Blog>
 }
 
-export type IBlogCategory= BlogCategory
+export type IBlogCategory = BlogCategory

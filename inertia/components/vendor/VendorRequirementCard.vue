@@ -29,7 +29,10 @@ const getImageUrls = useGetImageUrl()
     </VCardItem>
 
     <VCardText>
-      {{ requirement.desc }}
+      <p>
+        {{ requirement.desc }}
+      </p>
+      <VChip>&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip>
     </VCardText>
 
     <VCardItem v-if="requirement?.images">

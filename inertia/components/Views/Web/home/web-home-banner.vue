@@ -55,4 +55,3 @@ import routes from '~/utils/routes'
   background-image: url('~/assets/images/front-pages/backgrounds/cta-bg-dark.png');
 }
 </style>
-~/utils/routes-old

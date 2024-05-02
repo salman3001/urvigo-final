@@ -1,4 +1,4 @@
-import { App } from 'vue'
+import type { App } from 'vue'
 import * as vt from 'vue-toastification'
 
 // Import the CSS or use your own!

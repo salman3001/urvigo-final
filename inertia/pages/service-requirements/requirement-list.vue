@@ -17,10 +17,11 @@ import { reactive, ref, watch } from 'vue'
 import { VIcon } from 'vuetify/components'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import RequirementCard from '~/components/RequirementCard.vue'
+import ModalBase from '~/components/modal/ModalBase.vue'
 import ModalPostRequirement from '~/components/modal/ModalPostRequirement.vue'
 
 const filterModal = ref(false)
-const filter = ref(null)
+const filter = ref<null | string>(null)
 const postModal = ref(false)
 
 const props = defineProps<{
@@ -28,42 +29,46 @@ const props = defineProps<{
   categories: IServiceCategory[]
   tags: IServiceTag[]
   query: {
-    where_active: string
-    acepted: boolean | undefined
-    expires_at_lt: boolean | undefined
+    active: string
+    completed: boolean | undefined
+    expiresAtLt: boolean | undefined
     page: string
     perPage: string
+    orderBy: string
   }
 }>()
 
 const query = reactive({
-  where_active: props?.query?.where_active,
-  acepted: props?.query?.acepted,
-  expires_at_lt: props?.query?.expires_at_lt,
+  active: props?.query?.active,
+  completed: props?.query?.completed,
+  expiresAtLt: props?.query?.expiresAtLt,
   page: props?.query?.page || 1,
-  perPage: props?.query?.page || 20,
+  perPage: props?.query?.perPage || 20,
+  orderBy: props?.query?.orderBy || 'created_at:desc',
 })
 
 watch(filter, (newFilterValue) => {
   if (newFilterValue == 'active') {
     const newQuery = {
-      where_active: 1,
-      acepted: null,
-      expires_at_lt: null,
+      active: 1,
+      completed: null,
+      expiresAtLt: null,
       page: 1,
       perPage: 20,
+      orderBy: 'created_at:desc',
     }
 
     Object.assign(query, newQuery)
   }
 
-  if (newFilterValue == 'accepted') {
+  if (newFilterValue == 'completed') {
     const newQuery = {
-      where_active: null,
-      acepted: 1,
-      expires_at_lt: null,
+      active: null,
+      completed: 1,
+      expiresAtLt: null,
       page: 1,
       perPage: 20,
+      orderBy: 'created_at:desc',
     }
 
     Object.assign(query, newQuery)
@@ -71,11 +76,25 @@ watch(filter, (newFilterValue) => {
 
   if (newFilterValue == 'expired') {
     const newQuery = {
-      where_active: null,
-      acepted: null,
-      expires_at_lt: format(Date.now(), 'YYYY/MM/DD hh:mm:ss'),
+      active: null,
+      completed: null,
+      expiresAtLt: format(Date.now(), 'dd/MM/yyyy HH:mm'),
       page: 1,
       perPage: 20,
+      orderBy: 'created_at:desc',
+    }
+
+    Object.assign(query, newQuery)
+  }
+
+  if (newFilterValue == '') {
+    const newQuery = {
+      active: null,
+      completed: null,
+      expiresAtLt: null,
+      page: 1,
+      perPage: 20,
+      orderBy: 'created_at:desc',
     }
 
     Object.assign(query, newQuery)
@@ -108,22 +127,21 @@ watch(query, () => {
               <VICon icon="tabler-filter" />
               filtering by {{ filter }}
             </VChip>
-            <VChip
-              @click="
-                () => {
-                  filter = null
-                  router.reload({
-                    only: ['requirements'],
-                  })
-                }
-              "
-            >
-              <VIcon icon="tabler-x" />
-            </VChip>
+            <VTooltip text="Clear Filters">
+              <template #activator="{ props }">
+                <IconBtn v-bind="props" @click="filter = ''">
+                  <VIcon icon="tabler-x" />
+                </IconBtn>
+              </template>
+            </VTooltip>
           </div>
-          <IconBtn @click="filterModal = true">
-            <VIcon icon="tabler-filter" />
-          </IconBtn>
+          <VTooltip text="Filters">
+            <template #activator="{ props }">
+              <IconBtn v-bind="props" @click="filterModal = true">
+                <VIcon icon="tabler-filter" />
+              </IconBtn>
+            </template>
+          </VTooltip>
           <VBtn color="primary" @click="() => (postModal = true)">+ Post A Requirement</VBtn>
         </div>
         <br />
@@ -167,5 +185,32 @@ watch(query, () => {
         }
       "
     />
+    <ModalBase v-model:is-visible="filterModal" title="Filter Requirements">
+      <VCardItem>
+        <h3>Sorty By</h3>
+        <div class="my-1">
+          <VRadioGroup v-model="filter" @update:model-value="filterModal = false">
+            <VRadio label="Active" value="active" />
+            <VRadio label="Completed" value="completed" />
+            <VRadio label="Expired" value="expired" />
+          </VRadioGroup>
+        </div>
+        <!-- <div class="d-flex justify-end">
+          <VBtn
+            label="Apply"
+            color="primary"
+            @click="
+              () => {
+                router.reload({
+                  data: { ...query, page: 1 },
+                })
+                filterModal = false
+              }
+            "
+            >Apply</VBtn
+          >
+        </div> -->
+      </VCardItem>
+    </ModalBase>
   </VContainer>
 </template>
