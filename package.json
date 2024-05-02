@@ -141,7 +141,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && pnpm run typecheck"
+      "pre-commit": "lint-staged && pnpm run typecheck && pnpm run format"
     }
   },
   "lint-staged": {

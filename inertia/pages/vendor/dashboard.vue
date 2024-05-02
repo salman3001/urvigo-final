@@ -2,13 +2,12 @@
 import Layout from '~/layouts/VendorLayout.vue'
 
 export default {
-    layout: Layout,
+  layout: Layout,
 }
 </script>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <div>dashboard</div>
+  <div>dashboard</div>
 </template>

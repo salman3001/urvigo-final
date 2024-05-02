@@ -1,3 +1,3 @@
 <template>
-    <div>confirmation</div>
+  <div>confirmation</div>
 </template>

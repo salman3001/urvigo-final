@@ -10,7 +10,7 @@ import { useGenerateImageVariant } from '~/@core/composable/useGenerateImageVari
 import miscComingSoon from '~/assets/images/pages/misc-coming-soon.png'
 import miscMaskDark from '~/assets/images/pages/misc-mask-dark.png'
 import miscMaskLight from '~/assets/images/pages/misc-mask-light.png'
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const email = ref('')
 
@@ -22,35 +22,48 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
     <div>
       <!-- 👉 Title and subtitle -->
       <div class="text-center mb-4">
-        <h4 class="text-h4 font-weight-medium mb-2">
-          We are launching soon 🚀
-        </h4>
+        <h4 class="text-h4 font-weight-medium mb-2">We are launching soon 🚀</h4>
         <p class="text-body-1 mb-6">
           Our website is opening soon. Please register to get notified when it's ready!
         </p>
       </div>
 
       <!-- 👉 Email input -->
-      <VForm class="d-flex flex-wrap align-center justify-center gap-4 misc-form" @submit.prevent="() => { }">
-        <AppTextField v-model="email" autofocus placeholder="Enter your email or username" class="misc-email-input" />
-        <VBtn type="submit">
-          Notify
-        </VBtn>
+      <VForm
+        class="d-flex flex-wrap align-center justify-center gap-4 misc-form"
+        @submit.prevent="() => {}"
+      >
+        <AppTextField
+          v-model="email"
+          autofocus
+          placeholder="Enter your email or username"
+          class="misc-email-input"
+        />
+        <VBtn type="submit"> Notify </VBtn>
       </VForm>
     </div>
 
     <!-- 👉 Image -->
     <div class="misc-avatar w-100">
-      <VImg :src="miscComingSoon" alt="Coming Soon" :max-height="$vuetify.display.smAndDown ? 350 : 500"
-        class="mx-auto" />
+      <VImg
+        :src="miscComingSoon"
+        alt="Coming Soon"
+        :max-height="$vuetify.display.smAndDown ? 350 : 500"
+        class="mx-auto"
+      />
     </div>
 
-    <img class="misc-footer-img d-none d-md-block" :src="authThemeMask" alt="misc-footer-img" height="320">
+    <img
+      class="misc-footer-img d-none d-md-block"
+      :src="authThemeMask"
+      alt="misc-footer-img"
+      height="320"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
-@use "@core/scss/template/pages/misc.scss";
+@use '@core/scss/template/pages/misc.scss';
 
 .misc-email-input {
   max-inline-size: 22.75rem;

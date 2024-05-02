@@ -2,13 +2,12 @@
 import Layout from '~/layouts/VendorLayout.vue'
 
 export default {
-    layout: Layout,
+  layout: Layout,
 }
 </script>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <div>coupon-show</div>
+  <div>coupon-show</div>
 </template>
