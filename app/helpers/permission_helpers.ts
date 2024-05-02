@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { userTypes } from './enums.js'
 
-export const hasPermission = async (user: User, permission: number) => {
+export const hasPermission = async (user: User, permission: string) => {
   await user.load('role')
   if (user?.role) {
     if (user?.role?.name === 'Super Admin') {

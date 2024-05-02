@@ -72,9 +72,9 @@ export default class RoleService {
     const { bouncer } = this.ctx
     await bouncer.with('RolePolicy').authorize('viewList')
 
-    const permissionsArray: number[] = []
+    const permissionsArray: string[] = []
 
-    for (const perm of Object.values(permissions) as number[]) {
+    for (const perm of Object.values(permissions) as string[]) {
       permissionsArray.push(perm)
     }
 
