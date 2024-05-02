@@ -25,7 +25,7 @@ const isVisible = defineModel<boolean>('isVisible')
       "
     />
 
-    <VCard class="pa-2 pa-sm-10">
+    <VCard class="pa-2 pa-sm-6">
       <!-- 👉 Title -->
       <VCardItem class="text-center">
         <VCardTitle v-if="title">

@@ -26,7 +26,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import ServiceFilter from './filters/service_filter.js'
 import { DeliveryOptions } from '#helpers/enums'
-import WeeklyServiceTimeslot from './weekly_service_timeslot.js'
+import TimeslotPlan from './timeslot_plan.js'
 
 export default class Service extends compose(BaseModel, Filterable) {
   static $filter = () => ServiceFilter
@@ -111,8 +111,8 @@ export default class Service extends compose(BaseModel, Filterable) {
   @manyToMany(() => Coupon, { pivotTable: 'service_coupons' })
   declare coupons: ManyToMany<typeof Coupon>
 
-  @hasMany(() => WeeklyServiceTimeslot)
-  declare weeklyServiceTimeslot: HasMany<typeof WeeklyServiceTimeslot>
+  @hasOne(() => TimeslotPlan)
+  declare timeSlotPlan: HasOne<typeof TimeslotPlan>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

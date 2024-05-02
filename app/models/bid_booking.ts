@@ -1,13 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, afterCreate, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
 import { NotificationTypes, OrderStatus } from '#helpers/enums'
 import User from './user.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
 import type { IbidBookingDetail, PaymentDetail } from '#helpers/types'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import BidBookingFilter from './filters/bid_booking_filter.js'
+import Timeslot from './timeslot.js'
 
 export default class BidBooking extends compose(BaseModel, Filterable) {
   static $filter = () => BidBookingFilter
@@ -53,6 +54,9 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => BusinessProfile)
   declare businessProfile: BelongsTo<typeof BusinessProfile>
+
+  @hasOne(() => Timeslot)
+  declare timeSlot: HasOne<typeof Timeslot>
 
   @afterCreate()
   static async notifyUser(booking: BidBooking) {

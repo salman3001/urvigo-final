@@ -25,6 +25,7 @@ import BusinessProfile from './business_profile.js'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { Filterable } from 'adonis-lucid-filter'
 import UserFilter from './filters/user_filter.js'
+import TimeslotPlan from './timeslot_plan.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -101,6 +102,9 @@ export default class User extends compose(BaseModel, AuthFinder, Filterable) {
 
   @hasMany(() => BidBooking)
   declare bidBooking: HasMany<typeof BidBooking>
+
+  @hasMany(() => TimeslotPlan)
+  declare timeslotPlans: HasMany<typeof TimeslotPlan>
 
   @manyToMany(() => Conversation, {
     pivotTable: 'conversation_participants',

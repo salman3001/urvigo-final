@@ -18,6 +18,10 @@ export default [
         title: 'Add New Service',
         to: routes('vendor.service.create'),
       },
+      {
+        title: 'Timeslot Plans',
+        to: routes('vendor.timeslot-plans.index'),
+      },
     ],
   },
   {

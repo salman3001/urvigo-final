@@ -6,6 +6,7 @@ import { computed, ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { avatarText } from '~/@core/utils/formatters'
+import { resolveUserType } from '~/utils/helpers'
 
 defineEmits<{
   (e: 'close'): void
@@ -54,7 +55,7 @@ const isNotificationEnabled = ref(false)
         {{ user?.firstName || '' + ' ' + user?.lastName }}
       </h5>
       <p class="text-capitalize text-medium-emphasis mb-0">
-        {{ user.userType }}
+        {{ resolveUserType(user.userType) }}
       </p>
     </div>
 

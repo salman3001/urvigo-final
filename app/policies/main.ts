@@ -37,4 +37,5 @@ export const policies = {
   BidBookingPolicy: () => import('#policies/bid_booking_policy'),
   ServiceCategoryPolicy: () => import('#policies/service_category_policy'),
   ConversationPolicy: () => import('#policies/conversation_policy'),
+  TimeslotPlanPolicy: () => import('#policies/timeslot_plan_policy'),
 }

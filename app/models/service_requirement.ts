@@ -1,8 +1,16 @@
 import { DateTime } from 'luxon'
-import { BaseModel, afterCreate, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  afterCreate,
+  belongsTo,
+  column,
+  hasMany,
+  hasOne,
+  manyToMany,
+} from '@adonisjs/lucid/orm'
 import { NotificationTypes } from '#helpers/enums'
 import User from './user.js'
-import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import ServiceCategory from './service_category.js'
 import Bid from './bid.js'
 import Image from './image.js'
@@ -10,6 +18,7 @@ import ServiceTag from './service_tag.js'
 import ServiceRequirementFilter from './filters/service_requirement_filter.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
+import TimeslotPlan from './timeslot_plan.js'
 
 export default class ServiceRequirement extends compose(BaseModel, Filterable) {
   serializeExtras = true
@@ -67,6 +76,9 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
     pivotTable: 'service_requirement_tags_pivot',
   })
   declare tags: ManyToMany<typeof ServiceTag>
+
+  @hasOne(() => TimeslotPlan)
+  declare timeSlotPlan: HasOne<typeof TimeslotPlan>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

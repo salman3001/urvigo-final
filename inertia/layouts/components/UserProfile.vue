@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3'
 import avatar from '~/assets/images/dummy-avatar.webp'
 import useAuth from '~/composables/useAuth'
 import useGetImageUrl from '~/composables/useGetImageUrl'
+import { resolveUserType } from '~/utils/helpers'
 import routes from '~/utils/routes'
 
 const getImageUrl = useGetImageUrl()
@@ -33,7 +34,9 @@ const { user, isVendor } = useAuth()
               {{ user?.firstName + ' ' + user?.lastName }}
             </VListItemTitle>
             <VListItemSubtitle
-              ><span class="normalcase">{{ user?.userType }}</span></VListItemSubtitle
+              ><span class="normalcase">{{
+                resolveUserType(user!?.userType)
+              }}</span></VListItemSubtitle
             >
           </VListItem>
 

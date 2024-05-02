@@ -9,6 +9,7 @@ import BidBookingService from '../../services/bid_booking_service.js'
 import ServiceRequirementService from '../../services/service_requirement_service.js'
 import BidService from '../../services/bid_service.js'
 import CouponService from '../../services/coupon_service.js'
+import TimeslotPlanService from '#services/timeslot_plan_service'
 
 @inject()
 export default class WebVendorController {
@@ -21,7 +22,8 @@ export default class WebVendorController {
     protected bidbookingService: BidBookingService,
     protected requirementService: ServiceRequirementService,
     protected bidService: BidService,
-    protected couponService: CouponService
+    protected couponService: CouponService,
+    protected timeSlotPlanService: TimeslotPlanService
   ) {}
 
   async dashboard({ inertia }: HttpContext) {
@@ -321,5 +323,44 @@ export default class WebVendorController {
       type: 'success',
     })
     return response.redirect().toRoute('vendor.coupon.index')
+  }
+
+  async timeslotPlansIndex({ inertia }: HttpContext) {
+    return inertia.render('vendor/timeslot-plans/timeslot-plans-index', {
+      timeslotPlans: () => this.timeSlotPlanService.index(),
+    })
+  }
+
+  async timeslotPlansCreate({ response, session }: HttpContext) {
+    await this.timeSlotPlanService.store()
+    session.flash('flash', {
+      message: 'Timeslot Created',
+      type: 'success',
+    })
+    return response.redirect().back()
+  }
+
+  async timeslotPlansEdit({ inertia }: HttpContext) {
+    return inertia.render('vendor/timeslot-plans/timeslot-plans-edit', {
+      timeslotPlan: () => this.timeSlotPlanService.show(),
+    })
+  }
+
+  async timeslotPlansUpdate({ response, session }: HttpContext) {
+    await this.timeSlotPlanService.update()
+    session.flash('flash', {
+      message: 'Timeslot Updated',
+      type: 'success',
+    })
+    return response.redirect().back()
+  }
+
+  async timeslotPlansDelete({ response, session }: HttpContext) {
+    await this.timeSlotPlanService.destroy()
+    session.flash('flash', {
+      message: 'Timeslot Updated',
+      type: 'success',
+    })
+    return response.redirect().back()
   }
 }

@@ -4,6 +4,7 @@ import { avatarText } from '~/@core/utils/formatters'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import type { IUser } from '#models/user'
+import { resolveUserType } from '~/utils/helpers'
 
 defineEmits<{
   (e: 'close'): void
@@ -50,7 +51,7 @@ const getImageUrl = useGetImageUrl()
         {{ selectedParticipant?.firstName || '' + ' ' + selectedParticipant?.lastName }}
       </h5>
       <p class="text-capitalize text-body-1 mb-0">
-        {{ selectedParticipant.userType }}
+        {{ resolveUserType(selectedParticipant.userType) }}
       </p>
     </div>
 

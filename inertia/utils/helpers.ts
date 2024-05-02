@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentMode, PaymentStatus } from '#helpers/enums'
+import { OrderStatus, PaymentMode, PaymentStatus, userTypes } from '#helpers/enums'
 
 export function findObjectAndMoveToIndex0(
   array: Record<string, any>[],
@@ -62,4 +62,11 @@ export const resolvePaymentStatus = (status: PaymentStatus) => {
 export const resolvePaymentMode = (status: PaymentMode) => {
   if (status === PaymentMode.COD) return { text: 'COD', color: 'info' }
   if (status === PaymentMode.ONLINE) return { text: 'Online', color: 'info' }
+}
+
+export const resolveUserType = (type: userTypes) => {
+  if (type === userTypes.USER) return 'User'
+  if (type === userTypes.VENDER) return 'Vendor'
+  if (type === userTypes.ADMIN) return 'Admin'
+  return ''
 }

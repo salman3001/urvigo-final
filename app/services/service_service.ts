@@ -16,6 +16,7 @@ import ServiceVariant from '../models/service_variant.js'
 import FileService from './file_service.js'
 import Image from '../models/image.js'
 import User from '#models/user'
+import TimeslotPlan from '#models/timeslot_plan'
 
 @inject()
 export default class ServiceService {
@@ -359,6 +360,11 @@ export default class ServiceService {
         }
       }
 
+      if (payload.timeSlotPlanId) {
+        const timslotPlan = await TimeslotPlan.findOrFail(payload.timeSlotPlanId, { client: trx })
+        await service.related('timeSlotPlan').save(timslotPlan)
+      }
+
       if (payload.seo) {
         await service.related('seo').create(payload.seo)
       }
@@ -444,6 +450,11 @@ export default class ServiceService {
           }
           await variant.save()
         }
+      }
+
+      if (payload.timeSlotPlanId) {
+        const timslotPlan = await TimeslotPlan.findOrFail(payload.timeSlotPlanId, { client: trx })
+        await service.related('timeSlotPlan').save(timslotPlan)
       }
 
       if (payload.seo) {

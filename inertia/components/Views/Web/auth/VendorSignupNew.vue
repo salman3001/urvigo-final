@@ -12,7 +12,7 @@ import AuthProvider from '~/components/Views/Web/AuthProvider.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { userTypes } from '~/utils/enums'
+import { userTypes } from '#helpers/enums'
 
 const loading = ref(false)
 const isPasswordVisible = ref(false)

@@ -6,6 +6,7 @@ import ServiceTagFactory from './service_tag_factory.js'
 import ServiceVariantFactory from './service_variant_factory.js'
 import Service from '#models/service'
 import serviceCategoryFactory from './service_category_factory.js'
+import { DeliveryOptions } from '#helpers/enums'
 
 export default Factory.define(Service, ({ faker }) => {
   return {
@@ -14,8 +15,9 @@ export default Factory.define(Service, ({ faker }) => {
     shortDesc: faker.commerce.productDescription(),
     longDesc: faker.lorem.paragraphs(),
     isActive: true,
-    locationSpecific: false,
     geoLocation: `${faker.location.longitude()},${faker.location.latitude()}`,
+    address: faker.location.secondaryAddress(),
+    deliveryOptions: DeliveryOptions.BOTH,
   }
 })
   .relation('faq', () => FaqFactory)

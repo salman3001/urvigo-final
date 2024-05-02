@@ -138,7 +138,7 @@ export const createServiceValidator = vine.compile(
       serviceCategoryId: vine.number().optional(),
       serviceSubcategoryId: vine.number().optional(),
     }),
-
+    timeSlotPlanId: vine.number().optional(),
     seo: vine
       .object({
         metaTitle: vine.string().optional(),
@@ -224,7 +224,7 @@ export const updateServiceValidator = vine
           serviceSubcategoryId: vine.number().optional(),
         })
         .optional(),
-
+      timeSlotPlanId: vine.number().optional(),
       seo: vine
         .object({
           metaTitle: vine.string().optional(),

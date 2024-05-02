@@ -67,6 +67,22 @@ router
     router.get('coupons/:id/edit', [WebVendorController, 'couponsEdit']).as('coupon.edit')
     router.put('coupons/:id/', [WebVendorController, 'couponsEditPost']).as('coupon.edit.post')
     router.delete('coupons/:id/', [WebVendorController, 'couponsDelete']).as('coupon.delete')
+    // time-slot-plans
+    router
+      .get('timeslot-plans', [WebVendorController, 'timeslotPlansIndex'])
+      .as('timeslot-plans.index')
+    router
+      .post('timeslot-plans', [WebVendorController, 'timeslotPlansCreate'])
+      .as('timeslot-plans.create')
+    router
+      .get('timeslot-plans/:id/edit', [WebVendorController, 'timeslotPlansEdit'])
+      .as('timeslot-plans.edit')
+    router
+      .put('timeslot-plans/:id', [WebVendorController, 'timeslotPlansUpdate'])
+      .as('timeslot-plans.update')
+    router
+      .delete('timeslot-plans/:id', [WebVendorController, 'timeslotPlansDelete'])
+      .as('timeslot-plans.destroy')
   })
   .prefix('vendor')
   .as('vendor')

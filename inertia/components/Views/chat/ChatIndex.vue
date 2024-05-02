@@ -18,6 +18,7 @@ import { avatarText } from '~/@core/utils/formatters'
 import type { IConversation } from '#models/conversation'
 import type { IMessage } from '#models/message'
 import routes from '~/utils/routes'
+import { resolveUserType } from '~/utils/helpers'
 
 // composables
 const vuetifyDisplays = useDisplay()
@@ -210,7 +211,7 @@ onUnmounted(() => {
                 {{ selectedParticipant.firstName + ' ' + selectedParticipant.lastName }}
               </div>
               <p class="text-truncate mb-0 text-body-2 capitalize">
-                {{ selectedParticipant?.userType }}
+                {{ resolveUserType(selectedParticipant?.userType) }}
               </p>
             </div>
           </div>
