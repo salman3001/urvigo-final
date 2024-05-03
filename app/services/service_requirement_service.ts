@@ -248,6 +248,10 @@ export default class ServiceRequirementService {
         { client: trx }
       )
 
+      if (payload.address) {
+        await serviceRequirement.related('address').create(payload.address)
+      }
+
       if (keywords) {
         const tags = await ServiceTag.fetchOrCreateMany(
           'name',
@@ -282,6 +286,23 @@ export default class ServiceRequirementService {
       serviceRequirement.useTransaction(trx)
       serviceRequirement.merge({ ...payload, userId: auth.user!.id })
       await serviceRequirement.save()
+
+      if (payload.address) {
+        await serviceRequirement.load('address')
+        if (serviceRequirement.address) {
+          serviceRequirement.address.merge(payload.address)
+          await serviceRequirement.address.save()
+        } else {
+          await serviceRequirement.related('address').create(payload.address)
+        }
+      }
+
+      if (images) {
+        for (const i of images) {
+          const imageData = await this.fileservice.uploadeImage(i)
+          await serviceRequirement.related('images').create({ file: imageData })
+        }
+      }
     })
 
     await serviceRequirement.refresh()

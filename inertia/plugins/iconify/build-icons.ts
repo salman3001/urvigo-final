@@ -174,6 +174,7 @@ const sources: BundleScriptConfig = {
         'edit',
         'pencil',
         'cloud-upload',
+        'alarm',
       ],
     },
     {

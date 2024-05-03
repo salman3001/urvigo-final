@@ -15,8 +15,6 @@ export default Factory.define(Service, ({ faker }) => {
     shortDesc: faker.commerce.productDescription(),
     longDesc: faker.lorem.paragraphs(),
     isActive: true,
-    geoLocation: `${faker.location.longitude()},${faker.location.latitude()}`,
-    address: faker.location.secondaryAddress(),
     deliveryOptions: DeliveryOptions.BOTH,
   }
 })

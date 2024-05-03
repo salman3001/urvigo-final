@@ -22,5 +22,5 @@ export default class Role extends compose(BaseModel, Filterable) {
   @column({
     prepare: (v: any) => JSON.stringify(v),
   })
-  declare permissions: number[]
+  declare permissions: string[]
 }

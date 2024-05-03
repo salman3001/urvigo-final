@@ -10,6 +10,7 @@ import BookingFilter from './filters/booking_filter.js'
 import { Filterable } from 'adonis-lucid-filter'
 import { compose } from '@adonisjs/core/helpers'
 import Timeslot from './timeslot.js'
+import Address from './address.js'
 
 export default class Booking extends compose(BaseModel, Filterable) {
   static $filter = () => BookingFilter
@@ -58,6 +59,9 @@ export default class Booking extends compose(BaseModel, Filterable) {
 
   @hasOne(() => Timeslot)
   declare timeSlot: HasOne<typeof Timeslot>
+
+  @hasOne(() => Address)
+  declare address: HasOne<typeof Address>
 }
 
 export type IBooking = Booking

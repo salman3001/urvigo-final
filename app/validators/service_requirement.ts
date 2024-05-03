@@ -19,6 +19,11 @@ export const createServiceRequirementValidator = vine.compile(
     expiresAt: vine.date({ formats: ['DD/MM/YYYY HH:mm'] }).after('today'),
     location: vine.string().escape(),
     serviceCategoryId: vine.number(),
+    address: vine.object({
+      geoLocation: vine.string(),
+      mapAddress: vine.string(),
+      address: vine.string().escape().optional(),
+    }),
   })
 )
 
@@ -41,5 +46,12 @@ export const updateServiceRequirementValidator = vine.compile(
     expiresAt: vine.date({ formats: 'dd/MM/yyyy HH:mm' }).after('today').optional(),
     location: vine.string().minLength(20).escape().optional(),
     serviceCategoryId: vine.number().optional(),
+    address: vine
+      .object({
+        geoLocation: vine.string(),
+        mapAddress: vine.string(),
+        address: vine.string().escape().optional(),
+      })
+      .optional(),
   })
 )

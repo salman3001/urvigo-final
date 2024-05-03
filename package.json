@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "build:icons": "tsx inertia/plugins/iconify/build-icons.ts",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",

@@ -38,4 +38,5 @@ export const policies = {
   ServiceCategoryPolicy: () => import('#policies/service_category_policy'),
   ConversationPolicy: () => import('#policies/conversation_policy'),
   TimeslotPlanPolicy: () => import('#policies/timeslot_plan_policy'),
+  AddressPolicy: () => import('#policies/address_policy'),
 }

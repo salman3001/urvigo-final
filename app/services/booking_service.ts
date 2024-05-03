@@ -105,26 +105,39 @@ export default class BookingService {
     const { bouncer, request, auth } = this.ctx
     await bouncer.with('BookingPolicy').authorize('create')
     const payload = await request.validateUsing(CreateBookingValidator)
-    const booking = await this.getBookingData({
+    const bookingData = await this.getBookingData({
       serviceVariantId: payload.serviceVariantId,
       qty: payload.qty,
       couponId: payload?.couponId,
       alterMaxUsers: true,
     })
 
-    return await Booking.create({
-      userId: auth.user!.id,
-      status: OrderStatus.PLACED,
-      history: [
+    let booking: Booking | null = null
+
+    await db.transaction(async (trx) => {
+      booking = await Booking.create(
         {
-          date_time: DateTime.now(),
-          event: 'Order Placed',
-          remarks: '',
+          userId: auth.user!.id,
+          status: OrderStatus.PLACED,
+          history: [
+            {
+              date_time: DateTime.now(),
+              event: 'Order Placed',
+              remarks: '',
+            },
+          ],
+          paymentDetail: payload.paymentdetail as any,
+          ...bookingData,
         },
-      ],
-      paymentDetail: payload.paymentdetail as any,
-      ...booking,
+        { client: trx }
+      )
+
+      if (payload.address) {
+        await booking.related('address').create(payload.address)
+      }
     })
+
+    return booking!
   }
 
   async updateStatus() {

@@ -50,6 +50,7 @@ export default class WebVendorController {
       categories: () => this.categoryService.index(),
       subcategories: () => this.subcategoryService.index(),
       tags: () => this.tagService.index(),
+      timeslotPlans: () => this.timeSlotPlanService.index(),
     })
   }
 
@@ -68,6 +69,7 @@ export default class WebVendorController {
       categories: () => this.categoryService.index(),
       subcategories: () => this.subcategoryService.index(),
       tags: () => this.tagService.index(),
+      timeslotPlans: inertia.lazy(() => this.timeSlotPlanService.index()),
     })
   }
 

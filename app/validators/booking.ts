@@ -18,6 +18,13 @@ export const CreateBookingValidator = vine.compile(
       paymentMode: vine.enum(['cod', 'online']),
       paymentStatus: vine.enum(['pending', 'paid']),
     }),
+    address: vine
+      .object({
+        geoLocation: vine.string(),
+        mapAddress: vine.string(),
+        address: vine.string().escape().optional(),
+      })
+      .optional(),
   })
 )
 

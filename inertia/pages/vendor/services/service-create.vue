@@ -1,6 +1,9 @@
 <script lang="ts">
 import Layout from '~/layouts/VendorLayout.vue'
 import routes from '~/utils/routes'
+import { DeliveryOptions } from '../../../../app/helpers/enums'
+import LocationAutocomplete from '~/components/form/LocationAutocomplete.vue'
+import AddressComponent from '~/components/AddressComponent.vue'
 
 export default {
   layout: Layout,
@@ -45,7 +48,8 @@ const form = useForm({
     locationSpecific: '',
     shortDesc: '',
     longDesc: '',
-    geoLocation: '23.5,67.3',
+    deliveryOptions: DeliveryOptions.WALK_IN,
+    kmRadius: 10,
     isActive: true,
   },
   tags: [] as number[],
@@ -59,6 +63,11 @@ const form = useForm({
     ans: string
   }[],
   variant: [] as IvariantFrom[],
+  address: {
+    geoLocation: '',
+    mapAddress: '',
+    address: '',
+  },
 })
 
 const variantModalRef = ref(false)
@@ -88,10 +97,6 @@ const onVariantEdited = (opt: { variant: IvariantFrom; image: File | null; index
   form.variantImages[opt.index] = opt.image
   variantModalRef.value = false
 }
-
-const imagesUrls = computed(() => {
-  return form.images.map((img: File) => URL.createObjectURL(img))
-})
 
 const serviceThumbnailUrl = computed(() => {
   return form.thumbnail ? URL.createObjectURL(form.thumbnail) : dummyThumb
@@ -146,12 +151,8 @@ const submit = () => {
                 </VCol>
 
                 <VCol cols="12">
-                  <AppTextField
-                    label="Location"
-                    placeholder="FXSK123U"
-                    v-model="form.service.geoLocation"
-                    :rules="[requiredValidator]"
-                  />
+                  <label for="" class="v-label">Select Service Address</label>
+                  <AddressComponent />
                 </VCol>
                 <VCol cols="12">
                   <AppTextarea label="Short Description" v-model="form.service.shortDesc" />

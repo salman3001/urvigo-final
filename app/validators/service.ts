@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { DiscountType } from '../helpers/enums.js'
+import { DeliveryOptions, DiscountType } from '../helpers/enums.js'
 
 export const CreateServiceReviewValidator = vine.compile(
   vine.object({
@@ -135,6 +135,9 @@ export const createServiceValidator = vine.compile(
       isActive: vine.boolean().optional(),
       locationSpecific: vine.boolean().optional(),
       geoLocation: vine.string().optional(),
+      address: vine.string().escape().optional(),
+      deliveryOptions: vine.enum(DeliveryOptions),
+      kmRadius: vine.number().min(0),
       serviceCategoryId: vine.number().optional(),
       serviceSubcategoryId: vine.number().optional(),
     }),
@@ -165,6 +168,11 @@ export const createServiceValidator = vine.compile(
         desc: vine.string().optional(),
       })
     ),
+    address: vine.object({
+      geoLocation: vine.string(),
+      mapAddress: vine.string(),
+      address: vine.string().escape().optional(),
+    }),
   })
 )
 
@@ -219,7 +227,8 @@ export const updateServiceValidator = vine
           longDesc: vine.string().optional(),
           isActive: vine.boolean().optional(),
           locationSpecific: vine.boolean().optional(),
-          geoLocation: vine.string().optional(),
+          deliveryOptions: vine.enum(DeliveryOptions),
+          kmRadius: vine.number().min(0),
           serviceCategoryId: vine.number().optional(),
           serviceSubcategoryId: vine.number().optional(),
         })
@@ -252,6 +261,13 @@ export const updateServiceValidator = vine
             desc: vine.string().optional(),
           })
         )
+        .optional(),
+      address: vine
+        .object({
+          geoLocation: vine.string(),
+          mapAddress: vine.string(),
+          address: vine.string().escape().optional(),
+        })
         .optional(),
     })
   )

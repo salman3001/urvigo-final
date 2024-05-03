@@ -365,6 +365,10 @@ export default class ServiceService {
         await service.related('timeSlotPlan').save(timslotPlan)
       }
 
+      if (payload.address) {
+        await service.related('address').create(payload.address)
+      }
+
       if (payload.seo) {
         await service.related('seo').create(payload.seo)
       }
@@ -455,6 +459,16 @@ export default class ServiceService {
       if (payload.timeSlotPlanId) {
         const timslotPlan = await TimeslotPlan.findOrFail(payload.timeSlotPlanId, { client: trx })
         await service.related('timeSlotPlan').save(timslotPlan)
+      }
+
+      if (payload.address) {
+        await service.load('address')
+        if (service.address) {
+          service.address.merge(payload.address)
+          await service.address.save()
+        } else {
+          await service.related('address').create(payload.address)
+        }
       }
 
       if (payload.seo) {

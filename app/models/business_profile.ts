@@ -4,7 +4,6 @@ import Image from './image.js'
 import Seo from './seo.js'
 import Social from './social.js'
 import Faq from './faq.js'
-import Address from './address.js'
 import User from './user.js'
 import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Service from './service.js'
@@ -53,9 +52,6 @@ export default class BusinessProfile extends BaseModel {
 
   @hasMany(() => Faq)
   declare faq: HasMany<typeof Faq>
-
-  @hasMany(() => Address)
-  declare addresses: HasMany<typeof Address>
 
   @hasMany(() => Service)
   declare services: HasMany<typeof Service>

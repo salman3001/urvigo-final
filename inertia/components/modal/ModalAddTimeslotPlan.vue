@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ModalBase from './ModalBase.vue'
-import { maxNumValidator, minNumValidator, requiredValidator } from '~/@core/utils/validators'
+import { requiredValidator } from '~/@core/utils/validators'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import CustomForm from '../form/CustomForm.vue'
 import routes from '~/utils/routes'
@@ -8,6 +8,7 @@ import { useForm } from '@inertiajs/vue3'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import { WeekDays } from '#helpers/enums'
 import { VBtn } from 'vuetify/components'
+import TimePicker from '../form/TimePicker.vue'
 
 const emits = defineEmits<{
   (e: 'success'): void
@@ -21,11 +22,9 @@ const form = useForm({
   limitToOneBooking: false,
   options: [
     {
-      week: '',
-      fromHour: '',
-      fromMinute: '',
-      toHour: '',
-      toMinute: '',
+      week: WeekDays.MONDAY,
+      from: '',
+      to: '',
     },
   ],
 })
@@ -35,41 +34,23 @@ const resetForm = () => {
   form.limitToOneBooking = false
   form.options = [
     {
-      week: '',
-      fromHour: '',
-      fromMinute: '',
-      toHour: '',
-      toMinute: '',
+      week: WeekDays.MONDAY,
+      from: '',
+      to: '',
     },
   ]
 }
 
 const submit = async () => {
-  form
-    .transform((data) => {
-      const options = data.options.map((o) => {
-        const from = `${o.fromHour}:${o.fromMinute}:00`
-        const to = `${o.toHour}:${o.toMinute}:00`
-        return {
-          week: o.week,
-          from: from,
-          to: to,
-        }
-      })
-      return {
-        ...data,
-        options,
-      }
-    })
-    .post(routes('vendor.timeslot-plans.create'), {
-      onSuccess: () => {
-        emits('success')
-        resetForm()
-      },
-      onError: () => {
-        emits('error')
-      },
-    })
+  form.post(routes('vendor.timeslot-plans.create'), {
+    onSuccess: () => {
+      emits('success')
+      resetForm()
+    },
+    onError: () => {
+      emits('error')
+    },
+  })
 }
 
 const weekDaysOptions = [
@@ -105,11 +86,9 @@ const weekDaysOptions = [
 
 const addSlot = () => {
   form.options.push({
-    week: '',
-    fromHour: '',
-    fromMinute: '',
-    toHour: '',
-    toMinute: '',
+    week: WeekDays.MONDAY,
+    from: '',
+    to: '',
   })
 }
 
@@ -134,14 +113,12 @@ const deleteSlot = (index: number) => {
             :rules="[requiredValidator]"
           />
           <VCheckbox v-model="form.limitToOneBooking" label="Limit One Booking per slot" />
-          <VTable density="compact" class="text-no-wrap">
+          <VTable density="compact" class="text-no-wrap rounded">
             <thead>
               <tr>
                 <th>Day</th>
-                <th>Hours from</th>
-                <th>Minutes from</th>
-                <th>Hours to</th>
-                <th>Minutes to</th>
+                <th>Time from</th>
+                <th>Time to</th>
                 <th>delete</th>
               </tr>
             </thead>
@@ -149,7 +126,7 @@ const deleteSlot = (index: number) => {
             <tbody>
               <tr v-for="(o, i) in form.options" :key="i">
                 <td>
-                  <div class="table-input-wrapper">
+                  <div style="min-width: 100px">
                     <AppSelect
                       v-model="o.week"
                       :items="weekDaysOptions"
@@ -161,62 +138,26 @@ const deleteSlot = (index: number) => {
                   </div>
                 </td>
                 <td>
-                  <div class="table-input-wrapper">
-                    <AppTextField
-                      v-model="o.fromHour"
-                      placeholder="1-24"
-                      type="number"
-                      :rules="[
-                        requiredValidator,
-                        (v: any) => minNumValidator(v, 0),
-                        (v: any) => maxNumValidator(v, 24),
-                      ]"
-                      style="width: 150px"
+                  <div style="min-width: 120px">
+                    <TimePicker
+                      v-model="o.from"
+                      format="24hr"
+                      :rules="[requiredValidator]"
+                      @update:model-value="
+                        () => {
+                          o.to = ''
+                        }
+                      "
                     />
                   </div>
                 </td>
                 <td>
-                  <div class="table-input-wrapper">
-                    <AppTextField
-                      v-model="o.fromMinute"
-                      placeholder="1-60"
-                      type="number"
-                      :rules="[
-                        requiredValidator,
-                        (v: any) => minNumValidator(v, 0),
-                        (v: any) => maxNumValidator(v, 60),
-                      ]"
-                      style="width: 150px"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="table-input-wrapper">
-                    <AppTextField
-                      v-model="o.toHour"
-                      placeholder="1-24"
-                      type="number"
-                      :rules="[
-                        requiredValidator,
-                        (v: any) => minNumValidator(v, o.fromHour as unknown as number),
-                        (v: any) => maxNumValidator(v, 24),
-                      ]"
-                      style="width: 150px"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="table-input-wrapper">
-                    <AppTextField
-                      v-model="o.toMinute"
-                      placeholder="1-60"
-                      type="number"
-                      :rules="[
-                        requiredValidator,
-                        (v: any) => minNumValidator(v, 0),
-                        (v: any) => maxNumValidator(v, 60),
-                      ]"
-                      style="width: 150px"
+                  <div style="min-width: 120px">
+                    <TimePicker
+                      v-model="o.to"
+                      format="24hr"
+                      :min="o.from"
+                      :rules="[requiredValidator]"
                     />
                   </div>
                 </td>
@@ -233,7 +174,7 @@ const deleteSlot = (index: number) => {
         </div>
       </VCardItem>
       <VCardItem class="d-flex justify-end p-2">
-        <VBtn type="submit">Submit Request</VBtn>
+        <VBtn type="submit">Add Plan</VBtn>
       </VCardItem>
     </CustomForm>
   </ModalBase>

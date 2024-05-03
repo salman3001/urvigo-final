@@ -9,6 +9,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import BidBookingFilter from './filters/bid_booking_filter.js'
 import Timeslot from './timeslot.js'
+import Address from './address.js'
 
 export default class BidBooking extends compose(BaseModel, Filterable) {
   static $filter = () => BidBookingFilter
@@ -57,6 +58,9 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
 
   @hasOne(() => Timeslot)
   declare timeSlot: HasOne<typeof Timeslot>
+
+  @hasOne(() => Address)
+  declare address: HasOne<typeof Address>
 
   @afterCreate()
   static async notifyUser(booking: BidBooking) {

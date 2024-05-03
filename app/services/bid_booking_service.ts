@@ -144,6 +144,10 @@ export default class BidBookingService {
       serviceRequirement.useTransaction(trx)
       serviceRequirement.acceptedBidId = bid.id
       await serviceRequirement.save()
+
+      if (payload.address) {
+        await serviceRequirement.related('address').create(payload.address)
+      }
     })
 
     await bidBooking!?.refresh()

@@ -2,6 +2,7 @@
 import Layout from '~/layouts/VendorLayout.vue'
 import type { ITimeslotPlan } from '#models/timeslot_plan'
 import CustomForm from '~/components/form/CustomForm.vue'
+import TimePicker from '~/components/form/TimePicker.vue'
 
 export default {
   layout: Layout,
@@ -9,7 +10,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { maxNumValidator, minNumValidator, requiredValidator } from '~/@core/utils/validators'
+import { requiredValidator } from '~/@core/utils/validators'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import routes from '~/utils/routes'
 import { useForm } from '@inertiajs/vue3'
@@ -24,45 +25,21 @@ const props = defineProps<{
 const form = useForm({
   name: props.timeslotPlan.name,
   limitToOneBooking: props.timeslotPlan.limitToOneBooking,
-  options: props.timeslotPlan.options?.map((o) => {
-    const [fromHour, fromMinute] = o.from.split(':')
-    const [toHour, toMinute] = o.to.split(':')
-    return {
-      week: o.week,
-      fromHour: fromHour,
-      fromMinute: fromMinute,
-      toHour: toHour,
-      toMinute: toMinute,
-    }
-  }) || [
+  options: props.timeslotPlan.options?.map((o) => ({
+    week: o.week,
+    from: o.from,
+    to: o.to,
+  })) || [
     {
-      week: '',
-      fromHour: '',
-      fromMinute: '',
-      toHour: '',
-      toMinute: '',
+      week: WeekDays.MONDAY,
+      from: '',
+      to: '',
     },
   ],
 })
 
 const submit = async () => {
-  form
-    .transform((data) => {
-      const options = data.options.map((o) => {
-        const from = `${o.fromHour}:${o.fromMinute}:00`
-        const to = `${o.toHour}:${o.toMinute}:00`
-        return {
-          week: o.week,
-          from: from,
-          to: to,
-        }
-      })
-      return {
-        ...data,
-        options,
-      }
-    })
-    .put(routes('vendor.timeslot-plans.update', [props.timeslotPlan.id]))
+  form.put(routes('vendor.timeslot-plans.update', [props.timeslotPlan.id]))
 }
 
 const weekDaysOptions = [
@@ -99,10 +76,8 @@ const weekDaysOptions = [
 const addSlot = () => {
   form.options.push({
     week: WeekDays.MONDAY,
-    fromHour: '',
-    fromMinute: '',
-    toHour: '',
-    toMinute: '',
+    from: '',
+    to: '',
   })
 }
 
@@ -146,10 +121,8 @@ const deleteSlot = (index: number) => {
               <thead>
                 <tr>
                   <th>Day</th>
-                  <th>Hours from</th>
-                  <th>Minutes from</th>
-                  <th>Hours to</th>
-                  <th>Minutes to</th>
+                  <th>Time from</th>
+                  <th>Time to</th>
                   <th>delete</th>
                 </tr>
               </thead>
@@ -157,7 +130,7 @@ const deleteSlot = (index: number) => {
               <tbody>
                 <tr v-for="(o, i) in form.options" :key="i">
                   <td>
-                    <div class="table-input-wrapper">
+                    <div style="min-width: 100px">
                       <AppSelect
                         v-model="o.week"
                         :items="weekDaysOptions"
@@ -169,62 +142,26 @@ const deleteSlot = (index: number) => {
                     </div>
                   </td>
                   <td>
-                    <div class="table-input-wrapper">
-                      <AppTextField
-                        v-model="o.fromHour"
-                        placeholder="1-24"
-                        type="number"
-                        :rules="[
-                          requiredValidator,
-                          (v: any) => minNumValidator(v, 0),
-                          (v: any) => maxNumValidator(v, 24),
-                        ]"
-                        style="width: 150px"
+                    <div style="min-width: 120px">
+                      <TimePicker
+                        v-model="o.from"
+                        format="24hr"
+                        :rules="[requiredValidator]"
+                        @update:model-value="
+                          () => {
+                            o.to = ''
+                          }
+                        "
                       />
                     </div>
                   </td>
                   <td>
-                    <div class="table-input-wrapper">
-                      <AppTextField
-                        v-model="o.fromMinute"
-                        placeholder="1-60"
-                        type="number"
-                        :rules="[
-                          requiredValidator,
-                          (v: any) => minNumValidator(v, 0),
-                          (v: any) => maxNumValidator(v, 60),
-                        ]"
-                        style="width: 150px"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div class="table-input-wrapper">
-                      <AppTextField
-                        v-model="o.toHour"
-                        placeholder="1-24"
-                        type="number"
-                        :rules="[
-                          requiredValidator,
-                          (v: any) => minNumValidator(v, o.fromHour as unknown as number),
-                          (v: any) => maxNumValidator(v, 24),
-                        ]"
-                        style="width: 150px"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div class="table-input-wrapper">
-                      <AppTextField
-                        v-model="o.toMinute"
-                        placeholder="1-60"
-                        type="number"
-                        :rules="[
-                          requiredValidator,
-                          (v: any) => minNumValidator(v, 0),
-                          (v: any) => maxNumValidator(v, 60),
-                        ]"
-                        style="width: 150px"
+                    <div style="min-width: 120px">
+                      <TimePicker
+                        v-model="o.to"
+                        format="24hr"
+                        :min="o.from"
+                        :rules="[requiredValidator]"
                       />
                     </div>
                   </td>

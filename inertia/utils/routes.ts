@@ -186,6 +186,10 @@ const routesObject = {
   'api.wishlist.add_item': '/api/my-wishlist/add-item',
   'api.wishlist.remove_item': '/api/my-wishlist/:itemId',
   'api.wishlist.clear': '/api/my-wishlist',
+  'api.address.index': '/api/addresses',
+  'api.address.store': '/api/addresses',
+  'api.address.update': '/api/addresses/:id',
+  'api.address.destroy': '/api/addresses/:id',
 }
 
 export default function routes(

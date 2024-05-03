@@ -27,6 +27,7 @@ import { Filterable } from 'adonis-lucid-filter'
 import ServiceFilter from './filters/service_filter.js'
 import { DeliveryOptions } from '#helpers/enums'
 import TimeslotPlan from './timeslot_plan.js'
+import Address from './address.js'
 
 export default class Service extends compose(BaseModel, Filterable) {
   static $filter = () => ServiceFilter
@@ -51,13 +52,10 @@ export default class Service extends compose(BaseModel, Filterable) {
   declare isActive: boolean
 
   @column()
-  declare geoLocation: string
-
-  @column()
-  declare address: string
-
-  @column()
   declare deliveryOptions: DeliveryOptions
+
+  @column()
+  declare kmRadius: number
 
   @column({
     serialize: (v) => new BigNumber(v || 0).toFixed(1),
@@ -113,6 +111,9 @@ export default class Service extends compose(BaseModel, Filterable) {
 
   @hasOne(() => TimeslotPlan)
   declare timeSlotPlan: HasOne<typeof TimeslotPlan>
+
+  @hasOne(() => Address)
+  declare address: HasOne<typeof Address>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

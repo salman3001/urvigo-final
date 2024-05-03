@@ -6,6 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
+      table.string('map_address')
       table.string('address')
       table.point('geo_location')
       table
@@ -17,11 +18,35 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
 
       table
-        .integer('business_profile_id', 10)
+        .integer('service_id', 10)
         .unsigned()
         .nullable()
         .references('id')
-        .inTable('business_profiles')
+        .inTable('services')
+        .onDelete('CASCADE')
+
+      table
+        .integer('service_requirement_id', 10)
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('service_requirements')
+        .onDelete('CASCADE')
+
+      table
+        .integer('booking_id', 10)
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('bookings')
+        .onDelete('CASCADE')
+
+      table
+        .integer('bid_booking_id', 10)
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('bid_bookings')
         .onDelete('CASCADE')
     })
   }
