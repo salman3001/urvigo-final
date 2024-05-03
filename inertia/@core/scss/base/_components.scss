@@ -1,8 +1,8 @@
-@use "@core/scss/base/mixins";
-@use "@layouts/styles/placeholders";
-@use "@layouts/styles/mixins" as layoutMixins;
-@use "@configured-variables" as variables;
-@use "@styles/variables/_vuetify.scss" as vuetify;
+@use '@core/scss/base/mixins';
+@use '@layouts/styles/placeholders';
+@use '@layouts/styles/mixins' as layoutMixins;
+@use '@configured-variables' as variables;
+@use '@styles/variables/_vuetify.scss' as vuetify;
 
 // 👉 Avatar group
 .v-avatar-group {
@@ -14,7 +14,9 @@
       margin-inline-start: -0.8rem;
     }
 
-    transition: transform 0.25s ease, box-shadow 0.15s ease;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.15s ease;
 
     &:hover {
       z-index: 2;
@@ -37,7 +39,7 @@
 .v-card--variant-outlined,
 .v-chip--variant-outlined,
 .v-list-item--variant-outlined {
-  &:not([class*="text-"]) {
+  &:not([class*='text-']) {
     border-color: rgba(var(--v-border-color), var(--v-border-opacity));
   }
 
@@ -53,7 +55,7 @@
   opacity: 1;
   white-space: normal;
 
-  +.v-label {
+  + .v-label {
     letter-spacing: normal;
   }
 

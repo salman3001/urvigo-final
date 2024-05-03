@@ -37,10 +37,7 @@ const authProviders = [
       size="small"
       :color="global.name.value === 'dark' ? link.colorInDark : link.color"
     >
-      <VIcon
-        size="20"
-        :icon="link.icon"
-      />
+      <VIcon size="20" :icon="link.icon" />
     </VBtn>
   </div>
 </template>

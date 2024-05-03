@@ -1,6 +1,6 @@
-@use "shepherd.js/dist/css/shepherd.css";
-@use "@core/scss/base/mixins";
-@use "@styles/variables/_vuetify.scss" as variables;
+@use 'shepherd.js/dist/css/shepherd.css';
+@use '@core/scss/base/mixins';
+@use '@styles/variables/_vuetify.scss' as variables;
 
 .shepherd-button {
   border-radius: variables.$button-border-radius;
@@ -47,19 +47,19 @@
   font-size: 1.5rem;
 }
 
-.shepherd-element[data-popper-placement^="bottom"] {
+.shepherd-element[data-popper-placement^='bottom'] {
   margin-block-start: 0.75rem !important;
 }
 
-.shepherd-element[data-popper-placement^="top"] {
+.shepherd-element[data-popper-placement^='top'] {
   margin-block-start: -0.75rem !important;
 }
 
-.shepherd-element[data-popper-placement^="right"] {
+.shepherd-element[data-popper-placement^='right'] {
   margin-inline-start: 0.75rem !important;
 }
 
-.shepherd-element[data-popper-placement^="left"] {
+.shepherd-element[data-popper-placement^='left'] {
   margin-inline-end: 0.75rem !important;
 }
 

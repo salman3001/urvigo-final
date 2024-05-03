@@ -1,5 +1,5 @@
-@use "@configured-variables" as variables;
-@use "@core/scss/template/mixins" as templateMixins;
+@use '@configured-variables' as variables;
+@use '@core/scss/template/mixins' as templateMixins;
 
 // 👉 Tabs
 .v-tabs {
@@ -72,7 +72,7 @@
 
   @each $color-name in variables.$theme-colors-name {
     .v-slide-group-item--active.v-tab--selected.text-#{$color-name} {
-      @include templateMixins.custom-elevation(var(--v-theme-#{$color-name}), "sm");
+      @include templateMixins.custom-elevation(var(--v-theme-#{$color-name}), 'sm');
     }
   }
 

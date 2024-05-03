@@ -1,4 +1,4 @@
-@use "@core/scss/base/mixins";
+@use '@core/scss/base/mixins';
 
 // 👉 Avatar
 body {
@@ -8,7 +8,7 @@ body {
       inline-size: 1.5rem;
     }
 
-    &.v-avatar--variant-tonal:not([class*="text-"]) {
+    &.v-avatar--variant-tonal:not([class*='text-']) {
       .v-avatar__underlay {
         --v-activated-opacity: 0.08;
       }

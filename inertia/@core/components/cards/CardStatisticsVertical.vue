@@ -25,10 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
         rounded
         class="mb-2"
       >
-        <VIcon
-          :icon="props.icon"
-          size="26"
-        />
+        <VIcon :icon="props.icon" size="26" />
       </VAvatar>
 
       <h5 class="text-h5">
@@ -39,10 +36,6 @@ const props = withDefaults(defineProps<Props>(), {
       </div>
     </VCardText>
 
-    <VueApexCharts
-      :series="props.series"
-      :options="props.chartOptions"
-      :height="props.height"
-    />
+    <VueApexCharts :series="props.series" :options="props.chartOptions" :height="props.height" />
   </VCard>
 </template>

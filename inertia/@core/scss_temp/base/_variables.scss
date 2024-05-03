@@ -1,4 +1,4 @@
-@use "vuetify/lib/styles/tools/functions" as *;
+@use 'vuetify/lib/styles/tools/functions' as *;
 
 /*
   TODO: Add docs on when to use placeholder vs when to use SASS variable
@@ -11,12 +11,12 @@
     - You can also use variable for consistency (e.g. mx 1 rem should be applied to both vertical nav items and vertical nav header)
 */
 
-@forward "@layouts/styles/variables" with (
+@forward '@layouts/styles/variables' with (
   // Adjust z-index so vertical nav & overlay stays on top of v-layout in v-main. E.g. Email app
   $layout-vertical-nav-z-index: 1003,
-  $layout-overlay-z-index: 1002,
+  $layout-overlay-z-index: 1002
 );
-@use "@layouts/styles/variables" as *;
+@use '@layouts/styles/variables' as *;
 
 // 👉 Default layout
 
@@ -26,14 +26,7 @@ $navbar-high-emphasis-text: true !default;
 //   $layout-vertical-nav-width: 350px !default,
 // );
 
-$theme-colors-name: (
-  "primary",
-  "secondary",
-  "error",
-  "info",
-  "success",
-  "warning"
-) !default;
+$theme-colors-name: ('primary', 'secondary', 'error', 'info', 'success', 'warning') !default;
 
 // 👉 Default layout with vertical nav
 
@@ -51,7 +44,7 @@ $vertical-nav-horizontal-padding: 0.75rem !default;
 // Vertical nav header height. Mostly we will align it with navbar height;
 $vertical-nav-header-height: $layout-vertical-nav-navbar-height !default;
 $vertical-nav-navbar-elevation: 3 !default;
-$vertical-nav-navbar-style: "elevated" !default; // options: elevated, floating
+$vertical-nav-navbar-style: 'elevated' !default; // options: elevated, floating
 $vertical-nav-floating-navbar-top: 1rem !default;
 
 // Vertical nav header padding
@@ -121,19 +114,19 @@ $vuetify-reduce-default-compact-button-icon-size: true !default;
 $font-sizes: () !default;
 $font-sizes: map-deep-merge(
   (
-    "xs": 0.75rem,
-    "sm": 0.875rem,
-    "base": 1rem,
-    "lg": 1.125rem,
-    "xl": 1.25rem,
-    "2xl": 1.5rem,
-    "3xl": 1.875rem,
-    "4xl": 2.25rem,
-    "5xl": 3rem,
-    "6xl": 3.75rem,
-    "7xl": 4.5rem,
-    "8xl": 6rem,
-    "9xl": 8rem
+    'xs': 0.75rem,
+    'sm': 0.875rem,
+    'base': 1rem,
+    'lg': 1.125rem,
+    'xl': 1.25rem,
+    '2xl': 1.5rem,
+    '3xl': 1.875rem,
+    '4xl': 2.25rem,
+    '5xl': 3rem,
+    '6xl': 3.75rem,
+    '7xl': 4.5rem,
+    '8xl': 6rem,
+    '9xl': 8rem,
   ),
   $font-sizes
 );
@@ -142,19 +135,19 @@ $font-sizes: map-deep-merge(
 $font-line-height: () !default;
 $font-line-height: map-deep-merge(
   (
-    "xs": 1rem,
-    "sm": 1.25rem,
-    "base": 1.5rem,
-    "lg": 1.75rem,
-    "xl": 1.75rem,
-    "2xl": 2rem,
-    "3xl": 2.25rem,
-    "4xl": 2.5rem,
-    "5xl": 1,
-    "6xl": 1,
-    "7xl": 1,
-    "8xl": 1,
-    "9xl": 1
+    'xs': 1rem,
+    'sm': 1.25rem,
+    'base': 1.5rem,
+    'lg': 1.75rem,
+    'xl': 1.75rem,
+    '2xl': 2rem,
+    '3xl': 2.25rem,
+    '4xl': 2.5rem,
+    '5xl': 1,
+    '6xl': 1,
+    '7xl': 1,
+    '8xl': 1,
+    '9xl': 1,
   ),
   $font-line-height
 );
@@ -163,36 +156,36 @@ $font-line-height: map-deep-merge(
 $gap: () !default;
 $gap: map-deep-merge(
   (
-    "0": 0,
-    "1": 0.25rem,
-    "2": 0.5rem,
-    "3": 0.75rem,
-    "4": 1rem,
-    "5": 1.25rem,
-    "6":1.5rem,
-    "7": 1.75rem,
-    "8": 2rem,
-    "9": 2.25rem,
-    "10": 2.5rem,
-    "11": 2.75rem,
-    "12": 3rem,
-    "14": 3.5rem,
-    "16": 4rem,
-    "20": 5rem,
-    "24": 6rem,
-    "28": 7rem,
-    "32": 8rem,
-    "36": 9rem,
-    "40": 10rem,
-    "44": 11rem,
-    "48": 12rem,
-    "52": 13rem,
-    "56": 14rem,
-    "60": 15rem,
-    "64": 16rem,
-    "72": 18rem,
-    "80": 20rem,
-    "96": 24rem
+    '0': 0,
+    '1': 0.25rem,
+    '2': 0.5rem,
+    '3': 0.75rem,
+    '4': 1rem,
+    '5': 1.25rem,
+    '6': 1.5rem,
+    '7': 1.75rem,
+    '8': 2rem,
+    '9': 2.25rem,
+    '10': 2.5rem,
+    '11': 2.75rem,
+    '12': 3rem,
+    '14': 3.5rem,
+    '16': 4rem,
+    '20': 5rem,
+    '24': 6rem,
+    '28': 7rem,
+    '32': 8rem,
+    '36': 9rem,
+    '40': 10rem,
+    '44': 11rem,
+    '48': 12rem,
+    '52': 13rem,
+    '56': 14rem,
+    '60': 15rem,
+    '64': 16rem,
+    '72': 18rem,
+    '80': 20rem,
+    '96': 24rem,
   ),
   $gap
 );

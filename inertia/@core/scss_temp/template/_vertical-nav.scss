@@ -1,6 +1,6 @@
-@use "@configured-variables" as variables;
-@use "@core/scss/base/mixins";
-@use "@layouts/styles/mixins" as layoutsMixins;
+@use '@configured-variables' as variables;
+@use '@core/scss/base/mixins';
+@use '@layouts/styles/mixins' as layoutsMixins;
 
 .layout-nav-type-vertical {
   // 👉 Layout Vertical nav

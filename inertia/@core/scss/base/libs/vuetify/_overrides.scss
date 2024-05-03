@@ -1,5 +1,5 @@
-@use "@core/scss/base/utils";
-@use "@configured-variables" as variables;
+@use '@core/scss/base/utils';
+@use '@configured-variables' as variables;
 
 // 👉 Application
 // ℹ️ We need accurate vh in mobile devices as well
@@ -39,7 +39,7 @@ body,
 // Remove margin-bottom of v-input_details inside grid (validation error message)
 .v-row {
   .v-col,
-  [class^="v-col-*"] {
+  [class^='v-col-*'] {
     .v-input__details {
       margin-block-end: 0;
     }
@@ -84,8 +84,6 @@ body,
 
   flex: unset;
 }
-
-
 
 .v-radio-group {
   .v-selection-control-group {

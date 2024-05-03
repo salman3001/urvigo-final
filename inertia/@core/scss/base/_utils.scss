@@ -1,6 +1,6 @@
-@use "sass:map";
-@use "sass:list";
-@use "@configured-variables" as variables;
+@use 'sass:map';
+@use 'sass:list';
+@use '@configured-variables' as variables;
 
 // Thanks: https://css-tricks.com/snippets/sass/deep-getset-maps/
 @function map-deep-get($map, $keys...) {
@@ -12,19 +12,24 @@
 }
 
 @function map-deep-set($map, $keys, $value) {
-  $maps: ($map,);
+  $maps: ($map);
   $result: null;
 
   // If the last key is a map already
   // Warn the user we will be overriding it with $value
-  @if type-of(nth($keys, -1)) == "map" {
+  @if type-of(nth($keys, -1)) == 'map' {
     @warn "The last key you specified is a map; it will be overrided with `#{$value}`.";
   }
 
   // If $keys is a single key
   // Just merge and return
   @if length($keys) == 1 {
-    @return map-merge($map, ($keys: $value));
+    @return map-merge(
+      $map,
+      (
+        $keys: $value,
+      )
+    );
   }
 
   // Loop from the first to the second to last key from $keys
@@ -48,7 +53,12 @@
     $current-map: list.nth($maps, $i);
     $current-key: list.nth($keys, $i);
     $current-val: if($i == list.length($maps), $value, $result);
-    $result: map.map-merge($current-map, ($current-key: $current-val));
+    $result: map.map-merge(
+      $current-map,
+      (
+        $current-key: $current-val,
+      )
+    );
   }
 
   // Return result

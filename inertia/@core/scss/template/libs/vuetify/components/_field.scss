@@ -1,6 +1,6 @@
-@use "sass:map";
-@use "@configured-variables" as variables;
-@use "@core/scss/template/mixins" as templateMixins;
+@use 'sass:map';
+@use '@configured-variables' as variables;
+@use '@core/scss/template/mixins' as templateMixins;
 
 $v-input-density: (
   comfortable: (
@@ -71,12 +71,12 @@ $v-input-density: (
       .v-field__outline {
         @each $color-name in variables.$theme-colors-name {
           &.text-#{$color-name} {
-            @include templateMixins.custom-elevation(var(--v-theme-#{$color-name}), "sm");
+            @include templateMixins.custom-elevation(var(--v-theme-#{$color-name}), 'sm');
           }
         }
 
-        &:not([class*="text-"]) {
-          @include templateMixins.custom-elevation(var(--v-theme-primary), "sm");
+        &:not([class*='text-']) {
+          @include templateMixins.custom-elevation(var(--v-theme-primary), 'sm');
         }
       }
     }
@@ -84,7 +84,7 @@ $v-input-density: (
 
   // Give hint messages color based on theme color
   @each $color-name in variables.$theme-colors-name {
-    &:has( .v-field.v-field--focused .v-field__outline.text-#{$color-name}) {
+    &:has(.v-field.v-field--focused .v-field__outline.text-#{$color-name}) {
       .v-messages {
         color: rgb(var(--v-theme-#{$color-name}));
       }
@@ -152,7 +152,7 @@ body {
             &::placeholder {
               transform: translateX(4px) !important;
 
-              [dir="rtl"] & {
+              [dir='rtl'] & {
                 transform: translateX(-4px) !important;
               }
             }
@@ -271,9 +271,9 @@ body {
     }
   }
 
-  @include style-selectable-component("autocomplete");
-  @include style-selectable-component("select");
-  @include style-selectable-component("combobox");
+  @include style-selectable-component('autocomplete');
+  @include style-selectable-component('select');
+  @include style-selectable-component('combobox');
 
   // AutoComplete
   @at-root {

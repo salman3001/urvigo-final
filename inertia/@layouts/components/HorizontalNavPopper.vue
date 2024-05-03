@@ -102,21 +102,34 @@ watch(() => currenUrl, hideContent)
 </script>
 
 <template>
-  <div class="nav-popper" :class="[
-    {
-      'popper-inline-end': popperInlineEnd,
-      'show-content': isContentShown,
-    },
-  ]">
-    <div ref="refPopperContainer" class="popper-triggerer" @mouseenter="showContent" @mouseleave="hideContent">
+  <div
+    class="nav-popper"
+    :class="[
+      {
+        'popper-inline-end': popperInlineEnd,
+        'show-content': isContentShown,
+      },
+    ]"
+  >
+    <div
+      ref="refPopperContainer"
+      class="popper-triggerer"
+      @mouseenter="showContent"
+      @mouseleave="hideContent"
+    >
       <slot />
     </div>
 
     <!-- SECTION Popper Content -->
     <!-- 👉 Without transition -->
     <template v-if="!themeConfig.horizontalNav.transition">
-      <div ref="refPopper" class="popper-content" :style="popperContentStyles" @mouseenter="showContent"
-        @mouseleave="hideContent">
+      <div
+        ref="refPopper"
+        class="popper-content"
+        :style="popperContentStyles"
+        @mouseenter="showContent"
+        @mouseleave="hideContent"
+      >
         <div>
           <slot name="content" />
         </div>
@@ -127,8 +140,14 @@ watch(() => currenUrl, hideContent)
 
     <template v-else-if="typeof themeConfig.horizontalNav.transition === 'string'">
       <Transition :name="themeConfig.horizontalNav.transition">
-        <div v-show="isContentShown" ref="refPopper" class="popper-content" :style="popperContentStyles"
-          @mouseenter="showContent" @mouseleave="hideContent">
+        <div
+          v-show="isContentShown"
+          ref="refPopper"
+          class="popper-content"
+          :style="popperContentStyles"
+          @mouseenter="showContent"
+          @mouseleave="hideContent"
+        >
           <div>
             <slot name="content" />
           </div>
@@ -140,8 +159,14 @@ watch(() => currenUrl, hideContent)
 
     <template v-else>
       <Component :is="themeConfig.horizontalNav.transition">
-        <div v-show="isContentShown" ref="refPopper" class="popper-content" :style="popperContentStyles"
-          @mouseenter="showContent" @mouseleave="hideContent">
+        <div
+          v-show="isContentShown"
+          ref="refPopper"
+          class="popper-content"
+          :style="popperContentStyles"
+          @mouseenter="showContent"
+          @mouseleave="hideContent"
+        >
           <div>
             <slot name="content" />
           </div>

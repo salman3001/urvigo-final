@@ -1,7 +1,7 @@
-@use "sass:list";
-@use "sass:map";
-@use "@styles/variables/vuetify";
-@use "@configured-variables" as variables;
+@use 'sass:list';
+@use 'sass:map';
+@use '@styles/variables/vuetify';
+@use '@configured-variables' as variables;
 
 // 👉 Checkbox
 .v-checkbox {

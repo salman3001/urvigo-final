@@ -1,9 +1,9 @@
-@use "@core/scss/base/placeholders" as *;
-@use "@core/scss/template/placeholders" as *;
-@use "@configured-variables" as variables;
-@use "@layouts/styles/mixins" as layoutsMixins;
-@use "@core/scss/base/mixins";
-@use "vuetify/lib/styles/tools/states" as vuetifyStates;
+@use '@core/scss/base/placeholders' as *;
+@use '@core/scss/template/placeholders' as *;
+@use '@configured-variables' as variables;
+@use '@layouts/styles/mixins' as layoutsMixins;
+@use '@core/scss/base/mixins';
+@use 'vuetify/lib/styles/tools/states' as vuetifyStates;
 
 .layout-horizontal-nav {
   @extend %nav;
@@ -107,7 +107,7 @@
         &::after {
           position: absolute;
           block-size: variables.$horizontal-nav-popper-content-top;
-          content: "";
+          content: '';
           inline-size: 100%;
           inset-block-start: 100%;
           inset-inline-start: 0;
@@ -144,7 +144,7 @@
     // 👉 Sub group
     &.sub-item {
       &.active {
-        @include mixins.selected-states("> .popper-triggerer > .nav-group-label::before");
+        @include mixins.selected-states('> .popper-triggerer > .nav-group-label::before');
       }
 
       // Reduce the icon's size of nested group's nav links (Top level group > Sub group > [Nav links])
@@ -185,7 +185,7 @@
       }
 
       &:not(.active) {
-        @include mixins.selected-states("> .popper-triggerer > .nav-group-label::before");
+        @include mixins.selected-states('> .popper-triggerer > .nav-group-label::before');
       }
     }
   }

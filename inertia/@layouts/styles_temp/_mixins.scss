@@ -1,9 +1,9 @@
-@use "placeholders";
-@use "@configured-variables" as variables;
+@use 'placeholders';
+@use '@configured-variables' as variables;
 
 @mixin rtl {
   @if variables.$enable-rtl-styles {
-    [dir="rtl"] & {
+    [dir='rtl'] & {
       @content;
     }
   }

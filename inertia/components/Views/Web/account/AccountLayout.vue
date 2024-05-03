@@ -23,7 +23,12 @@ const tabs = [
     tab: 'wishlist',
     href: routes('web.account.wishlist'),
   },
-  { title: 'Settings', icon: 'tabler-settings', tab: 'settings', href: routes('web.account.settings') },
+  {
+    title: 'Settings',
+    icon: 'tabler-settings',
+    tab: 'settings',
+    href: routes('web.account.settings'),
+  },
 ]
 </script>
 
@@ -36,10 +41,10 @@ const tabs = [
     <div>
       <VTabs :model-value="activeTab" class="v-tabs-pill">
         <Link v-for="item in tabs" :key="item.icon" :href="item.href">
-        <VTab :value="item.title">
-          <VIcon size="20" start :icon="item.icon" />
-          {{ item.title }}
-        </VTab>
+          <VTab :value="item.title">
+            <VIcon size="20" start :icon="item.icon" />
+            {{ item.title }}
+          </VTab>
         </Link>
       </VTabs>
 

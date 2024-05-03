@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Shortcuts from '~/@core/components/Shortcuts.vue';
+import Shortcuts from '~/@core/components/Shortcuts.vue'
 
 const shortcuts = [
   {
@@ -38,7 +38,6 @@ const shortcuts = [
     subtitle: 'Account Settings',
     to: { name: 'pages-account-settings-tab', params: { tab: 'account' } },
   },
-
 ]
 </script>
 

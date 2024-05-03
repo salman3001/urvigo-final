@@ -1,6 +1,6 @@
-@use "@configured-variables" as variables;
-@use "misc";
-@use "@core/scss/base/mixins";
+@use '@configured-variables' as variables;
+@use 'misc';
+@use '@core/scss/base/mixins';
 
 %default-layout-horizontal-nav-navbar-and-nav-container {
   @include mixins.elevation(3);

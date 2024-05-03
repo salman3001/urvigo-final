@@ -1,5 +1,5 @@
-@use "@configured-variables" as variables;
-@use "@core/scss/template/mixins" as templateMixins;
+@use '@configured-variables' as variables;
+@use '@core/scss/template/mixins' as templateMixins;
 
 // 👉 switch
 .v-switch {
@@ -12,7 +12,7 @@
       &.v-selection-control--dirty {
         @each $color-name in variables.$theme-colors-name {
           .v-switch__track.bg-#{$color-name} {
-            @include templateMixins.custom-elevation(var(--v-theme-#{$color-name}), "sm");
+            @include templateMixins.custom-elevation(var(--v-theme-#{$color-name}), 'sm');
           }
         }
       }

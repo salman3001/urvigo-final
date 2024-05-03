@@ -1,35 +1,35 @@
-@use "sass:map";
-@use "@core/scss/base/mixins";
-@use "@configured-variables" as variables;
+@use 'sass:map';
+@use '@core/scss/base/mixins';
+@use '@configured-variables' as variables;
 
-$header: ".layout-navbar";
+$header: '.layout-navbar';
 
 @if variables.$layout-vertical-nav-navbar-is-contained {
-  $header: ".layout-navbar .navbar-content-container";
+  $header: '.layout-navbar .navbar-content-container';
 }
 
 .skin--bordered {
   // Expansion Panels
   @include mixins.bordered-skin(
-    ".v-expansion-panels:not(.expansion-panels-width-border) .v-expansion-panel, .v-expansion-panel__shadow"
+    '.v-expansion-panels:not(.expansion-panels-width-border) .v-expansion-panel, .v-expansion-panel__shadow'
   );
 
   // Navbar
 
   // -- Vertical
   @if variables.$layout-vertical-nav-navbar-is-contained {
-    @include mixins.bordered-skin(".layout-nav-type-vertical #{$header}");
+    @include mixins.bordered-skin('.layout-nav-type-vertical #{$header}');
     .layout-nav-type-vertical.window-scrolled #{$header} {
       border-block-start: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
     }
   }
   /* stylelint-disable-next-line @stylistic/indentation */
- @else {
-    @include mixins.bordered-skin(".layout-nav-type-vertical #{$header}", "border-bottom");
+  @else {
+    @include mixins.bordered-skin('.layout-nav-type-vertical #{$header}', 'border-bottom');
   }
 
   // Dialog close button
-  @include mixins.bordered-skin(".v-dialog-close-btn");
+  @include mixins.bordered-skin('.v-dialog-close-btn');
 
   // Vertical Nav
   .layout-vertical-nav {
@@ -49,7 +49,7 @@ $header: ".layout-navbar";
       }
 
       &::after {
-        content: "";
+        content: '';
       }
     }
   }

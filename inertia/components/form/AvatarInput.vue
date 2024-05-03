@@ -35,7 +35,13 @@ function previewSelectedImage() {
 
 <template>
   <!-- 👉 Avatar -->
-  <VAvatar rounded :size="size" :image="urlRef" class="me-4 cursor-pointer" @click="refInputEl?.click()" />
+  <VAvatar
+    rounded
+    :size="size"
+    :image="urlRef"
+    class="me-4 cursor-pointer"
+    @click="refInputEl?.click()"
+  />
 
   <!-- 👉 Upload Photo -->
   <form class="d-flex flex-column justify-center gap-4">
@@ -45,11 +51,19 @@ function previewSelectedImage() {
         <span class="d-none d-sm-block">Upload new photo</span>
       </VBtn>
 
-      <input ref="refInputEl" type="file" :name="name" accept=".jpeg,.png,.jpg,GIF" hidden @change="(e) => {
-    file = e.target?.files[0]
-    previewSelectedImage()
-  }
-    " />
+      <input
+        ref="refInputEl"
+        type="file"
+        :name="name"
+        accept=".jpeg,.png,.jpg,GIF"
+        hidden
+        @change="
+          (e) => {
+            file = e.target?.files[0]
+            previewSelectedImage()
+          }
+        "
+      />
 
       <!-- <VBtn
             type="reset"

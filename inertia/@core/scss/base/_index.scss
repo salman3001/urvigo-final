@@ -1,35 +1,35 @@
-@use "sass:map";
+@use 'sass:map';
 
 // Layout
-@use "vertical-nav";
-@use "horizontal-nav";
-@use "default-layout";
-@use "default-layout-w-vertical-nav";
-@use "default-layout-w-horizontal-nav";
+@use 'vertical-nav';
+@use 'horizontal-nav';
+@use 'default-layout';
+@use 'default-layout-w-vertical-nav';
+@use 'default-layout-w-horizontal-nav';
 
 // Layouts package
-@use "layouts";
+@use 'layouts';
 
 // Skins
-@use "skins";
+@use 'skins';
 
 // Components
-@use "components";
+@use 'components';
 
 // Utilities
-@use "utilities";
+@use 'utilities';
 
 // Route Transitions
-@use "route-transitions";
+@use 'route-transitions';
 
 // Misc
-@use "misc";
+@use 'misc';
 
 // Dark
-@use "dark";
+@use 'dark';
 
 // libs
-@use "libs/perfect-scrollbar";
+@use 'libs/perfect-scrollbar';
 
 a {
   color: rgb(var(--v-theme-primary));

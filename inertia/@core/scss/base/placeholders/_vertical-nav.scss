@@ -1,6 +1,6 @@
-@use "@core/scss/base/mixins";
-@use "@configured-variables" as variables;
-@use "vuetify/lib/styles/tools/states" as vuetifyStates;
+@use '@core/scss/base/mixins';
+@use '@configured-variables' as variables;
+@use 'vuetify/lib/styles/tools/states' as vuetifyStates;
 
 %nav-header-action {
   font-size: 1.25rem;
@@ -41,10 +41,14 @@
     ℹ️ `margin-inline` will be (normal icon font-size - small icon font-size) / 2
     (1.5rem - 0.9rem) / 2 => 0.6rem / 2 => 0.3rem
   */
-  $vertical-nav-items-nested-icon-margin-inline: calc((variables.$vertical-nav-items-icon-size - variables.$vertical-nav-items-nested-icon-size) / 2);
+  $vertical-nav-items-nested-icon-margin-inline: calc(
+    (variables.$vertical-nav-items-icon-size - variables.$vertical-nav-items-nested-icon-size) / 2
+  );
 
   font-size: variables.$vertical-nav-items-nested-icon-size;
-  margin-inline: $vertical-nav-items-nested-icon-margin-inline $vertical-nav-items-nested-icon-margin-inline + variables.$vertical-nav-items-icon-margin-inline-end;
+  margin-inline: $vertical-nav-items-nested-icon-margin-inline
+    $vertical-nav-items-nested-icon-margin-inline +
+    variables.$vertical-nav-items-icon-margin-inline-end;
 }
 
 %vertical-nav-items-icon-after-2nd-level {
@@ -53,7 +57,7 @@
 
 // Open & Active nav group styles
 %vertical-nav-group-open-active {
-  @include mixins.selected-states("&::before");
+  @include mixins.selected-states('&::before');
 }
 
 // Section title
