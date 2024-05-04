@@ -1,9 +1,11 @@
 <script lang="ts">
 import Layout from '~/layouts/VendorLayout.vue'
 import routes from '~/utils/routes'
-import { DeliveryOptions } from '../../../../app/helpers/enums'
-import LocationAutocomplete from '~/components/form/LocationAutocomplete.vue'
+import { DeliveryOptions } from '#helpers/enums'
 import AddressComponent from '~/components/AddressComponent.vue'
+import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
+import type { ITimeslotPlan } from '../../../../app/models/timeslot_plan'
+import ModalAddTimeslotPlan from '~/components/modal/ModalAddTimeslotPlan.vue'
 
 export default {
   layout: Layout,
@@ -11,11 +13,11 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { IvariantFrom } from '#helpers/types'
+import type { IvariantFrom } from '#helpers/types'
 import type { IServiceCategory } from '#models/service_category'
 import type { IServiceSubcategory } from '#models/service_subcategory'
 import type { IServiceTag } from '#models/service_tag'
-import { Link, useForm } from '@inertiajs/vue3'
+import { Link, router, useForm } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import DropZone from '~/@core/components/DropZone.vue'
 import ProductDescriptionEditor from '~/@core/components/ProductDescriptionEditor.vue'
@@ -33,6 +35,7 @@ defineProps<{
   categories: IServiceCategory[]
   subcategories: IServiceSubcategory[]
   tags: IServiceTag[]
+  timeslotPlans: ITimeslotPlan[]
 }>()
 
 const form = useForm({
@@ -49,6 +52,8 @@ const form = useForm({
     shortDesc: '',
     longDesc: '',
     deliveryOptions: DeliveryOptions.WALK_IN,
+    geoLocation: '',
+    address: '',
     kmRadius: 10,
     isActive: true,
   },
@@ -63,11 +68,7 @@ const form = useForm({
     ans: string
   }[],
   variant: [] as IvariantFrom[],
-  address: {
-    geoLocation: '',
-    mapAddress: '',
-    address: '',
-  },
+  timeSlotPlanId: '' as unknown as number,
 })
 
 const variantModalRef = ref(false)
@@ -79,6 +80,7 @@ const selectedVariant = ref<
     }
   | undefined
 >(undefined)
+const timeslotAddModal = ref(false)
 
 const removeVariant = (index: number) => {
   form.variantImages.splice(index, 1)
@@ -151,8 +153,19 @@ const submit = () => {
                 </VCol>
 
                 <VCol cols="12">
-                  <label for="" class="v-label">Select Service Address</label>
-                  <AddressComponent />
+                  <label for="" class="v-label mb-2">Select Service Address</label>
+                  <!-- <div class="pa-2 text-h5 border rounded my-2" v-if="form.service.address">
+                    {{ form.service.address }}
+                  </div> -->
+                  <AddressComponent
+                    @selected-address="
+                      (ad) => {
+                        form.service.geoLocation = ad.geoLocation
+                        form.service.address = ad.mapAddress
+                      }
+                    "
+                    :rules="[requiredValidator]"
+                  />
                 </VCol>
                 <VCol cols="12">
                   <AppTextarea label="Short Description" v-model="form.service.shortDesc" />
@@ -224,6 +237,7 @@ const submit = () => {
 
               <VBtn
                 class="mt-6"
+                variant="tonal"
                 prepend-icon="tabler-plus"
                 @click="
                   () => {
@@ -298,6 +312,7 @@ const submit = () => {
               <div class="q-pt-md">
                 <VBtn
                   class="mt-6"
+                  variant="tonal"
                   prepend-icon="tabler-plus"
                   @click="
                     () => {
@@ -370,6 +385,65 @@ const submit = () => {
             </VCardText>
           </VCard>
 
+          <!-- 👉 Delivery options -->
+          <VCard title="Delivery options" class="mb-6">
+            <VCardText>
+              <div class="d-flex ga-2 flex-column">
+                <CustomRadios
+                  v-model:selected-radio="form.service.deliveryOptions"
+                  :radio-content="[
+                    { title: 'Walk In', value: DeliveryOptions.WALK_IN },
+                    { title: 'Home Service', value: DeliveryOptions.HOME_SERVICE },
+                    { title: 'Both', value: DeliveryOptions.BOTH },
+                  ]"
+                  :grid-column="{ cols: '12' }"
+                />
+                <div
+                  v-if="
+                    form.service.deliveryOptions === DeliveryOptions.HOME_SERVICE ||
+                    form.service.deliveryOptions === DeliveryOptions.BOTH
+                  "
+                  class="mt-2"
+                >
+                  <AppTextField
+                    label="Max distance (Km) for home services"
+                    type="number"
+                    placeholder="Specify in kilometers"
+                    v-model="form.service.kmRadius"
+                    :rules="[requiredValidator]"
+                  />
+                </div>
+              </div>
+            </VCardText>
+          </VCard>
+
+          <!-- 👉 Select Time Slot plan -->
+          <VCard title="Select timeslot plan" subtitle="Only for booking by timeslots" class="mb-6">
+            <VCardText>
+              <div class="d-flex ga-2 flex-column">
+                <CustomRadios
+                  v-if="timeslotPlans"
+                  v-model:selected-radio="form.service.deliveryOptions"
+                  :radio-content="timeslotPlans.map((t) => ({ title: t.name, value: t.id }))"
+                  :grid-column="{ cols: '12' }"
+                />
+                <div v-else>No Timeslot plans found! Please a plan</div>
+                <div class="mt-2">
+                  <VBtn
+                    variant="tonal"
+                    prepend-icon="tabler-plus"
+                    text="Add plan"
+                    @click="
+                      () => {
+                        timeslotAddModal = true
+                      }
+                    "
+                  />
+                </div>
+              </div>
+            </VCardText>
+          </VCard>
+
           <!-- 👉 SEO -->
           <VCard title="SEO">
             <VCardText>
@@ -398,6 +472,17 @@ const submit = () => {
         @variant-edited="
           (opt) => {
             onVariantEdited(opt)
+          }
+        "
+      />
+      <ModalAddTimeslotPlan
+        v-model="timeslotAddModal"
+        @success="
+          () => {
+            router.reload({
+              only: ['timeslotPlans'],
+            })
+            timeslotAddModal = false
           }
         "
       />

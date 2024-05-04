@@ -1,4 +1,4 @@
-import { PaymentMode } from '#helpers/enums'
+import { PaymentMode, PaymentStatus } from '#helpers/enums'
 import vine from '@vinejs/vine'
 
 export const BidBookingCreateValidator = vine.compile(
@@ -7,15 +7,14 @@ export const BidBookingCreateValidator = vine.compile(
     acceptedBidId: vine.number(),
     qty: vine.number().min(1),
     paymentdetail: vine.object({
-      paymentMode: vine.enum(Object.values(PaymentMode)),
-      paymentStatus: vine.enum(['pending', 'paid']),
+      paymentMode: vine.enum(PaymentMode),
+      paymentStatus: vine.enum(PaymentStatus),
     }),
-    address: vine
-      .object({
-        geoLocation: vine.string(),
-        mapAddress: vine.string(),
-        address: vine.string().escape().optional(),
-      })
-      .optional(),
+    addressDetail: vine.object({
+      geoLocation: vine.string(),
+      mapAddress: vine.string(),
+      address: vine.string().escape().optional(),
+      mobile: vine.string().escape().minLength(8),
+    }),
   })
 )

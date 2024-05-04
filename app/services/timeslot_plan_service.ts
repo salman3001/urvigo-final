@@ -3,18 +3,21 @@ import { HttpContext } from '@adonisjs/core/http'
 import { paginate } from '../helpers/common.js'
 import TimeslotPlan from '#models/timeslot_plan'
 import { CreateTimeslotValidator, UpdateTimeslotValidator } from '#validators/timeslot'
+import { IndexOption } from '#helpers/types'
 
 @inject()
 export default class TimeslotPlanService {
   constructor(protected ctx: HttpContext) {}
 
-  async index() {
+  async index(opt?: IndexOption) {
     const { request, bouncer, auth } = this.ctx
     await bouncer.with('TimeslotPlanPolicy').authorize('viewList')
     const user = auth.user!
     const timeSlotQuery = TimeslotPlan.query().where('user_id', user.id)
 
-    const timeSlotplan = await paginate(timeSlotQuery, request)
+    const timeSlotplan = opt?.unPaginated
+      ? await timeSlotQuery.exec()
+      : await paginate(timeSlotQuery, request)
 
     return timeSlotplan
   }

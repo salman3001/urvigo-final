@@ -14,7 +14,7 @@ const isVisible = defineModel<boolean>('isVisible')
 </script>
 
 <template>
-  <VDialog v-model="isVisible" :width="$vuetify.display.smAndDown ? 'auto' : 600">
+  <VDialog v-model="isVisible" :width="$vuetify.display.smAndUp ? 600 : undefined">
     <!-- Dialog close btn -->
     <DialogCloseBtn
       @click="
@@ -25,7 +25,7 @@ const isVisible = defineModel<boolean>('isVisible')
       "
     />
 
-    <VCard class="pa-2 pa-sm-6">
+    <VCard density="compact" class="pa-4 pa-sm-8">
       <!-- 👉 Title -->
       <VCardItem class="text-center">
         <VCardTitle v-if="title">
@@ -34,7 +34,7 @@ const isVisible = defineModel<boolean>('isVisible')
         <p class="text-body-1 mb-0" v-if="subtitle">{{ subtitle }}</p>
       </VCardItem>
 
-      <VCardText class="pt-2">
+      <VCardText class="pt-2 px-0">
         <slot />
       </VCardText>
     </VCard>

@@ -127,14 +127,11 @@ export default class BookingService {
             },
           ],
           paymentDetail: payload.paymentdetail as any,
+          addressDetail: payload.addressDetail,
           ...bookingData,
         },
         { client: trx }
       )
-
-      if (payload.address) {
-        await booking.related('address').create(payload.address)
-      }
     })
 
     return booking!

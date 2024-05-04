@@ -6,7 +6,7 @@ import { until, useEventListener } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLayoutConfigStore } from '~/@layouts/stores/config'
 import { themeConfig } from '~/themeConfig'
-import { IPageProps } from '../../../app/helpers/types'
+import type { IPageProps } from '../../../app/helpers/types'
 
 interface Props {
   popperInlineEnd?: boolean

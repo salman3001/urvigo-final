@@ -22,7 +22,7 @@ export type UserThemeConfig = LayoutConfig & ExplicitThemeConfig
 export interface CustomInputContent {
   title: string
   desc?: string
-  value: string
+  value: any
   subtitle?: string
   icon?: string | object
   images?: string

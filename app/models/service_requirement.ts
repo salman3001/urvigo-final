@@ -19,7 +19,6 @@ import ServiceRequirementFilter from './filters/service_requirement_filter.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import TimeslotPlan from './timeslot_plan.js'
-import Address from './address.js'
 
 export default class ServiceRequirement extends compose(BaseModel, Filterable) {
   serializeExtras = true
@@ -50,6 +49,12 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
   declare urgent: boolean
 
   @column()
+  declare geoLocation: string
+
+  @column()
+  declare address: string
+
+  @column()
   declare userId: number
 
   @column()
@@ -77,9 +82,6 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
 
   @hasOne(() => TimeslotPlan)
   declare timeSlotPlan: HasOne<typeof TimeslotPlan>
-
-  @hasOne(() => Address)
-  declare address: HasOne<typeof Address>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

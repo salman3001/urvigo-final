@@ -116,7 +116,7 @@ const onUpdate = (v: resultType['features'][0]) => {
     :loading="loading"
     :items="items"
     placeholder="Search for a location"
-    label="location"
+    label="Search Location"
     :menu-props="{ maxHeight: '200px' }"
     @update:model-value="onUpdate"
     no-filter

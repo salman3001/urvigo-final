@@ -49,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/tsconfig": "^0.5.1",
     "eslint": "^8.57.0",
     "hot-hook": "^0.2.4",
     "husky": "^9.0.11",
@@ -139,20 +140,14 @@
       "./resources/*.ts"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && pnpm run typecheck && pnpm run format"
-    }
-  },
   "lint-staged": {
     "./**/*.js": [
-      "eslint . --fix"
+      "eslint . --fix",
+      "prettier --write ."
     ],
     "./**/*.ts": [
-      "eslint . --fix"
-    ],
-    "inertia/**/*.vue": [
-      "eslint . --fix"
+      "eslint . --fix",
+      "prettier --write ."
     ]
   }
 }

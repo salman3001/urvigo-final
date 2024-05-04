@@ -1,4 +1,4 @@
-import { OrderStatus } from '#helpers/enums'
+import { OrderStatus, PaymentMode, PaymentStatus } from '#helpers/enums'
 import vine from '@vinejs/vine'
 
 export const BookingSummaryValidator = vine.compile(
@@ -15,16 +15,15 @@ export const CreateBookingValidator = vine.compile(
     qty: vine.number().min(1),
     couponId: vine.number().optional(),
     paymentdetail: vine.object({
-      paymentMode: vine.enum(['cod', 'online']),
-      paymentStatus: vine.enum(['pending', 'paid']),
+      paymentMode: vine.enum(PaymentMode),
+      paymentStatus: vine.enum(PaymentStatus),
     }),
-    address: vine
-      .object({
-        geoLocation: vine.string(),
-        mapAddress: vine.string(),
-        address: vine.string().escape().optional(),
-      })
-      .optional(),
+    addressDetail: vine.object({
+      geoLocation: vine.string(),
+      mapAddress: vine.string(),
+      address: vine.string().escape().optional(),
+      mobile: vine.string().escape().minLength(8),
+    }),
   })
 )
 

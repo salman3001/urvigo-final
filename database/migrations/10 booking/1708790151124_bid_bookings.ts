@@ -19,6 +19,7 @@ export default class extends BaseSchema {
       table.json('history').defaultTo([])
       table.json('booking_detail')
       table.json('payment_detail')
+      table.json('address_detail')
       table.enum('status', Object.values(OrderStatus)).notNullable().defaultTo(OrderStatus.PLACED)
 
       /**

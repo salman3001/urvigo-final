@@ -16,7 +16,7 @@ const emit = defineEmits<{
 
 <template>
   <VDialog max-width="500" v-model="isVisible">
-    <VCard class="text-center px-10 py-6">
+    <VCard class="text-center py-6">
       <VCardText>
         <VBtn
           icon

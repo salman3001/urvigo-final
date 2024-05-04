@@ -1,3 +1,4 @@
+import { AddressType } from '#helpers/enums'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Address extends BaseModel {
@@ -5,10 +6,16 @@ export default class Address extends BaseModel {
   declare id: number
 
   @column()
+  declare type: AddressType
+
+  @column()
   declare mapAddress: string
 
   @column()
   declare address: string
+
+  @column()
+  declare mobile: string
 
   @column()
   declare geoLocation: string

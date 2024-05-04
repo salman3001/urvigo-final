@@ -9,7 +9,7 @@ import type { NavGroup } from '@layouts/types'
 import { getDynamicI18nProps, isNavGroupActive, openGroups } from '@layouts/utils'
 import { useMounted } from '@vueuse/core'
 import { usePage } from '@inertiajs/vue3'
-import { IPageProps } from '../../../app/helpers/types'
+import type { IPageProps } from '../../../app/helpers/types'
 
 defineOptions({
   name: 'VerticalNavGroup',

@@ -33,6 +33,11 @@ export type IResType<T> = {
   message: string | null
   success: boolean
   error?: string
+  errors?: Array<{
+    message: string
+    field: string
+    rule: string
+  }>
 }
 
 export type IPageProps<T> = {
@@ -83,8 +88,16 @@ export interface IbidBookingDetail {
   }
 }
 
+export interface IbookingAddressDetail {
+  geoLocation: string
+  mapAddress: string
+  address?: string
+  mobile: string
+}
+
 export interface IndexOption {
   disableFilter?: boolean
+  unPaginated?: boolean
 }
 
 export interface IvariantFrom {

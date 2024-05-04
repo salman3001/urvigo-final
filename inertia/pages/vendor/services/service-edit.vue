@@ -8,7 +8,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { IvariantFrom } from '#helpers/types'
+import type { IvariantFrom } from '#helpers/types'
 import type { IService } from '#models/service'
 import type { IServiceCategory } from '#models/service_category'
 import type { IServiceSubcategory } from '#models/service_subcategory'
@@ -250,6 +250,7 @@ const submit = () => {
                 </tbody>
               </VTable>
               <VBtn
+                variant="tonal"
                 class="mt-6"
                 prepend-icon="tabler-plus"
                 @click="
@@ -334,6 +335,7 @@ const submit = () => {
 
               <div class="q-pt-md">
                 <VBtn
+                  variant="tonal"
                   class="mt-6"
                   prepend-icon="tabler-plus"
                   @click="

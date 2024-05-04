@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <VDialog v-model="model" max-width="500">
     <VCard>
-      <VCardText class="text-center px-10 py-6">
+      <VCardText class="text-center py-6">
         <VBtn
           icon
           variant="outlined"

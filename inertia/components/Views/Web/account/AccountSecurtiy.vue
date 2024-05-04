@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { IPageProps } from '#helpers/types'
+import type { IPageProps } from '#helpers/types'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { IPageProps } from '#helpers/types'
+import type { IPageProps } from '#helpers/types'
 import type { IConversation } from '#models/conversation'
 import dummyAvatar from '@images/dummy-avatar.webp'
 import { usePage } from '@inertiajs/vue3'

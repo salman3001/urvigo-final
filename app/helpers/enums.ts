@@ -104,3 +104,8 @@ export enum WeekDays {
   SATURDAY = '6',
   SUNDAY = '7',
 }
+
+export enum AddressType {
+  HOME = '1',
+  OFFICE = '2',
+}

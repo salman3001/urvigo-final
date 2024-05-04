@@ -23,6 +23,7 @@ export default class extends BaseSchema {
         .onDelete('SET NULL')
       table.json('booking_detail')
       table.json('payment_detail')
+      table.json('address_detail')
       table.json('history').defaultTo([])
       table.enum('status', Object.values(OrderStatus)).notNullable().defaultTo(OrderStatus.PLACED)
 

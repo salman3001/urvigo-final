@@ -5,7 +5,7 @@ import User from './user.js'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
 import BusinessProfile from './business_profile.js'
-import type { IBookingDetail, PaymentDetail } from '../helpers/types.js'
+import type { IBookingDetail, IbookingAddressDetail, PaymentDetail } from '../helpers/types.js'
 import BookingFilter from './filters/booking_filter.js'
 import { Filterable } from 'adonis-lucid-filter'
 import { compose } from '@adonisjs/core/helpers'
@@ -31,6 +31,9 @@ export default class Booking extends compose(BaseModel, Filterable) {
 
   @column({ prepare: (v) => JSON.stringify(v) })
   declare paymentDetail: PaymentDetail
+
+  @column({ prepare: (v) => JSON.stringify(v) })
+  declare addressDetail: IbookingAddressDetail
 
   @column({ prepare: (v) => JSON.stringify(v) })
   declare history: {

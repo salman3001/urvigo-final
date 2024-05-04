@@ -10,7 +10,7 @@ import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '~/@la
 import { useElementHover } from '@vueuse/core'
 import { Link, usePage } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
-import { IPageProps } from '../../../app/helpers/types'
+import type { IPageProps } from '../../../app/helpers/types'
 
 interface Props {
   tag?: string | Component

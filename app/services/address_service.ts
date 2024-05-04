@@ -3,6 +3,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import Address from '#models/address'
 import User from '#models/user'
 import vine from '@vinejs/vine'
+import { AddressType } from '#helpers/enums'
 
 @inject()
 export default class AddressService {
@@ -13,7 +14,9 @@ export default class AddressService {
     await bouncer.with('AddressPolicy').authorize('viewList')
     const user = auth.user! as User
     await user.load('profile')
-    const addressQuery = Address.query().where('user_profile_id', user.profile.id)
+    const addressQuery = Address.query()
+      .where('user_profile_id', user.profile.id)
+      .orderBy('id', 'desc')
 
     const addresses = await addressQuery.exec()
 
@@ -25,9 +28,11 @@ export default class AddressService {
     await bouncer.with('AddressPolicy').authorize('create')
     const validationSchema = vine.compile(
       vine.object({
+        type: vine.enum(AddressType),
         geoLocation: vine.string(),
         mapAddress: vine.string(),
         address: vine.string().escape().optional(),
+        mobile: vine.string().minLength(8).maxLength(15).optional(),
       })
     )
 
@@ -48,14 +53,18 @@ export default class AddressService {
 
     const validationSchema = vine.compile(
       vine.object({
-        geoLocation: vine.string(),
-        mapAddress: vine.string(),
+        type: vine.enum(AddressType).optional(),
+        geoLocation: vine.string().optional(),
+        mapAddress: vine.string().optional(),
         address: vine.string().escape().optional(),
+        mobile: vine.string().minLength(8).maxLength(15).optional(),
       })
     )
+
     const payload = await request.validateUsing(validationSchema)
 
-    await address.merge(payload).save()
+    address.merge(payload)
+    await address.save()
 
     return address
   }

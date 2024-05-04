@@ -46,7 +46,7 @@ function previewSelectedImage() {
   <!-- 👉 Upload Photo -->
   <form class="d-flex flex-column justify-center gap-4">
     <div class="d-flex flex-wrap gap-4">
-      <VBtn color="primary" size="small" @click="refInputEl?.click()">
+      <VBtn variant="tonal" color="primary" size="small" @click="refInputEl?.click()">
         <VIcon icon="tabler-cloud-upload" class="d-sm-none" />
         <span class="d-none d-sm-block">Upload new photo</span>
       </VBtn>

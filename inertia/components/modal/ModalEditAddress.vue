@@ -9,33 +9,40 @@ import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import { AddressType } from '../../../app/helpers/enums'
 import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import ErrorAlert from '../form/ErrorAlert.vue'
+import type { IAddress } from '../../../app/models/address'
+import { watch } from 'vue'
 
 const emits = defineEmits<{
   (e: 'success'): void
   (e: 'error'): void
 }>()
 
+const props = defineProps<{
+  address: IAddress
+}>()
+
 const model = defineModel<boolean>({ required: true })
 
-const addAddressForm = useApiForm({
-  type: AddressType.HOME,
-  geoLocation: '',
-  mapAddress: '',
-  address: '',
-  mobile: '',
+const editAddressForm = useApiForm({
+  type: props.address?.type || AddressType.HOME,
+  // @ts-ignore
+  geoLocation: `${props.address?.geoLocation?.x},${props.address?.geoLocation?.y}` || '',
+  mapAddress: props.address?.mapAddress || '',
+  address: props.address?.address || '',
+  mobile: props.address?.mobile || '',
 })
 
 const resetForm = () => {
-  addAddressForm.type = AddressType.HOME
-  addAddressForm.geoLocation = ''
-  addAddressForm.mapAddress = ''
-  addAddressForm.address = ''
-  addAddressForm.mobile = ''
+  editAddressForm.type = AddressType.HOME
+  editAddressForm.geoLocation = ''
+  editAddressForm.mapAddress = ''
+  editAddressForm.address = ''
+  editAddressForm.mobile = ''
 }
 
 const submit = () => {
-  addAddressForm.post(
-    routes('api.address.store'),
+  editAddressForm.put(
+    routes('api.address.update', [props.address.id]),
     {},
     {
       onSucess: () => {
@@ -49,16 +56,30 @@ const submit = () => {
     }
   )
 }
+
+watch(
+  () => props.address,
+  () => {
+    editAddressForm.type = props.address?.type || AddressType.HOME
+
+    editAddressForm.geoLocation =
+      // @ts-ignore
+      `${props.address?.geoLocation?.x},${props.address?.geoLocation?.y}` || ''
+    editAddressForm.mapAddress = props.address?.mapAddress || ''
+    editAddressForm.address = props.address?.address || ''
+    editAddressForm.mobile = props.address?.mobile || ''
+  }
+)
 </script>
 <template>
-  <ModalBase v-model:is-visible="model" title="Add New Address" subtitle="">
+  <ModalBase v-model:is-visible="model" title="Edit Address" subtitle="">
     <VRow class="justify-center">
       <VCol style="max-width: 400px">
         <CustomForm @submit="submit">
-          <ErrorAlert v-if="addAddressForm.error" :errors="addAddressForm.error" class="mb-2" />
+          <ErrorAlert v-if="editAddressForm.error" :errors="editAddressForm.error" class="mb-2" />
           <div class="d-flex flex-column gap-3">
             <CustomRadios
-              v-model:selected-radio="addAddressForm.type"
+              v-model:selected-radio="editAddressForm.type"
               :radio-content="[
                 { title: 'Home', value: AddressType.HOME },
                 { title: 'Office', value: AddressType.OFFICE },
@@ -66,23 +87,22 @@ const submit = () => {
               :grid-column="{ cols: '12', sm: '6', md: '4' }"
             />
             <LocationAutocomplete
-              :rules="[requiredValidator]"
               @selection="
                 (v: any) => {
-                  addAddressForm.geoLocation = v.coordinates
-                  addAddressForm.mapAddress = v.mapAddress
+                  editAddressForm.geoLocation = v.coordinates
+                  editAddressForm.mapAddress = v.mapAddress
                 }
               "
             />
-            <AppTextField label="Address line 1" v-model="addAddressForm.mapAddress" disabled />
-            <AppTextField label="Address line 2 (optional)" v-model="addAddressForm.address" />
+            <AppTextField label="Address line 1" v-model="editAddressForm.mapAddress" disabled />
+            <AppTextField label="Address line 2 (optional)" v-model="editAddressForm.address" />
             <AppTextField
               type="number"
               label="Mobile"
-              v-model="addAddressForm.mobile"
+              v-model="editAddressForm.mobile"
               :rules="[requiredValidator, (v: string) => minLengthValidator(v, 8)]"
             />
-            <VBtn type="submit" class="mt-2">Add Address</VBtn>
+            <VBtn type="submit" class="mt-2">Update Address</VBtn>
           </div>
         </CustomForm>
       </VCol>

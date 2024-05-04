@@ -7,7 +7,7 @@ import { canViewNavMenuGroup } from '~/@layouts/plugins/casl'
 import { useLayoutConfigStore } from '~/@layouts/stores/config'
 import type { NavGroup } from '~/@layouts/types'
 import { getDynamicI18nProps, isNavGroupActive } from '~/@layouts/utils'
-import { IPageProps } from '../../../app/helpers/types'
+import type { IPageProps } from '../../../app/helpers/types'
 
 interface Props {
   item: NavGroup

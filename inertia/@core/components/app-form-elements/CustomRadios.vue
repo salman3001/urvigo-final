@@ -2,13 +2,13 @@
 import type { CustomInputContent, GridColumn } from '~/@core/types'
 
 interface Props {
-  selectedRadio: string
+  selectedRadio: any
   radioContent: CustomInputContent[]
   gridColumn?: GridColumn
 }
 
 interface Emit {
-  (e: 'update:selectedRadio', value: string): void
+  (e: 'update:selectedRadio', value: any): void
 }
 
 const props = defineProps<Props>()
@@ -29,7 +29,7 @@ const updateSelectedOption = (value: string | null) => {
     <VRow>
       <VCol v-for="item in props.radioContent" :key="item.title" v-bind="gridColumn">
         <VLabel
-          class="custom-input custom-radio rounded cursor-pointer"
+          class="custom-input custom-radio rounded cursor-pointer pa-2"
           :class="props.selectedRadio === item.value ? 'active' : ''"
         >
           <div>
@@ -46,7 +46,7 @@ const updateSelectedOption = (value: string | null) => {
                   item.subtitle
                 }}</span>
               </div>
-              <p class="text-body-2 mb-0">
+              <p v-if="item.desc" class="text-body-2 mb-0">
                 {{ item.desc }}
               </p>
             </div>

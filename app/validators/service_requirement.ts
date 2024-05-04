@@ -17,13 +17,9 @@ export const createServiceRequirementValidator = vine.compile(
     keywords: vine.array(vine.string().maxLength(50).escape()).optional(),
     urgent: vine.boolean().optional(),
     expiresAt: vine.date({ formats: ['DD/MM/YYYY HH:mm'] }).after('today'),
-    location: vine.string().escape(),
+    geoLocation: vine.string(),
+    address: vine.string().escape(),
     serviceCategoryId: vine.number(),
-    address: vine.object({
-      geoLocation: vine.string(),
-      mapAddress: vine.string(),
-      address: vine.string().escape().optional(),
-    }),
   })
 )
 
@@ -44,14 +40,8 @@ export const updateServiceRequirementValidator = vine.compile(
     keywords: vine.array(vine.string().maxLength(50).escape()).optional().optional(),
     urgent: vine.boolean().optional().optional(),
     expiresAt: vine.date({ formats: 'dd/MM/yyyy HH:mm' }).after('today').optional(),
-    location: vine.string().minLength(20).escape().optional(),
+    geoLocation: vine.string(),
+    address: vine.string().escape(),
     serviceCategoryId: vine.number().optional(),
-    address: vine
-      .object({
-        geoLocation: vine.string(),
-        mapAddress: vine.string(),
-        address: vine.string().escape().optional(),
-      })
-      .optional(),
   })
 )

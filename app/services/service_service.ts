@@ -47,7 +47,6 @@ export default class ServiceService {
         'slug',
         'short_desc',
         'is_active',
-        'geo_location',
         'thumbnail',
         'avg_rating',
         'service_category_id',
@@ -96,7 +95,6 @@ export default class ServiceService {
         'slug',
         'short_desc',
         'is_active',
-        'geo_location',
         'thumbnail',
         'avg_rating',
         'business_profile_id',
@@ -226,7 +224,6 @@ export default class ServiceService {
           'slug',
           'short_desc',
           'is_active',
-          'geo_location',
           'thumbnail',
           'avg_rating',
           'service_category_id',
@@ -280,7 +277,6 @@ export default class ServiceService {
           'slug',
           'short_desc',
           'is_active',
-          'geo_location',
           'thumbnail',
           'avg_rating',
           'service_category_id',
@@ -363,10 +359,6 @@ export default class ServiceService {
       if (payload.timeSlotPlanId) {
         const timslotPlan = await TimeslotPlan.findOrFail(payload.timeSlotPlanId, { client: trx })
         await service.related('timeSlotPlan').save(timslotPlan)
-      }
-
-      if (payload.address) {
-        await service.related('address').create(payload.address)
       }
 
       if (payload.seo) {
@@ -459,16 +451,6 @@ export default class ServiceService {
       if (payload.timeSlotPlanId) {
         const timslotPlan = await TimeslotPlan.findOrFail(payload.timeSlotPlanId, { client: trx })
         await service.related('timeSlotPlan').save(timslotPlan)
-      }
-
-      if (payload.address) {
-        await service.load('address')
-        if (service.address) {
-          service.address.merge(payload.address)
-          await service.address.save()
-        } else {
-          await service.related('address').create(payload.address)
-        }
       }
 
       if (payload.seo) {

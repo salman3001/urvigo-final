@@ -116,7 +116,7 @@ export const minLengthValidator = (value: unknown, length: number) => {
   if (isEmpty(value)) return true
 
   return (
-    String(value).length < length ||
+    String(value).length > length ||
     `"The length of the Characters field must be greater than ${length} characters."`
   )
 }
@@ -126,7 +126,7 @@ export const maxLengthValidator = (value: unknown, length: number) => {
   if (isEmpty(value)) return true
 
   return (
-    String(value).length > length ||
+    String(value).length < length ||
     `"The length of the Characters field must be less than ${length} characters."`
   )
 }

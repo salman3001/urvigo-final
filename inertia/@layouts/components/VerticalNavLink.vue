@@ -5,7 +5,7 @@ import { can } from '~/@layouts/plugins/casl'
 import { useLayoutConfigStore } from '~/@layouts/stores/config'
 import type { NavLink } from '~/@layouts/types'
 import { getComputedNavLinkToProp, getDynamicI18nProps, isNavLinkActive } from '~/@layouts/utils'
-import { IPageProps } from '../../../app/helpers/types'
+import type { IPageProps } from '../../../app/helpers/types'
 import { computed } from 'vue'
 
 defineProps<{

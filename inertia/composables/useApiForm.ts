@@ -8,7 +8,7 @@ export default function useApiForm<T extends Object>(initialForm: T) {
   const formObject = reactive({
     ...initialForm,
     processing: false,
-    error: null as string | null,
+    error: null as Record<any, any> | null,
     async post(
       url: string,
       config?: AxiosRequestConfig,
@@ -26,7 +26,17 @@ export default function useApiForm<T extends Object>(initialForm: T) {
           opt?.onSucess && opt.onSucess()
         }
       } catch (error: unknown) {
-        this.error = (error as AxiosError<IResType<any>>).response?.data?.error || null
+        const errors = (error as AxiosError<IResType<any>>).response?.data?.errors
+
+        if (errors && errors.length > 0) {
+          let errorObj: Record<any, any> = {}
+          errors.forEach((e) => {
+            errorObj[e.field] = e.message
+          })
+          this.error = errorObj
+        } else {
+          this.error = null
+        }
         opt?.onError && opt.onError()
       }
       this.processing = false
@@ -48,7 +58,16 @@ export default function useApiForm<T extends Object>(initialForm: T) {
           opt?.onSucess && opt.onSucess()
         }
       } catch (error: unknown) {
-        this.error = (error as AxiosError<IResType<any>>).response?.data?.error || null
+        const errors = (error as AxiosError<IResType<any>>).response?.data?.errors
+        if (errors && errors.length > 1) {
+          let errorObj: Record<any, any> = {}
+          errors.forEach((e) => {
+            errorObj[e.field] = e.message
+          })
+          this.error = errorObj
+        } else {
+          this.error = null
+        }
         opt?.onError && opt.onError()
       }
       this.processing = false
@@ -66,7 +85,16 @@ export default function useApiForm<T extends Object>(initialForm: T) {
           opt?.onSucess && opt.onSucess()
         }
       } catch (error: unknown) {
-        this.error = (error as AxiosError<IResType<any>>).response?.data?.error || null
+        const errors = (error as AxiosError<IResType<any>>).response?.data?.errors
+        if (errors && errors.length > 1) {
+          let errorObj: Record<any, any> = {}
+          errors.forEach((e) => {
+            errorObj[e.field] = e.message
+          })
+          this.error = errorObj
+        } else {
+          this.error = null
+        }
         opt?.onError && opt.onError()
       }
       this.processing = false
