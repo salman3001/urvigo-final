@@ -442,7 +442,7 @@ export default class ServiceService {
 
           if (payload.variantImages?.[index]) {
             variant.image = await this.fileService.uploadeImage(
-              payload.variantImages?.[index],
+              payload.variantImages?.[index]!,
               'services/variants'
             )
           }
