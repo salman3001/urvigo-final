@@ -15,7 +15,9 @@ export default Factory.define(Service, ({ faker }) => {
     shortDesc: faker.commerce.productDescription(),
     longDesc: faker.lorem.paragraphs(),
     isActive: true,
-    deliveryOptions: DeliveryOptions.BOTH,
+    deliveryOptions: DeliveryOptions.WALK_IN,
+    address: 'New Delhi , India',
+    geoLocation: '28.61,77.20',
   }
 })
   .relation('faq', () => FaqFactory)

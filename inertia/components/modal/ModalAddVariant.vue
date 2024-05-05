@@ -9,6 +9,7 @@ import ModalBase from './ModalBase.vue'
 import AvatarInput from '../form/AvatarInput.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import { VBtn } from 'vuetify/components'
+import { DiscountType } from '#helpers/enums'
 
 const props = defineProps<{
   selectedVariant?: {
@@ -23,7 +24,7 @@ const model = defineModel<boolean>({ required: true })
 const form = useForm({
   name: '',
   price: '',
-  discountType: 'flat',
+  discountType: DiscountType.FLAT,
   discountFlat: 0,
   discountPercentage: 0,
   desc: '',
@@ -68,9 +69,9 @@ const emitAdd = () => {
 watch(
   () => props.selectedVariant,
   () => {
-    ;(form.name = props.selectedVariant?.variant?.name || ''),
-      (form.price = (props.selectedVariant?.variant?.price as unknown as string) || '')
-    form.discountType = props.selectedVariant?.variant?.discountType || 'flat'
+    form.name = props.selectedVariant?.variant?.name || ''
+    form.price = (props.selectedVariant?.variant?.price as unknown as string) || ''
+    form.discountType = props.selectedVariant?.variant?.discountType || DiscountType.FLAT
     form.discountFlat = props.selectedVariant?.variant?.discountFlat || 0
     form.discountPercentage = props.selectedVariant?.variant?.discountPercentage || 0
     form.desc = props.selectedVariant?.variant?.desc || ''
@@ -112,18 +113,18 @@ watch(
             v-model="form.discountType"
             @update:model-value="
               (value: string) => {
-                if (value === 'flat') {
+                if (value === DiscountType.FLAT) {
                   form.discountPercentage = 0
                 }
 
-                if (value === 'percentage') {
+                if (value === DiscountType.PERCENATAGE) {
                   form.discountFlat = 0
                 }
               }
             "
           >
-            <VRadio label="Flat" value="flat" />
-            <VRadio label="Percentage" value="percentage" />
+            <VRadio label="Flat" :value="DiscountType.FLAT" />
+            <VRadio label="Percentage" :value="DiscountType.PERCENATAGE" />
           </VRadioGroup>
         </VCol>
         <VCol cols="12" md="6">
@@ -131,7 +132,7 @@ watch(
             type="number"
             v-model="form.discountFlat"
             label="Flat Discount"
-            v-if="form.discountType === 'flat'"
+            v-if="form.discountType === DiscountType.FLAT"
             :rules="[
               (v: string) => minNumValidator(v, 0),
               (value: string) => maxNumValidator(value, Number(form.price)),
@@ -141,7 +142,7 @@ watch(
             type="number"
             v-model="form.discountPercentage"
             label="Percentage Discount"
-            v-if="form.discountType === 'percentage'"
+            v-if="form.discountType === DiscountType.PERCENATAGE"
             :rules="[
               (v: string) => minNumValidator(v, 0),
               (value: string) => maxNumValidator(value, 99),

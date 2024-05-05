@@ -25,7 +25,7 @@ defineProps<{
   <br />
   <VContainer>
     <CheckoutLayout :step="1">
-      <CheckoutAddress :summary="summary" @next="router.visit(routes('web.booking.payment'))" />
+      <CheckoutAddress :summary="summary" />
     </CheckoutLayout>
   </VContainer>
 

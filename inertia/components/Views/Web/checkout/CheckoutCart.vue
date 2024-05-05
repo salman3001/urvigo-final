@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import BigNumber from 'bignumber.js'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import { Prop } from '../../../../../app/helpers/types'
+import type { Prop } from '../../../../../app/helpers/types'
 import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
+import { Link } from '@inertiajs/vue3'
+import routes from '~/utils/routes'
 
 const emits = defineEmits<{
   (e: 'apply-coupon'): void
@@ -64,11 +66,7 @@ const decrementQty = () => {
           <div>
             <VImg
               width="140"
-              :src="
-                getImageUrl(
-                  summary?.bookingDetail?.service_variant?.image?.breakpoints?.thumbnail?.url
-                )
-              "
+              :src="getImageUrl(summary?.bookingDetail?.service_variant?.image?.thumbnailUrl)"
             />
           </div>
 
@@ -79,9 +77,16 @@ const decrementQty = () => {
               </h6>
               <div class="d-flex align-center text-no-wrap gap-4 text-body-1">
                 <div class="text-disabled">
-                  Category
-                  <span class="d-inline-block text-primary">
-                    {{ summary?.bookingDetail?.service_variant?.service?.name }}</span
+                  Service
+                  <Link
+                    :href="
+                      routes('web.services.show', [
+                        summary?.bookingDetail?.service_variant?.service?.slug,
+                      ])
+                    "
+                    class="d-inline-block text-primary"
+                  >
+                    {{ summary?.bookingDetail?.service_variant?.service?.name }}</Link
                   >
                 </div>
               </div>
@@ -112,6 +117,7 @@ const decrementQty = () => {
                 <div class="text-primary">
                   &#x20B9;{{ summary?.bookingDetail?.totalAfterDiscount }}
                 </div>
+                &nbsp;
                 <div
                   v-if="new BigNumber(summary?.bookingDetail?.vendorDiscount).gt(0)"
                   class="text-decoration-line-through"

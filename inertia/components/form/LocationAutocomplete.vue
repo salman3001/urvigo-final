@@ -73,8 +73,8 @@ const querySelections = (query: string) => {
               type: 'Point',
             },
             properties: {
-              name: 'There is error or you may be offiline',
-              city: 'Click this option to populate fake address',
+              name: 'Test city, Testifyland',
+              city: 'Ahmedabad Zalod Highway Lunavada Taluka India',
             },
             type: 'Feature',
           },

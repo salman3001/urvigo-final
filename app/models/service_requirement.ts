@@ -8,7 +8,7 @@ import {
   hasOne,
   manyToMany,
 } from '@adonisjs/lucid/orm'
-import { NotificationTypes } from '#helpers/enums'
+import { DeliveryType, NotificationTypes } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import ServiceCategory from './service_category.js'
@@ -47,6 +47,9 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
 
   @column()
   declare urgent: boolean
+
+  @column()
+  declare deliveryType: DeliveryType
 
   @column()
   declare geoLocation: string

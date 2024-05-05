@@ -1,7 +1,7 @@
 import type User from '#models/user'
 import type { PageObject } from '@adonisjs/inertia/types'
 import type ServiceVariant from '../models/service_variant.js'
-import { PaymentMode, PaymentStatus, WeekDays } from './enums.js'
+import { DiscountType, PaymentMode, PaymentStatus, WeekDays } from './enums.js'
 
 export type ImageType = {
   url: string
@@ -103,7 +103,7 @@ export interface IndexOption {
 export interface IvariantFrom {
   name: string
   price: number
-  discountType: 'flat' | 'percentage'
+  discountType: DiscountType
   discountFlat: number
   discountPercentage: number
   desc: string
@@ -114,3 +114,8 @@ export type ItimeslotPlanOptions = Array<{
   from: string
   to: string
 }>
+
+export interface CordType {
+  x: number
+  y: number
+}

@@ -160,11 +160,12 @@ const submit = () => {
                   <AddressComponent
                     @selected-address="
                       (ad) => {
-                        form.service.geoLocation = ad.geoLocation
+                        // @ts-ignore
+                        form.service.geoLocation = `${ad.geoLocation?.x},${ad.geoLocation?.y}`
                         form.service.address = ad.mapAddress
                       }
                     "
-                    :rules="[requiredValidator]"
+                    required
                   />
                 </VCol>
                 <VCol cols="12">
@@ -423,7 +424,7 @@ const submit = () => {
               <div class="d-flex ga-2 flex-column">
                 <CustomRadios
                   v-if="timeslotPlans"
-                  v-model:selected-radio="form.service.deliveryOptions"
+                  v-model:selected-radio="form.timeSlotPlanId"
                   :radio-content="timeslotPlans.map((t) => ({ title: t.name, value: t.id }))"
                   :grid-column="{ cols: '12' }"
                 />

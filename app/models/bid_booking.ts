@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, afterCreate, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
-import { NotificationTypes, OrderStatus } from '#helpers/enums'
+import { DeliveryType, NotificationTypes, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
@@ -43,6 +43,9 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
     event: string
     remarks: string
   }[]
+
+  @column()
+  declare deliveryType: DeliveryType
 
   @column()
   declare status: OrderStatus

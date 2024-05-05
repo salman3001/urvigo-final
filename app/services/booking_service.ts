@@ -93,12 +93,26 @@ export default class BookingService {
     const { bouncer, request } = this.ctx
     await bouncer.with('BookingPolicy').authorize('create')
     const payload = await request.validateUsing(BookingSummaryValidator)
-    return await this.getBookingData({
+    const bookingData = await this.getBookingData({
       serviceVariantId: payload.serviceVariantId,
       qty: payload.qty,
       couponId: payload?.couponId,
       alterMaxUsers: false,
     })
+    return {
+      ...bookingData,
+      paymentDetail: {
+        paymentMode: null,
+        paymenAddress: null,
+      },
+      addressDetail: {
+        address: '',
+        mapAddress: '',
+        mobile: '',
+        geoLocation: '',
+      },
+      deliveryType: null,
+    }
   }
 
   async store() {
@@ -126,9 +140,10 @@ export default class BookingService {
               remarks: '',
             },
           ],
-          paymentDetail: payload.paymentdetail as any,
-          addressDetail: payload.addressDetail,
           ...bookingData,
+          paymentDetail: payload.paymentDetail as any,
+          addressDetail: payload.addressDetail,
+          deliveryType: payload.deliveryType,
         },
         { client: trx }
       )
@@ -267,11 +282,23 @@ export default class BookingService {
     const serviceVariant = await ServiceVariant.findOrFail(opt?.serviceVariantId)
 
     await serviceVariant.load('service', (service) => {
-      service.preload('businessProfile', (b) => {
-        b.preload('vendor', (v) => {
-          v.select(['id', 'first_name', 'last_name'])
+      service
+        .preload('businessProfile', (b) => {
+          b.preload('vendor', (v) => {
+            v.select(['id', 'first_name', 'last_name'])
+          })
         })
-      })
+        .select([
+          'id',
+          'delivery_options',
+          'name',
+          'slug',
+          'geo_location',
+          'km_radius',
+          'avg_rating',
+          'thumbnail',
+          'business_profile_id',
+        ])
     })
 
     const totalWithoutDiscount = new BigNumber(serviceVariant.price).times(opt.qty)

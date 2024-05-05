@@ -10,6 +10,7 @@ import { AddressType } from '../../app/helpers/enums'
 import ModalConfirm from './modal/ModalConfirm.vue'
 import useApiForm from '~/composables/useApiForm'
 import ModalEditAddress from './modal/ModalEditAddress.vue'
+import { requiredValidator } from '~/@core/utils/validators'
 
 const addAddressModal = ref(false)
 const deleteAddressModal = ref(false)
@@ -17,6 +18,7 @@ const editAddressModal = ref(false)
 const selectedAddress = ref<IAddress>()
 defineProps<{
   editable?: boolean
+  required?: boolean
 }>()
 
 const { data: addresses, processing, exec: getAddresses } = useApiGet<IAddress[]>()
@@ -71,6 +73,7 @@ onMounted(() => {
     "
     :radio-content="radioContent"
     :grid-column="{ cols: '12', sm: '6' }"
+    :rules="[required && requiredValidator]"
   >
     <template #default="{ item }">
       <div class="w-100">

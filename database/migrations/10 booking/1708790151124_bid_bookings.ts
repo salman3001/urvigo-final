@@ -1,4 +1,4 @@
-import { OrderStatus } from '#helpers/enums'
+import { DeliveryType, OrderStatus } from '#helpers/enums'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -20,6 +20,10 @@ export default class extends BaseSchema {
       table.json('booking_detail')
       table.json('payment_detail')
       table.json('address_detail')
+      table
+        .enum('delivery_type', Object.values(DeliveryType))
+        .notNullable()
+        .defaultTo(DeliveryType.WALK_IN)
       table.enum('status', Object.values(OrderStatus)).notNullable().defaultTo(OrderStatus.PLACED)
 
       /**

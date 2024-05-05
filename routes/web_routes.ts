@@ -69,8 +69,14 @@ router
           .get('bookings/checkout/address', [WebBookingsController, 'address'])
           .as('booking.address')
         router
+          .post('bookings/checkout/address', [WebBookingsController, 'addressPost'])
+          .as('booking.address.post')
+        router
           .get('bookings/checkout/payment', [WebBookingsController, 'payment'])
           .as('booking.payment')
+        router
+          .post('bookings/checkout/payment', [WebBookingsController, 'paymentPost'])
+          .as('booking.payment.post')
         router
           .post('bookings/checkout/create-booking', [WebBookingsController, 'createBooking'])
           .as('booking.create')

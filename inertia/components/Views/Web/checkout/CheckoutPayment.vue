@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
+import useGetImageUrl from '~/composables/useGetImageUrl'
 
 defineProps<{
   summary: any
@@ -11,6 +12,7 @@ defineEmits<{
 }>()
 
 const selectedPaymentMethod = ref('card')
+const getImageUrl = useGetImageUrl()
 
 const cardFormData = ref({
   cardNumber: null,
@@ -116,7 +118,37 @@ const cardFormData = ref({
     <VCol cols="12" md="4">
       <VCard flat variant="outlined">
         <VCardText>
+          <h6 class="text-h6 mb-4">Booking Item</h6>
+
+          <VList class="card-list">
+            <VListItem>
+              <template #prepend>
+                <img
+                  height="70"
+                  width="60"
+                  :src="getImageUrl(summary?.bookingDetail.service_variant?.image?.thumbnailUrl)"
+                  class="me-4"
+                />
+              </template>
+
+              <div class="text-body-1">
+                {{ summary?.bookingDetail?.service_variant?.name }}
+              </div>
+              <h6 class="text-h6 text-medium-emphasis">
+                &#x20B9; {{ summary?.bookingDetail?.service_variant?.price }}
+              </h6>
+            </VListItem>
+          </VList>
+        </VCardText>
+
+        <VDivider />
+
+        <VCardText>
           <h6 class="text-h6 mb-4">Price Details</h6>
+          <div class="d-flex align-center justify-space-between mb-2">
+            <span class="text-high-emphasis">Qty</span>
+            <span>{{ summary?.bookingDetail?.qty }}</span>
+          </div>
 
           <div class="d-flex justify-space-between text-base mb-2">
             <span class="text-high-emphasis">Order Total</span>
@@ -126,7 +158,7 @@ const cardFormData = ref({
           <div class="d-flex justify-space-between text-base">
             <span class="text-high-emphasis">Delivery Fees</span>
             <div class="d-flex align-center">
-              <div class="text-decoration-line-through text-disabled me-2">$5.00</div>
+              <div class="text-decoration-line-through text-disabled me-2">&#x20B9;20.00</div>
               <VChip size="small" color="success"> FREE </VChip>
             </div>
             <!-- <div>

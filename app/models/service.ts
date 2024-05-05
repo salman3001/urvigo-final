@@ -10,7 +10,7 @@ import {
 } from '@adonisjs/lucid/orm'
 
 import { BigNumber } from 'bignumber.js'
-import type { ImageType, VideoType } from '#helpers/types'
+import type { CordType, ImageType, VideoType } from '#helpers/types'
 import ServiceCategory from './service_category.js'
 import ServiceSubcategory from './service_subcategory.js'
 import Image from './image.js'
@@ -54,7 +54,7 @@ export default class Service extends compose(BaseModel, Filterable) {
   declare deliveryOptions: DeliveryOptions
 
   @column()
-  declare geoLocation: string
+  declare geoLocation: string | CordType
 
   @column()
   declare address: string

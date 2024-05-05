@@ -175,6 +175,8 @@ const sources: BundleScriptConfig = {
         'pencil',
         'cloud-upload',
         'alarm',
+        'truck-delivery',
+        'walk',
       ],
     },
     {

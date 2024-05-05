@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
-import { OrderStatus } from '#helpers/enums'
+import { DeliveryType, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
@@ -41,6 +41,9 @@ export default class Booking extends compose(BaseModel, Filterable) {
     event: string
     remarks: string
   }[]
+
+  @column()
+  declare deliveryType: DeliveryType
 
   @column()
   declare status: OrderStatus

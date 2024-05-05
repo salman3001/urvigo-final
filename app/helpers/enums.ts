@@ -95,6 +95,11 @@ export enum DeliveryOptions {
   BOTH = '3',
 }
 
+export enum DeliveryType {
+  HOME_SERVICE = '1',
+  WALK_IN = '2',
+}
+
 export enum WeekDays {
   MONDAY = '1',
   TUESDAY = '2',

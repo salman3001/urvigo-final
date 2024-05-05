@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.decimal('avg_rating', 2, 1).defaultTo(0)
       table.enum('delivery_options', Object.values(DeliveryOptions)).notNullable()
       table.point('geo_location')
-      table.point('address')
+      table.string('address')
       table.smallint('km_radius').defaultTo(0)
       table.json('video')
       table.json('thumbnail')

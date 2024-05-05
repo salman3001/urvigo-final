@@ -136,6 +136,7 @@ export default class ServiceService {
       .preload('businessProfile', (v) => {
         v.preload('vendor')
       })
+      .preload('timeSlotPlan')
       .preload('reviews', (r) => {
         r.preload('user', (u) => {
           u.select(['first_name', 'last_name']).preload('profile', (p) => {
@@ -168,6 +169,7 @@ export default class ServiceService {
       .where('is_active', true)
       .where('slug', slug)
       .preload('variants')
+      .preload('timeSlotPlan')
       .preload('businessProfile', (v) => {
         v.preload('vendor')
       })

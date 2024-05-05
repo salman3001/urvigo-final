@@ -1,15 +1,16 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
+import { PaymentMode, PaymentStatus } from '#helpers/enums'
+import { useForm } from '@inertiajs/vue3'
+import routes from '~/utils/routes'
 export default {
   layout: Layout,
 }
 </script>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3'
 import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
 import type { Prop } from '../../../../app/helpers/types'
-import routes from '~/utils/routes'
 import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
 import CheckoutPayment from '~/components/Views/Web/checkout/CheckoutPayment.vue'
 
@@ -18,16 +19,23 @@ const props = defineProps<{
 }>()
 
 const form = useForm({
-  couponId: props.summary.bookingDetail.couponId,
-  qty: props.summary.bookingDetail.qty,
-  serviceVariantId: props.summary.bookingDetail.service_variant.id,
-  paymentdetail: {
-    paymentMode: 'online',
-    paymentStatus: 'paid',
+  couponId: props.summary?.bookingDetail?.couponId,
+  qty: props.summary?.bookingDetail?.qty,
+  serviceVariantId: props.summary?.bookingDetail?.service_variant.id,
+  addressDetail: {
+    address: props.summary?.addressDetail?.address,
+    mapAddress: props.summary?.addressDetail?.mapAddress,
+    mobile: props.summary?.addressDetail?.mobile,
+    geoLocation: props.summary?.addressDetail?.geoLocation,
+  },
+  deliveryType: props.summary?.deliveryType,
+  paymentDetail: {
+    paymentMode: PaymentMode.ONLINE,
+    paymentStatus: PaymentStatus.PAID,
   },
 })
 
-const submit = async () => {
+const submit = () => {
   form.post(routes('web.booking.create'))
 }
 </script>

@@ -8,11 +8,13 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { DeliveryOptions, DiscountType } from '#helpers/enums'
 import type { IvariantFrom } from '#helpers/types'
 import type { IService } from '#models/service'
 import type { IServiceCategory } from '#models/service_category'
 import type { IServiceSubcategory } from '#models/service_subcategory'
 import type { IServiceTag } from '#models/service_tag'
+import type { ITimeslotPlan } from '#models/timeslot_plan'
 import { Link, router, useForm } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import DropZone from '~/@core/components/DropZone.vue'
@@ -20,12 +22,15 @@ import ProductDescriptionEditor from '~/@core/components/ProductDescriptionEdito
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import dummyThumb from '~/assets/images/no-image.png'
+import AddressComponent from '~/components/AddressComponent.vue'
 import AvatarInput from '~/components/form/AvatarInput.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import ErrorAlert from '~/components/form/ErrorAlert.vue'
 import MultiImagePreview from '~/components/form/MultiImagePreview.vue'
+import ModalAddTimeslotPlan from '~/components/modal/ModalAddTimeslotPlan.vue'
 import ModalAddVariant from '~/components/modal/ModalAddVariant.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
@@ -34,6 +39,7 @@ const props = defineProps<{
   categories: IServiceCategory[]
   subcategories: IServiceSubcategory[]
   tags: IServiceTag[]
+  timeslotPlans: ITimeslotPlan[]
 }>()
 
 const form = useForm({
@@ -46,10 +52,12 @@ const form = useForm({
     slug: props.service?.slug || '',
     serviceCategoryId: props.service?.serviceCategoryId || '',
     serviceSubcategoryId: props.service?.serviceSubcategoryId || '',
-    locationSpecific: '',
     shortDesc: props.service?.shortDesc || '',
     longDesc: props.service?.longDesc || '',
-    geoLocation: '22.2,94.5',
+    deliveryOptions: props.service?.deliveryOptions || DeliveryOptions.WALK_IN,
+    geoLocation: props.service?.geoLocation || '',
+    address: props.service?.address || '',
+    kmRadius: props.service?.kmRadius || 10,
     isActive: props.service?.isActive || '',
   },
   tags: props.service?.tags?.map((t) => t.id) || [],
@@ -67,12 +75,13 @@ const form = useForm({
     ...props.service?.variants?.map((v) => ({
       name: v?.name || '',
       price: v?.price || '',
-      discountType: (v?.discountType || 'flat') as 'flat' | 'percentage',
+      discountType: (v?.discountType || '1') as DiscountType,
       discountFlat: v?.discountFlat || 0,
       discountPercentage: v?.discountPercentage || 0,
       desc: v?.desc || '',
     })),
   ],
+  timeSlotPlanId: props.service?.timeSlotPlan?.id || ('' as unknown as number),
 })
 
 const getImageUrl = useGetImageUrl()
@@ -85,6 +94,7 @@ const selectedVariant = ref<
     }
   | undefined
 >(undefined)
+const timeslotAddModal = ref(false)
 
 const removeVariant = (index: number) => {
   form.variantImages.splice(index, 1)
@@ -104,14 +114,14 @@ const onVariantEdited = (opt: { variant: IvariantFrom; image: File | null; index
   variantModalRef.value = false
 }
 
-const imagesUrls = computed(() => {
-  return form.images.map((img: File) => URL.createObjectURL(img))
-})
+// const imagesUrls = computed(() => {
+//   return form.images.map((img: File) => URL.createObjectURL(img))
+// })
 
 const serviceThumbnailUrl = computed(() => {
   return form.thumbnail
-    ? URL.createObjectURL(form.thumbnail)
-    : getImageUrl(props.service.thumbnail.thumbnailUrl, dummyThumb)
+    ? URL.createObjectURL(form?.thumbnail)
+    : getImageUrl(props.service?.thumbnail?.thumbnailUrl, dummyThumb)
 })
 
 const variantThumbnailUrl = computed(() => {
@@ -173,15 +183,27 @@ const submit = () => {
                     :rules="[requiredValidator]"
                   />
                 </VCol>
+                <VCol cols="12">
+                  <label for="" class="v-label">Service Address</label>
+                  <div class="pa-2 text-h6 border rounded my-2" v-if="form.service.address">
+                    {{ form.service.address }}
+                  </div>
+                </VCol>
 
                 <VCol cols="12">
-                  <AppTextField
-                    label="Location"
-                    placeholder="FXSK123U"
-                    v-model="form.service.geoLocation"
-                    :rules="[requiredValidator]"
+                  <label for="" class="v-label mb-2">Change Service Address</label>
+                  <AddressComponent
+                    @selected-address="
+                      (ad) => {
+                        // @ts-ignore
+                        form.service.geoLocation = `${ad.geoLocation?.x},${ad.geoLocation?.y}`
+                        form.service.address = ad.mapAddress
+                      }
+                    "
+                    required
                   />
                 </VCol>
+
                 <VCol cols="12">
                   <AppTextarea label="Short Description" v-model="form.service.shortDesc" />
                 </VCol>
@@ -409,6 +431,65 @@ const submit = () => {
             </VCardText>
           </VCard>
 
+          <!-- 👉 Delivery options -->
+          <VCard title="Delivery options" class="mb-6">
+            <VCardText>
+              <div class="d-flex ga-2 flex-column">
+                <CustomRadios
+                  v-model:selected-radio="form.service.deliveryOptions"
+                  :radio-content="[
+                    { title: 'Walk In', value: DeliveryOptions.WALK_IN },
+                    { title: 'Home Service', value: DeliveryOptions.HOME_SERVICE },
+                    { title: 'Both', value: DeliveryOptions.BOTH },
+                  ]"
+                  :grid-column="{ cols: '12' }"
+                />
+                <div
+                  v-if="
+                    form.service.deliveryOptions === DeliveryOptions.HOME_SERVICE ||
+                    form.service.deliveryOptions === DeliveryOptions.BOTH
+                  "
+                  class="mt-2"
+                >
+                  <AppTextField
+                    label="Max distance (Km) for home services"
+                    type="number"
+                    placeholder="Specify in kilometers"
+                    v-model="form.service.kmRadius"
+                    :rules="[requiredValidator]"
+                  />
+                </div>
+              </div>
+            </VCardText>
+          </VCard>
+
+          <!-- 👉 Select Time Slot plan -->
+          <VCard title="Select timeslot plan" subtitle="Only for booking by timeslots" class="mb-6">
+            <VCardText>
+              <div class="d-flex ga-2 flex-column">
+                <CustomRadios
+                  v-if="timeslotPlans"
+                  v-model:selected-radio="form.timeSlotPlanId"
+                  :radio-content="timeslotPlans.map((t) => ({ title: t.name, value: t.id }))"
+                  :grid-column="{ cols: '12' }"
+                />
+                <div v-else>No Timeslot plans found! Please a plan</div>
+                <div class="mt-2">
+                  <VBtn
+                    variant="tonal"
+                    prepend-icon="tabler-plus"
+                    text="Add plan"
+                    @click="
+                      () => {
+                        timeslotAddModal = true
+                      }
+                    "
+                  />
+                </div>
+              </div>
+            </VCardText>
+          </VCard>
+
           <!-- 👉 SEO -->
           <VCard title="SEO">
             <VCardText>
@@ -437,6 +518,18 @@ const submit = () => {
         @variant-edited="
           (opt) => {
             onVariantEdited(opt)
+          }
+        "
+      />
+
+      <ModalAddTimeslotPlan
+        v-model="timeslotAddModal"
+        @success="
+          () => {
+            router.reload({
+              only: ['timeslotPlans'],
+            })
+            timeslotAddModal = false
           }
         "
       />
