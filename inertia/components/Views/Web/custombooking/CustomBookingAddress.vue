@@ -5,8 +5,9 @@ import BigNumber from 'bignumber.js'
 import type { IServiceRequirement } from '#models/service_requirement'
 import type { IBid } from '#models/bid'
 import { ref } from 'vue'
-import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import CustomRadiosWithIcon from '~/@core/components/app-form-elements/CustomRadiosWithIcon.vue'
+import type { IAddress } from '#models/address'
+import { useForm } from '@inertiajs/vue3'
 
 interface Props {
   serviceRequirement: IServiceRequirement
@@ -15,8 +16,28 @@ interface Props {
 }
 
 const step = defineModel<number>('step', { required: true })
+const selectedAddressCords = ref()
 
 defineProps<Props>()
+
+const form = useForm({
+  addressDetail: {
+    address: '',
+    mapAddress: '',
+    mobile: '',
+    geoLocation: '',
+  },
+  deliveryType: '',
+})
+
+const setAddress = (ad: IAddress) => {
+  selectedAddressCords.value = ad.geoLocation
+  form.addressDetail.address = ad.address
+  form.addressDetail.mapAddress = ad.mapAddress
+  form.addressDetail.mobile = ad.mobile
+  // @ts-ignore
+  form.addressDetail.geoLocation = `${ad.geoLocation.x},${ad.geoLocation.y}`
+}
 
 const checkoutData = ref({
   cartItems: [
@@ -88,11 +109,6 @@ const deliveryOptions = [
   },
 ]
 
-const resolveAddressBadgeColor: any = {
-  home: 'primary',
-  office: 'success',
-}
-
 const resolveDeliveryBadgeData: any = {
   free: { color: 'success', price: 'Free' },
   express: { color: 'secondary', price: 10 },
@@ -107,40 +123,7 @@ const resolveDeliveryBadgeData: any = {
       <h6 class="text-h6 mb-4">Select your preferable address</h6>
 
       <!-- 👉 Address custom input -->
-      <CustomRadios
-        v-model:selected-radio="checkoutData.deliveryAddress"
-        :radio-content="checkoutData.addresses"
-        :grid-column="{ cols: '12', sm: '6' }"
-      >
-        <template #default="{ item }">
-          <div class="w-100">
-            <div class="d-flex justify-space-between mb-3">
-              <h6 class="text-base font-weight-medium">
-                {{ item.title }}
-              </h6>
-
-              <VChip
-                :color="resolveAddressBadgeColor[item.value]"
-                label
-                size="small"
-                class="text-capitalize"
-              >
-                {{ item.value }}
-              </VChip>
-            </div>
-
-            <p class="mb-0 text-sm">
-              {{ item.desc }}
-            </p>
-            <p class="text-sm mb-3">Mobile: {{ item.subtitle }}</p>
-            <VDivider />
-            <div class="pt-2">
-              <a href="#" class="me-4">Edit</a>
-              <a href="#">Remove</a>
-            </div>
-          </div>
-        </template>
-      </CustomRadios>
+      <AddressComponent required @selected-address="setAddress" />
 
       <!-- 👉 Add New Address -->
       <VBtn

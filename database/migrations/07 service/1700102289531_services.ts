@@ -13,7 +13,7 @@ export default class extends BaseSchema {
       table.text('long_desc')
       table.boolean('is_active').defaultTo(false).notNullable()
       table.decimal('avg_rating', 2, 1).defaultTo(0)
-      table.enum('delivery_options', Object.values(DeliveryOptions)).notNullable()
+      table.json('delivery_options').notNullable().defaultTo([DeliveryOptions.WALK_IN])
       table.point('geo_location')
       table.string('address')
       table.smallint('km_radius').defaultTo(0)

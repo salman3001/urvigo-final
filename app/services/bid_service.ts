@@ -1,6 +1,7 @@
 import { paginate } from '#helpers/common'
 import Bid from '#models/bid'
 import ServiceRequirement from '#models/service_requirement'
+import TimeslotPlan from '#models/timeslot_plan'
 import { BidValidator } from '#validators/bid'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -40,7 +41,7 @@ export default class BidService {
 
     await bouncer.with('BidPolicy').authorize('create')
 
-    const payload = await request.validateUsing(BidValidator)
+    const { timeSlotPlanId, ...payload } = await request.validateUsing(BidValidator)
 
     const serviceRequirment = await ServiceRequirement.query()
       .where('id', payload.serviceRequirementId)
@@ -59,6 +60,11 @@ export default class BidService {
 
     await db.transaction(async (trx) => {
       bid = await Bid.create({ ...payload, userId: auth.user!.id }, { client: trx })
+
+      if (timeSlotPlanId) {
+        const timslotPlan = await TimeslotPlan.findOrFail(timeSlotPlanId, { client: trx })
+        await bid.related('timeSlotPlan').save(timslotPlan)
+      }
     })
 
     if (bid) {
@@ -73,12 +79,18 @@ export default class BidService {
     const bid = await Bid.findOrFail(+params.id)
     await bouncer.with('BidPolicy').authorize('update', bid)
 
-    const payload = await request.validateUsing(BidValidator)
+    const { timeSlotPlanId, ...payload } = await request.validateUsing(BidValidator)
 
     await db.transaction(async (trx) => {
       bid.useTransaction(trx)
       bid.merge({ ...payload, userId: auth.user!.id })
       await bid.save()
+
+      if (timeSlotPlanId) {
+        await bid.load('timeSlotPlan')
+        const timslotPlan = await TimeslotPlan.findOrFail(timeSlotPlanId, { client: trx })
+        await bid.related('timeSlotPlan').save(timslotPlan)
+      }
     })
 
     await bid.refresh()

@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, afterCreate, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
 import User from './user.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import ServiceRequirement from './service_requirement.js'
-import { NotificationTypes } from '#helpers/enums'
+import { DeliveryOptions, NotificationTypes } from '#helpers/enums'
 import BidFilter from './filters/bid_filter.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
+import TimeslotPlan from './timeslot_plan.js'
 
 export default class Bid extends compose(BaseModel, Filterable) {
   serializeExtras = true
@@ -29,6 +30,9 @@ export default class Bid extends compose(BaseModel, Filterable) {
     accepted: boolean
   }[]
 
+  @column({ prepare: (v) => JSON.stringify(v) })
+  declare deliveryOptions: Array<DeliveryOptions>
+
   @column()
   declare serviceRequirementId: number
 
@@ -40,6 +44,9 @@ export default class Bid extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => ServiceRequirement)
   declare serviceRequirement: BelongsTo<typeof ServiceRequirement>
+
+  @hasOne(() => TimeslotPlan)
+  declare timeSlotPlan: HasOne<typeof TimeslotPlan>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

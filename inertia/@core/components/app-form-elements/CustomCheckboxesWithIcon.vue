@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import type { CustomInputContent, GridColumn } from '~/@core/types'
+import { emptyValidator, requiredValidator } from '~/@core/utils/validators'
 
 interface Props {
   selectedCheckbox: string[]
   checkboxContent: CustomInputContent[]
   gridColumn?: GridColumn
+  required?: boolean
 }
 
 interface Emit {
@@ -42,6 +44,7 @@ const updateSelectedOption = (value: string[] | null) => {
           <VCheckbox
             :model-value="props.selectedCheckbox"
             :value="item.value"
+            :rules="[required ? requiredValidator : emptyValidator]"
             @update:model-value="updateSelectedOption"
           />
         </div>

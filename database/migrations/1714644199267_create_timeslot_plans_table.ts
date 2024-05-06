@@ -11,12 +11,7 @@ export default class extends BaseSchema {
       table.json('options').notNullable().defaultTo([])
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.integer('service_id').unsigned().references('id').inTable('services')
-
-      table
-        .integer('service_requirement_id')
-        .unsigned()
-        .references('id')
-        .inTable('service_requirements')
+      table.integer('bid_id').unsigned().references('id').inTable('bids')
     })
   }
 

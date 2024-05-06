@@ -10,7 +10,7 @@ import { AddressType } from '../../app/helpers/enums'
 import ModalConfirm from './modal/ModalConfirm.vue'
 import useApiForm from '~/composables/useApiForm'
 import ModalEditAddress from './modal/ModalEditAddress.vue'
-import { requiredValidator } from '~/@core/utils/validators'
+import { emptyValidator, requiredValidator } from '~/@core/utils/validators'
 
 const addAddressModal = ref(false)
 const deleteAddressModal = ref(false)
@@ -70,7 +70,7 @@ onMounted(() => {
     v-model:selected-radio="selectedAddress"
     :radio-content="radioContent"
     :grid-column="{ cols: '12', sm: '6' }"
-    :rules="[required && requiredValidator]"
+    :rules="[required ? requiredValidator : emptyValidator]"
     @update:selected-radio="
       (v) => {
         $emit('selected-address', v)

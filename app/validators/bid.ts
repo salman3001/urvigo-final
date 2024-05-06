@@ -5,5 +5,6 @@ export const BidValidator = vine.compile(
     serviceRequirementId: vine.number(),
     offeredPrice: vine.number().min(0),
     message: vine.string().maxLength(150).optional(),
+    timeSlotPlanId: vine.number().optional(),
   })
 )

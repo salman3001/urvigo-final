@@ -1,3 +1,4 @@
+import { DeliveryOptions } from '#helpers/enums'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -9,6 +10,7 @@ export default class extends BaseSchema {
       table.decimal('offered_price', 8, 2)
       table.string('message', 1500)
       table.json('negotiate_history').defaultTo([])
+      table.json('delivery_options').notNullable().defaultTo([DeliveryOptions.WALK_IN])
       table
         .integer('service_requirement_id')
         .unsigned()

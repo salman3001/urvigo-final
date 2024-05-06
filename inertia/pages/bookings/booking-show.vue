@@ -16,9 +16,6 @@ import useGetImageUrl from '~/composables/useGetImageUrl'
 import type { IBooking } from '#models/booking'
 import { computed } from 'vue'
 
-// const isConfirmDialogVisible = ref(false);
-// const isUserInfoEditDialogVisible = ref(false);
-// const isEditAddressDialogVisible = ref(false);
 const getImagesUrl = useGetImageUrl()
 
 const props = defineProps<{
@@ -211,13 +208,15 @@ const headers = [
             <VCardText class="d-flex flex-column gap-y-6">
               <!-- <h5 class="text-h5">Customer details</h5> -->
 
-              <!-- <div class="d-flex align-center gap-x-3">
-                <VAvatar :image="avatar1" />
+              <div class="d-flex align-center gap-x-3">
+                <!-- <VAvatar :image="" /> -->
                 <div>
-                  <h6 class="text-h6">Shamus Tuttle</h6>
-                  <div class="text-body-1">Customer ID: #47389</div>
+                  <h6 class="text-h6">
+                    {{ booking?.user?.firstName }} {{ booking?.user?.lastName }}
+                  </h6>
+                  <div class="text-body-1">Customer ID: #{{ booking?.user?.id }}</div>
                 </div>
-              </div> -->
+              </div>
               <!--
               <div class="d-flex gap-x-3 align-center">
                 <VAvatar variant="tonal" color="success">
@@ -229,17 +228,9 @@ const headers = [
               <div class="d-flex flex-column gap-y-1">
                 <div class="d-flex justify-space-between align-center">
                   <h6 class="text-h6">Contact Info</h6>
-                  <!-- <div
-                    class="text-base text-primary cursor-pointer font-weight-medium"
-                    @click="
-                      isUserInfoEditDialogVisible = !isUserInfoEditDialogVisible
-                    "
-                  >
-                    Edit
-                  </div> -->
                 </div>
-                <span>Email: Sheldon88@yahoo.com</span>
-                <span>Mobile: +1 (609) 972-22-22</span>
+                <span>{{ booking?.user?.email }}</span>
+                <span>Mobile: {{ booking?.user?.phone }}</span>
               </div>
             </VCardText>
           </VCard>
@@ -248,27 +239,13 @@ const headers = [
           <VCard class="mb-6">
             <VCardItem>
               <VCardTitle>Shipping Address</VCardTitle>
-
-              <template #append>
-                <div class="d-flex align-center justify-space-between">
-                  <!-- <div
-                    class="text-base font-weight-medium text-primary cursor-pointer"
-                    @click="
-                      isEditAddressDialogVisible = !isEditAddressDialogVisible
-                    "
-                  >
-                    Edit
-                  </div> -->
-                </div>
-              </template>
             </VCardItem>
 
             <VCardText>
               <div class="text-body-1">
-                45 Rocker Terrace <br />
-                Latheronwheel <br />
-                KW5 8NW, London <br />
-                UK
+                {{ booking.addressDetail.address }} <br />
+                {{ booking.addressDetail.mapAddress }}<br />
+                {{ booking.addressDetail.mobile }} <br />
               </div>
             </VCardText>
           </VCard>
@@ -278,20 +255,11 @@ const headers = [
             <VCardText>
               <div class="d-flex align-center justify-space-between mb-2">
                 <h5 class="text-h5">Billing Address</h5>
-                <!-- <div
-                  class="text-base font-weight-medium text-primary cursor-pointer"
-                  @click="
-                    isEditAddressDialogVisible = !isEditAddressDialogVisible
-                  "
-                >
-                  Edit
-                </div> -->
               </div>
               <div>
-                45 Rocker Terrace <br />
-                Latheronwheel <br />
-                KW5 8NW, London <br />
-                UK
+                {{ booking.addressDetail.address }} <br />
+                {{ booking.addressDetail.mapAddress }}<br />
+                {{ booking.addressDetail.mobile }} <br />
               </div>
 
               <div class="mt-6">

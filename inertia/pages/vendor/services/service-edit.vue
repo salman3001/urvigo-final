@@ -22,6 +22,7 @@ import ProductDescriptionEditor from '~/@core/components/ProductDescriptionEdito
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import CustomCheckboxesWithIcon from '~/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue'
 import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import dummyThumb from '~/assets/images/no-image.png'
@@ -54,8 +55,8 @@ const form = useForm({
     serviceSubcategoryId: pageProps.service?.serviceSubcategoryId || '',
     shortDesc: pageProps.service?.shortDesc || '',
     longDesc: pageProps.service?.longDesc || '',
-    deliveryOptions: pageProps.service?.deliveryOptions || DeliveryOptions.WALK_IN,
-    geoLocation: pageProps.service?.geoLocation || '',
+    deliveryOptions: pageProps.service?.deliveryOptions || [DeliveryOptions.WALK_IN],
+    geoLocation: '',
     address: pageProps.service?.address || '',
     kmRadius: pageProps.service?.kmRadius || 10,
     isActive: pageProps.service?.isActive || '',
@@ -196,7 +197,6 @@ const submit = () => {
                 <VCol cols="12">
                   <label for="" class="v-label mb-2">Change Service Address</label>
                   <AddressComponent
-                    required
                     @selected-address="
                       (ad) => {
                         // @ts-ignore
@@ -438,20 +438,33 @@ const submit = () => {
           <VCard title="Delivery options" class="mb-6">
             <VCardText>
               <div class="d-flex ga-2 flex-column">
-                <CustomRadios
-                  v-model:selected-radio="form.service.deliveryOptions"
-                  :radio-content="[
-                    { title: 'Walk In', value: DeliveryOptions.WALK_IN },
-                    { title: 'Home Service', value: DeliveryOptions.HOME_SERVICE },
-                    { title: 'Both', value: DeliveryOptions.BOTH },
+                <CustomCheckboxesWithIcon
+                  v-model:selected-checkbox="form.service.deliveryOptions"
+                  :checkbox-content="[
+                    {
+                      icon: { icon: 'tabler-truck-delivery' },
+                      title: 'Home Service',
+                      desc: 'Get Service at home',
+                      value: DeliveryOptions.HOME_SERVICE,
+                    },
+                    {
+                      icon: { icon: 'tabler-walk' },
+                      title: 'Walkin',
+                      desc: 'Walk in and Get Served',
+                      value: DeliveryOptions.WALK_IN,
+                    },
+                    {
+                      icon: { icon: 'tabler-wifi' },
+                      title: 'Online',
+                      desc: 'Get Service done online',
+                      value: DeliveryOptions.ONLINE,
+                    },
                   ]"
                   :grid-column="{ cols: '12' }"
+                  required
                 />
                 <div
-                  v-if="
-                    form.service.deliveryOptions === DeliveryOptions.HOME_SERVICE ||
-                    form.service.deliveryOptions === DeliveryOptions.BOTH
-                  "
+                  v-if="form.service.deliveryOptions.includes(DeliveryOptions.HOME_SERVICE)"
                   class="mt-2"
                 >
                   <AppTextField

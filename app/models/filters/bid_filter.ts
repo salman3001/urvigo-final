@@ -7,6 +7,11 @@ export default class BidFilter extends BaseModelFilter {
 
   // search(value: string): void {
   //   const searchValue = `%${value}%`
-  //   this.$query.whereILike('title', searchValue)
+  //   this.$query.whereILike('name', searchValue)
   // }
+
+  orderBy(value: string): void {
+    const [orderBy, direction] = value.split(':')
+    this.$query.orderBy(orderBy, (direction as 'desc') || 'asc')
+  }
 }

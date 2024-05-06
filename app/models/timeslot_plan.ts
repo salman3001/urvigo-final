@@ -18,7 +18,7 @@ export default class TimeslotPlan extends BaseModel {
   declare serviceId: number
 
   @column()
-  declare serviceRequirementId: number
+  declare bidId: number
 
   @column()
   declare userId: number

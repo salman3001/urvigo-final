@@ -25,9 +25,9 @@ const getImageUrl = useGetImageUrl()
             :image="getImageUrl(review?.user?.profile?.avatar?.thumbnailUrl, dummyAvatar)"
           />
           <div class="me-2 mb-2">
-            <VCardTitle class="pa-0">
+            <VCardText class="pa-0">
               {{ review?.user?.firstName + ' ' + review?.user?.lastName }}
-            </VCardTitle>
+            </VCardText>
             <VCardSubtitle class="text-caption pa-0">
               {{ format(review.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
             </VCardSubtitle>

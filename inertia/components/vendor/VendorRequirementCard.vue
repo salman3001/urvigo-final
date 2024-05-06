@@ -9,6 +9,8 @@ import dummyThumb from '~/assets/images/dummy-avatar.webp'
 import LightBox from '../LightBox.vue'
 import ClientOnly from '../client-only.vue'
 import { format } from 'date-fns'
+import MapLink from '../MapLink.vue'
+import type { CordType } from '#helpers/types'
 
 defineProps<{
   requirement: IServiceRequirement
@@ -32,7 +34,7 @@ const getImageUrls = useGetImageUrl()
       <p>
         {{ requirement.desc }}
       </p>
-      <VChip>&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip>
+      <VChip color="primary">&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip>
     </VCardText>
 
     <VCardItem v-if="requirement?.images">
@@ -61,7 +63,11 @@ const getImageUrls = useGetImageUrl()
               </div>
               <div>
                 <VIcon icon="tabler-map-pin"></VIcon>
-                Jarkhand, India
+                <MapLink
+                  :x="(requirement.geoLocation as CordType).x"
+                  :y="(requirement.geoLocation as CordType).y"
+                  >{{ requirement.address }}</MapLink
+                >
               </div>
             </div>
           </div>

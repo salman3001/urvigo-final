@@ -1,3 +1,4 @@
+import { DeliveryOptions } from '#helpers/enums'
 import vine from '@vinejs/vine'
 
 export const createServiceRequirementValidator = vine.compile(
@@ -17,6 +18,7 @@ export const createServiceRequirementValidator = vine.compile(
     keywords: vine.array(vine.string().maxLength(50).escape()).optional(),
     urgent: vine.boolean().optional(),
     expiresAt: vine.date({ formats: ['DD/MM/YYYY HH:mm'] }).after('today'),
+    deliveryOptions: vine.array(vine.enum(DeliveryOptions)),
     geoLocation: vine.string(),
     address: vine.string().escape(),
     serviceCategoryId: vine.number(),

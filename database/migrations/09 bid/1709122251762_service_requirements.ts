@@ -1,4 +1,4 @@
-import { DeliveryType } from '#helpers/enums'
+import { DeliveryOptions } from '#helpers/enums'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -13,10 +13,7 @@ export default class extends BaseSchema {
       table.decimal('budget', 10, 2).notNullable()
       table.dateTime('expires_at')
       table.boolean('urgent').notNullable().defaultTo(false)
-      table
-        .enum('delivery_type', Object.values(DeliveryType))
-        .notNullable()
-        .defaultTo(DeliveryType.WALK_IN)
+      table.json('delivery_options').notNullable().defaultTo([DeliveryOptions.WALK_IN])
       table.point('geo_location')
       table.string('address')
       table

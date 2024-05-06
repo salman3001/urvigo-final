@@ -4,12 +4,12 @@ import { useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
 import type { IServiceRequirement } from '#models/service_requirement'
 import useApiGet from '~/composables/useApiGet'
-import type { IBid } from '#models/bid'
 import CustomBookingCart from '~/components/Views/Web/custombooking/CustomBookingCart.vue'
 import CheckoutConfirmation from '~/components/Views/Web/checkout/CheckoutConfirmation.vue'
 import AppStepper from '~/@core/components/AppStepper.vue'
 import CustomBookingAddress from '~/components/Views/Web/custombooking/CustomBookingAddress.vue'
 import CustomBookingPayment from '~/components/Views/Web/custombooking/CustomBookingPayment.vue'
+import { PaymentMode, PaymentStatus } from '#helpers/enums'
 
 export default {
   layout: Layout,
@@ -41,16 +41,16 @@ const form = useForm({
   acceptedBidId: '' as string | number,
   qty: 1,
   paymentdetail: {
-    paymentMode: 'online',
-    paymentStatus: 'paid',
+    paymentMode: PaymentMode.ONLINE,
+    paymentStatus: PaymentStatus.PAID,
   },
 })
 
 const submit = async () => {
   form.serviceRequirementId = props.query.requirementId
   form.acceptedBidId = props?.query?.acceptedBidId
-  form.paymentdetail.paymentMode = 'online'
-  form.paymentdetail.paymentStatus = 'paid'
+  form.paymentdetail.paymentMode = PaymentMode.ONLINE
+  form.paymentdetail.paymentStatus = PaymentStatus.PAID
   form.post(routes('web.custom_booking.create'), {
     onSuccess: () => {
       currentStep.value = 3

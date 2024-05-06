@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { DeliveryOptions, DeliveryType } from '#helpers/enums'
+import { DeliveryOptions } from '#helpers/enums'
 import type { CordType } from '#helpers/types'
 import type { IService } from '#models/service'
-import { watch } from 'vue'
-import CustomRadiosWithIcon from '~/@core/components/app-form-elements/CustomRadiosWithIcon.vue'
+import { ref, watch } from 'vue'
+import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import { isWithinRadius } from '~/utils/helpers'
 
@@ -20,29 +20,46 @@ const homeOption = {
   icon: { icon: 'tabler-truck-delivery' },
   title: 'Home Service',
   desc: 'Get Service at home',
-  value: DeliveryType.HOME_SERVICE,
+  value: DeliveryOptions.HOME_SERVICE,
 }
 
 const walkinOption = {
   icon: { icon: 'tabler-walk' },
   title: 'Walkin',
   desc: 'Walk in and Get Served',
-  value: DeliveryType.WALK_IN,
+  value: DeliveryOptions.WALK_IN,
+}
+
+const onlineOption = {
+  icon: { icon: 'tabler-wifi' },
+  title: 'Online',
+  desc: 'Get Service done online',
+  value: DeliveryOptions.ONLINE,
 }
 
 const resolveDeliveryBadgeData: any = {
-  [DeliveryType.HOME_SERVICE]: { color: 'success', price: 'Free' },
-  [DeliveryType.WALK_IN]: { color: 'success', price: 'Free' },
+  [DeliveryOptions.HOME_SERVICE]: { color: 'success', price: 'Free' },
+  [DeliveryOptions.WALK_IN]: { color: 'success', price: 'Free' },
+  [DeliveryOptions.ONLINE]: { color: 'success', price: 'Free' },
 }
 
-const deliveryOptions =
-  props.service.deliveryOptions === DeliveryOptions.BOTH
-    ? [walkinOption, homeOption]
-    : props.service.deliveryOptions === DeliveryOptions.HOME_SERVICE
-      ? [homeOption]
-      : DeliveryOptions.WALK_IN
-        ? [walkinOption]
-        : []
+const deliveryOptions = ref<any[]>([])
+
+props.service.deliveryOptions.forEach((o) => {
+  console.log('ran')
+
+  if (o === DeliveryOptions.HOME_SERVICE) {
+    deliveryOptions.value.push(homeOption)
+  }
+
+  if (o === DeliveryOptions.WALK_IN) {
+    deliveryOptions.value.push(walkinOption)
+  }
+
+  if (o === DeliveryOptions.ONLINE) {
+    deliveryOptions.value.push(onlineOption)
+  }
+})
 
 watch(model, (v) => {
   outOfRadiusError.value = false
@@ -69,23 +86,10 @@ watch(
     }
   }
 )
-
-watch(
-  () => props.selectedAddressCords,
-  () => {
-    if (model.value === DeliveryOptions.HOME_SERVICE && props.selectedAddressCords) {
-      outOfRadiusError.value = !isWithinRadius(
-        props.service.geoLocation as CordType,
-        props.selectedAddressCords,
-        props.service.kmRadius
-      )
-    }
-  }
-)
 </script>
 
 <template>
-  <CustomRadiosWithIcon
+  <CustomRadios
     v-model:selected-radio="model"
     :radio-content="deliveryOptions"
     :grid-column="{ cols: '12', sm: '4' }"
@@ -113,5 +117,5 @@ watch(
         </p>
       </div>
     </template>
-  </CustomRadiosWithIcon>
+  </CustomRadios>
 </template>

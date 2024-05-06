@@ -22,18 +22,6 @@ export default class Address extends BaseModel {
 
   @column()
   declare userProfileId: number
-
-  @column()
-  declare serviceId: number
-
-  @column()
-  declare serviceRequirementId: number
-
-  @column()
-  declare bookingId: number
-
-  @column()
-  declare bidBookingId: number
 }
 
 export type IAddress = Address

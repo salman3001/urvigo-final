@@ -1,4 +1,4 @@
-import { DeliveryType, OrderStatus, PaymentMode, PaymentStatus } from '#helpers/enums'
+import { DeliveryOptions, OrderStatus, PaymentMode, PaymentStatus } from '#helpers/enums'
 import vine from '@vinejs/vine'
 
 export const BookingSummaryValidator = vine.compile(
@@ -24,7 +24,7 @@ export const CreateBookingValidator = vine.compile(
       address: vine.string().escape().optional(),
       mobile: vine.string().escape().minLength(8),
     }),
-    deliveryType: vine.enum(DeliveryType),
+    deliveryType: vine.enum(DeliveryOptions),
   })
 )
 

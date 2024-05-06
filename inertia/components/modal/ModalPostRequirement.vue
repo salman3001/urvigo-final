@@ -13,6 +13,9 @@ import ErrorAlert from '../form/ErrorAlert.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import { addDays, format } from 'date-fns'
+import AddressComponent from '../AddressComponent.vue'
+import { DeliveryOptions } from '#helpers/enums'
+import CustomCheckboxesWithIcon from '~/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue'
 
 const isVisible = defineModel<boolean>('isVisible')
 defineProps<{
@@ -33,8 +36,10 @@ const form = useForm({
   urgent: false,
   budget: '',
   budgetUnit: '',
-  location: '21.25,87.52',
+  geoLocation: '',
+  address: '',
   expiresAt: format(addDays(Date.now(), 3), 'dd/MM/yyyy HH:mm'),
+  deliveryOptions: [DeliveryOptions.WALK_IN] as Array<DeliveryOptions>,
 })
 
 const creatRequirement = async () => {
@@ -58,7 +63,7 @@ const creatRequirement = async () => {
         <VCol cols="12">
           <ErrorAlert v-if="form.errors" :errors="form.errors" />
         </VCol>
-        <VCol cols="12">
+        <VCol cols="12" sm="6">
           <AppTextField
             v-model="form.title"
             label="Enter Your Title"
@@ -66,15 +71,7 @@ const creatRequirement = async () => {
             lazy-rules="true"
           />
         </VCol>
-        <VCol cols="12">
-          <AppTextarea
-            v-model="form.desc"
-            label="Requirement Detail"
-            class="col-12 col-sm-6 col-md-3"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol cols="12">
+        <VCol cols="12" sm="6">
           <AppSelect
             v-model="form.serviceCategoryId"
             label="Select Category"
@@ -84,7 +81,8 @@ const creatRequirement = async () => {
             item-value="id"
           />
         </VCol>
-        <VCol cols="12">
+
+        <VCol cols="12" sm="6">
           <SelectOrAdd
             v-model="form.keywords"
             label="Select Kewwords"
@@ -96,10 +94,10 @@ const creatRequirement = async () => {
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12">
+        <VCol cols="12" sm="6">
           <VSwitch v-model="form.urgent" label="Need In short Time?" />
         </VCol>
-        <VCol cols="12">
+        <VCol cols="12" sm="6">
           <AppTextField
             v-model="form.budget"
             type="number"
@@ -107,7 +105,7 @@ const creatRequirement = async () => {
             :rules="[requiredValidator, (v: any) => minNumValidator(v, 1)]"
           />
         </VCol>
-        <VCol cols="12">
+        <VCol cols="12" sm="6">
           <SelectOrAdd
             v-model="form.budgetUnit"
             label="Budget Units"
@@ -117,7 +115,53 @@ const creatRequirement = async () => {
           />
         </VCol>
         <VCol cols="12">
-          <AppTextField v-model="form.location" label="Location" :rules="[requiredValidator]" />
+          <label>Select address</label>
+          <AddressComponent
+            required
+            @selected-address="
+              (ad) => {
+                // @ts-ignore
+                form.geoLocation = `${ad.geoLocation?.x},${ad.geoLocation?.y}`
+                form.address = ad.mapAddress
+              }
+            "
+          />
+        </VCol>
+        <!-- 👉 Delivery options custom input -->
+        <VCol cols="12">
+          <CustomCheckboxesWithIcon
+            v-model:selected-checkbox="form.deliveryOptions"
+            :checkbox-content="[
+              {
+                icon: { icon: 'tabler-truck-delivery' },
+                title: 'Home Service',
+                desc: 'Get Service at home',
+                value: DeliveryOptions.HOME_SERVICE,
+              },
+              {
+                icon: { icon: 'tabler-walk' },
+                title: 'Walkin',
+                desc: 'Walk in and Get Served',
+                value: DeliveryOptions.WALK_IN,
+              },
+              {
+                icon: { icon: 'tabler-wifi' },
+                title: 'Online',
+                desc: 'Get Service done online',
+                value: DeliveryOptions.ONLINE,
+              },
+            ]"
+            :grid-column="{ cols: '12', sm: '3' }"
+            required
+          />
+        </VCol>
+        <VCol cols="12">
+          <AppTextarea
+            v-model="form.desc"
+            label="Requirement Detail"
+            class="col-12 col-sm-6 col-md-3"
+            :rules="[requiredValidator]"
+          />
         </VCol>
         <VCol cols="12">
           <VCard border class="mb-6">

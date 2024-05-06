@@ -8,6 +8,10 @@ import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
 import ClientOnly from './client-only.vue'
 import LightBox from './LightBox.vue'
+import MapLink from './MapLink.vue'
+import type { CordType } from '#helpers/types'
+import { VIcon, VTooltip } from 'vuetify/components'
+import { DeliveryOptions } from '#helpers/enums'
 
 defineProps<{
   requirement: IServiceRequirement
@@ -33,7 +37,28 @@ const getImageUrls = useGetImageUrl()
           <p>
             {{ requirement.desc }}
           </p>
-          <VChip>&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip>
+          <div class="d-flex gap-2 align-center">
+            <VChip color="primary"
+              >&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip
+            >
+            <VTooltip v-for="(dt, i) in requirement.deliveryOptions" :key="i" :text="dt">
+              <template #activator="{ props }">
+                <VIcon
+                  v-bind="props"
+                  color="primary"
+                  :icon="
+                    dt === DeliveryOptions.HOME_SERVICE
+                      ? 'tabler-truck-delivery'
+                      : dt === DeliveryOptions.WALK_IN
+                        ? 'tabler-walk'
+                        : dt === DeliveryOptions.ONLINE
+                          ? 'tabler-wifi'
+                          : ''
+                  "
+                />
+              </template>
+            </VTooltip>
+          </div>
         </VCardText>
         <VCardItem v-if="requirement?.images">
           <h3>Images</h3>
@@ -48,7 +73,11 @@ const getImageUrls = useGetImageUrl()
             <div class="d-flex flex-column gap-2">
               <div>
                 <VIcon icon="tabler-map-pin"></VIcon>
-                Jarkhand, India
+                <MapLink
+                  :x="(requirement.geoLocation as CordType).x"
+                  :y="(requirement.geoLocation as CordType).y"
+                  >{{ requirement.address }}</MapLink
+                >
               </div>
               <div class="d-flex gap-2">
                 <VChip v-if="requirement.urgent" color="error">Urgent Requirment</VChip>

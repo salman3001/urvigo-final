@@ -17,7 +17,9 @@ useInjectToast()
   <BaseAppLayout>
     <div class="layout-wrapper layout-blank">
       <WebNavbar />
-      <slot />
+      <div class="main-wrapper">
+        <slot />
+      </div>
       <WebFooter />
     </div>
   </BaseAppLayout>
@@ -27,5 +29,9 @@ useInjectToast()
 .layout-wrapper.layout-blank {
   flex-direction: column;
   gap: 3rem;
+}
+
+.main-wrapper {
+  min-height: 90vh;
 }
 </style>

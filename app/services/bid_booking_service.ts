@@ -84,7 +84,13 @@ export default class BidBookingService {
   async show() {
     const { bouncer, params } = this.ctx
     const id = params.id
-    const booking = await BidBooking.query().where('id', id).firstOrFail()
+    const booking = await BidBooking.query()
+      .where('id', id)
+      .preload('user')
+      .preload('businessProfile', (b) => {
+        b.preload('vendor')
+      })
+      .firstOrFail()
 
     await bouncer.with('BidBookingPolicy').authorize('view', booking)
 

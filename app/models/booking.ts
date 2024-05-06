@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
-import { DeliveryType, OrderStatus } from '#helpers/enums'
+import { DeliveryOptions, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
@@ -10,7 +10,6 @@ import BookingFilter from './filters/booking_filter.js'
 import { Filterable } from 'adonis-lucid-filter'
 import { compose } from '@adonisjs/core/helpers'
 import Timeslot from './timeslot.js'
-import Address from './address.js'
 
 export default class Booking extends compose(BaseModel, Filterable) {
   static $filter = () => BookingFilter
@@ -43,7 +42,7 @@ export default class Booking extends compose(BaseModel, Filterable) {
   }[]
 
   @column()
-  declare deliveryType: DeliveryType
+  declare deliveryType: DeliveryOptions
 
   @column()
   declare status: OrderStatus
@@ -65,9 +64,6 @@ export default class Booking extends compose(BaseModel, Filterable) {
 
   @hasOne(() => Timeslot)
   declare timeSlot: HasOne<typeof Timeslot>
-
-  @hasOne(() => Address)
-  declare address: HasOne<typeof Address>
 }
 
 export type IBooking = Booking

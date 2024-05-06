@@ -82,7 +82,13 @@ export default class BookingService {
   async show() {
     const { bouncer, params } = this.ctx
     const id = params.id
-    const booking = await Booking.query().where('id', id).firstOrFail()
+    const booking = await Booking.query()
+      .preload('user')
+      .preload('businessProfile', (b) => {
+        b.preload('vendor')
+      })
+      .where('id', id)
+      .firstOrFail()
 
     await bouncer.with('BookingPolicy').authorize('view', booking)
 

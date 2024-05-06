@@ -41,7 +41,9 @@ const setAddress = (ad: IAddress) => {
 
 const submit = () => {
   if (outOfRadiusError.value) {
-    alert('Oops! Vendor dont serve at this location! Please choose walkin in option if available')
+    alert(
+      'Oops! Vendor dont serve at this location! Please choose other delivery option if available'
+    )
     return
   }
   form.post(routes('web.booking.address.post'))

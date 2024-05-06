@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, afterCreate, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
-import { DeliveryType, NotificationTypes, OrderStatus } from '#helpers/enums'
+import { DeliveryOptions, NotificationTypes, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
@@ -9,7 +9,6 @@ import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import BidBookingFilter from './filters/bid_booking_filter.js'
 import Timeslot from './timeslot.js'
-import Address from './address.js'
 
 export default class BidBooking extends compose(BaseModel, Filterable) {
   static $filter = () => BidBookingFilter
@@ -45,7 +44,7 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
   }[]
 
   @column()
-  declare deliveryType: DeliveryType
+  declare deliveryType: DeliveryOptions
 
   @column()
   declare status: OrderStatus
@@ -64,9 +63,6 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
 
   @hasOne(() => Timeslot)
   declare timeSlot: HasOne<typeof Timeslot>
-
-  @hasOne(() => Address)
-  declare address: HasOne<typeof Address>
 
   @afterCreate()
   static async notifyUser(booking: BidBooking) {

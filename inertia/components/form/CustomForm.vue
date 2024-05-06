@@ -16,7 +16,7 @@ const resetValidations = () => {
 
 const submit = async () => {
   const { valid } = await formRef.value?.validate()
-
+  console.log(formRef.value)
   if (valid) {
     emit('submit', resetForm, resetValidations)
   }

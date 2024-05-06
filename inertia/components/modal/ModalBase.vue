@@ -4,6 +4,7 @@ import DialogCloseBtn from '~/@core/components/DialogCloseBtn.vue'
 defineProps<{
   title?: string
   subtitle?: string
+  width?: number
 }>()
 
 defineEmits<{
@@ -14,7 +15,7 @@ const isVisible = defineModel<boolean>('isVisible')
 </script>
 
 <template>
-  <VDialog v-model="isVisible" :width="$vuetify.display.smAndUp ? 600 : undefined">
+  <VDialog v-model="isVisible" :width="$vuetify.display.smAndUp ? width || 600 : undefined">
     <!-- Dialog close btn -->
     <DialogCloseBtn
       @click="

@@ -92,12 +92,7 @@ export enum PaymentMode {
 export enum DeliveryOptions {
   HOME_SERVICE = '1',
   WALK_IN = '2',
-  BOTH = '3',
-}
-
-export enum DeliveryType {
-  HOME_SERVICE = '1',
-  WALK_IN = '2',
+  ONLINE = '3',
 }
 
 export enum WeekDays {

@@ -50,8 +50,8 @@ export default class Service extends compose(BaseModel, Filterable) {
   @column()
   declare isActive: boolean
 
-  @column()
-  declare deliveryOptions: DeliveryOptions
+  @column({ prepare: (v) => JSON.stringify(v) })
+  declare deliveryOptions: Array<DeliveryOptions>
 
   @column()
   declare geoLocation: string | CordType

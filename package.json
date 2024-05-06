@@ -10,7 +10,7 @@
     "dev": "node ace serve --hmr",
     "dev:hmr": "node ace serve --hmr",
     "test": "node ace test",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "typecheck:vue": "vue-tsc --noEmit",

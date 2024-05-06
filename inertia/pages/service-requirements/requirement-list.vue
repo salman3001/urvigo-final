@@ -176,6 +176,7 @@ watch(query, () => {
       v-model:is-visible="postModal"
       :categories="categories"
       :tags="tags"
+      :width="1000"
       @submit="
         async () => {
           router.reload({

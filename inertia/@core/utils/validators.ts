@@ -10,6 +10,11 @@ export const requiredValidator = (value: unknown) => {
   return !!String(value).trim().length || 'This field is required'
 }
 
+// 👉 empty Validator
+export const emptyValidator = () => {
+  return true
+}
+
 // 👉 Email Validator
 export const emailValidator = (value: unknown) => {
   if (isEmpty(value)) return true

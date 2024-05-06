@@ -1,10 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
-
 import { inject } from '@adonisjs/core'
 import BookingService from '#services/booking_service'
 import CouponService from '../../services/coupon_service.js'
 import vine from '@vinejs/vine'
-import { DeliveryType, PaymentMode, PaymentStatus } from '#helpers/enums'
+import { DeliveryOptions, PaymentMode, PaymentStatus } from '#helpers/enums'
 
 @inject()
 export default class WebBookingsController {
@@ -71,7 +70,7 @@ export default class WebBookingsController {
           mobile: vine.string(),
           geoLocation: vine.string(),
         }),
-        deliveryType: vine.enum(DeliveryType),
+        deliveryType: vine.enum(DeliveryOptions),
       })
     )
 

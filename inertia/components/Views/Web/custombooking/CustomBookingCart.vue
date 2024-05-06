@@ -152,7 +152,7 @@ const decrementQty = () => {
               <span>Delivery Charges</span>
 
               <div class="d-flex align-center">
-                <div class="text-decoration-line-through text-disabled me-2">&#x20B9;5.00</div>
+                <div class="text-decoration-line-through text-disabled me-2">&#x20B9;20.00</div>
                 <VChip size="small" color="success"> FREE </VChip>
               </div>
             </div>

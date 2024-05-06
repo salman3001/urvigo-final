@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import ConnectImg from '~/assets/images/front-pages/landing-page/contact-customer-service.png'
 import { ref } from 'vue'
+import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 
 const name = ref('')
 const email = ref('')

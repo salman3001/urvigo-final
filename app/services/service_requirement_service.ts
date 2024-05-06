@@ -194,7 +194,7 @@ export default class ServiceRequirementService {
     return bid
   }
 
-  async showBids() {
+  async showBids(opt?: IndexOption) {
     const { bouncer, params, request } = this.ctx
     const serviceRequirement = await ServiceRequirement.findOrFail(+params.id)
 
@@ -211,10 +211,10 @@ export default class ServiceRequirementService {
     bidQuery.whereNot('bids.id', serviceRequirement?.acceptedBidId || 0)
 
     if (request.qs()?.orderby_avg_rating) {
-      bidQuery.join('vendor_users', 'bids.vendor_user_id', 'vendor_users.id')
+      bidQuery.join('business_profiles', 'bids.user_id', 'business_profiles.user_id')
 
       bidQuery.select('bids.*')
-      bidQuery.orderBy('vendor_users.avg_rating', 'desc')
+      bidQuery.orderBy('business_profiles.avg_rating', 'desc')
     } else if (request.qs()?.orderby_lowest_price) {
       bidQuery.whereNot('id', serviceRequirement?.acceptedBidId || 0)
       bidQuery.orderBy('offered_price', 'asc')
@@ -224,7 +224,7 @@ export default class ServiceRequirementService {
       bidQuery.orderBy('created_at', 'desc')
     }
 
-    bidQuery.filter(request.qs())
+    !opt?.disableFilter && bidQuery.filter(request.qs())
 
     const bids = await paginate<typeof Bid>(bidQuery, request)
 

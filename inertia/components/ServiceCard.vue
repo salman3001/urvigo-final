@@ -15,7 +15,7 @@ const pageProps = defineProps<{
 
 const getImageUrl = useGetImageUrl()
 const wishlist = wishlistStore()
-const color = ref('secondary')
+const color = ref('white')
 
 const minPriceVariant = pageProps.service.variants.reduce((prev, current) =>
   prev.price < current.price ? prev : current
@@ -36,7 +36,7 @@ const isWishlisted = ref<boolean | undefined>(false)
 watch(
   () => wishlist.wishlistItems,
   () => {
-    isWishlisted.value = wishlist.isWishlisted(props.service.id)
+    isWishlisted.value = wishlist.isWishlisted(pageProps.service.id)
   },
   { immediate: true }
 )
@@ -72,10 +72,10 @@ const removeItem = (serviceId: number | string) => {
 
 <template>
   <Link :href="routes('web.services.show', [service.slug])">
-    <VCard density="compact" class="ma-0">
+    <VCard density="compact" class="ma-0" style="position: relative !important">
       <VImg :src="getImageUrl(service?.thumbnail?.thumbnailUrl)" cover />
       <VCardItem>
-        <VChip variant="tonal" color="info" size="small">
+        <VChip v-if="service?.serviceCategory?.name" variant="tonal" color="info" size="small">
           {{ service?.serviceCategory?.name }}
         </VChip>
         <VCardTitle>{{ service.name }}</VCardTitle>

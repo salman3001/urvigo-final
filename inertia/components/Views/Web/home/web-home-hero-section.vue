@@ -28,7 +28,7 @@ const theme = useTheme()
                 Join Community
                 <VImg :src="joinArrow" class="flip-in-rtl" width="54" height="31" />
               </h6>
-              <div class="d-flex flex-column flex-sm-row gap-2">
+              <div class="d-flex flex-column flex-sm-row justify-space-between flex-sm-row gap-2">
                 <Link :href="routes('web.services')">
                   <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
                     Explore Services
@@ -36,7 +36,7 @@ const theme = useTheme()
                 </Link>
                 <Link :href="routes('web.service_requirement.my-list')">
                   <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
-                    PersonaliZe Service
+                    Personalize Service
                   </VBtn>
                 </Link>
               </div>

@@ -118,7 +118,7 @@ const getImageUrl = useGetImageUrl()
               <VChip color="warning">Pending</VChip>
             </div>
             <div v-else>
-              <VChip color="success">Accepted</VChip>
+              <VChip color="success">Negotiated</VChip>
             </div>
           </VTimelineItem>
         </VTimeline>
