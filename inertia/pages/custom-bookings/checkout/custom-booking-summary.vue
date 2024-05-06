@@ -119,10 +119,10 @@ onMounted(() => {
           <VWindowItem>
             <CustomBookingAddress
               v-if="requirement && acceptedBid"
+              v-model:step="currentStep"
               :service-requirement="requirement"
               :accepted-bid="acceptedBid"
               :qty="form.qty"
-              v-model:step="currentStep"
             />
           </VWindowItem>
 

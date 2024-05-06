@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IBid } from '#models/bid'
+import type { IBid } from '#models/bid'
 import type { IServiceRequirement } from '#models/service_requirement'
 import BigNumber from 'bignumber.js'
 import { ref } from 'vue'

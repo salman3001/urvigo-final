@@ -1,4 +1,3 @@
-/// <reference path="../../adonisrc.ts" />
 import { createInertiaApp } from '@inertiajs/vue3'
 import { renderToString } from '@vue/server-renderer'
 import { createPinia } from 'pinia'

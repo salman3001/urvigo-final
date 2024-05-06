@@ -191,7 +191,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('~/@core/components/A
     <IconBtn @click="Shepherd.activeTour?.cancel()">
       <VIcon icon="tabler-search" />
     </IconBtn>
-    <AppTextField placeholder="Search Services" @focus.prevent="" v-if="inputVisible" />
+    <AppTextField v-if="inputVisible" placeholder="Search Services" @focus.prevent="" />
 
     <span
       v-if="configStore.appContentLayoutNav === 'vertical'"

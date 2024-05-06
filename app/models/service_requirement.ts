@@ -19,6 +19,7 @@ import ServiceRequirementFilter from './filters/service_requirement_filter.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import TimeslotPlan from './timeslot_plan.js'
+import { CordType } from '#helpers/types'
 
 export default class ServiceRequirement extends compose(BaseModel, Filterable) {
   serializeExtras = true
@@ -52,7 +53,7 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
   declare deliveryType: DeliveryType
 
   @column()
-  declare geoLocation: string
+  declare geoLocation: string | CordType
 
   @column()
   declare address: string

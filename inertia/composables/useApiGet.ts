@@ -6,7 +6,7 @@ import type { IResType } from '#helpers/types'
 
 export default function useApiGet<T>() {
   const processing = ref(false)
-  let data = ref<T | null>(null)
+  const data = ref<T | null>(null)
 
   const error = ref<null | string | undefined>(null)
 

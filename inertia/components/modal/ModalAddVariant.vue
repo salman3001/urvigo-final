@@ -86,13 +86,13 @@ watch(
           <div class="d-flex">
             <AvatarInput
               name="image"
+              size="120"
+              :url="selectedVariant?.variantThumbnailUrl"
               @image="
                 (file: any) => {
                   image = file
                 }
               "
-              size="120"
-              :url="selectedVariant?.variantThumbnailUrl"
             />
           </div>
         </VCol>
@@ -101,8 +101,8 @@ watch(
         </VCol>
         <VCol cols="12" md="6">
           <AppTextField
-            type="number"
             v-model="form.price"
+            type="number"
             label="Price"
             :rules="[requiredValidator, (v: string) => minNumValidator(v, 1)]"
           />
@@ -129,20 +129,20 @@ watch(
         </VCol>
         <VCol cols="12" md="6">
           <AppTextField
-            type="number"
-            v-model="form.discountFlat"
-            label="Flat Discount"
             v-if="form.discountType === DiscountType.FLAT"
+            v-model="form.discountFlat"
+            type="number"
+            label="Flat Discount"
             :rules="[
               (v: string) => minNumValidator(v, 0),
               (value: string) => maxNumValidator(value, Number(form.price)),
             ]"
           />
           <AppTextField
-            type="number"
-            v-model="form.discountPercentage"
-            label="Percentage Discount"
             v-if="form.discountType === DiscountType.PERCENATAGE"
+            v-model="form.discountPercentage"
+            type="number"
+            label="Percentage Discount"
             :rules="[
               (v: string) => minNumValidator(v, 0),
               (value: string) => maxNumValidator(value, 99),
@@ -150,7 +150,7 @@ watch(
           />
         </VCol>
         <VCol cols="12">
-          <AppTextarea label="Short Description" v-model="form.desc" />
+          <AppTextarea v-model="form.desc" label="Short Description" />
         </VCol>
         <VCol cols="12" class="d-flex justify-end gap-2">
           <VBtn

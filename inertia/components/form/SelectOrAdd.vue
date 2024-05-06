@@ -23,7 +23,7 @@ const addToOption = () => {
 
 <template>
   <AppAutocomplete v-model="model" :items="itemOptions" @update:search="update">
-    <template v-slot:no-data>
+    <template #no-data>
       <v-btn @click="addToOption"> Add Item: {{ search }}</v-btn>
     </template>
   </AppAutocomplete>

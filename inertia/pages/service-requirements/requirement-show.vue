@@ -139,9 +139,9 @@ onMounted(() => {
             v-else
             :accepted="true"
             :bid="acceptedBid"
-            @create-chat="createChat"
             :any-bid-accepted="acceptedBid ? true : false"
             :requirement-id="requirement.id"
+            @create-chat="createChat"
             @bid-rejected="refreshData"
             @review="
               (v) => {
@@ -159,10 +159,10 @@ onMounted(() => {
               <h3 class="text-bold">Bids Recieved</h3>
             </div>
             <div class="d-flex items-center gap-2">
-              <VChip color="primary" v-if="bidQuery.orderby_avg_rating == '1'"
+              <VChip v-if="bidQuery.orderby_avg_rating == '1'" color="primary"
                 >Sorting by Top Rating</VChip
               >
-              <VChip color="primary" v-if="bidQuery.orderby_lowest_price == '1'"
+              <VChip v-if="bidQuery.orderby_lowest_price == '1'" color="primary"
                 >Sorting by Lowest Price</VChip
               >
 
@@ -180,17 +180,17 @@ onMounted(() => {
 
           <div>
             <div v-if="processingRecievedBids">
-              <VSkeletonLoader type="list-item-avatar-three-line" v-for="i in 3" :key="i" />
+              <VSkeletonLoader v-for="i in 3" :key="i" type="list-item-avatar-three-line" />
             </div>
             <div v-else-if="recivedBids?.data!?.length < 1">No Bids Recieved..</div>
             <VRow v-else class="row gap-100">
-              <VCol v-for="bid in recivedBids?.data" cols="12" sm="6" md="4" lg="3">
+              <VCol v-for="bid in recivedBids?.data" :key="bid.id" cols="12" sm="6" md="4" lg="3">
                 <ProposalCard
                   :accepted="false"
                   :bid="bid"
                   :any-bid-accepted="acceptedBid ? true : false"
                   @bid-accpted="refreshData"
-                  @create-chat=""
+                  @create-chat="() => {}"
                   @review="
                     (v) => {
                       selectedBid = v
@@ -220,6 +220,7 @@ onMounted(() => {
       v-model="bidDetailModal"
       :accepted-bid="acceptedBid!"
       :service-requirement="requirement"
+      :selected-bid="selectedBid!"
       @create-chat="createChat"
       @negotiated="
         () => {
@@ -229,7 +230,6 @@ onMounted(() => {
           })
         }
       "
-      :selected-bid="selectedBid!"
     />
   </VContainer>
 </template>

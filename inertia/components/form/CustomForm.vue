@@ -25,6 +25,6 @@ const submit = async () => {
 
 <template>
   <VForm ref="formRef" @submit.prevent="submit">
-    <slot :resetForm="resetForm" :resetValidations="resetValidations" />
+    <slot :reset-form="resetForm" :reset-validations="resetValidations" />
   </VForm>
 </template>

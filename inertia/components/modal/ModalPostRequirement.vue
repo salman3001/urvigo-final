@@ -76,18 +76,18 @@ const creatRequirement = async () => {
         </VCol>
         <VCol cols="12">
           <AppSelect
+            v-model="form.serviceCategoryId"
             label="Select Category"
             :rules="[requiredValidator]"
             :items="categories"
             item-title="name"
             item-value="id"
-            v-model="form.serviceCategoryId"
           />
         </VCol>
         <VCol cols="12">
           <SelectOrAdd
-            label="Select Kewwords"
             v-model="form.keywords"
+            label="Select Kewwords"
             :items="tags?.map((t) => t.name) || []"
             placeholder="Select Kewwords"
             chips
@@ -101,16 +101,16 @@ const creatRequirement = async () => {
         </VCol>
         <VCol cols="12">
           <AppTextField
-            type="number"
             v-model="form.budget"
+            type="number"
             label="Budget"
             :rules="[requiredValidator, (v: any) => minNumValidator(v, 1)]"
           />
         </VCol>
         <VCol cols="12">
           <SelectOrAdd
-            label="Budget Units"
             v-model="form.budgetUnit"
+            label="Budget Units"
             :items="['Hourly', 'Fixed', 'Per Unit', 'Monthly']"
             placeholder="Select a Budget Unit"
             :rules="[requiredValidator]"
@@ -133,7 +133,7 @@ const creatRequirement = async () => {
         <!-- 👉 Card actions -->
         <VCol cols="12" class="text-center">
           <VBtn class="me-4" type="submit" :disabled="form.processing">
-            <VProgressCircular indeterminate color="primary" v-if="form.processing" />
+            <VProgressCircular v-if="form.processing" indeterminate color="primary" />
             Submit
           </VBtn>
           <VBtn color="secondary" variant="tonal" @click="isVisible = false"> Cancel </VBtn>

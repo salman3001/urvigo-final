@@ -52,7 +52,7 @@ const submit = () => {
   <CustomForm @submit="submit">
     <VRow>
       <VCol cols="12" md="8">
-        <VAlert variant="tonal" color="error" v-if="outOfRadiusError">
+        <VAlert v-if="outOfRadiusError" variant="tonal" color="error">
           Oops! Vendor dont serve at this location! Please choose walkin in option if available
         </VAlert>
         <!-- 👉 Address options -->
@@ -67,9 +67,9 @@ const submit = () => {
         <!-- 👉 Delivery options custom input -->
         <SelectDeliveryType
           v-model="form.deliveryType"
-          :service="summary?.bookingDetail?.service_variant?.service"
           v-model:outOfRadiusError="outOfRadiusError"
-          :selectedAddressCords="selectedAddressCords"
+          :service="summary?.bookingDetail?.service_variant?.service"
+          :selected-address-cords="selectedAddressCords"
           required
         />
       </VCol>

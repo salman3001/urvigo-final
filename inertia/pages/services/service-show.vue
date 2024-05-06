@@ -86,7 +86,7 @@ export default {
 
                 <h5 class="text-h5 mb-4">Service Variants</h5>
                 <VRow>
-                  <VCol cols="12" xl="6" v-for="variant in service?.variants">
+                  <VCol v-for="variant in service?.variants" :key="variant.id" cols="12" xl="6">
                     <WebSelectVariant :variant="variant" />
                   </VCol>
                 </VRow>
@@ -177,7 +177,7 @@ export default {
       <VCol cols="12" md="3">
         <h6 class="text-h6">Similar Services</h6>
         <div class="course-content">
-          <ServiceCard2 class="ma-2" v-for="(s, i) in similarServices" :service="s" :key="i" />
+          <ServiceCard2 v-for="(s, i) in similarServices" :key="i" class="ma-2" :service="s" />
         </div>
       </VCol>
     </VRow>

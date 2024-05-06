@@ -59,7 +59,7 @@ watch(
   () => props.newMessage,
   () => {
     if (props.newMessage !== null) {
-      if (conversationsRef.value?.some((c) => c.id == props.newMessage?.conversationId)) {
+      if (conversationsRef.value?.some((c) => c.id === props.newMessage?.conversationId)) {
         const newData = findObjectAndMoveToIndex0(
           conversationsRef.value,
           props.newMessage,

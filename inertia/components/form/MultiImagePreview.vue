@@ -17,8 +17,8 @@ defineEmits<{
         <IconBtn
           color="error"
           content="9+"
-          @click="$emit('delete', i)"
           style="position: absolute; top: 1px; right: 1px"
+          @click="$emit('delete', i)"
         >
           <VIcon icon="tabler-x" />
         </IconBtn>

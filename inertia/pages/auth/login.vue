@@ -116,8 +116,8 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                   placeholder="············"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
                   :rules="[requiredValidator]"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
 
                 <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">

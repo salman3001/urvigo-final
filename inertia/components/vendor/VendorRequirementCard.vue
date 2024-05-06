@@ -110,8 +110,8 @@ const getImageUrls = useGetImageUrl()
           <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span>
         </VChip>
         <Link
-          :href="routes('vendor.requirements.show', [requirement.id])"
           v-if="currentUrl != routes('vendor.requirements.show', [requirement.id])"
+          :href="routes('vendor.requirements.show', [requirement.id])"
         >
           <VBtn color="primary"> View Detail </VBtn>
         </Link>

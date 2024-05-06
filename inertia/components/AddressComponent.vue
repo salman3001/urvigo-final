@@ -62,18 +62,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <VSkeletonLoader v-if="processing" v-for="i in 3" :key="i" type="list-item-two-line" />
+  <div v-if="processing">
+    <VSkeletonLoader v-for="i in 3" :key="i" type="list-item-two-line" />
+  </div>
   <div v-if="addresses && addresses?.length < 1">No Address! Please add an address</div>
   <CustomRadios
     v-model:selected-radio="selectedAddress"
+    :radio-content="radioContent"
+    :grid-column="{ cols: '12', sm: '6' }"
+    :rules="[required && requiredValidator]"
     @update:selected-radio="
       (v) => {
         $emit('selected-address', v)
       }
     "
-    :radio-content="radioContent"
-    :grid-column="{ cols: '12', sm: '6' }"
-    :rules="[required && requiredValidator]"
   >
     <template #default="{ item }">
       <div class="w-100">
@@ -98,7 +100,7 @@ onMounted(() => {
         </p>
         <p class="text-sm mb-3">Mobile: {{ item.subtitle }}</p>
         <VDivider v-if="editable" />
-        <div class="pt-2" v-if="editable">
+        <div v-if="editable" class="pt-2">
           <VBtn
             variant="text"
             href="#"
@@ -109,8 +111,9 @@ onMounted(() => {
                 editAddressModal = true
               }
             "
-            >Edit</VBtn
           >
+            Edit
+          </VBtn>
           <VBtn
             variant="text"
             href="#"
@@ -120,8 +123,9 @@ onMounted(() => {
                 deleteAddressModal = true
               }
             "
-            >Remove</VBtn
           >
+            Remove
+          </VBtn>
         </div>
       </div>
     </template>
@@ -152,13 +156,13 @@ onMounted(() => {
   />
   <ModalConfirm
     v-model:is-visible="deleteAddressModal"
+    title="Delete Address"
+    message="Are you sure to delete this address?"
     @confirmed="
       () => {
         deleteAddress()
         deleteAddressModal = false
       }
     "
-    title="Delete Address"
-    message="Are you sure to delete this address?"
   />
 </template>

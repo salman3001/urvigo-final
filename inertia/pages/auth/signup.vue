@@ -99,12 +99,12 @@ const form = useForm({
 
         <VCardText>
           <CustomForm
+            ref="formRef"
             @submit="
               () => {
                 form.post(routes('web.auth.signup.post'))
               }
             "
-            ref="formRef"
           >
             <ErrorAlert v-if="form.errors" :errors="form.errors" />
             <VRow>

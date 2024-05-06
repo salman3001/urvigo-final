@@ -4,7 +4,7 @@ export type ActiveChat = {
 } | null
 
 export const useChat = () => {
-  const resolveAvatarBadgeVariant = (status: any) => {
+  const resolveAvatarBadgeVariant = (status: string) => {
     if (status === 'online') return 'success'
     if (status === 'busy') return 'error'
     if (status === 'away') return 'warning'

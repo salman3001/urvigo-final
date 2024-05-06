@@ -57,12 +57,12 @@ const decrementQty = () => {
         <VCardItem>
           <VCardTitle>{{ variant?.name }} </VCardTitle>
           <VChip
-            color="error"
             v-if="discount.gt(0) && variant.discountType === DiscountType.PERCENATAGE"
+            color="error"
             >{{ new BigNumber(variant.discountPercentage).toFixed(0) }}% off</VChip
           >
 
-          <VChip color="error" v-if="discount.gt(0) && variant.discountType === DiscountType.FLAT"
+          <VChip v-if="discount.gt(0) && variant.discountType === DiscountType.FLAT" color="error"
             >&#x20B9;{{ variant.discountFlat }} off</VChip
           >
         </VCardItem>
@@ -76,7 +76,7 @@ const decrementQty = () => {
           <span class="font-weight-medium"
             >&#x20B9;{{ new BigNumber(variant?.price).minus(discount).toFixed(2) }}</span
           >&nbsp;
-          <span class="font-weight-medium text-decoration-line-through" v-if="discount.gt(0)"
+          <span v-if="discount.gt(0)" class="font-weight-medium text-decoration-line-through"
             >&#x20B9;{{ new BigNumber(variant?.price).toFixed(2) }}</span
           >
         </VCardText>

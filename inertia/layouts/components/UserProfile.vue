@@ -43,7 +43,7 @@ const { user, isVendor } = useAuth()
           <VDivider class="my-2" />
 
           <!-- 👉 dashboard -->
-          <Link :href="routes('vendor.dashboard')" v-if="isVendor()">
+          <Link v-if="isVendor()" :href="routes('vendor.dashboard')">
             <VListItem link>
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-brand-envato" size="22" />

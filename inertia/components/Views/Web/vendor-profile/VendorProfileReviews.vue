@@ -10,8 +10,8 @@ import ReviewsOverview from '~/components/ReviewsOverview.vue'
 
 defineProps<{
   vendorId: number
-  avg_rating: number
-  reviews_count: number
+  avgRating: number
+  reviewsCount: number
   reviews: IPaginatedModel<IReview>
 }>()
 
@@ -33,7 +33,7 @@ watchDebounced(
 </script>
 
 <template>
-  <ReviewsOverview :total-reviews="reviews_count" :rating="avg_rating" />
+  <ReviewsOverview :total-reviews="reviewsCount" :rating="avgRating" />
   <br />
   <div v-if="reviews">
     <VRow>

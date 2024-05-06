@@ -17,7 +17,7 @@ defineProps<{
 </script>
 
 <template>
-  <VendorProfileLayout :vendor="vendor" activeTab="profile">
+  <VendorProfileLayout :vendor="vendor" active-tab="profile">
     <VendorProfileAbout :vendor="vendor!" />
   </VendorProfileLayout>
 </template>

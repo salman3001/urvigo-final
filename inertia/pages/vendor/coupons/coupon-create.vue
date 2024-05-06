@@ -79,14 +79,14 @@ const minPurchaseValidator = (v: string) => {
         <VCol md="8">
           <!-- 👉 service Information -->
           <VCard class="mb-6" title="Coupon Information">
-            <ErrorAlert :errors="form.errors" v-if="form.errors" />
+            <ErrorAlert v-if="form.errors" :errors="form.errors" />
             <VCardText>
               <VRow>
                 <VCol cols="12">
                   <AppTextField
+                    v-model="form.name"
                     label="Name"
                     placeholder="Coupon Name"
-                    v-model="form.name"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -112,17 +112,17 @@ const minPurchaseValidator = (v: string) => {
                 </VCol>
                 <VCol cols="12" md="6">
                   <AppTextField
-                    type="number"
-                    v-model="form.discountFlat"
-                    label="Flat Discount"
                     v-if="form.discountType === 'flat'"
+                    v-model="form.discountFlat"
+                    type="number"
+                    label="Flat Discount"
                     :rules="[(v: string) => minNumValidator(v, 0)]"
                   />
                   <AppTextField
-                    type="number"
-                    v-model="form.discountPercentage"
-                    label="Percentage Discount"
                     v-if="form.discountType === 'percentage'"
+                    v-model="form.discountPercentage"
+                    type="number"
+                    label="Percentage Discount"
                     :rules="[
                       (v: string) => minNumValidator(v, 0),
                       (value: string) => maxNumValidator(value, 99),
@@ -131,16 +131,16 @@ const minPurchaseValidator = (v: string) => {
                 </VCol>
                 <VCol cols="12" md="6">
                   <AppTextField
-                    type="number"
                     v-model="form.maxUsers"
+                    type="number"
                     label="Max Users"
                     :rules="[(v: string) => minNumValidator(v, 0)]"
                   />
                 </VCol>
                 <VCol cols="12" md="6">
                   <AppTextField
-                    type="number"
                     v-model="form.minPurchaseAmount"
+                    type="number"
                     label="Minimum purchase amount"
                     :rules="[requiredValidator, minPurchaseValidator]"
                   />

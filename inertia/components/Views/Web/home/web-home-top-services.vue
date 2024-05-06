@@ -27,7 +27,7 @@ defineProps<{
     <br />
     <div v-if="topServices">
       <VRow class="">
-        <VCol v-for="s in topServices" cols="12" md="6" lg="3">
+        <VCol v-for="s in topServices" :key="s" cols="12" md="6" lg="3">
           <ServiceCard :service="s" />
         </VCol>
       </VRow>

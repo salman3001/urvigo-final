@@ -77,8 +77,8 @@ export default {
 
                 <h5 class="text-h5 mb-4">Service Variants</h5>
                 <VRow>
-                  <VCol cols="12" xl="6" v-for="variant in service?.variants">
-                    <WebSelectVariant :variant="variant" :diableBookButton="true" />
+                  <VCol v-for="variant in service?.variants" :key="variant.id" cols="12" xl="6">
+                    <WebSelectVariant :variant="variant" :diable-book-button="true" />
                   </VCol>
                 </VRow>
                 <VDivider class="my-6" />

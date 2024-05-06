@@ -74,12 +74,12 @@ const submit = () => {
                 }
               "
             />
-            <AppTextField label="Address line 1" v-model="addAddressForm.mapAddress" disabled />
-            <AppTextField label="Address line 2 (optional)" v-model="addAddressForm.address" />
+            <AppTextField v-model="addAddressForm.mapAddress" label="Address line 1" disabled />
+            <AppTextField v-model="addAddressForm.address" label="Address line 2 (optional)" />
             <AppTextField
+              v-model="addAddressForm.mobile"
               type="number"
               label="Mobile"
-              v-model="addAddressForm.mobile"
               :rules="[requiredValidator, (v: string) => minLengthValidator(v, 8)]"
             />
             <VBtn type="submit" class="mt-2">Add Address</VBtn>

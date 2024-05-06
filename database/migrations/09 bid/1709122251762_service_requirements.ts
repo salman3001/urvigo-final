@@ -18,7 +18,7 @@ export default class extends BaseSchema {
         .notNullable()
         .defaultTo(DeliveryType.WALK_IN)
       table.point('geo_location')
-      table.point('address')
+      table.string('address')
       table
         .integer('user_id')
         .unsigned()

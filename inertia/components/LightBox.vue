@@ -11,7 +11,7 @@ const {
   // methods
   show,
   onHide,
-  changeIndex,
+  // changeIndex,
   // refs
   visibleRef,
   indexRef,
@@ -29,9 +29,10 @@ const {
     <vue-easy-lightbox :visible="visibleRef" :imgs="imgsRef" :index="indexRef" @hide="onHide" />
     <div class="d-flex flex-wrap cursor-pointer gap-4">
       <VImg
+        v-for="(img, i) in images"
+        :key="i"
         class="border"
         fit="contain"
-        v-for="(img, i) in images"
         :src="img"
         :height="imgMaxHeight || '140px'"
         :style="{ maxWidth: imgMaxWidth || ' 150px' }"

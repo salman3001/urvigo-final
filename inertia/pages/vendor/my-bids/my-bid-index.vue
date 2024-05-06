@@ -213,8 +213,8 @@ watch(query, () => {
         "
       >
         <AppTextField
-          type="number"
           v-model="acceptNegotiaionForm.newPrice"
+          type="number"
           label="New Price"
           :rules="[requiredValidator]"
         />
@@ -223,7 +223,7 @@ watch(query, () => {
           <VBtn v-if="acceptNegotiaionForm.processing" disabled>
             <VProgressCircular /> Processing
           </VBtn>
-          <VBtn type="submit" :disabled="acceptNegotiaionForm.processing" v-else>Update</VBtn>
+          <VBtn v-else type="submit" :disabled="acceptNegotiaionForm.processing">Update</VBtn>
         </div>
       </CustomForm>
     </VCardItem>

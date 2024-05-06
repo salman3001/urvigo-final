@@ -4,7 +4,7 @@ import { watch } from 'vue'
 import * as vt from 'vue-toastification'
 
 export default function useInjectToast() {
-  const page = usePage<IPageProps<{}>>()
+  const page = usePage<IPageProps<object>>()
 
   watch(
     () => page.props.flash,

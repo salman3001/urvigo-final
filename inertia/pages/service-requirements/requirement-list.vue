@@ -24,7 +24,7 @@ const filterModal = ref(false)
 const filter = ref<null | string>(null)
 const postModal = ref(false)
 
-const props = defineProps<{
+const pageProps = defineProps<{
   requirements: IPaginatedModel<IServiceRequirement>
   categories: IServiceCategory[]
   tags: IServiceTag[]
@@ -39,16 +39,16 @@ const props = defineProps<{
 }>()
 
 const query = reactive({
-  active: props?.query?.active,
-  completed: props?.query?.completed,
-  expiresAtLt: props?.query?.expiresAtLt,
-  page: props?.query?.page || 1,
-  perPage: props?.query?.perPage || 20,
-  orderBy: props?.query?.orderBy || 'created_at:desc',
+  active: pageProps?.query?.active,
+  completed: pageProps?.query?.completed,
+  expiresAtLt: pageProps?.query?.expiresAtLt,
+  page: pageProps?.query?.page || 1,
+  perPage: pageProps?.query?.perPage || 20,
+  orderBy: pageProps?.query?.orderBy || 'created_at:desc',
 })
 
 watch(filter, (newFilterValue) => {
-  if (newFilterValue == 'active') {
+  if (newFilterValue === 'active') {
     const newQuery = {
       active: 1,
       completed: null,
@@ -61,7 +61,7 @@ watch(filter, (newFilterValue) => {
     Object.assign(query, newQuery)
   }
 
-  if (newFilterValue == 'completed') {
+  if (newFilterValue === 'completed') {
     const newQuery = {
       active: null,
       completed: 1,
@@ -74,7 +74,7 @@ watch(filter, (newFilterValue) => {
     Object.assign(query, newQuery)
   }
 
-  if (newFilterValue == 'expired') {
+  if (newFilterValue === 'expired') {
     const newQuery = {
       active: null,
       completed: null,
@@ -87,7 +87,7 @@ watch(filter, (newFilterValue) => {
     Object.assign(query, newQuery)
   }
 
-  if (newFilterValue == '') {
+  if (newFilterValue === '') {
     const newQuery = {
       active: null,
       completed: null,
@@ -122,7 +122,7 @@ watch(query, () => {
         <br />
         <br />
         <div class="d-flex flex-wrap justify-end gap-2">
-          <div class="normalcase" v-if="filter">
+          <div v-if="filter" class="normalcase">
             <VChip color="info">
               <VICon icon="tabler-filter" />
               filtering by {{ filter }}
@@ -149,11 +149,11 @@ watch(query, () => {
       <div class="">
         <div style="max-width: 95vw">
           <div class="q-gutter-y-md">
-            <div v-if="!requirements" v-for="n in 5">
-              <VSkeletonLoader type="list-item-three-line" />
+            <div v-if="!requirements">
+              <VSkeletonLoader v-for="n in 5" :key="n" type="list-item-three-line" />
             </div>
             <VRow v-else>
-              <VCol v-for="requirement in requirements?.data" cols="12">
+              <VCol v-for="requirement in requirements?.data" :key="requirement.id" cols="12">
                 <RequirementCard :requirement="requirement" />
               </VCol>
             </VRow>
@@ -173,9 +173,9 @@ watch(query, () => {
       </div>
     </div>
     <ModalPostRequirement
+      v-model:is-visible="postModal"
       :categories="categories"
       :tags="tags"
-      v-model:is-visible="postModal"
       @submit="
         async () => {
           router.reload({

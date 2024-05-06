@@ -20,7 +20,7 @@ defineProps<{
 </script>
 
 <template>
-  <VendorProfileLayout :vendor="vendor" :activeTab="'reviews'">
+  <VendorProfileLayout :vendor="vendor" :active-tab="'reviews'">
     <VendorProfileReviews
       :reviews="reviews"
       :avg_rating="(vendor?.businessProfile?.avgRating as unknown as number) || 0"

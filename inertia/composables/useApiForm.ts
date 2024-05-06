@@ -4,7 +4,7 @@ import api from '~/utils/axios'
 import type { IResType } from '#helpers/types'
 import { pickKeysFromReference } from '~/utils/helpers'
 
-export default function useApiForm<T extends Object>(initialForm: T) {
+export default function useApiForm<T extends object>(initialForm: T) {
   const formObject = reactive({
     ...initialForm,
     processing: false,
@@ -29,7 +29,7 @@ export default function useApiForm<T extends Object>(initialForm: T) {
         const errors = (error as AxiosError<IResType<any>>).response?.data?.errors
 
         if (errors && errors.length > 0) {
-          let errorObj: Record<any, any> = {}
+          const errorObj: Record<any, any> = {}
           errors.forEach((e) => {
             errorObj[e.field] = e.message
           })
@@ -60,7 +60,7 @@ export default function useApiForm<T extends Object>(initialForm: T) {
       } catch (error: unknown) {
         const errors = (error as AxiosError<IResType<any>>).response?.data?.errors
         if (errors && errors.length > 1) {
-          let errorObj: Record<any, any> = {}
+          const errorObj: Record<any, any> = {}
           errors.forEach((e) => {
             errorObj[e.field] = e.message
           })
@@ -87,7 +87,7 @@ export default function useApiForm<T extends Object>(initialForm: T) {
       } catch (error: unknown) {
         const errors = (error as AxiosError<IResType<any>>).response?.data?.errors
         if (errors && errors.length > 1) {
-          let errorObj: Record<any, any> = {}
+          const errorObj: Record<any, any> = {}
           errors.forEach((e) => {
             errorObj[e.field] = e.message
           })

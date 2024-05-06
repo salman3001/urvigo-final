@@ -56,8 +56,8 @@ const updatePassword = async (reset: () => void, resetValidation: () => void) =>
                   label="Current Password"
                   autocomplete="on"
                   placeholder="············"
-                  @click:append-inner="isCurrentPasswordVisible = !isCurrentPasswordVisible"
                   :rules="[requiredValidator]"
+                  @click:append-inner="isCurrentPasswordVisible = !isCurrentPasswordVisible"
                 />
               </VCol>
             </VRow>
@@ -73,8 +73,8 @@ const updatePassword = async (reset: () => void, resetValidation: () => void) =>
                   label="New Password"
                   autocomplete="on"
                   placeholder="············"
-                  @click:append-inner="isNewPasswordVisible = !isNewPasswordVisible"
                   :rules="[requiredValidator, passwordValidator]"
+                  @click:append-inner="isNewPasswordVisible = !isNewPasswordVisible"
                 />
               </VCol>
 
@@ -87,8 +87,8 @@ const updatePassword = async (reset: () => void, resetValidation: () => void) =>
                   label="Confirm New Password"
                   autocomplete="on"
                   placeholder="············"
-                  @click:append-inner="isConfirmPasswordVisible = !isConfirmPasswordVisible"
                   :rules="[requiredValidator, (v: string) => confirmedValidator(v, form.password)]"
+                  @click:append-inner="isConfirmPasswordVisible = !isConfirmPasswordVisible"
                 />
               </VCol>
             </VRow>

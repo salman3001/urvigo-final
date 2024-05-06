@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { userTypes } from '../../app/helpers/enums'
 
 export default function useAuth() {
-  const page = usePage<IPageProps<{}>>()
+  const page = usePage<IPageProps<object>>()
   const user = computed(() => page?.props?.user)
 
   const isUser = () => {

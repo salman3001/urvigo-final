@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useFocus } from '@vueuse/core'
-import { PropType, computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
+import { type PropType, computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
+// @ts-ignore
 import FlatPickr from '../../../../node_modules/vue-flatpickr-component/dist/esm/component'
 import { useTheme } from 'vuetify'
 
@@ -133,7 +134,7 @@ watch(
 
 const elementId = computed(() => {
   // @ts-expect-error id or label will be there
-  const _elementIdToken = fieldProps.id || fieldProps.label
+  const _elementIdToken = fieldProps.value.id || fieldProps.value.label
 
   return _elementIdToken
     ? `app-picker-field-${_elementIdToken}-${Math.random().toString(36).slice(2, 7)}`

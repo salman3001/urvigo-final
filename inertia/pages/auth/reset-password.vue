@@ -96,8 +96,8 @@ const form = useForm({
                   placeholder="············"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
                   :rules="[requiredValidator, passwordValidator]"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
               </VCol>
 
@@ -109,8 +109,8 @@ const form = useForm({
                   placeholder="············"
                   :type="isConfirmPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isConfirmPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isConfirmPasswordVisible = !isConfirmPasswordVisible"
                   :rules="[(v: string) => confirmedValidator(v, form.password)]"
+                  @click:append-inner="isConfirmPasswordVisible = !isConfirmPasswordVisible"
                 />
               </VCol>
 

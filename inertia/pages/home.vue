@@ -31,7 +31,7 @@ export default {
 
     <!-- top services -->
     <div :style="{ 'background-color': 'rgb(var(--v-theme-surface))' }">
-      <WebHomeTopServices :topServices="topServices?.data" />
+      <WebHomeTopServices :top-services="topServices?.data" />
     </div>
 
     <!-- 👉 Startup as Vendor  -->

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
-import { Socket } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
 import type { IMessage } from '#models/message'
 import type { IConversation } from '#models/conversation'
 import { usePage } from '@inertiajs/vue3'
@@ -26,7 +26,7 @@ const user = computed(() => page.props?.user)
 // const { fetcher } = useFetchRef()
 const getImageUrl = useGetImageUrl()
 
-const { data, processing, exec: getMessages } = useApiGet<IPaginatedModel<IMessage>>()
+const { data, exec: getMessages } = useApiGet<IPaginatedModel<IMessage>>()
 
 const {
   data: newData,
@@ -59,7 +59,7 @@ watch(
   () => {
     if (
       props.newMessage !== null &&
-      props.newMessage.conversationId == props.selectedConversation.id
+      props.newMessage.conversationId === props.selectedConversation.id
     ) {
       dataRef.value?.data.unshift(props.newMessage)
       if (dataRef.value?.data.length! > 19) {
@@ -95,7 +95,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="chat-log pa-6" v-for="m in dataRef?.data" :key="m.id">
+  <div v-for="m in dataRef?.data" :key="m.id" class="chat-log pa-6">
     <div
       class="chat-group d-flex align-start"
       :class="[
@@ -131,14 +131,16 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-  <div v-if="loadingMore" class="chat-log pa-6" v-for="m in 5" :key="m">
-    <div class="chat-group d-flex align-start flex-row-reverse">
-      <VSkeletonLoader type="list-item" class="w-50" />
+  <template v-if="loadingMore">
+    <div v-for="m in 5" :key="m" class="chat-log pa-6">
+      <div class="chat-group d-flex align-start flex-row-reverse">
+        <VSkeletonLoader type="list-item" class="w-50" />
+      </div>
+      <div class="chat-group d-flex align-start">
+        <VSkeletonLoader type="list-item" class="w-50" />
+      </div>
     </div>
-    <div class="chat-group d-flex align-start">
-      <VSkeletonLoader type="list-item" class="w-50" />
-    </div>
-  </div>
+  </template>
   <div v-else-if="dataRef?.data?.length! > 1" class="d-flex justify-center w-100">
     <VBtn
       v-if="dataRef?.meta?.nextPageUrl"

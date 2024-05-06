@@ -44,8 +44,8 @@ const submit = async () => {
     <CustomForm @submit="submit">
       <VCardItem>
         <AppTextField
-          type="number"
           v-model="negotiateForm.price"
+          type="number"
           label="Request a price"
           :rules="[requiredValidator]"
         />

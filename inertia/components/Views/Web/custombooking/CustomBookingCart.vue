@@ -46,7 +46,7 @@ const decrementQty = () => {
       <h5 class="text-h5 my-4">My Shopping Bag 1 Items</h5>
 
       <!-- 👉 Cart items -->
-      <div class="border rounded" v-if="serviceRequirement">
+      <div v-if="serviceRequirement" class="border rounded">
         <div
           class="d-flex align-center gap-4 pa-6 position-relative flex-column flex-sm-row flex-grow-1"
         >
@@ -123,7 +123,7 @@ const decrementQty = () => {
         <VCardText>
           <h6 class="text-h6 mb-4">Price Details</h6>
 
-          <div class="text-high-emphasis" v-if="acceptedBid">
+          <div v-if="acceptedBid" class="text-high-emphasis">
             <div class="d-flex justify-space-between mb-2">
               <span>Bag Total</span>
               <span class="text-medium-emphasis"

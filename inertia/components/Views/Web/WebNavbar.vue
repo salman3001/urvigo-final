@@ -21,7 +21,7 @@ const page = usePage<IPageProps<{}>>()
 const user = computed(() => page.props.user)
 const meta = computed(() => page.props.meta)
 
-interface navItem {
+interface NavItem {
   name: string
   to: any
 }
@@ -29,7 +29,7 @@ interface navItem {
 interface MenuItem {
   listTitle: string
   listIcon: string
-  navItems: navItem[]
+  NavItems: NavItem[]
 }
 
 const navMenuItems = [
@@ -57,7 +57,7 @@ const menuItems: MenuItem[] = [
   {
     listTitle: 'Service Requirement',
     listIcon: 'tabler-layout-grid',
-    navItems: [
+    NavItems: [
       { name: 'My Requirement', to: routes('web.service_requirement.my-list') },
       {
         name: 'Post Requirement',
@@ -71,7 +71,7 @@ const menuItems: MenuItem[] = [
   {
     listTitle: 'Bookings',
     listIcon: 'tabler-lock-open',
-    navItems: [
+    NavItems: [
       { name: 'My Bookings', to: routes('web.booking.list') },
       { name: 'My Custom Bookings', to: routes('web.custom_booking.list') },
       // { name: 'Login (Cover)', to: { name: 'pages-authentication-login-v2' } },
@@ -87,7 +87,7 @@ const menuItems: MenuItem[] = [
   {
     listTitle: 'Other',
     listIcon: 'tabler-photo',
-    navItems: [
+    NavItems: [
       { name: 'Pricing', to: '' },
       { name: 'Help Center', to: '' },
       { name: 'FAQ', to: '' },
@@ -113,7 +113,7 @@ const isCurrentRoute = (to: any) => {
 }
 
 const isPageActive = computed(() =>
-  menuItems.some((item) => item.navItems.some((listItem) => isCurrentRoute(listItem.to)))
+  menuItems.some((item) => item.NavItems.some((listItem) => isCurrentRoute(listItem.to)))
 )
 </script>
 
@@ -154,7 +154,7 @@ const isPageActive = computed(() =>
               </div>
               <ul class="mb-6">
                 <li
-                  v-for="listItem in item.navItems"
+                  v-for="listItem in item.NavItems"
                   :key="listItem.name"
                   style="list-style: none"
                   class="text-body-1 mb-4 text-no-wrap"
@@ -268,7 +268,7 @@ const isPageActive = computed(() =>
                         </div>
                         <ul>
                           <li
-                            v-for="listItem in item.navItems"
+                            v-for="listItem in item.NavItems"
                             :key="listItem.name"
                             style="list-style: none"
                             class="text-body-1 mb-4 text-no-wrap"

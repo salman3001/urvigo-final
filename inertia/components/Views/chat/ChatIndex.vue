@@ -8,9 +8,9 @@ import ChatLog from './ChatLog.vue'
 import ChatUserProfileSidebarContent from './ChatUserProfileSidebarContent.vue'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import { useResponsiveLeftSidebar } from '~/@core/composable/useResponsiveSidebar'
-import { Ref, computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { type Ref, computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import { IPageProps, IPaginatedModel } from '#helpers/types'
+import type { IPageProps, IPaginatedModel } from '#helpers/types'
 import { useForm, usePage } from '@inertiajs/vue3'
 import useSocket from '~/composables/useSocket'
 import { VNavigationDrawer } from 'vuetify/components'
@@ -91,9 +91,9 @@ const openChatOfConversation = async (conversation: IConversation) => {
 }
 
 const selectedParticipant = computed(() => {
-  if (selectedConversation.value?.participantOneId != user.value?.id) {
+  if (selectedConversation.value?.participantOneId !== user.value?.id) {
     return selectedConversation.value?.participantOne
-  } else if (selectedConversation.value?.participantTwoId != user.value?.id) {
+  } else if (selectedConversation.value?.participantTwoId !== user.value?.id) {
     return selectedConversation.value?.participantTwo
   } else {
     return selectedConversation.value?.participantOne
@@ -128,8 +128,8 @@ onUnmounted(() => {
       width="370"
     >
       <ChatUserProfileSidebarContent
-        :selectedConversation="selectedConversation"
-        :selectedParticipant="selectedParticipant"
+        :selected-conversation="selectedConversation"
+        :selected-participant="selectedParticipant"
         @close="isUserProfileSidebarOpen = false"
       />
     </VNavigationDrawer>
@@ -162,9 +162,9 @@ onUnmounted(() => {
       :permanent="$vuetify.display.mdAndUp"
     >
       <ChatLeftSidebarContent
-        :selectedConversation="selectedConversation!"
-        :new-message="newMessage"
         v-model:isDrawerOpen="isLeftSidebarOpen"
+        :selected-conversation="selectedConversation!"
+        :new-message="newMessage"
         :chat-list="chatList.data"
         @open-chat-of-conversation="openChatOfConversation"
         @show-user-profile="isUserProfileSidebarOpen = true"
@@ -178,8 +178,8 @@ onUnmounted(() => {
       <div v-if="selectedConversation" class="d-flex flex-column">
         <!-- 👉 Active chat header -->
         <div
-          class="active-chat-header d-flex align-center text-medium-emphasis bg-surface"
           v-if="selectedParticipant"
+          class="active-chat-header d-flex align-center text-medium-emphasis bg-surface"
         >
           <!-- Sidebar toggler -->
           <IconBtn class="d-md-none me-3" @click="isLeftSidebarOpen = true">
@@ -247,10 +247,10 @@ onUnmounted(() => {
         >
           <ChatLog
             v-if="selectedConversation && selectedParticipant"
-            :selectedConversation="selectedConversation!"
+            :selected-conversation="selectedConversation!"
             :socket="socket"
-            :newMessage="newMessage"
-            :selectedParticipant="selectedParticipant"
+            :new-message="newMessage"
+            :selected-participant="selectedParticipant"
           />
         </PerfectScrollbar>
 
@@ -273,7 +273,7 @@ onUnmounted(() => {
                 <IconBtn @click="refInputEl?.click()">
                   <VIcon icon="tabler-paperclip" size="22" />
                 </IconBtn>
-                <VBtn @click="createMessage" :disabled="messageForm.processing">
+                <VBtn :disabled="messageForm.processing" @click="createMessage">
                   <template #append>
                     <VIcon icon="tabler-send" color="#fff" />
                   </template>

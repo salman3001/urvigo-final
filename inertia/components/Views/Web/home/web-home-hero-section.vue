@@ -42,7 +42,7 @@ const theme = useTheme()
               </div>
             </div>
             <div class="mt-sm-16 pt-8">
-              <NavSearchBar :inputVisible="true" />
+              <NavSearchBar :input-visible="true" />
             </div>
           </div>
         </VContainer>

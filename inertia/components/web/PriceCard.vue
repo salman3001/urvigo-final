@@ -40,7 +40,7 @@ watch(
   <div>
     <div v-if="selectedVariant" class="column q-col-gutter-lg">
       <div class="q-mt-xs q-gutter-x-lg row items-center">
-        <div class="line-through text-subtitle2" v-if="discount.gt(0)">
+        <div v-if="discount.gt(0)" class="line-through text-subtitle2">
           &#x20B9;{{ new BigNumber(selectedVariant?.price).times(qty).toFixed(2) }}
         </div>
         <div class="text-bold text-h5">

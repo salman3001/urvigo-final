@@ -94,12 +94,12 @@ watch(
                 }
               "
             />
-            <AppTextField label="Address line 1" v-model="editAddressForm.mapAddress" disabled />
-            <AppTextField label="Address line 2 (optional)" v-model="editAddressForm.address" />
+            <AppTextField v-model="editAddressForm.mapAddress" label="Address line 1" disabled />
+            <AppTextField v-model="editAddressForm.address" label="Address line 2 (optional)" />
             <AppTextField
+              v-model="editAddressForm.mobile"
               type="number"
               label="Mobile"
-              v-model="editAddressForm.mobile"
               :rules="[requiredValidator, (v: string) => minLengthValidator(v, 8)]"
             />
             <VBtn type="submit" class="mt-2">Update Address</VBtn>

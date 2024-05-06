@@ -11,10 +11,10 @@ defineProps<{
   <h2>My Wishist</h2>
   <br />
   <VRow>
-    <VCol v-if="!wishlist" v-for="s in 10" cols="12" md="6" lg="3">
-      <VSkeletonLoader type="card" />
+    <VCol v-if="!wishlist" cols="12" md="6" lg="3">
+      <VSkeletonLoader v-for="s in 10" :key="s" type="card" />
     </VCol>
-    <VCol v-else v-for="s in wishlist?.items" cols="12" md="6" lg="3">
+    <VCol v-for="s in wishlist?.items" v-else :key="s" cols="12" md="6" lg="3">
       <ServiceCard :service="s" />
     </VCol>
   </VRow>

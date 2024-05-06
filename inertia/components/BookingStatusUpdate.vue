@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { OrderStatus } from '#helpers/enums'
-import { IBooking } from '#models/booking'
+import type { IBooking } from '#models/booking'
 import { ref } from 'vue'
 import ModalUpdateBookingStatus from './modal/ModalUpdateBookingStatus.vue'
-import { IBidBooking } from '#models/bid_booking'
+import type { IBidBooking } from '#models/bid_booking'
 
 defineProps<{
   booking: IBooking | IBidBooking

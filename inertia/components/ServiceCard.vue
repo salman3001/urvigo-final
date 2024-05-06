@@ -9,7 +9,7 @@ import routes from '~/utils/routes'
 import { Link, useForm } from '@inertiajs/vue3'
 import { VBtn, VCard, VChip } from 'vuetify/components'
 
-const props = defineProps<{
+const pageProps = defineProps<{
   service: IService
 }>()
 
@@ -17,7 +17,7 @@ const getImageUrl = useGetImageUrl()
 const wishlist = wishlistStore()
 const color = ref('secondary')
 
-const minPriceVariant = props.service.variants.reduce((prev, current) =>
+const minPriceVariant = pageProps.service.variants.reduce((prev, current) =>
   prev.price < current.price ? prev : current
 )
 
@@ -75,8 +75,8 @@ const removeItem = (serviceId: number | string) => {
     <VCard density="compact" class="ma-0">
       <VImg :src="getImageUrl(service?.thumbnail?.thumbnailUrl)" cover />
       <VCardItem>
-        <VChip variant="tonal" color="info" size="small"
-          >{{ service?.serviceCategory?.name }}
+        <VChip variant="tonal" color="info" size="small">
+          {{ service?.serviceCategory?.name }}
         </VChip>
         <VCardTitle>{{ service.name }}</VCardTitle>
       </VCardItem>
@@ -88,13 +88,13 @@ const removeItem = (serviceId: number | string) => {
         <span>
           <span>
             <VChip
-              color="error"
               v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.FLAT"
+              color="error"
               >&#x20B9;{{ minPriceVariant.discountFlat }} off</VChip
             >
             <VChip
-              color="error"
               v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.PERCENATAGE"
+              color="error"
               >{{ minPriceVariant.discountPercentage }}% off</VChip
             >
           </span>
@@ -123,8 +123,8 @@ const removeItem = (serviceId: number | string) => {
         <IconBtn color="secondary" icon="tabler-share" />
       </VCardActions>
       <div class="fav-icon">
-        <VTooltip text="Remove FromWishlist" v-if="isWishlisted">
-          <template v-slot:activator="{ props }">
+        <VTooltip v-if="isWishlisted" text="Remove FromWishlist">
+          <template #activator="{ props }">
             <VBtn
               icon
               color="pink"
@@ -143,15 +143,15 @@ const removeItem = (serviceId: number | string) => {
           </template>
         </VTooltip>
         <VTooltip v-else text="Add to Wishlist">
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <VBtn
               icon
               :color="color"
               v-bind="props"
-              @mouseenter="color = 'pink'"
-              @mouseleave="color = 'secondary'"
               class="cursor-pointer"
               size="large"
+              @mouseenter="color = 'pink'"
+              @mouseleave="color = 'secondary'"
               @click="
                 (e: Event) => {
                   e.preventDefault()

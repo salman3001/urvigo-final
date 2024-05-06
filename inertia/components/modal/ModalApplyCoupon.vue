@@ -22,7 +22,7 @@ const emit = defineEmits<{
   >
     <VCardItem>
       <VRow>
-        <VCol cols="2" sm="6" v-for="(c, i) in couponList" :key="i">
+        <VCol v-for="(c, i) in couponList" :key="i" cols="2" sm="6">
           <CouponCard :coupon="c" @click="$emit('apply', c.id)" />
         </VCol>
       </VRow>

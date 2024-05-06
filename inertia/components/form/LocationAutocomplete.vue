@@ -18,7 +18,7 @@ const emits = defineEmits<{
   ): void
 }>()
 
-interface resultType {
+interface ResultType {
   type: string
   features: [
     {
@@ -47,13 +47,13 @@ interface resultType {
   ]
 }
 
-const items = ref<resultType['features'] | []>([])
+const items = ref<ResultType['features'] | []>([])
 
 const querySelections = (query: string) => {
   loading.value = true
 
   axios
-    .get<resultType>('https://photon.komoot.io/api', {
+    .get<ResultType>('https://photon.komoot.io/api', {
       params: {
         q: query,
       },
@@ -95,13 +95,13 @@ watchDebounced(
   }
 )
 
-const resolveCordinates = (item: resultType['features'][0]) =>
+const resolveCordinates = (item: ResultType['features'][0]) =>
   `${item?.geometry?.coordinates[0]},${item?.geometry?.coordinates[1]}`
-const resolveTitle = (item: resultType['features'][0]) => item?.properties?.name
-const resolveSubtitle = (item: resultType['features'][0]) =>
+const resolveTitle = (item: ResultType['features'][0]) => item?.properties?.name
+const resolveSubtitle = (item: ResultType['features'][0]) =>
   `${item?.properties?.housenumber || ''} ${item?.properties?.street || ''} ${item?.properties?.city || ''} ${item?.properties?.district || ''} ${item?.properties?.county || ''} ${item?.properties?.country || ''}`
 
-const onUpdate = (v: resultType['features'][0]) => {
+const onUpdate = (v: ResultType['features'][0]) => {
   emits('selection', {
     coordinates: resolveCordinates(v),
     mapAddress: resolveSubtitle(v),
@@ -118,9 +118,9 @@ const onUpdate = (v: resultType['features'][0]) => {
     placeholder="Search for a location"
     label="Search Location"
     :menu-props="{ maxHeight: '200px' }"
-    @update:model-value="onUpdate"
     no-filter
     variant="plain"
+    @update:model-value="onUpdate"
   >
     <template #selection="{ item }">
       {{ item?.props?.title?.properties?.name }}

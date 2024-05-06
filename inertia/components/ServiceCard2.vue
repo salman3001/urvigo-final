@@ -52,13 +52,13 @@ if (minPriceVariant.discountType === DiscountType.FLAT) {
           </p>
           <span>
             <VChip
-              color="error"
               v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.FLAT"
+              color="error"
               >&#x20B9;{{ minPriceVariant.discountFlat }} off</VChip
             >
             <VChip
-              color="error"
               v-if="discount.gt(0) && minPriceVariant.discountType === DiscountType.PERCENATAGE"
+              color="error"
               >{{ minPriceVariant.discountPercentage }}% off</VChip
             >
           </span>

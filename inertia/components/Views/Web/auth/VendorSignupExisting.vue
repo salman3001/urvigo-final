@@ -23,12 +23,12 @@ const form = useForm({
 
 <template>
   <CustomForm
+    ref="formRef"
     @submit="
       () => {
         form.post(routes('web.auth.vendor.signup.existing.post'))
       }
     "
-    ref="formRef"
   >
     <ErrorAlert v-if="form.errors" :errors="form.errors" />
     <VRow>

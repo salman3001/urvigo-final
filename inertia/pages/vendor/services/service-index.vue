@@ -183,11 +183,11 @@ const updateStatusForm = useForm({
           <template #item.tags="{ item }">
             <VChip
               v-for="tag in item?.tags"
+              :key="tag.id"
               label
               size="small"
               :text="tag.name"
               color="info"
-              :key="tag.id"
             />
           </template>
 

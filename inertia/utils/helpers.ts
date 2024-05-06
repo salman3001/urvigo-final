@@ -7,14 +7,16 @@ export function findObjectAndMoveToIndex0(
   arrayObjectKeyToMatch: string,
   objectKeyToMatch: string
 ) {
-  let newArray = array.slice()
+  const newArray = array.slice()
   // Check if the object exists in the array
-  let index = newArray.findIndex((item) => item[arrayObjectKeyToMatch] === object[objectKeyToMatch])
+  const index = newArray.findIndex(
+    (item) => item[arrayObjectKeyToMatch] === object[objectKeyToMatch]
+  )
 
   // If object found, move it to index 0
   if (index !== -1) {
     // Remove the object from its current position
-    let removedItem = newArray.splice(index, 1)[0]
+    const removedItem = newArray.splice(index, 1)[0]
     // Add the removed item at index 0
     newArray.unshift(removedItem)
   }
@@ -37,7 +39,7 @@ export function pickKeysFromReference(source: Record<any, any>, reference: Recor
   return result
 }
 
-export const isEmptyObject = (obj: Object) => {
+export const isEmptyObject = (obj: object) => {
   return Object.keys(obj).length === 0
 }
 

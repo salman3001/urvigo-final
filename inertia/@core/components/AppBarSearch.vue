@@ -2,7 +2,7 @@
 import { useMagicKeys } from '@vueuse/core'
 import { ref, watch } from 'vue'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { VList, VListItem } from 'vuetify/components/VList'
+import { type VList, VListItem } from 'vuetify/components/VList'
 
 interface Emit {
   (e: 'update:isDialogVisible', value: boolean): void

@@ -55,7 +55,7 @@ const formSubmit = async () => {
     title="Add Review"
     subtitle="Share your thoughts about this service"
   >
-    <CustomForm fast-fail @submit="() => formSubmit()" ref="formRef">
+    <CustomForm ref="formRef" fast-fail @submit="() => formSubmit()">
       <ErrorAlert v-if="serviceReviewForm.errors" :errors="serviceReviewForm.errors" />
       <ErrorAlert v-if="vendorReviewForm.errors" :errors="vendorReviewForm.errors" />
       <br />

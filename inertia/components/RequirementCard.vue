@@ -52,15 +52,15 @@ const getImageUrls = useGetImageUrl()
               </div>
               <div class="d-flex gap-2">
                 <VChip v-if="requirement.urgent" color="error">Urgent Requirment</VChip>
-                <VChip color="warning" v-if="!requirement.acceptedBidId">Active</VChip>
+                <VChip v-if="!requirement.acceptedBidId" color="warning">Active</VChip>
                 <VChip v-else-if="requirement.acceptedBidId != null" color="success"
                   >Completed</VChip
                 >
                 <VChip
-                  color="error"
                   v-else-if="
                     differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
                   "
+                  color="error"
                   >Expired</VChip
                 >
               </div>
@@ -109,8 +109,8 @@ const getImageUrls = useGetImageUrl()
               <span> {{ requirement.acceptedBidId ? 1 : 0 }}</span>
             </VChip>
             <Link
-              :href="routes('web.service_requirement.show', [requirement.id])"
               v-if="currentUrl != routes('web.service_requirement.show', [requirement.id])"
+              :href="routes('web.service_requirement.show', [requirement.id])"
             >
               <VBtn color="primary"> View Detail </VBtn>
             </Link>

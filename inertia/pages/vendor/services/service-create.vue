@@ -140,14 +140,14 @@ const submit = () => {
         <VCol md="8">
           <!-- 👉 service Information -->
           <VCard class="mb-6" title="Service Information">
-            <ErrorAlert :errors="form.errors" v-if="form.errors" />
+            <ErrorAlert v-if="form.errors" :errors="form.errors" />
             <VCardText>
               <VRow>
                 <VCol cols="12">
                   <AppTextField
+                    v-model="form.service.name"
                     label="Name"
                     placeholder="Service Name"
-                    v-model="form.service.name"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -158,6 +158,7 @@ const submit = () => {
                     {{ form.service.address }}
                   </div> -->
                   <AddressComponent
+                    required
                     @selected-address="
                       (ad) => {
                         // @ts-ignore
@@ -165,11 +166,10 @@ const submit = () => {
                         form.service.address = ad.mapAddress
                       }
                     "
-                    required
                   />
                 </VCol>
                 <VCol cols="12">
-                  <AppTextarea label="Short Description" v-model="form.service.shortDesc" />
+                  <AppTextarea v-model="form.service.shortDesc" label="Short Description" />
                 </VCol>
                 <VCol cols="12">
                   <span class="mb-1">Description (optional)</span>
@@ -277,7 +277,7 @@ const submit = () => {
                   <div class="d-flex justify-space-between align-center">
                     <p class="text-bold">Faq - {{ i + 1 }}</p>
                     <VTooltip text="Remove Faq">
-                      <template v-slot:activator="{ props }">
+                      <template #activator="{ props }">
                         <IconBtn
                           v-bind="props"
                           @click="
@@ -294,15 +294,15 @@ const submit = () => {
 
                   <div>
                     <AppTextField
+                      v-model="f.quest"
                       label="Question"
                       placeholder="Add a Question"
-                      v-model="f.quest"
                       :rules="[requiredValidator]"
                     />
                     <AppTextarea
+                      v-model="f.ans"
                       label="Answer"
                       placeholder="Add answer"
-                      v-model="f.ans"
                       :rules="[requiredValidator]"
                     />
                     <br />
@@ -338,14 +338,14 @@ const submit = () => {
               <div class="d-flex ga-2">
                 <AvatarInput
                   name="logo"
+                  :url="serviceThumbnailUrl"
+                  helper-text="Add a Thumbnail"
+                  size="120"
                   @image="
                     (f) => {
                       form.thumbnail = f as unknown as null
                     }
                   "
-                  :url="serviceThumbnailUrl"
-                  helperText="Add a Thumbnail"
-                  size="120"
                 />
               </div>
             </VCardText>
@@ -407,10 +407,10 @@ const submit = () => {
                   class="mt-2"
                 >
                   <AppTextField
+                    v-model="form.service.kmRadius"
                     label="Max distance (Km) for home services"
                     type="number"
                     placeholder="Specify in kilometers"
-                    v-model="form.service.kmRadius"
                     :rules="[requiredValidator]"
                   />
                 </div>
@@ -452,9 +452,9 @@ const submit = () => {
                 <AppTextField v-model="form.seo.metaTitle" label="Meta Title" />
                 <AppTextField v-model="form.seo.metaKeywords" label="Meta Keywords" />
                 <AppTextarea
+                  v-model="form.seo.metaDesc"
                   type="textarea"
                   outlined
-                  v-model="form.seo.metaDesc"
                   label="Meta Description"
                 />
               </div>
@@ -464,7 +464,7 @@ const submit = () => {
       </VRow>
       <ModalAddVariant
         v-model:isVisible="variantModalRef"
-        :selectedVariant="selectedVariant"
+        :selected-variant="selectedVariant"
         @variant-added="
           (opt) => {
             onVariantAdded(opt)

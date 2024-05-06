@@ -25,9 +25,9 @@ const isChatContactActive = computed(() => {
 })
 
 const computedParticipant = computed(() => {
-  if (props.conversation.participantOneId != user.value?.id) {
+  if (props.conversation.participantOneId !== user.value?.id) {
     return props.conversation.participantOne
-  } else if (props.conversation.participantTwoId != user.value?.id) {
+  } else if (props.conversation.participantTwoId !== user.value?.id) {
     return props.conversation.participantTwo
   } else {
     return props.conversation.participantOne
@@ -64,10 +64,10 @@ const computedParticipant = computed(() => {
       <p class="text-base text-high-emphasis mb-0">
         {{ computedParticipant?.firstName || '' + ' ' + computedParticipant?.lastName }}
       </p>
-      <p class="mb-0 text-truncate text-body-2" v-if="conversation?.messages?.length > 0">
+      <p v-if="conversation?.messages?.length > 0" class="mb-0 text-truncate text-body-2">
         {{ conversation?.messages[0]?.body }}
       </p>
-      <p class="mb-0 text-truncate text-body-2" v-else>
+      <p v-else class="mb-0 text-truncate text-body-2">
         Say Hi to {{ computedParticipant?.firstName }}
       </p>
     </div>

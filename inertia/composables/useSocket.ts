@@ -5,7 +5,7 @@ import { computed, ref } from 'vue'
 
 export default function useSocket() {
   const socket = ref<Socket | null>(null)
-  const page = usePage<IPageProps<{}>>()
+  const page = usePage<IPageProps<object>>()
   const user = computed(() => page.props?.user)
 
   const connectSocket = (url: string) => {

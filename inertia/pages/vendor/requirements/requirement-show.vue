@@ -151,8 +151,8 @@ const acceptNegotiate = (placedBidId: number) => {
       <VCardItem>
         <CustomForm class="q-gutter-y-sm" @submit="createBid">
           <AppTextField
-            type="number"
             v-model="createBidForm.offeredPrice"
+            type="number"
             label="Offer a price"
             :rules="[requiredValidator]"
           />
@@ -163,7 +163,7 @@ const acceptNegotiate = (placedBidId: number) => {
           />
           <div class="d-flex gap-2 justify-end pt-4">
             <VBtn v-if="createBidForm.processing" disabled> <VProgressCircular /> Processing </VBtn>
-            <VBtn type="submit" :disabled="createBidForm.processing" v-else>Submit</VBtn>
+            <VBtn v-else type="submit" :disabled="createBidForm.processing">Submit</VBtn>
           </div>
         </CustomForm>
       </VCardItem>
@@ -182,8 +182,8 @@ const acceptNegotiate = (placedBidId: number) => {
           "
         >
           <AppTextField
-            type="number"
             v-model="acceptNegotiaionForm.newPrice"
+            type="number"
             label="New Price"
             :rules="[requiredValidator]"
           />
@@ -192,7 +192,7 @@ const acceptNegotiate = (placedBidId: number) => {
             <VBtn v-if="acceptNegotiaionForm.processing" disabled>
               <VProgressCircular /> Processing
             </VBtn>
-            <VBtn type="submit" :disabled="acceptNegotiaionForm.processing" v-else>Update</VBtn>
+            <VBtn v-else type="submit" :disabled="acceptNegotiaionForm.processing">Update</VBtn>
           </div>
         </CustomForm>
       </VCardItem>

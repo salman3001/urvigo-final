@@ -118,7 +118,7 @@ const submit = () => {
 </script>
 
 <template>
-  <VDialog max-width="500" v-model="isVisible">
+  <VDialog v-model="isVisible" max-width="500">
     <CustomForm @submit="submit">
       <VCard class="text-center px-10 py-6">
         <VCardText>
@@ -127,7 +127,7 @@ const submit = () => {
           </h6>
 
           <div>
-            <AppTextarea label="Add Remarks (Optional)" v-model="form.remarks" />
+            <AppTextarea v-model="form.remarks" label="Add Remarks (Optional)" />
           </div>
         </VCardText>
 

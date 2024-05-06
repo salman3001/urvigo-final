@@ -45,14 +45,14 @@ const getImageUrl = useGetImageUrl()
                 size="large"
               />
             </div>
-            <div class="d-flex gap-2" v-if="acceptedBid?.id === selectedBid?.id">
+            <div v-if="acceptedBid?.id === selectedBid?.id" class="d-flex gap-2">
               <span>
                 {{ selectedBid?.vendor.firstName }}
                 {{ selectedBid?.vendor.lastName }}
               </span>
               <VBtn
-                size="small"
                 v-if="acceptedBid?.id === selectedBid?.id"
+                size="small"
                 @click="() => emit('createChat')"
                 >chat
               </VBtn>
@@ -127,13 +127,13 @@ const getImageUrl = useGetImageUrl()
     <VCardItem v-if="selectedBid && !acceptedBid">
       <div class="d-flex justify-end gap-2">
         <VBtn
-          variant="tonal"
-          color="primary"
-          @click.prevent="negotiateModal = true"
           v-if="
             !selectedBid?.negotiateHistory?.length ||
             selectedBid?.negotiateHistory[selectedBid?.negotiateHistory?.length - 1]?.accepted
           "
+          variant="tonal"
+          color="primary"
+          @click.prevent="negotiateModal = true"
           >Negotiate</VBtn
         >
         <Link

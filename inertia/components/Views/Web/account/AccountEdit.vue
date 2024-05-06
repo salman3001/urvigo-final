@@ -47,7 +47,7 @@ const updateProfile = async () => {
 
     <VCardText class="pt-2">
       <!-- 👉 Form -->
-      <CustomForm @submit="updateProfile" class="mt-3">
+      <CustomForm class="mt-3" @submit="updateProfile">
         <VRow>
           <!-- 👉 First Name -->
           <VCol md="6" cols="12">

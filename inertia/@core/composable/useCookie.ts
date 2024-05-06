@@ -31,7 +31,7 @@ export const useCookie = <T = string | null | undefined>(
   const cookie = ref<T | undefined>(undefined)
 
   const updateCookie = () => {
-    const cookies = parse(document.cookie, opts)
+    const cookies = parse(document.cookie, opts as any)
 
     cookie.value = (cookies[name] as any) ?? opts.default?.()
   }

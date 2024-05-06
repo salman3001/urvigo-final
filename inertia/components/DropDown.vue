@@ -7,9 +7,9 @@ defineProps<{
 
 <template>
   <v-menu>
-    <template v-slot:activator="{ props }">
-      <v-btn color="primary" v-bind="props"
-        ><VIcon v-if="leftIcon" :icon="leftIcon" />&nbsp; {{ name }}
+    <template #activator="{ props }">
+      <v-btn color="primary" v-bind="props">
+        <VIcon v-if="leftIcon" :icon="leftIcon" />&nbsp; {{ name }}
       </v-btn>
     </template>
     <v-list>

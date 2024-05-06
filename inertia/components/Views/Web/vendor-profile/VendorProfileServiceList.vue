@@ -42,14 +42,14 @@ watchDebounced(
     <VCardItem>
       <div v-if="services">
         <VRow class="">
-          <VCol v-for="s in services.data" cols="12" md="6" lg="3">
+          <VCol v-for="s in services.data" :key="s" cols="12" md="6" lg="3">
             <ServiceCard :service="s" />
           </VCol>
         </VRow>
       </div>
       <div v-else>
         <VRow class="">
-          <VCol v-for="s in 10" cols="12" md="6" lg="3">
+          <VCol v-for="s in 10" :key="s" cols="12" md="6" lg="3">
             <VSkeletonLoader type="card" />
           </VCol>
         </VRow>

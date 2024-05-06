@@ -18,7 +18,7 @@ export default {
 const filterModal = ref(false)
 const filter = ref<string | null>(null)
 
-const props = defineProps<{
+const pageProps = defineProps<{
   requirements: IPaginatedModel<IServiceRequirement>
   query: {
     page: number
@@ -27,12 +27,12 @@ const props = defineProps<{
 }>()
 
 const query = reactive({
-  page: props?.query?.page || 1,
-  orderBy: props?.query?.page || 'created_at:desc',
+  page: pageProps?.query?.page || 1,
+  orderBy: pageProps?.query?.page || 'created_at:desc',
 })
 
 watch(filter, (newFilterValue) => {
-  if (newFilterValue == 'Heighest Price') {
+  if (newFilterValue === 'Heighest Price') {
     const newQuery = {
       page: 1,
       orderBy: 'budget:asc',
@@ -41,7 +41,7 @@ watch(filter, (newFilterValue) => {
     Object.assign(query, newQuery)
   }
 
-  if (newFilterValue == 'Lowest Price') {
+  if (newFilterValue === 'Lowest Price') {
     const newQuery = {
       page: 1,
       orderBy: 'budget:desc',
@@ -50,7 +50,7 @@ watch(filter, (newFilterValue) => {
     Object.assign(query, newQuery)
   }
 
-  if (newFilterValue == '') {
+  if (newFilterValue === '') {
     const newQuery = {
       page: 1,
       orderBy: 'created_at:desc',
@@ -69,7 +69,7 @@ watch(query, () => {
 <template>
   <div class="d-flex align-center justify-end gap-2">
     <div class="d-flex flex-wrap justify-end gap-2">
-      <div class="normalcase" v-if="filter">
+      <div v-if="filter" class="normalcase">
         <VChip color="info">
           <VICon icon="tabler-filter" />
           filtering by {{ filter }}
@@ -93,11 +93,11 @@ watch(query, () => {
   </div>
   <br />
   <div>
-    <div v-if="!requirements" v-for="n in 5">
-      <VSkeletonLoader type="card" />
+    <div v-if="!requirements">
+      <VSkeletonLoader v-for="n in 5" :key="n" type="card" />
     </div>
     <VRow v-else>
-      <VCol v-for="requirement in requirements?.data" cols="12">
+      <VCol v-for="requirement in requirements?.data" :key="requirement.id" cols="12">
         <VendorRequirementCard :requirement="requirement" />
       </VCol>
     </VRow>
