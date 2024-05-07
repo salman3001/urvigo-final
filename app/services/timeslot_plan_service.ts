@@ -90,7 +90,7 @@ export default class TimeslotPlanService {
         b.where('start_time', dateToCheck)
       })
 
-      if (plan.bookedTimeslots.length > 1) {
+      if (plan.bookedTimeslots.length < 1) {
         getNormalSlots()
       } else {
         // itrate over bookedslots > convert to time only >
