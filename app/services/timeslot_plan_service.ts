@@ -4,6 +4,7 @@ import { paginate } from '../helpers/common.js'
 import TimeslotPlan from '#models/timeslot_plan'
 import { CreateTimeslotValidator, UpdateTimeslotValidator } from '#validators/timeslot'
 import { IndexOption } from '#helpers/types'
+import { DateTime } from 'luxon'
 
 @inject()
 export default class TimeslotPlanService {
@@ -65,5 +66,39 @@ export default class TimeslotPlanService {
     await timeslotPlan.delete()
 
     return timeslotPlan
+  }
+
+  async getAvailableTimeslots() {
+    const { params } = this.ctx
+    const dateToCheck = params.date
+    const slots = [] as any[]
+
+    const getNormalSlots = () => {
+      plan.options.map((o) => {
+        const fromDateTime = DateTime.fromFormat(`${dateToCheck} ${o.from}`, 'dd/MM/yyyy HH:mm')
+        const toDateTime = DateTime.fromFormat(`${dateToCheck} ${o.to}`, 'dd/MM/yyyy HH:mm')
+        slots.push({
+          from: fromDateTime,
+          to: toDateTime,
+        })
+      })
+    }
+
+    const plan = await TimeslotPlan.findOrFail(+params.id)
+    if (plan.limitToOneBooking) {
+      plan.load('bookedTimeslots', (b) => {
+        b.where('start_time', dateToCheck)
+      })
+
+      if (plan.bookedTimeslots.length > 1) {
+        getNormalSlots()
+      } else {
+        // itrate over bookedslots > convert to time only >
+      }
+    } else {
+      getNormalSlots()
+    }
+
+    return slots
   }
 }

@@ -25,8 +25,8 @@ const categories = computed(() => page.props.categories)
 
 const query = reactive({
   search: page.props?.query?.search || '',
-  order_by: page.props?.query?.order_by || '',
-  service_category_id: page.props?.query?.service_category_id || '',
+  orderBy: page.props?.query?.order_by || '',
+  serviceCategoryId: page.props?.query?.service_category_id || '',
   page: page.props?.query?.page || 1,
 })
 

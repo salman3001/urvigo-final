@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import googleHome from '~/assets/images/pages/google-home.png'
-import iphone11 from '~/assets/images/pages/iphone-11.png'
 import BigNumber from 'bignumber.js'
 import type { IServiceRequirement } from '#models/service_requirement'
 import type { IBid } from '#models/bid'
 import { ref } from 'vue'
-import CustomRadiosWithIcon from '~/@core/components/app-form-elements/CustomRadiosWithIcon.vue'
 import type { IAddress } from '#models/address'
 import { useForm } from '@inertiajs/vue3'
+import AddressComponent from '~/components/AddressComponent.vue'
+import SelectDeliveryType from '~/components/SelectDeliveryType.vue'
 
 interface Props {
   serviceRequirement: IServiceRequirement
@@ -15,12 +14,7 @@ interface Props {
   qty: number
 }
 
-const step = defineModel<number>('step', { required: true })
-const selectedAddressCords = ref()
-
-defineProps<Props>()
-
-const form = useForm({
+const initialForm = {
   addressDetail: {
     address: '',
     mapAddress: '',
@@ -28,7 +22,18 @@ const form = useForm({
     geoLocation: '',
   },
   deliveryType: '',
-})
+}
+
+const selectedAddressCords = ref()
+const outOfRadiusError = ref(false)
+
+const emits = defineEmits<{
+  (e: 'submit', form: typeof initialForm): void
+}>()
+
+defineProps<Props>()
+
+const form = useForm({ ...initialForm })
 
 const setAddress = (ad: IAddress) => {
   selectedAddressCords.value = ad.geoLocation
@@ -39,80 +44,11 @@ const setAddress = (ad: IAddress) => {
   form.addressDetail.geoLocation = `${ad.geoLocation.x},${ad.geoLocation.y}`
 }
 
-const checkoutData = ref({
-  cartItems: [
-    {
-      id: 1,
-      name: 'Google - Google Home - White',
-      seller: 'Google',
-      inStock: true,
-      rating: 4,
-      price: 299,
-      discountPrice: 359,
-      image: googleHome,
-      quantity: 1,
-      estimatedDelivery: '18th Nov 2021',
-    },
-    {
-      id: 2,
-      name: 'Apple iPhone 11 (64GB, Black)',
-      seller: 'Apple',
-      inStock: true,
-      rating: 4,
-      price: 899,
-      discountPrice: 999,
-      image: iphone11,
-      quantity: 1,
-      estimatedDelivery: '20th Nov 2021',
-    },
-  ],
-  promoCode: '',
-  orderAmount: 1198,
-  deliveryAddress: 'home',
-  deliverySpeed: 'free',
-  deliveryCharges: 0,
-  addresses: [
-    {
-      title: 'John Doe (Default)',
-      desc: '4135 Parkway Street, Los Angeles, CA, 90017',
-      subtitle: '1234567890',
-      value: 'home',
-    },
-    {
-      title: 'ACME Inc.',
-      desc: '87 Hoffman Avenue, New York, NY, 10016',
-      subtitle: '1234567890',
-      value: 'office',
-    },
-  ],
-})
-const isEditAddressDialogVisible = ref(false)
-
-const deliveryOptions = [
-  {
-    icon: { icon: 'tabler-user' },
-    title: 'Standard',
-    desc: 'Get your product in 1 Week.',
-    value: 'free',
-  },
-  {
-    icon: { icon: 'tabler-star' },
-    title: 'Express',
-    desc: 'Get your product in 4 days.',
-    value: 'express',
-  },
-  {
-    icon: { icon: 'tabler-crown' },
-    title: 'Overnight',
-    desc: 'Get your product in 1 day.',
-    value: 'overnight',
-  },
-]
-
-const resolveDeliveryBadgeData: any = {
-  free: { color: 'success', price: 'Free' },
-  express: { color: 'secondary', price: 10 },
-  overnight: { color: 'secondary', price: 15 },
+const submit = () => {
+  emits('submit', {
+    addressDetail: form.addressDetail,
+    deliveryType: form.deliveryType,
+  })
 }
 </script>
 
@@ -125,47 +61,17 @@ const resolveDeliveryBadgeData: any = {
       <!-- 👉 Address custom input -->
       <AddressComponent required @selected-address="setAddress" />
 
-      <!-- 👉 Add New Address -->
-      <VBtn
-        variant="tonal"
-        class="mt-4 mb-6"
-        @click="isEditAddressDialogVisible = !isEditAddressDialogVisible"
-      >
-        Add New Address
-      </VBtn>
-
       <!-- 👉 Delivery options -->
-      <h6 class="text-h6 mb-4">Choose Delivery Speed</h6>
+      <h6 class="text-h6 mb-4">Choose Delivery Options</h6>
 
       <!-- 👉 Delivery options custom input -->
-      <CustomRadiosWithIcon
-        v-model:selected-radio="checkoutData.deliverySpeed"
-        :radio-content="deliveryOptions"
-        :grid-column="{ cols: '12', sm: '4' }"
-      >
-        <template #default="{ item }">
-          <div class="d-flex flex-column align-center gap-2 w-100">
-            <div class="d-flex justify-end w-100 mb-n3">
-              <VChip :color="resolveDeliveryBadgeData[item.value].color" size="small" label>
-                {{
-                  resolveDeliveryBadgeData[item.value].price === 'Free'
-                    ? resolveDeliveryBadgeData[item.value].price
-                    : `$${resolveDeliveryBadgeData[item.value].price}`
-                }}
-              </VChip>
-            </div>
-
-            <VIcon v-bind="item?.icon" size="28" />
-
-            <h6 class="text-h6">
-              {{ item.title }}
-            </h6>
-            <p class="text-sm text-center mb-0">
-              {{ item.desc }}
-            </p>
-          </div>
-        </template>
-      </CustomRadiosWithIcon>
+      <!-- 👉 Delivery options custom input -->
+      <SelectDeliveryType
+        v-model="form.deliveryType"
+        v-model:outOfRadiusError="outOfRadiusError"
+        :delivery-options="acceptedBid.deliveryOptions"
+        required
+      />
     </VCol>
 
     <VCol cols="12" md="4">
@@ -200,13 +106,10 @@ const resolveDeliveryBadgeData: any = {
           <div class="d-flex align-center justify-space-between">
             <span class="text-high-emphasis">Delivery Charges</span>
             <div class="text-end">
-              <div v-if="checkoutData.deliverySpeed === 'free'" class="d-flex align-center">
-                <div class="text-decoration-line-through text-disabled me-2">&#x20B9;5.00</div>
+              <div class="d-flex align-center">
+                <div class="text-decoration-line-through text-disabled me-2">&#x20B9;20.00</div>
                 <VChip size="small" color="success"> FREE </VChip>
               </div>
-              <span v-else
-                >&#x20B9;{{ resolveDeliveryBadgeData[checkoutData.deliverySpeed].price }}.00</span
-              >
             </div>
           </div>
         </VCardText>
@@ -221,7 +124,7 @@ const resolveDeliveryBadgeData: any = {
         </VCardText>
       </VCard>
 
-      <VBtn block class="mt-4" @click="step = step + 1"> Place Order </VBtn>
+      <VBtn block class="mt-4" @click="submit"> Place Order </VBtn>
     </VCol>
   </VRow>
 </template>

@@ -44,6 +44,13 @@ const form = useForm({
     paymentMode: PaymentMode.ONLINE,
     paymentStatus: PaymentStatus.PAID,
   },
+  addressDetail: {
+    address: '',
+    mapAddress: '',
+    mobile: '',
+    geoLocation: '',
+  },
+  deliveryType: '',
 })
 
 const submit = async () => {
@@ -123,6 +130,13 @@ onMounted(() => {
               :service-requirement="requirement"
               :accepted-bid="acceptedBid"
               :qty="form.qty"
+              @submit="
+                (f) => {
+                  form.addressDetail = f.addressDetail
+                  form.deliveryType = f.deliveryType
+                  currentStep += 1
+                }
+              "
             />
           </VWindowItem>
 

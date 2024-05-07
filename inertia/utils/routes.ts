@@ -191,7 +191,11 @@ const routesObject = {
   "api.address.index": "/api/addresses",
   "api.address.store": "/api/addresses",
   "api.address.update": "/api/addresses/:id",
-  "api.address.destroy": "/api/addresses/:id"
+  "api.address.destroy": "/api/addresses/:id",
+  "api.timeslots.index": "/api/timeslots",
+  "api.timeslots.store": "/api/timeslots",
+  "api.timeslots.update": "/api/timeslots/:id",
+  "api.timeslots.destroy": "/api/timeslots/:id"
 };
 
 export default function routes(

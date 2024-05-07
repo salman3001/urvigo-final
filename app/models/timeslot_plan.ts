@@ -1,5 +1,7 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { ItimeslotPlanOptions } from '#helpers/types'
+import BookedTimeslot from './booked_timeslot.js'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class TimeslotPlan extends BaseModel {
   @column({ isPrimary: true })
@@ -22,6 +24,9 @@ export default class TimeslotPlan extends BaseModel {
 
   @column()
   declare userId: number
+
+  @hasMany(() => BookedTimeslot)
+  declare bookedTimeslots: HasMany<typeof BookedTimeslot>
 }
 
 export type ITimeslotPlan = TimeslotPlan

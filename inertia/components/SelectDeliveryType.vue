@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { DeliveryOptions } from '#helpers/enums'
 import type { CordType } from '#helpers/types'
-import type { IService } from '#models/service'
 import { ref, watch } from 'vue'
 import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import { requiredValidator } from '~/@core/utils/validators'
@@ -11,7 +10,9 @@ const model = defineModel<string>({ required: true })
 const outOfRadiusError = defineModel<boolean>('outOfRadiusError')
 
 const props = defineProps<{
-  service: IService
+  deliveryOptions: Array<DeliveryOptions>
+  geoLocation?: CordType
+  kmRadius?: number
   selectedAddressCords?: CordType
   required?: boolean
 }>()
@@ -43,31 +44,29 @@ const resolveDeliveryBadgeData: any = {
   [DeliveryOptions.ONLINE]: { color: 'success', price: 'Free' },
 }
 
-const deliveryOptions = ref<any[]>([])
+const deliveryOpt = ref<any[]>([])
 
-props.service.deliveryOptions.forEach((o) => {
-  console.log('ran')
-
+props.deliveryOptions.forEach((o) => {
   if (o === DeliveryOptions.HOME_SERVICE) {
-    deliveryOptions.value.push(homeOption)
+    deliveryOpt.value.push(homeOption)
   }
 
   if (o === DeliveryOptions.WALK_IN) {
-    deliveryOptions.value.push(walkinOption)
+    deliveryOpt.value.push(walkinOption)
   }
 
   if (o === DeliveryOptions.ONLINE) {
-    deliveryOptions.value.push(onlineOption)
+    deliveryOpt.value.push(onlineOption)
   }
 })
 
 watch(model, (v) => {
   outOfRadiusError.value = false
-  if (v === DeliveryOptions.HOME_SERVICE && props.selectedAddressCords) {
+  if (v === DeliveryOptions.HOME_SERVICE && props.geoLocation && props.selectedAddressCords) {
     outOfRadiusError.value = !isWithinRadius(
-      props.service.geoLocation as CordType,
+      props.geoLocation as CordType,
       props.selectedAddressCords,
-      props.service.kmRadius
+      props.kmRadius!
     )
   }
 })
@@ -77,11 +76,15 @@ watch(
   () => {
     outOfRadiusError.value = false
 
-    if (model.value === DeliveryOptions.HOME_SERVICE && props.selectedAddressCords) {
+    if (
+      model.value === DeliveryOptions.HOME_SERVICE &&
+      props.geoLocation &&
+      props.selectedAddressCords
+    ) {
       outOfRadiusError.value = !isWithinRadius(
-        props.service.geoLocation as CordType,
+        props.geoLocation as CordType,
         props.selectedAddressCords,
-        props.service.kmRadius
+        props.kmRadius!
       )
     }
   }
@@ -91,7 +94,7 @@ watch(
 <template>
   <CustomRadios
     v-model:selected-radio="model"
-    :radio-content="deliveryOptions"
+    :radio-content="deliveryOpt"
     :grid-column="{ cols: '12', sm: '4' }"
     :rules="[required && requiredValidator]"
   >

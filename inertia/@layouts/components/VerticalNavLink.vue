@@ -69,5 +69,6 @@ const hideTitleAndBadge = configStore.isVerticalNavMini()
     0 0 transparent,
     0 0 transparent;
   background: linear-gradient(270deg, rgba(#7367f0, 0.7) 0%, #7367f0 100%) !important;
+  color: white !important;
 }
 </style>

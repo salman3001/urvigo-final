@@ -3,10 +3,9 @@ import Layout from '~/layouts/VendorLayout.vue'
 import routes from '~/utils/routes'
 import { DeliveryOptions } from '#helpers/enums'
 import AddressComponent from '~/components/AddressComponent.vue'
-import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import type { ITimeslotPlan } from '../../../../app/models/timeslot_plan'
-import ModalAddTimeslotPlan from '~/components/modal/ModalAddTimeslotPlan.vue'
 import CustomCheckboxesWithIcon from '~/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue'
+import SelectTimeslotplans from '~/components/SelectTimeslotplans.vue'
 
 export default {
   layout: Layout,
@@ -81,7 +80,6 @@ const selectedVariant = ref<
     }
   | undefined
 >(undefined)
-const timeslotAddModal = ref(false)
 
 const removeVariant = (index: number) => {
   form.variantImages.splice(index, 1)
@@ -435,27 +433,7 @@ const submit = () => {
           <!-- 👉 Select Time Slot plan -->
           <VCard title="Select timeslot plan" subtitle="Only for booking by timeslots" class="mb-6">
             <VCardText>
-              <div class="d-flex ga-2 flex-column">
-                <CustomRadios
-                  v-if="timeslotPlans"
-                  v-model:selected-radio="form.timeSlotPlanId"
-                  :radio-content="timeslotPlans.map((t) => ({ title: t.name, value: t.id }))"
-                  :grid-column="{ cols: '12' }"
-                />
-                <div v-else>No Timeslot plans found! Please a plan</div>
-                <div class="mt-2">
-                  <VBtn
-                    variant="tonal"
-                    prepend-icon="tabler-plus"
-                    text="Add plan"
-                    @click="
-                      () => {
-                        timeslotAddModal = true
-                      }
-                    "
-                  />
-                </div>
-              </div>
+              <SelectTimeslotplans v-model="form.timeSlotPlanId" />
             </VCardText>
           </VCard>
 
@@ -487,17 +465,6 @@ const submit = () => {
         @variant-edited="
           (opt) => {
             onVariantEdited(opt)
-          }
-        "
-      />
-      <ModalAddTimeslotPlan
-        v-model="timeslotAddModal"
-        @success="
-          () => {
-            router.reload({
-              only: ['timeslotPlans'],
-            })
-            timeslotAddModal = false
           }
         "
       />

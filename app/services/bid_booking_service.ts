@@ -14,6 +14,7 @@ import {
   UpdateBookingStatusValidator,
   requestBookingCompletionValidator,
 } from '#validators/booking'
+import BookedTimeslot from '#models/booked_timeslot'
 
 @inject()
 export default class BidBookingService {
@@ -144,6 +145,7 @@ export default class BidBookingService {
             },
           },
           addressDetail: payload.addressDetail,
+          deliveryType: payload.deliveryType,
         },
         { client: trx }
       )
@@ -151,6 +153,19 @@ export default class BidBookingService {
       serviceRequirement.useTransaction(trx)
       serviceRequirement.acceptedBidId = bid.id
       await serviceRequirement.save()
+
+      if (payload.timeslot) {
+        const bookedslot = await BookedTimeslot.create(
+          {
+            startTime: payload.timeslot.from,
+            endTime: payload.timeslot.to,
+            timeslotPlanId: payload.timeslot.timeslotPlanId,
+          },
+          { client: trx }
+        )
+
+        await bidBooking.related('bookedTimeslot').associate(bookedslot)
+      }
     })
 
     await bidBooking!?.refresh()

@@ -177,6 +177,7 @@ const sources: BundleScriptConfig = {
         'alarm',
         'truck-delivery',
         'walk',
+        'wifi',
       ],
     },
     {

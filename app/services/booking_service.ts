@@ -16,6 +16,7 @@ import { DateTime } from 'luxon'
 import db from '@adonisjs/lucid/services/db'
 import { IndexOption } from '../helpers/types.js'
 import { paginate } from '../helpers/common.js'
+import BookedTimeslot from '#models/booked_timeslot'
 
 @inject()
 export default class BookingService {
@@ -153,6 +154,19 @@ export default class BookingService {
         },
         { client: trx }
       )
+
+      if (payload.timeslot) {
+        const bookedslot = await BookedTimeslot.create(
+          {
+            startTime: payload.timeslot.from,
+            endTime: payload.timeslot.to,
+            timeslotPlanId: payload.timeslot.timeslotPlanId,
+          },
+          { client: trx }
+        )
+
+        await booking.related('bookedTimeslot').associate(bookedslot)
+      }
     })
 
     return booking!

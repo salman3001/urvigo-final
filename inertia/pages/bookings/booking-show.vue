@@ -4,7 +4,7 @@ import { VDataTable } from 'vuetify/components'
 import { format } from 'date-fns'
 import { OrderStatus } from '#helpers/enums'
 import BookingStatusUpdate from '~/components/BookingStatusUpdate.vue'
-import { resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
+import { resolveDeliveryOptions, resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
 
 export default {
   layout: Layout,
@@ -206,7 +206,7 @@ const headers = [
           <!-- 👉 Customer Details  -->
           <VCard class="mb-6">
             <VCardText class="d-flex flex-column gap-y-6">
-              <!-- <h5 class="text-h5">Customer details</h5> -->
+              <h5 class="text-h5">Customer details</h5>
 
               <div class="d-flex align-center gap-x-3">
                 <!-- <VAvatar :image="" /> -->
@@ -235,17 +235,18 @@ const headers = [
             </VCardText>
           </VCard>
 
-          <!-- 👉 Shipping Address -->
+          <!-- 👉 Booking Information -->
           <VCard class="mb-6">
             <VCardItem>
-              <VCardTitle>Shipping Address</VCardTitle>
+              <VCardTitle>Booking Information</VCardTitle>
             </VCardItem>
 
             <VCardText>
               <div class="text-body-1">
-                {{ booking.addressDetail.address }} <br />
-                {{ booking.addressDetail.mapAddress }}<br />
-                {{ booking.addressDetail.mobile }} <br />
+                <span class="font-weight-bold">Booking Type:</span>
+                {{ resolveDeliveryOptions(booking.deliveryType) }}
+                <br />
+                <span class="font-weight-bold">Time slot:</span> to be done
               </div>
             </VCardText>
           </VCard>
@@ -270,25 +271,6 @@ const headers = [
           </VCard>
         </VCol>
       </VRow>
-
-      <!-- <DialogsConfirmDialog
-        v-model:isDialogVisible="isConfirmDialogVisible"
-        confirmation-question="Are you sure to cancel your Order?"
-        cancel-msg="Order cancelled!!"
-        cancel-title="Cancelled"
-        confirm-msg="Your order cancelled successfully."
-        confirm-title="Cancelled!"
-      />
-
-      <DialogsUserInfoEditDialog
-        v-model:isDialogVisible="isUserInfoEditDialogVisible"
-        :user-data="userData"
-      />
-
-      <DialogsAddEditAddressDialog
-        v-model:isDialogVisible="isEditAddressDialogVisible"
-        :billing-address="currentBillingAddress"
-      /> -->
     </div>
   </VContainer>
 </template>

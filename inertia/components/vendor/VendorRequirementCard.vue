@@ -11,6 +11,8 @@ import ClientOnly from '../client-only.vue'
 import { format } from 'date-fns'
 import MapLink from '../MapLink.vue'
 import type { CordType } from '#helpers/types'
+import { resolveDeliveryOptions } from '~/utils/helpers'
+import { DeliveryOptions } from '#helpers/enums'
 
 defineProps<{
   requirement: IServiceRequirement
@@ -23,18 +25,61 @@ const getImageUrls = useGetImageUrl()
 </script>
 
 <template>
-  <VCard density="compact">
-    <VCardItem>
-      <VCardTitle>
-        <h3>{{ requirement.title }}</h3>
-      </VCardTitle>
-    </VCardItem>
+  <VCard density="compact" dense>
+    <template #title>
+      <div class="d-flex flex-wrap">
+        <VTooltip
+          v-for="(dt, i) in requirement.deliveryOptions"
+          :key="i"
+          text="Accepted Delivery type"
+        >
+          <template #activator="{ props }">
+            <VChip
+              variant="text"
+              :prepend-icon="
+                dt === DeliveryOptions.HOME_SERVICE
+                  ? 'tabler-truck-delivery'
+                  : dt === DeliveryOptions.WALK_IN
+                    ? 'tabler-walk'
+                    : dt === DeliveryOptions.ONLINE
+                      ? 'tabler-wifi'
+                      : ''
+              "
+              v-bind="props"
+            >
+              {{ resolveDeliveryOptions(dt) }}
+            </VChip>
+          </template>
+        </VTooltip>
+      </div>
+    </template>
+    <template #append>
+      <div class="d-flex flex-column align-center justify-center">
+        <VAvatar
+          :image="getImageUrls(requirement?.user?.profile?.avatar?.thumbnailUrl, dummyThumb)"
+          size="48"
+        >
+        </VAvatar>
+        <div>
+          {{ requirement?.user?.firstName }}
+          {{ requirement?.user?.lastName }}
+        </div>
+      </div>
+    </template>
 
     <VCardText>
+      <p class="text-h5">{{ requirement.title }}</p>
       <p>
         {{ requirement.desc }}
       </p>
-      <VChip color="primary">&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip>
+      <div class="d-flex gap-2 flex-wrap">
+        <VChip color="" style="max-width: max-content"
+          >&#x20B9;{{ requirement.budget }} {{ requirement.budgetUnit }}</VChip
+        >
+        <VChip v-if="requirement.urgent" color="error" style="max-width: max-content"
+          >Urgent Requirment</VChip
+        >
+      </div>
     </VCardText>
 
     <VCardItem v-if="requirement?.images">
@@ -45,32 +90,14 @@ const getImageUrls = useGetImageUrl()
       </ClientOnly>
     </VCardItem>
     <VCardItem>
-      <div class="d-flex gap-2 mb-2">
-        <VChip v-if="requirement.urgent" color="error">Urgent Requirment</VChip>
-      </div>
       <div class="d-flex flex-wrap justify-space-between gap-3">
-        <div class="d-flex flex-column gap-2">
-          <div class="d-flex gap-2">
-            <VAvatar
-              :image="getImageUrls(requirement?.user?.profile?.avatar?.thumbnailUrl, dummyThumb)"
-              size="48"
-            >
-            </VAvatar>
-            <div>
-              <div>
-                {{ requirement?.user?.firstName }}
-                {{ requirement?.user?.lastName }}
-              </div>
-              <div>
-                <VIcon icon="tabler-map-pin"></VIcon>
-                <MapLink
-                  :x="(requirement.geoLocation as CordType).x"
-                  :y="(requirement.geoLocation as CordType).y"
-                  >{{ requirement.address }}</MapLink
-                >
-              </div>
-            </div>
-          </div>
+        <div class="d-flex gap-2">
+          <VIcon icon="tabler-map-pin"></VIcon>
+          <MapLink
+            :x="(requirement.geoLocation as CordType).x"
+            :y="(requirement.geoLocation as CordType).y"
+            >{{ requirement.address }}</MapLink
+          >
         </div>
 
         <div>
@@ -119,7 +146,7 @@ const getImageUrls = useGetImageUrl()
           v-if="currentUrl != routes('vendor.requirements.show', [requirement.id])"
           :href="routes('vendor.requirements.show', [requirement.id])"
         >
-          <VBtn color="primary"> View Detail </VBtn>
+          <VBtn variant="tonal" color="primary"> View Detail </VBtn>
         </Link>
       </div>
     </VCardText>

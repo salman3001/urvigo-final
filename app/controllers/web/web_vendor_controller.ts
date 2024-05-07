@@ -50,7 +50,6 @@ export default class WebVendorController {
       categories: () => this.categoryService.index(),
       subcategories: () => this.subcategoryService.index(),
       tags: () => this.tagService.index(),
-      timeslotPlans: () => this.timeSlotPlanService.index({ unPaginated: true }),
     })
   }
 
@@ -69,7 +68,6 @@ export default class WebVendorController {
       categories: () => this.categoryService.index(),
       subcategories: () => this.subcategoryService.index(),
       tags: () => this.tagService.index(),
-      timeslotPlans: () => this.timeSlotPlanService.index({ unPaginated: true }),
     })
   }
 

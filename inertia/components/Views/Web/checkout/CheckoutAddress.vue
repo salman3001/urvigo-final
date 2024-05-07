@@ -70,7 +70,9 @@ const submit = () => {
         <SelectDeliveryType
           v-model="form.deliveryType"
           v-model:outOfRadiusError="outOfRadiusError"
-          :service="summary?.bookingDetail?.service_variant?.service"
+          :geo-location="summary?.bookingDetail?.service_variant?.service?.geoLocation"
+          :delivery-options="summary?.bookingDetail?.service_variant?.service?.deliveryOptions"
+          :km-radius="summary?.bookingDetail?.service_variant?.service?.kmRadius"
           :selected-address-cords="selectedAddressCords"
           required
         />

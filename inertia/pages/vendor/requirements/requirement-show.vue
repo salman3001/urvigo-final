@@ -15,6 +15,9 @@ import VendorRequirementCard from '~/components/vendor/VendorRequirementCard.vue
 import VendorPlacedBidCard from '~/components/vendor/VendorPlacedBidCard.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import { format } from 'date-fns'
+import SelectTimeslotplans from '~/components/SelectTimeslotplans.vue'
+import { DeliveryOptions } from '#helpers/enums'
+import CustomCheckboxesWithIcon from '~/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue'
 
 export default {
   layout: Layout,
@@ -55,6 +58,8 @@ const createBidForm = useForm({
   serviceRequirementId: props.requirement.id,
   offeredPrice: '',
   message: '',
+  timeSlotPlanId: '',
+  deliveryOptions: [DeliveryOptions.WALK_IN] as Array<DeliveryOptions>,
 })
 
 const createBid = () => {
@@ -147,20 +152,62 @@ const acceptNegotiate = (placedBidId: number) => {
       <br />
       <br />
     </div>
-    <ModalBase v-model:is-visible="placeBidModal" title="Place a bid">
+    <ModalBase v-model:is-visible="placeBidModal" title="Place a bid" :width="1000">
       <VCardItem>
-        <CustomForm class="q-gutter-y-sm" @submit="createBid">
-          <AppTextField
-            v-model="createBidForm.offeredPrice"
-            type="number"
-            label="Offer a price"
-            :rules="[requiredValidator]"
-          />
-          <AppTextarea
-            v-model="createBidForm.message"
-            label="Message"
-            :rules="[requiredValidator]"
-          />
+        <CustomForm class="d-flex flex-column gap-4" @submit="createBid">
+          <VRow>
+            <VCol cols="12" sm="6">
+              <AppTextField
+                v-model="createBidForm.offeredPrice"
+                type="number"
+                label="Offer a price"
+                :rules="[requiredValidator]"
+              />
+            </VCol>
+            <VCol cols="12" sm="6">
+              <AppTextarea
+                v-model="createBidForm.message"
+                label="Message"
+                :rules="[requiredValidator]"
+              />
+            </VCol>
+            <VCol cols="12" sm="6">
+              <div>
+                <p class="mb-2">Select Delivery Options</p>
+                <CustomCheckboxesWithIcon
+                  v-model:selected-checkbox="createBidForm.deliveryOptions"
+                  :checkbox-content="[
+                    {
+                      icon: { icon: 'tabler-truck-delivery' },
+                      title: 'Home Service',
+                      desc: 'Get Service at home',
+                      value: DeliveryOptions.HOME_SERVICE,
+                    },
+                    {
+                      icon: { icon: 'tabler-walk' },
+                      title: 'Walkin',
+                      desc: 'Walk in and Get Served',
+                      value: DeliveryOptions.WALK_IN,
+                    },
+                    {
+                      icon: { icon: 'tabler-wifi' },
+                      title: 'Online',
+                      desc: 'Get Service done online',
+                      value: DeliveryOptions.ONLINE,
+                    },
+                  ]"
+                  :grid-column="{ cols: '12', sm: '6' }"
+                  required
+                />
+              </div>
+            </VCol>
+            <VCol cols="12" sm="6">
+              <div>
+                <p class="mb-2">Select Timeslot plan (optional)</p>
+                <SelectTimeslotplans v-model="createBidForm.timeSlotPlanId" />
+              </div>
+            </VCol>
+          </VRow>
           <div class="d-flex gap-2 justify-end pt-4">
             <VBtn v-if="createBidForm.processing" disabled> <VProgressCircular /> Processing </VBtn>
             <VBtn v-else type="submit" :disabled="createBidForm.processing">Submit</VBtn>

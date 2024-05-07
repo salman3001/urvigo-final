@@ -2,18 +2,13 @@ import { DeliveryOptions, OrderStatus } from '#helpers/enums'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'bookings'
+  protected tableName = 'bid_bookings'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('qty', 4)
-      table
-        .integer('service_variant_id', 10)
-        .unsigned()
-        .references('id')
-        .inTable('service_variants')
-        .onDelete('SET NULL')
+      table.decimal('price', 10, 2)
       table.integer('user_id', 10).unsigned().references('id').inTable('users').onDelete('SET NULL')
       table
         .integer('business_profile_id', 10)
@@ -21,6 +16,13 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('business_profiles')
         .onDelete('SET NULL')
+      table
+        .integer('booked_timeslot_id', 10)
+        .unsigned()
+        .references('id')
+        .inTable('booked_timeslots')
+        .onDelete('SET_NULL')
+      table.json('history').defaultTo([])
       table.json('booking_detail')
       table.json('payment_detail')
       table.json('address_detail')
@@ -28,7 +30,6 @@ export default class extends BaseSchema {
         .enum('delivery_type', Object.values(DeliveryOptions))
         .notNullable()
         .defaultTo(DeliveryOptions.WALK_IN)
-      table.json('history').defaultTo([])
       table.enum('status', Object.values(OrderStatus)).notNullable().defaultTo(OrderStatus.PLACED)
 
       /**

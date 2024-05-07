@@ -25,6 +25,13 @@ export const CreateBookingValidator = vine.compile(
       mobile: vine.string().escape().minLength(8),
     }),
     deliveryType: vine.enum(DeliveryOptions),
+    timeslot: vine
+      .object({
+        timeslotPlanId: vine.number(),
+        from: vine.date({ formats: 'DD/MM/YYYY HH:mm' }),
+        to: vine.date({ formats: 'DD/MM/YYYY HH:mm' }),
+      })
+      .optional(),
   })
 )
 

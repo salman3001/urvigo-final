@@ -1,4 +1,4 @@
-import { PaymentMode, PaymentStatus } from '#helpers/enums'
+import { DeliveryOptions, PaymentMode, PaymentStatus } from '#helpers/enums'
 import vine from '@vinejs/vine'
 
 export const BidBookingCreateValidator = vine.compile(
@@ -16,5 +16,13 @@ export const BidBookingCreateValidator = vine.compile(
       address: vine.string().escape().optional(),
       mobile: vine.string().escape().minLength(8),
     }),
+    deliveryType: vine.enum(DeliveryOptions),
+    timeslot: vine
+      .object({
+        timeslotPlanId: vine.number(),
+        from: vine.date({ formats: 'DD/MM/YYYY HH:mm' }),
+        to: vine.date({ formats: 'DD/MM/YYYY HH:mm' }),
+      })
+      .optional(),
   })
 )

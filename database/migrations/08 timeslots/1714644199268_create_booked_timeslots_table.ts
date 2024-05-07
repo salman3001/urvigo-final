@@ -1,7 +1,7 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'timeslots'
+  protected tableName = 'booked_timeslots'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
@@ -9,17 +9,11 @@ export default class extends BaseSchema {
       table.dateTime('start_time').notNullable()
       table.dateTime('end_time').notNullable()
       table
-        .integer('booking_id')
+        .integer('timeslot_plan_id')
         .unsigned()
         .references('id')
-        .inTable('bookings')
-        .onDelete('CASCADE')
-      table
-        .integer('bid_booking_id')
-        .unsigned()
-        .references('id')
-        .inTable('bid_bookings')
-        .onDelete('CASCADE')
+        .inTable('timeslot_plans')
+        .onDelete('SET_NULL')
     })
   }
 

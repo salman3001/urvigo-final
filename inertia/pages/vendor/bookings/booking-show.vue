@@ -4,7 +4,7 @@ import { VDataTable } from 'vuetify/components'
 import { format } from 'date-fns'
 import BookingStatusUpdate from '~/components/BookingStatusUpdate.vue'
 import { OrderStatus } from '#helpers/enums'
-import { resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
+import { resolveDeliveryOptions, resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
 
 export default {
   layout: Layout,
@@ -205,15 +205,17 @@ const headers = [
           <!-- 👉 Customer Details  -->
           <VCard class="mb-6">
             <VCardText class="d-flex flex-column gap-y-6">
-              <!-- <h5 class="text-h5">Customer details</h5> -->
+              <h5 class="text-h5">Customer details</h5>
 
-              <!-- <div class="d-flex align-center gap-x-3">
-                <VAvatar :image="avatar1" />
+              <div class="d-flex align-center gap-x-3">
+                <!-- <VAvatar :image="" /> -->
                 <div>
-                  <h6 class="text-h6">Shamus Tuttle</h6>
-                  <div class="text-body-1">Customer ID: #47389</div>
+                  <h6 class="text-h6">
+                    {{ booking?.user?.firstName }} {{ booking?.user?.lastName }}
+                  </h6>
+                  <div class="text-body-1">Customer ID: #{{ booking?.user?.id }}</div>
                 </div>
-              </div> -->
+              </div>
               <!--
               <div class="d-flex gap-x-3 align-center">
                 <VAvatar variant="tonal" color="success">
@@ -225,46 +227,25 @@ const headers = [
               <div class="d-flex flex-column gap-y-1">
                 <div class="d-flex justify-space-between align-center">
                   <h6 class="text-h6">Contact Info</h6>
-                  <!-- <div
-                    class="text-base text-primary cursor-pointer font-weight-medium"
-                    @click="
-                      isUserInfoEditDialogVisible = !isUserInfoEditDialogVisible
-                    "
-                  >
-                    Edit
-                  </div> -->
                 </div>
-                <span>Email: Sheldon88@yahoo.com</span>
-                <span>Mobile: +1 (609) 972-22-22</span>
+                <span>{{ booking?.user?.email }}</span>
+                <span>Mobile: {{ booking?.user?.phone }}</span>
               </div>
             </VCardText>
           </VCard>
 
-          <!-- 👉 Shipping Address -->
+          <!-- 👉 Booking Information -->
           <VCard class="mb-6">
             <VCardItem>
-              <VCardTitle>Shipping Address</VCardTitle>
-
-              <template #append>
-                <div class="d-flex align-center justify-space-between">
-                  <!-- <div
-                    class="text-base font-weight-medium text-primary cursor-pointer"
-                    @click="
-                      isEditAddressDialogVisible = !isEditAddressDialogVisible
-                    "
-                  >
-                    Edit
-                  </div> -->
-                </div>
-              </template>
+              <VCardTitle>Booking Information</VCardTitle>
             </VCardItem>
 
             <VCardText>
               <div class="text-body-1">
-                45 Rocker Terrace <br />
-                Latheronwheel <br />
-                KW5 8NW, London <br />
-                UK
+                <span class="font-weight-bold">Booking Type:</span>
+                {{ resolveDeliveryOptions(booking.deliveryType) }}
+                <br />
+                <span class="font-weight-bold">Time slot:</span> to be done
               </div>
             </VCardText>
           </VCard>
@@ -274,20 +255,11 @@ const headers = [
             <VCardText>
               <div class="d-flex align-center justify-space-between mb-2">
                 <h5 class="text-h5">Billing Address</h5>
-                <!-- <div
-                  class="text-base font-weight-medium text-primary cursor-pointer"
-                  @click="
-                    isEditAddressDialogVisible = !isEditAddressDialogVisible
-                  "
-                >
-                  Edit
-                </div> -->
               </div>
               <div>
-                45 Rocker Terrace <br />
-                Latheronwheel <br />
-                KW5 8NW, London <br />
-                UK
+                {{ booking.addressDetail.address }} <br />
+                {{ booking.addressDetail.mapAddress }}<br />
+                {{ booking.addressDetail.mobile }} <br />
               </div>
 
               <div class="mt-6">
@@ -298,16 +270,6 @@ const headers = [
           </VCard>
         </VCol>
       </VRow>
-
-      <!-- <DialogsUserInfoEditDialog
-        v-model:isDialogVisible="isUserInfoEditDialogVisible"
-        :user-data="userData"
-      />
-
-      <DialogsAddEditAddressDialog
-        v-model:isDialogVisible="isEditAddressDialogVisible"
-        :billing-address="currentBillingAddress"
-      /> -->
     </div>
   </VContainer>
 </template>

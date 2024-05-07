@@ -1,15 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import { DeliveryOptions, OrderStatus } from '#helpers/enums'
 import User from './user.js'
-import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
 import BusinessProfile from './business_profile.js'
 import type { IBookingDetail, IbookingAddressDetail, PaymentDetail } from '../helpers/types.js'
 import BookingFilter from './filters/booking_filter.js'
 import { Filterable } from 'adonis-lucid-filter'
 import { compose } from '@adonisjs/core/helpers'
-import Timeslot from './timeslot.js'
+import BookedTimeslot from './booked_timeslot.js'
 
 export default class Booking extends compose(BaseModel, Filterable) {
   static $filter = () => BookingFilter
@@ -24,6 +24,9 @@ export default class Booking extends compose(BaseModel, Filterable) {
 
   @column()
   declare businessProfileId: number
+
+  @column()
+  declare bookedTimeslotId: number
 
   @column({ prepare: (v) => JSON.stringify(v) })
   declare bookingDetail: IBookingDetail
@@ -62,8 +65,8 @@ export default class Booking extends compose(BaseModel, Filterable) {
   @belongsTo(() => ServiceVariant)
   declare serviceVariant: BelongsTo<typeof ServiceVariant>
 
-  @hasOne(() => Timeslot)
-  declare timeSlot: HasOne<typeof Timeslot>
+  @belongsTo(() => BookedTimeslot)
+  declare bookedTimeslot: BelongsTo<typeof BookedTimeslot>
 }
 
 export type IBooking = Booking

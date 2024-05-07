@@ -23,15 +23,14 @@ import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import CustomCheckboxesWithIcon from '~/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue'
-import CustomRadios from '~/@core/components/app-form-elements/CustomRadios.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import dummyThumb from '~/assets/images/no-image.png'
 import AddressComponent from '~/components/AddressComponent.vue'
+import SelectTimeslotplans from '~/components/SelectTimeslotplans.vue'
 import AvatarInput from '~/components/form/AvatarInput.vue'
 import CustomForm from '~/components/form/CustomForm.vue'
 import ErrorAlert from '~/components/form/ErrorAlert.vue'
 import MultiImagePreview from '~/components/form/MultiImagePreview.vue'
-import ModalAddTimeslotPlan from '~/components/modal/ModalAddTimeslotPlan.vue'
 import ModalAddVariant from '~/components/modal/ModalAddVariant.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
@@ -95,7 +94,6 @@ const selectedVariant = ref<
     }
   | undefined
 >(undefined)
-const timeslotAddModal = ref(false)
 
 const removeVariant = (index: number) => {
   form.variantImages.splice(index, 1)
@@ -482,27 +480,7 @@ const submit = () => {
           <!-- 👉 Select Time Slot plan -->
           <VCard title="Select timeslot plan" subtitle="Only for booking by timeslots" class="mb-6">
             <VCardText>
-              <div class="d-flex ga-2 flex-column">
-                <CustomRadios
-                  v-if="timeslotPlans"
-                  v-model:selected-radio="form.timeSlotPlanId"
-                  :radio-content="timeslotPlans.map((t) => ({ title: t.name, value: t.id }))"
-                  :grid-column="{ cols: '12' }"
-                />
-                <div v-else>No Timeslot plans found! Please a plan</div>
-                <div class="mt-2">
-                  <VBtn
-                    variant="tonal"
-                    prepend-icon="tabler-plus"
-                    text="Add plan"
-                    @click="
-                      () => {
-                        timeslotAddModal = true
-                      }
-                    "
-                  />
-                </div>
-              </div>
+              <SelectTimeslotplans v-model="form.timeSlotPlanId" />
             </VCardText>
           </VCard>
 
@@ -534,18 +512,6 @@ const submit = () => {
         @variant-edited="
           (opt) => {
             onVariantEdited(opt)
-          }
-        "
-      />
-
-      <ModalAddTimeslotPlan
-        v-model="timeslotAddModal"
-        @success="
-          () => {
-            router.reload({
-              only: ['timeslotPlans'],
-            })
-            timeslotAddModal = false
           }
         "
       />

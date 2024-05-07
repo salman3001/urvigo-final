@@ -1,9 +1,10 @@
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import Booking from './booking.js'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import BidBooking from './bid_booking.js'
+import TimeslotPlan from './timeslot_plan.js'
 
-export default class Timeslot extends BaseModel {
+export default class BookedTimeslot extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
@@ -14,10 +15,10 @@ export default class Timeslot extends BaseModel {
   declare endTime: Date
 
   @column()
-  declare bookingId: number
+  declare timeslotPlanId: number
 
-  @column()
-  declare bidBookingId: number
+  @belongsTo(() => TimeslotPlan)
+  declare timeslotPlan: BelongsTo<typeof TimeslotPlan>
 
   @hasMany(() => Booking)
   declare bookings: HasMany<typeof Booking>
@@ -25,5 +26,3 @@ export default class Timeslot extends BaseModel {
   @hasMany(() => BidBooking)
   declare bidBookings: HasMany<typeof BidBooking>
 }
-
-export type ITimeSlot = Timeslot

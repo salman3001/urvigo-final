@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentMode, PaymentStatus, userTypes } from '#helpers/enums'
+import { DeliveryOptions, OrderStatus, PaymentMode, PaymentStatus, userTypes } from '#helpers/enums'
 import type { CordType } from '#helpers/types'
 
 export function findObjectAndMoveToIndex0(
@@ -71,6 +71,13 @@ export const resolveUserType = (type: userTypes) => {
   if (type === userTypes.USER) return 'User'
   if (type === userTypes.VENDER) return 'Vendor'
   if (type === userTypes.ADMIN) return 'Admin'
+  return ''
+}
+
+export const resolveDeliveryOptions = (opt: DeliveryOptions) => {
+  if (opt === DeliveryOptions.HOME_SERVICE) return 'Home Service'
+  if (opt === DeliveryOptions.WALK_IN) return 'Walk in'
+  if (opt === DeliveryOptions.ONLINE) return 'Online'
   return ''
 }
 
