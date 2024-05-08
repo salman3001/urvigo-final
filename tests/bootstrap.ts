@@ -7,6 +7,8 @@ import { apiClient } from '@japa/api-client'
 import env from '#start/env'
 import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
 import { authApiClient } from '@adonisjs/auth/plugins/api_client'
+import { inertiaApiClient } from '@adonisjs/inertia/plugins/api_client'
+import { shieldApiClient } from '@adonisjs/shield/plugins/api_client'
 
 /**
  * This file is imported by the "bin/test.ts" entrypoint file
@@ -18,11 +20,13 @@ import { authApiClient } from '@adonisjs/auth/plugins/api_client'
  */
 export const plugins: Config['plugins'] = [
   assert(),
+  pluginAdonisJS(app),
   apiClient({
     baseURL: `http://${env.get('HOST')}:${env.get('PORT')}`,
   }),
-  pluginAdonisJS(app),
+  inertiaApiClient(app),
   sessionApiClient(app),
+  shieldApiClient(),
   authApiClient(app),
 ]
 
@@ -34,7 +38,7 @@ export const plugins: Config['plugins'] = [
  * The teardown functions are executer after all the tests
  */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
-  setup: [() => testUtils.db().truncate()],
+  setup: [() => testUtils.db().migrate()],
   teardown: [],
 }
 

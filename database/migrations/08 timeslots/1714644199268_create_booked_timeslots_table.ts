@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('timeslot_plans')
-        .onDelete('SET_NULL')
+        .onDelete('SET NULL')
     })
   }
 

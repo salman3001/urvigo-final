@@ -4,10 +4,10 @@ import TimeslotPlanService from '#services/timeslot_plan_service'
 
 @inject()
 export default class ApiTimeslotController {
-  constructor(protected timeSlotService: TimeslotPlanService) {}
+  constructor(protected timeSlotPlanService: TimeslotPlanService) {}
 
   async index({ response }: HttpContext) {
-    const plans = await this.timeSlotService.index()
+    const plans = await this.timeSlotPlanService.index()
     return response.custom({
       code: 200,
       data: plans,
@@ -17,7 +17,7 @@ export default class ApiTimeslotController {
   }
 
   async store({ response }: HttpContext) {
-    const plan = await this.timeSlotService.store()
+    const plan = await this.timeSlotPlanService.store()
     return response.custom({
       code: 200,
       data: plan,
@@ -27,7 +27,7 @@ export default class ApiTimeslotController {
   }
 
   async update({ response }: HttpContext) {
-    const plan = await this.timeSlotService.update()
+    const plan = await this.timeSlotPlanService.update()
     return response.custom({
       code: 200,
       data: plan,
@@ -37,7 +37,17 @@ export default class ApiTimeslotController {
   }
 
   async destroy({ response }: HttpContext) {
-    const plan = await this.timeSlotService.destroy()
+    const plan = await this.timeSlotPlanService.destroy()
+    return response.custom({
+      code: 200,
+      data: plan,
+      message: 'Plan Deleted',
+      success: true,
+    })
+  }
+
+  async getAvailableSlots({ response }: HttpContext) {
+    const plan = await this.timeSlotPlanService.getAvailableTimeslots()
     return response.custom({
       code: 200,
       data: plan,

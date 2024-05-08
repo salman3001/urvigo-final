@@ -358,7 +358,7 @@ export default class WebVendorController {
   async timeslotPlansDelete({ response, session }: HttpContext) {
     await this.timeSlotPlanService.destroy()
     session.flash('flash', {
-      message: 'Timeslot Updated',
+      message: 'Timeslot Deleted',
       type: 'success',
     })
     return response.redirect().back()

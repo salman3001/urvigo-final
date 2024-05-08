@@ -21,7 +21,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('booked_timeslots')
-        .onDelete('SET_NULL')
+        .onDelete('SET NULL')
       table.json('history').defaultTo([])
       table.json('booking_detail')
       table.json('payment_detail')
