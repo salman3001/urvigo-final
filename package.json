@@ -146,16 +146,16 @@
   },
   "lint-staged": {
     "./**/*.js": [
-      "eslint .",
-      "prettier --write ."
+      "eslint ",
+      "prettier --write "
     ],
     "./**/*.ts": [
-      "eslint .",
-      "prettier --write ."
+      "eslint ",
+      "prettier --write "
     ],
     "./**/*.vue": [
-      "eslint .",
-      "prettier --write ."
+      "eslint ",
+      "prettier --write "
     ]
   }
 }
