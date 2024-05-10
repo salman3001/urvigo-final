@@ -76,6 +76,11 @@ watchDebounced(
 <template>
   <VContainer>
     <div>
+      <div class="mb-4 d-flex justify-end">
+        <Link :href="routes('vendor.coupon.create')">
+          <VBtn prepend-icon="tabler-plus" text="Add Coupon" />
+        </Link>
+      </div>
       <VCard>
         <!-- 👉 Filters -->
         <VCardText>

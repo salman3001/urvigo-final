@@ -88,6 +88,7 @@ export default class BidBookingService {
     const booking = await BidBooking.query()
       .where('id', id)
       .preload('user')
+      .preload('bookedTimeslot')
       .preload('businessProfile', (b) => {
         b.preload('vendor')
       })

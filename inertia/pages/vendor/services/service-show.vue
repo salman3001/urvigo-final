@@ -25,7 +25,7 @@ export default {
 </script>
 
 <template>
-  <VContainer fluid>
+  <VContainer fluid class="pa-0">
     <VRow>
       <VCol cols="12">
         <VCard>
@@ -75,7 +75,7 @@ export default {
                 </p>
                 <VDivider class="my-6" />
 
-                <h5 class="text-h5 mb-4">Service Variants</h5>
+                <h5 class="text-h5 mb-4">Variants</h5>
                 <VRow>
                   <VCol v-for="variant in service?.variants" :key="variant.id" cols="12" xl="6">
                     <WebSelectVariant :variant="variant" :diable-book-button="true" />

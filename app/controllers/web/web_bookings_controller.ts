@@ -71,12 +71,20 @@ export default class WebBookingsController {
           geoLocation: vine.string(),
         }),
         deliveryType: vine.enum(DeliveryOptions),
+        timeslot: vine
+          .object({
+            timeslotPlanId: vine.number(),
+            from: vine.string(),
+            to: vine.string(),
+          })
+          .optional(),
       })
     )
 
     const payload = await request.validateUsing(validationSchema)
     session.put('booking-summary.addressDetail', payload.addressDetail)
     session.put('booking-summary.deliveryType', payload.deliveryType)
+    payload.timeslot && session.put('booking-summary.timeslot', payload.timeslot)
 
     return response.redirect().toRoute('web.booking.payment')
   }

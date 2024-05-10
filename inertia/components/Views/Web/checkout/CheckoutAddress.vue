@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import useGetImageUrl from '~/composables/useGetImageUrl'
-import type { Prop } from '../../../../../app/helpers/types'
-import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
+import type { BookingSummary } from '#helpers/types'
 import AddressComponent from '~/components/AddressComponent.vue'
 import type { IAddress } from '#models/address'
 import CustomForm from '~/components/form/CustomForm.vue'
@@ -9,16 +8,18 @@ import SelectDeliveryType from '~/components/SelectDeliveryType.vue'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
+import SelectTimeslot from '~/components/SelectTimeslot.vue'
+import { format } from 'date-fns'
 
 interface Props {
-  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
+  summary: BookingSummary
 }
 
 const getImageUrl = useGetImageUrl()
 const outOfRadiusError = ref(false)
 const selectedAddressCords = ref()
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const form = useForm({
   addressDetail: {
@@ -28,6 +29,13 @@ const form = useForm({
     geoLocation: '',
   },
   deliveryType: '',
+  timeslot: props?.summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id
+    ? {
+        timeslotPlanId: props?.summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id,
+        from: '',
+        to: '',
+      }
+    : null,
 })
 
 const setAddress = (ad: IAddress) => {
@@ -70,11 +78,31 @@ const submit = () => {
         <SelectDeliveryType
           v-model="form.deliveryType"
           v-model:outOfRadiusError="outOfRadiusError"
-          :geo-location="summary?.bookingDetail?.service_variant?.service?.geoLocation"
+          :geo-location="(summary?.bookingDetail?.service_variant?.service as any)?.geoLocation"
           :delivery-options="summary?.bookingDetail?.service_variant?.service?.deliveryOptions"
           :km-radius="summary?.bookingDetail?.service_variant?.service?.kmRadius"
           :selected-address-cords="selectedAddressCords"
           required
+        />
+        <br />
+        <!-- 👉 time slots -->
+        <h6
+          v-if="summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id"
+          class="text-h6 mb-2"
+        >
+          Choose a timeslot
+        </h6>
+        <SelectTimeslot
+          v-if="summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id"
+          :time-slot-id="summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id"
+          @selected-slot="
+            (slot) => {
+              if (form.timeslot) {
+                form.timeslot.from = format(slot.from, 'dd/MM/yyyy HH:mm')
+                form.timeslot.to = format(slot.to, 'dd/MM/yyyy HH:mm')
+              }
+            }
+          "
         />
       </VCol>
 

@@ -36,6 +36,7 @@ const headers = [
   { title: 'id', key: 'id' },
   { title: 'Name', key: 'name' },
   { title: 'One booking/slot', key: 'limitToOneBooking' },
+  { title: 'Skip hours', key: 'skipHours' },
   { title: 'Actions', key: 'actions' },
 ]
 </script>

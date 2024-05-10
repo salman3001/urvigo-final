@@ -1,4 +1,3 @@
-import Review from '#models/review'
 import User from '#models/user'
 import { BasePolicy, action } from '@adonisjs/bouncer'
 import logger from '@adonisjs/core/services/logger'
@@ -25,12 +24,7 @@ export default class ReviewPolicy extends BasePolicy {
   async update() {
     return false
   }
-  async delete(authUser: User, review: Review) {
-    await authUser.load('businessProfile')
-    if (review.businessProfileId === authUser?.businessProfile?.id) {
-      return true
-    } else {
-      return false
-    }
+  async delete() {
+    return false
   }
 }

@@ -5,6 +5,7 @@ export const CreateTimeslotValidator = vine.compile(
   vine.object({
     name: vine.string().maxLength(100).escape(),
     limitToOneBooking: vine.boolean(),
+    skipHours: vine.number(),
     options: vine.array(
       vine.object({
         week: vine.enum(WeekDays),
@@ -19,6 +20,7 @@ export const UpdateTimeslotValidator = vine.compile(
   vine.object({
     name: vine.string().maxLength(100).escape(),
     limitToOneBooking: vine.boolean(),
+    skipHours: vine.number(),
     options: vine.array(
       vine.object({
         week: vine.enum(WeekDays),

@@ -5,12 +5,12 @@ const ApiTimeslotController = () => import('#controllers/api/api_timeslot_contro
 router
   .group(() => {
     router
-      .get('timeslots-plans/:id/:date', [ApiTimeslotController, 'getAvailableSlots'])
-      .as('timeslot-plan.get-available-slots')
+      .get('timeslots-plans/:id/:year/:month/:day', [ApiTimeslotController, 'getAvailableSlots'])
+      .as('timeslot_plan.get_available_slots')
     router
       .resource('timeslots-plans', ApiTimeslotController)
       .only(['index', 'store', 'update', 'destroy'])
-      .as('timeslot-plan')
+      .as('timeslot_plan')
   })
   .prefix('api')
   .as('api')

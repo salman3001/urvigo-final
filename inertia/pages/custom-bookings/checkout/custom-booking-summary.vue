@@ -10,6 +10,7 @@ import AppStepper from '~/@core/components/AppStepper.vue'
 import CustomBookingAddress from '~/components/Views/Web/custombooking/CustomBookingAddress.vue'
 import CustomBookingPayment from '~/components/Views/Web/custombooking/CustomBookingPayment.vue'
 import { PaymentMode, PaymentStatus } from '#helpers/enums'
+import type Bid from '#models/bid'
 
 export default {
   layout: Layout,
@@ -51,6 +52,11 @@ const form = useForm({
     geoLocation: '',
   },
   deliveryType: '',
+  timeslot: {
+    timeslotPlanId: '',
+    from: '',
+    to: '',
+  } as any,
 })
 
 const submit = async () => {
@@ -134,6 +140,7 @@ onMounted(() => {
                 (f) => {
                   form.addressDetail = f.addressDetail
                   form.deliveryType = f.deliveryType
+                  form.timeslot = f.timeslot
                   currentStep += 1
                 }
               "

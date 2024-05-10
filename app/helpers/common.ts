@@ -7,6 +7,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import app from '@adonisjs/core/services/app'
 import { CordType } from './types.js'
+import { DateTime } from 'luxon'
 
 export async function paginate<T extends LucidModel>(
   query: ModelQueryBuilderContract<T>,
@@ -111,4 +112,12 @@ export const isWithinRadius = (cord1: CordType, cord2: CordType, maxRadius: numb
 
   const distanceKm = earthRadiusKm * c
   return distanceKm <= maxRadius
+}
+
+export function createDateTime(date: DateTime<true> | DateTime<false>, time: string) {
+  const [hours, minutes] = time.split(':') // Extract hours and minutes from the time
+  return date.set({
+    hour: Number.parseInt(hours),
+    minute: Number.parseInt(minutes),
+  })
 }

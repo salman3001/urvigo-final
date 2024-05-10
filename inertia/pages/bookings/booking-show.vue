@@ -1,8 +1,8 @@
 <script lang="ts">
 import Layout from '~/layouts/default.vue'
-import { VDataTable } from 'vuetify/components'
+import { VDataTable, VTooltip } from 'vuetify/components'
 import { format } from 'date-fns'
-import { OrderStatus } from '#helpers/enums'
+import { DeliveryOptions, OrderStatus } from '#helpers/enums'
 import BookingStatusUpdate from '~/components/BookingStatusUpdate.vue'
 import { resolveDeliveryOptions, resolvePaymentStatus, resolveStatus } from '~/utils/helpers'
 
@@ -18,11 +18,11 @@ import { computed } from 'vue'
 
 const getImagesUrl = useGetImageUrl()
 
-const props = defineProps<{
+const pagepProps = defineProps<{
   booking: IBooking
 }>()
 
-const bookingData = computed(() => (props.booking ? [props.booking] : []))
+const bookingData = computed(() => (pagepProps.booking ? [pagepProps.booking] : []))
 
 const headers = [
   { title: 'Service', key: 'service_variant' },
@@ -244,9 +244,33 @@ const headers = [
             <VCardText>
               <div class="text-body-1">
                 <span class="font-weight-bold">Booking Type:</span>
-                {{ resolveDeliveryOptions(booking.deliveryType) }}
+                <VTooltip v-for="(dt, i) in booking.deliveryType" :key="i" text="mode of ddelivery">
+                  <template #activator="{ props }">
+                    <VChip
+                      variant="text"
+                      :prepend-icon="
+                        dt === DeliveryOptions.HOME_SERVICE
+                          ? 'tabler-truck-delivery'
+                          : dt === DeliveryOptions.WALK_IN
+                            ? 'tabler-walk'
+                            : dt === DeliveryOptions.ONLINE
+                              ? 'tabler-wifi'
+                              : ''
+                      "
+                      v-bind="props"
+                    >
+                      {{ resolveDeliveryOptions(dt as DeliveryOptions) }}
+                    </VChip>
+                  </template>
+                </VTooltip>
+              </div>
+              <br />
+              <div v-if="booking?.bookedTimeslot" class="text-body-1">
+                <span class="font-weight-bold">Booked Time slot:</span>
                 <br />
-                <span class="font-weight-bold">Time slot:</span> to be done
+                {{ format(booking?.bookedTimeslot?.startTime, 'dd/MM/yyyy') }}
+                {{ format(booking?.bookedTimeslot?.startTime, 'HH:mm') }} to
+                {{ format(booking?.bookedTimeslot?.endTime, 'HH:mm') }}
               </div>
             </VCardText>
           </VCard>

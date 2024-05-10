@@ -83,8 +83,13 @@ const updateStatusForm = useForm({
 </script>
 
 <template>
-  <VContainer>
+  <VContainer class="pa-0">
     <div>
+      <div class="mb-4 d-flex justify-end">
+        <Link :href="routes('vendor.service.create')">
+          <VBtn prepend-icon="tabler-plus" text="Add Service" />
+        </Link>
+      </div>
       <VCard>
         <!-- 👉 Filters -->
         <VCardText>
@@ -96,7 +101,7 @@ const updateStatusForm = useForm({
               label="Search"
             />
 
-            <div class="d-flex gap-x-4 align-center">
+            <div class="d-flex gap-4 align-center flex-wrap">
               <AppSelect
                 v-model="query.serviceCategoryId"
                 :items="[...categories, { name: 'None', id: '' }]"

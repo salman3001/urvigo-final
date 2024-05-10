@@ -51,7 +51,7 @@ export default class ApiTimeslotController {
     return response.custom({
       code: 200,
       data: plan,
-      message: 'Plan Deleted',
+      message: null,
       success: true,
     })
   }

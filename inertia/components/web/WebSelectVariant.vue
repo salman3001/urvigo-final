@@ -44,7 +44,7 @@ const decrementQty = () => {
     <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
       <div class="ma-auto pa-2">
         <VImg
-          :width="250"
+          :width="200"
           aspect-ratio="16/9"
           cover
           :src="getImageUrl(variant.image?.thumbnailUrl)"
@@ -55,7 +55,7 @@ const decrementQty = () => {
 
       <div class="flex-grow-1">
         <VCardItem>
-          <VCardTitle>{{ variant?.name }} </VCardTitle>
+          <div class="text-h6">{{ variant?.name }}</div>
           <VChip
             v-if="discount.gt(0) && variant.discountType === DiscountType.PERCENATAGE"
             color="error"

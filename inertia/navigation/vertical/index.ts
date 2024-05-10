@@ -15,10 +15,6 @@ export default [
         to: routes('vendor.service.index'),
       },
       {
-        title: 'Add New Service',
-        to: routes('vendor.service.create'),
-      },
-      {
         title: 'Timeslot Plans',
         to: routes('vendor.timeslot-plans.index'),
       },
@@ -31,10 +27,6 @@ export default [
       {
         title: 'My Coupons',
         to: routes('vendor.coupon.index'),
-      },
-      {
-        title: 'Add New Coupon',
-        to: routes('vendor.coupon.create'),
       },
     ],
   },
@@ -63,12 +55,10 @@ export default [
     children: [
       {
         title: 'My Bookings',
-        icon: { icon: 'tabler-shopping-cart' },
         to: routes('vendor.booking.index'),
       },
       {
         title: 'My Custom Bookings',
-        icon: { icon: 'tabler-shopping-cart' },
         to: routes('vendor.custom-booking.index'),
       },
     ],

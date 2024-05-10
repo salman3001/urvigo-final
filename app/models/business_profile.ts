@@ -7,9 +7,9 @@ import Faq from './faq.js'
 import User from './user.js'
 import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Service from './service.js'
-import Review from './review.js'
 import Booking from './booking.js'
 import BidBooking from './bid_booking.js'
+import VendorReview from './vendor_review.js'
 
 export default class BusinessProfile extends BaseModel {
   serializeExtras = true
@@ -62,8 +62,8 @@ export default class BusinessProfile extends BaseModel {
   @hasMany(() => BidBooking)
   declare bidBooking: HasMany<typeof BidBooking>
 
-  @hasMany(() => Review)
-  declare reviews: HasMany<typeof Review>
+  @hasMany(() => VendorReview)
+  declare reviews: HasMany<typeof VendorReview>
 
   @belongsTo(() => User)
   declare vendor: BelongsTo<typeof User>

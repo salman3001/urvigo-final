@@ -16,6 +16,16 @@ export default class ApiReviewsController {
     })
   }
 
+  async getServiceReviewsInfo({ response }: HttpContext) {
+    const info = await this.reviewService.serviceReviewsInfo()
+    return response.custom({
+      code: 200,
+      data: info,
+      message: null,
+      success: true,
+    })
+  }
+
   async getVendorReviews({ response }: HttpContext) {
     const reviews = await this.reviewService.getVendorReviews()
     return response.custom({
@@ -26,23 +36,51 @@ export default class ApiReviewsController {
     })
   }
 
-  async createServiceReview({ response }: HttpContext) {
-    const reviews = await this.reviewService.createServiceReview()
+  async getVendorReviewsInfo({ response }: HttpContext) {
+    const info = await this.reviewService.vendorReviewsInfo()
     return response.custom({
       code: 200,
-      data: reviews,
-      message: 'Review Creaed',
+      data: info,
+      message: null,
       success: true,
     })
   }
 
+  async createServiceReview({ response }: HttpContext) {
+    const data = await this.reviewService.createServiceReview()
+    if (data === 'Already Exist') {
+      return response.custom({
+        code: 400,
+        data: null,
+        message: 'Review already exits',
+        success: true,
+      })
+    } else {
+      return response.custom({
+        code: 200,
+        data: data,
+        message: 'Review Created',
+        success: true,
+      })
+    }
+  }
+
   async createVendorReview({ response }: HttpContext) {
-    const reviews = await this.reviewService.createVendorReview()
-    return response.custom({
-      code: 200,
-      data: reviews,
-      message: 'Review Creaed',
-      success: true,
-    })
+    const data = await this.reviewService.createVendorReview()
+    if (data === 'Already Exist') {
+      return response.custom({
+        code: 400,
+        data: null,
+        message: 'Review already exits',
+        success: true,
+      })
+    } else {
+      return response.custom({
+        code: 200,
+        data: data,
+        message: 'Review Created',
+        success: true,
+      })
+    }
   }
 }

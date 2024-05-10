@@ -30,7 +30,7 @@ const props = defineProps<{
 const form = useForm({
   name: props?.coupon?.name || '',
   desc: props?.coupon?.desc || '',
-  discountType: props?.coupon?.discountType || 'flat',
+  discountType: props?.coupon?.discountType || DiscountType.FLAT,
   discountFlat: props?.coupon?.discountFlat || 0,
   discountPercentage: props?.coupon?.discountPercentage || 0,
   maxUsers: props?.coupon?.maxUsers || 0,
@@ -103,30 +103,30 @@ const minPurchaseValidator = (v: string) => {
                     v-model="form.discountType"
                     @update:model-value="
                       (value: string) => {
-                        if (value === 'flat') {
+                        if (value === DiscountType.FLAT) {
                           form.discountPercentage = 0
                         }
 
-                        if (value === 'percentage') {
+                        if (value === DiscountType.PERCENATAGE) {
                           form.discountFlat = 0
                         }
                       }
                     "
                   >
-                    <VRadio label="Flat" value="flat" />
-                    <VRadio label="Percentage" value="percentage" />
+                    <VRadio label="Flat" :value="DiscountType.FLAT" />
+                    <VRadio label="Percentage" :value="DiscountType.PERCENATAGE" />
                   </VRadioGroup>
                 </VCol>
                 <VCol cols="12" md="6">
                   <AppTextField
-                    v-if="form.discountType === 'flat'"
+                    v-if="form.discountType === DiscountType.FLAT"
                     v-model="form.discountFlat"
                     type="number"
                     label="Flat Discount"
                     :rules="[(v: string) => minNumValidator(v, 0)]"
                   />
                   <AppTextField
-                    v-if="form.discountType === 'percentage'"
+                    v-if="form.discountType === DiscountType.PERCENATAGE"
                     v-model="form.discountPercentage"
                     type="number"
                     label="Percentage Discount"

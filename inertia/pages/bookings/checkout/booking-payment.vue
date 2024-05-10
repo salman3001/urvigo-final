@@ -9,13 +9,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import type { IWebBookingController } from '#controllers/web/web_bookings_controller'
-import type { Prop } from '../../../../app/helpers/types'
+import type { BookingSummary } from '#helpers/types'
 import CheckoutLayout from '~/components/Views/Web/checkout/CheckoutLayout.vue'
 import CheckoutPayment from '~/components/Views/Web/checkout/CheckoutPayment.vue'
 
 const props = defineProps<{
-  summary: Awaited<Prop<IWebBookingController['summary']>['summary']>
+  summary: BookingSummary
 }>()
 
 const form = useForm({
@@ -33,6 +32,13 @@ const form = useForm({
     paymentMode: PaymentMode.ONLINE,
     paymentStatus: PaymentStatus.PAID,
   },
+  timeslot: props?.summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id
+    ? {
+        timeslotPlanId: props?.summary?.bookingDetail?.service_variant?.service?.timeSlotPlan?.id,
+        from: props?.summary?.timeslot?.from,
+        to: props?.summary?.timeslot?.to,
+      }
+    : null,
 })
 
 const submit = () => {
@@ -47,6 +53,7 @@ const submit = () => {
   <br />
   <VContainer>
     <CheckoutLayout :step="2">
+      {{ props?.summary?.timeslot?.from }}
       <CheckoutPayment :summary="summary" @paid="submit" />
     </CheckoutLayout>
   </VContainer>

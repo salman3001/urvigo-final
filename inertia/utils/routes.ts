@@ -192,10 +192,11 @@ const routesObject = {
   "api.address.store": "/api/addresses",
   "api.address.update": "/api/addresses/:id",
   "api.address.destroy": "/api/addresses/:id",
-  "api.timeslots.index": "/api/timeslots",
-  "api.timeslots.store": "/api/timeslots",
-  "api.timeslots.update": "/api/timeslots/:id",
-  "api.timeslots.destroy": "/api/timeslots/:id"
+  "api.timeslot_plan.get_available_slots": "/api/timeslots-plans/:id/:year/:month/:day",
+  "api.timeslot_plan.index": "/api/timeslots-plans",
+  "api.timeslot_plan.store": "/api/timeslots-plans",
+  "api.timeslot_plan.update": "/api/timeslots-plans/:id",
+  "api.timeslot_plan.destroy": "/api/timeslots-plans/:id"
 };
 
 export default function routes(

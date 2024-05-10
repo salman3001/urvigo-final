@@ -20,6 +20,7 @@ const model = defineModel<boolean>({ required: true })
 const form = useForm({
   name: '',
   limitToOneBooking: false,
+  skipHours: '',
   options: [
     {
       week: WeekDays.MONDAY,
@@ -32,6 +33,7 @@ const form = useForm({
 const resetForm = () => {
   form.name = ''
   form.limitToOneBooking = false
+  form.skipHours = ''
   form.options = [
     {
       week: WeekDays.MONDAY,
@@ -102,17 +104,34 @@ const deleteSlot = (index: number) => {
     v-model:is-visible="model"
     title="Create a time slot plan"
     subtitle="Add a weekly time slot plan. Plan will be repeated each week. You can update any time"
+    :width="900"
   >
     <CustomForm @submit="submit">
       <VCardItem>
         <div class="d-flex flex-column gap-4">
-          <AppTextField
-            v-model="form.name"
-            label="Plan Name"
-            placeholder="Add a plan name"
-            :rules="[requiredValidator]"
-          />
-          <VCheckbox v-model="form.limitToOneBooking" label="Limit One Booking per slot" />
+          <VRow>
+            <VCol cols="12" sm="6">
+              <AppTextField
+                v-model="form.name"
+                label="Plan Name"
+                placeholder="Add a plan name"
+                :rules="[requiredValidator]"
+              />
+            </VCol>
+            <VCol cols="12" sm="6">
+              <AppTextField
+                v-model="form.skipHours"
+                type="number"
+                label="Hours to skip before bookings starts"
+                placeholder="Skip hours"
+                :rules="[requiredValidator]"
+              />
+            </VCol>
+            <VCol cols="12" sm="6">
+              <VCheckbox v-model="form.limitToOneBooking" label="Limit One Booking per slot" />
+            </VCol>
+          </VRow>
+
           <VTable density="compact" class="text-no-wrap rounded">
             <thead>
               <tr>

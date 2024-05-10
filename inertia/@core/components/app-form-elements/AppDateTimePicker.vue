@@ -133,8 +133,7 @@ watch(
 )
 
 const elementId = computed(() => {
-  // @ts-expect-error id or label will be there
-  const _elementIdToken = fieldProps.value.id || fieldProps.value.label
+  const _elementIdToken = (fieldProps as any).id || (fieldProps as any).label
 
   return _elementIdToken
     ? `app-picker-field-${_elementIdToken}-${Math.random().toString(36).slice(2, 7)}`

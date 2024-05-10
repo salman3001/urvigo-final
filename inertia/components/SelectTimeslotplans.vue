@@ -16,7 +16,7 @@ const { data, processing, exec } = useApiGet<IPaginatedModel<TimeslotPlan>>()
 
 const getPlans = () => {
   exec(
-    routes('api.timeslots.index'),
+    routes('api.timeslot_plan.index'),
     {},
     {
       onSuccess: () => {

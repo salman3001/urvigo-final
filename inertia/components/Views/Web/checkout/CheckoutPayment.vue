@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import type { BookingSummary } from '#helpers/types'
 import { ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
 defineProps<{
-  summary: any
+  summary: BookingSummary
 }>()
 
 defineEmits<{
@@ -178,17 +179,13 @@ const cardFormData = ref({
           <div class="d-flex justify-space-between text-base mb-4">
             <span class="text-high-emphasis font-weight-medium">Deliver to:</span>
             <VChip color="primary" class="text-capitalize" label size="small">
-              Lorem ipsum dolor sit amet.
+              {{ summary?.addressDetail.mapAddress }}
             </VChip>
           </div>
 
-          <h6 class="text-base font-weight-medium">Lorem ipsum dolor sit amet.</h6>
-          <p class="text-base text-wrap mb-0">Lorem ipsum dolor sit amet.</p>
-          <p class="text-base mb-4">Mobile : 99999999</p>
-
-          <h6 class="text-h6">
-            <a href="#">Change address</a>
-          </h6>
+          <h6 class="text-base font-weight-medium">{{ summary?.addressDetail?.mapAddress }}</h6>
+          <p class="text-base text-wrap mb-0">{{ summary?.addressDetail?.address }}</p>
+          <p class="text-base mb-4">Mobile : {{ summary?.addressDetail?.mobile }}</p>
         </VCardText>
       </VCard>
     </VCol>

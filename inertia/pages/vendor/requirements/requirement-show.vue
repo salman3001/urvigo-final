@@ -97,20 +97,22 @@ const acceptNegotiate = (placedBidId: number) => {
     <VendorRequirementCard :requirement="requirement" />
     <br />
     <br />
-    <div>
-      <div v-if="!placedBid">
-        <VBtn @click="placeBidModal = true"> Place a Bid</VBtn>
-      </div>
-      <div v-else>
-        <h4 class="text-bold">Placed Bid</h4>
-        <br />
-        <VendorPlacedBidCard
-          :bid="placedBid"
-          :accepted="requirement?.acceptedBidId == placedBid?.id"
-        />
-      </div>
-      <br />
-      <div v-if="placedBid && placedBid.negotiateHistory?.length > 0">
+    <br />
+    <VRow v-if="placedBid && placedBid.negotiateHistory?.length > 0">
+      <VCol cols="12" md="6">
+        <div v-if="!placedBid">
+          <VBtn @click="placeBidModal = true"> Place a Bid</VBtn>
+        </div>
+        <div v-else>
+          <h4 class="text-bold">Placed Bid</h4>
+          <br />
+          <VendorPlacedBidCard
+            :bid="placedBid"
+            :accepted="requirement?.acceptedBidId == placedBid?.id"
+          />
+        </div>
+      </VCol>
+      <VCol cols="12" md="6">
         <h4 class="text-bold">Negotiate history</h4>
         <br />
         <div>
@@ -147,16 +149,17 @@ const acceptNegotiate = (placedBidId: number) => {
             </VTimelineItem>
           </VTimeline>
         </div>
-      </div>
-      <br />
-      <br />
-      <br />
-    </div>
-    <ModalBase v-model:is-visible="placeBidModal" title="Place a bid" :width="1000">
+      </VCol>
+    </VRow>
+    <br />
+    <br />
+    <br />
+
+    <ModalBase v-model:is-visible="placeBidModal" title="Place a bid">
       <VCardItem>
         <CustomForm class="d-flex flex-column gap-4" @submit="createBid">
           <VRow>
-            <VCol cols="12" sm="6">
+            <VCol cols="12">
               <AppTextField
                 v-model="createBidForm.offeredPrice"
                 type="number"
@@ -164,14 +167,14 @@ const acceptNegotiate = (placedBidId: number) => {
                 :rules="[requiredValidator]"
               />
             </VCol>
-            <VCol cols="12" sm="6">
+            <VCol cols="12">
               <AppTextarea
                 v-model="createBidForm.message"
                 label="Message"
                 :rules="[requiredValidator]"
               />
             </VCol>
-            <VCol cols="12" sm="6">
+            <VCol cols="12">
               <div>
                 <p class="mb-2">Select Delivery Options</p>
                 <CustomCheckboxesWithIcon
@@ -201,7 +204,7 @@ const acceptNegotiate = (placedBidId: number) => {
                 />
               </div>
             </VCol>
-            <VCol cols="12" sm="6">
+            <VCol cols="12">
               <div>
                 <p class="mb-2">Select Timeslot plan (optional)</p>
                 <SelectTimeslotplans v-model="createBidForm.timeSlotPlanId" />

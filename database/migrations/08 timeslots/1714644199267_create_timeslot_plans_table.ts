@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name').notNullable()
       table.boolean('limit_to_one_booking').notNullable().defaultTo(false)
+      table.smallint('skip_hours').notNullable()
       table.json('options').notNullable().defaultTo([])
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.integer('service_id').unsigned().references('id').inTable('services')

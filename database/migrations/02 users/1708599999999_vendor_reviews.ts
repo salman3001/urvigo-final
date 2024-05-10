@@ -1,19 +1,24 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'reviews'
+  protected tableName = 'vendor_reviews'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.decimal('rating', 2, 1).notNullable()
+      table.decimal('response_time', 2, 1).notNullable()
+      table.decimal('quality_of_service', 2, 1).notNullable()
+      table.decimal('professional_behavior', 2, 1).notNullable()
+      table.decimal('communication', 2, 1).notNullable()
+      table.decimal('fair_pricing', 2, 1).notNullable()
+      table.decimal('avg_rating', 2, 1).notNullable()
       table.string('message', 1500).notNullable()
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table
-        .integer('service_id')
+        .integer('business_profile_id')
         .unsigned()
         .references('id')
-        .inTable('services')
+        .inTable('business_profiles')
         .onDelete('CASCADE')
 
       /**

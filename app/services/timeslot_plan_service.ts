@@ -1,6 +1,6 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
-import { paginate } from '../helpers/common.js'
+import { createDateTime, paginate } from '../helpers/common.js'
 import TimeslotPlan from '#models/timeslot_plan'
 import { CreateTimeslotValidator, UpdateTimeslotValidator } from '#validators/timeslot'
 import { IndexOption } from '#helpers/types'
@@ -70,35 +70,60 @@ export default class TimeslotPlanService {
 
   async getAvailableTimeslots() {
     const { params } = this.ctx
-    const dateToCheck = params.date
-    const slots = [] as any[]
-
-    const getNormalSlots = () => {
-      plan.options.map((o) => {
-        const fromDateTime = DateTime.fromFormat(`${dateToCheck} ${o.from}`, 'dd/MM/yyyy HH:mm')
-        const toDateTime = DateTime.fromFormat(`${dateToCheck} ${o.to}`, 'dd/MM/yyyy HH:mm')
-        slots.push({
-          from: fromDateTime,
-          to: toDateTime,
-        })
-      })
-    }
+    const year = params.year
+    const month = params.month
+    const day = params.day
 
     const plan = await TimeslotPlan.findOrFail(+params.id)
-    if (plan.limitToOneBooking) {
-      plan.load('bookedTimeslots', (b) => {
-        b.where('start_time', dateToCheck)
-      })
 
-      if (plan.bookedTimeslots.length < 1) {
-        getNormalSlots()
-      } else {
-        // itrate over bookedslots > convert to time only >
-      }
-    } else {
-      getNormalSlots()
+    const requestedDate = DateTime.local(+year, +month, +day, 0, 0, 0, { zone: 'local' })
+
+    const getNormalSlots = () => {
+      const normalSlots: Array<{
+        from: DateTime<true> | DateTime<false>
+        to: DateTime<true> | DateTime<false>
+      }> = []
+      plan.options.map((o) => {
+        const skipHours = plan.skipHours
+        const fromDateTime = createDateTime(requestedDate, o.from)
+        const toDateTime = createDateTime(requestedDate, o.to)
+
+        if (
+          fromDateTime.weekday === Number.parseInt(o.week) &&
+          fromDateTime.diffNow('hour').hours > skipHours
+        ) {
+          normalSlots.push({
+            from: fromDateTime,
+            to: toDateTime,
+          })
+        }
+      })
+      return normalSlots
     }
 
-    return slots
+    if (plan.limitToOneBooking) {
+      await plan.load('bookedTimeslots')
+      if (plan.bookedTimeslots?.length < 1) {
+        return getNormalSlots()
+      } else {
+        const normalTimeslots = getNormalSlots()
+        const slots = normalTimeslots.filter((nt) => {
+          let isAvailable = true
+          plan.bookedTimeslots.forEach((bt) => {
+            if (
+              DateTime.fromJSDate(bt.startTime).equals(nt.from) &&
+              DateTime.fromJSDate(bt.endTime).equals(nt.to)
+            ) {
+              isAvailable = false
+            }
+          })
+          return isAvailable
+        })
+
+        return slots
+      }
+    } else {
+      return getNormalSlots()
+    }
   }
 }

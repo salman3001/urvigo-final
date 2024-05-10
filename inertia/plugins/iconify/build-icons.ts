@@ -178,6 +178,9 @@ const sources: BundleScriptConfig = {
         'truck-delivery',
         'walk',
         'wifi',
+        'moneybag',
+        'message',
+        'circle-check',
       ],
     },
     {

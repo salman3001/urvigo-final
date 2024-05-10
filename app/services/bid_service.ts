@@ -29,7 +29,7 @@ export default class BidService {
   async show() {
     const { bouncer, params } = this.ctx
     const id = params.id
-    const bid = await Bid.query().where('id', id).firstOrFail()
+    const bid = await Bid.query().where('id', id).preload('timeSlotPlan').firstOrFail()
 
     await bouncer.with('BidPolicy').authorize('view')
 

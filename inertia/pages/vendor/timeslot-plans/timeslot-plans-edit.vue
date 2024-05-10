@@ -25,6 +25,7 @@ const props = defineProps<{
 const form = useForm({
   name: props.timeslotPlan.name,
   limitToOneBooking: props.timeslotPlan.limitToOneBooking,
+  skipHours: props.timeslotPlan.skipHours,
   options: props.timeslotPlan.options?.map((o) => ({
     week: o.week,
     from: o.from,
@@ -105,7 +106,7 @@ const deleteSlot = (index: number) => {
       </div>
       <div>
         <VRow>
-          <VCol cols="12" md="6">
+          <VCol cols="12" sm="6">
             <AppTextField
               v-model="form.name"
               label="Plan Name"
@@ -113,7 +114,16 @@ const deleteSlot = (index: number) => {
               :rules="[requiredValidator]"
             />
           </VCol>
-          <VCol cols="12">
+          <VCol cols="12" sm="6">
+            <AppTextField
+              v-model="form.skipHours"
+              type="number"
+              label="Hours to skip before bookings starts"
+              placeholder="Skip hours"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" sm="6">
             <VCheckbox v-model="form.limitToOneBooking" label="Limit One Booking per slot" />
           </VCol>
           <VCol cols="12">

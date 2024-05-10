@@ -17,6 +17,9 @@ export default class TimeslotPlan extends BaseModel {
   declare limitToOneBooking: boolean
 
   @column()
+  declare skipHours: number
+
+  @column()
   declare serviceId: number
 
   @column()

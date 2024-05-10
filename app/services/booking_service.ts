@@ -85,6 +85,7 @@ export default class BookingService {
     const id = params.id
     const booking = await Booking.query()
       .preload('user')
+      .preload('bookedTimeslot')
       .preload('businessProfile', (b) => {
         b.preload('vendor')
       })
@@ -308,6 +309,7 @@ export default class BookingService {
             v.select(['id', 'first_name', 'last_name'])
           })
         })
+        .preload('timeSlotPlan', (p) => p.select('id'))
         .select([
           'id',
           'delivery_options',

@@ -1,7 +1,13 @@
 import type User from '#models/user'
 import type { PageObject } from '@adonisjs/inertia/types'
 import type ServiceVariant from '../models/service_variant.js'
-import { DiscountType, PaymentMode, PaymentStatus, WeekDays } from './enums.js'
+import type {
+  DeliveryOptions,
+  DiscountType,
+  PaymentMode,
+  PaymentStatus,
+  WeekDays,
+} from './enums.js'
 
 export type ImageType = {
   url: string
@@ -88,6 +94,37 @@ export interface IbidBookingDetail {
   }
 }
 
+export interface BookingSummary {
+  businessProfileId: number
+  bookingDetail: {
+    couponId: number | undefined
+    vendorUserId: number
+    service_variant: ServiceVariant
+    qty: number
+    totalWithoutDiscount: string
+    vendorDiscount: string
+    totalAfterDiscount: string
+    couponDiscount: string
+    grandTotal: string
+  }
+  paymentDetail: {
+    paymentMode: null
+    paymenAddress: null
+  }
+  addressDetail: {
+    address: string
+    mapAddress: string
+    mobile: string
+    geoLocation: string
+  }
+  deliveryType: DeliveryOptions
+  timeslot?: {
+    timeslotPlanId: number
+    from: string | Date
+    to: string | Date
+  }
+}
+
 export interface IbookingAddressDetail {
   geoLocation: string
   mapAddress: string
@@ -118,4 +155,31 @@ export type ItimeslotPlanOptions = Array<{
 export interface CordType {
   x: number
   y: number
+}
+
+export type SlotType = Array<{
+  from: string
+  to: string
+}>
+
+export type ReviewsCountInfo = Array<{
+  rating: 1 | 2 | 3 | 4 | 5
+  value: number | string
+}>
+
+export type ServiceReviewsInfo = {
+  avgRating: number | string
+  totalReviews: number | string
+  counts: ReviewsCountInfo
+}
+
+export type VendorReviewsInfo = {
+  avgResponseTime: number | string
+  avgQualityOfService: number | string
+  avgProfessionalBehavior: number | string
+  avgCommunication: number | string
+  avgFairPricing: number | string
+  avgRating: number | string
+  totalReviews: number | string
+  counts: ReviewsCountInfo
 }
