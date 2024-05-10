@@ -148,10 +148,6 @@ const routesObject = {
   "api.notifications.index": "/api/notifications",
   "api.notifications.update": "/api/notifications/:id",
   "api.notifications.destroy": "/api/notifications/:id",
-  "api.reviews.service": "/api/reviews/service-reviews/:serviceId",
-  "api.reviews.vendor": "/api/reviews/venodr-reviews/:vendorId",
-  "api.reviews.service.create": "/api/reviews/service-reviews",
-  "api.reviews.vendor.create": "/api/reviews/venodr-reviews",
   "api.service.show": "/api/service/:slug",
   "api.service.destroy_images": "/api/service/delete-screenshot/:id",
   "api.service.my_list": "/api/service/my-list",
@@ -196,7 +192,13 @@ const routesObject = {
   "api.timeslot_plan.index": "/api/timeslots-plans",
   "api.timeslot_plan.store": "/api/timeslots-plans",
   "api.timeslot_plan.update": "/api/timeslots-plans/:id",
-  "api.timeslot_plan.destroy": "/api/timeslots-plans/:id"
+  "api.timeslot_plan.destroy": "/api/timeslots-plans/:id",
+  "api.reviews.services": "/api/reviews/services/:serviceId",
+  "api.reviews.services.info": "/api/reviews/services/:serviceId/get-info",
+  "api.reviews.services.store": "/api/reviews/services/:serviceId",
+  "api.reviews.vendor": "/api/reviews/vendor/:businessProfileId",
+  "api.reviews.vendor.info": "/api/reviews/vendor/:businessProfileId/get-info",
+  "api.reviews.vendor.store": "/api/reviews/vendor/:businessProfileId"
 };
 
 export default function routes(

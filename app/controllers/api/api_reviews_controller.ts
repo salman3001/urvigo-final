@@ -53,7 +53,7 @@ export default class ApiReviewsController {
         code: 400,
         data: null,
         message: 'Review already exits',
-        success: true,
+        success: false,
       })
     } else {
       return response.custom({
@@ -72,7 +72,7 @@ export default class ApiReviewsController {
         code: 400,
         data: null,
         message: 'Review already exits',
-        success: true,
+        success: false,
       })
     } else {
       return response.custom({

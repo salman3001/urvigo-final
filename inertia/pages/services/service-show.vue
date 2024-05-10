@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import type { IPageProps } from '#helpers/types'
 import type { IService } from '#models/service'
-import { Link, router, usePage } from '@inertiajs/vue3'
-import { computed } from 'vue'
-import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
-import ReviewsCard from '~/components/ReviewsCard.vue'
-import ReviewsOverview from '~/components/ReviewsOverview.vue'
 import ServiceCard2 from '~/components/ServiceCard2.vue'
+import ServiceReviews from '~/components/ServiceReviews.vue'
 import SwiperCrousel from '~/components/SwiperCrousel.vue'
-import ModalAddReview from '~/components/modal/ModalAddReview.vue'
 import WebSelectVariant from '~/components/web/WebSelectVariant.vue'
 
 const getImageUrl = useGetImageUrl()
-const addReviewModal = ref(false)
-const page = usePage<IPageProps<{}>>()
-const user = computed(() => page.props?.user)
 
 defineProps<{
   service: IService
@@ -38,7 +30,7 @@ export default {
   <br />
   <br />
   <br />
-  <VContainer fluid>
+  <VContainer>
     <VRow>
       <VCol cols="12" md="9">
         <VCard>
@@ -141,37 +133,7 @@ export default {
           </VCardText>
         </VCard>
         <br />
-
-        <ReviewsOverview
-          :total-reviews="service?.businessProfile?.meta?.reviews_count || 0"
-          :rating="Number(service?.businessProfile.avgRating)"
-        >
-          <div class="d-flex gap-2 flex-wrap">
-            <VBtn
-              @click="
-                () => {
-                  if (user) {
-                    addReviewModal = true
-                  } else {
-                    router.visit(`${routes('web.auth.login')}?next=${page.url}`)
-                  }
-                }
-              "
-            >
-              <VIcon size="24" class="cursor-pointer" icon="tabler-plus" />
-              Add Review
-            </VBtn>
-            <VBtn>
-              <VIcon size=" 24" class="cursor-pointer" icon="tabler-eye" /> &nbsp; View All
-            </VBtn>
-          </div>
-        </ReviewsOverview>
-        <br />
-        <VRow>
-          <VCol v-for="(r, i) in service?.reviews" :key="i">
-            <ReviewsCard :review="r" />
-          </VCol>
-        </VRow>
+        <ServiceReviews :service-id="service?.id" />
       </VCol>
 
       <VCol cols="12" md="3">
@@ -181,16 +143,6 @@ export default {
         </div>
       </VCol>
     </VRow>
-    <ModalAddReview
-      v-model:isVisible="addReviewModal"
-      :service-id="service!.id"
-      @submit="
-        async () => {
-          router.reload({ only: ['service'] })
-          addReviewModal = false
-        }
-      "
-    />
   </VContainer>
 </template>
 

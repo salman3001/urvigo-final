@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
 import { requiredValidator } from '~/@core/utils/validators'
 import routes from '~/utils/routes'
@@ -7,6 +6,7 @@ import CustomForm from '../form/CustomForm.vue'
 import ErrorAlert from '../form/ErrorAlert.vue'
 import ModalBase from './ModalBase.vue'
 import { VRating } from 'vuetify/components'
+import useApiForm from '~/composables/useApiForm'
 
 const isVisible = defineModel<boolean>('isVisible')
 
@@ -19,32 +19,43 @@ const emit = defineEmits<{
   (e: 'submit'): void
 }>()
 
-const serviceReviewForm = useForm({
+const serviceReviewForm = useApiForm({
   rating: '',
   message: '',
 })
 
-const vendorReviewForm = useForm({
-  rating: '',
+const vendorReviewForm = useApiForm({
+  responseTime: '',
+  qualityOfService: '',
+  professionalBehavior: '',
+  communication: '',
+  fairPricing: '',
   message: '',
 })
 
 const formSubmit = async () => {
   if (props.serviceId) {
-    serviceReviewForm.post(routes('web.services.create_review', [props.serviceId]), {
-      onSuccess: () => {
-        emit('submit')
-      },
-    })
+    serviceReviewForm.post(
+      routes('api.reviews.services.store', [props.serviceId]),
+      {},
+      {
+        onSucess: () => {
+          emit('submit')
+        },
+      }
+    )
   }
 
   if (props.businessProfileId) {
-    // to be done
-    serviceReviewForm.post('', {
-      onSuccess: () => {
-        emit('submit')
-      },
-    })
+    vendorReviewForm.post(
+      routes('api.reviews.services.store', [props.businessProfileId]),
+      {},
+      {
+        onSucess: () => {
+          emit('submit')
+        },
+      }
+    )
   }
 }
 </script>
@@ -53,48 +64,64 @@ const formSubmit = async () => {
   <ModalBase
     v-model:is-visible="isVisible"
     title="Add Review"
-    subtitle="Share your thoughts about this service"
+    :subtitle="`Share your thoughts about this ${serviceId ? 'service' : 'vendor'}`"
+    :width="400"
   >
     <CustomForm ref="formRef" fast-fail @submit="() => formSubmit()">
-      <ErrorAlert v-if="serviceReviewForm.errors" :errors="serviceReviewForm.errors" />
-      <ErrorAlert v-if="vendorReviewForm.errors" :errors="vendorReviewForm.errors" />
+      <ErrorAlert v-if="serviceReviewForm.error" :errors="serviceReviewForm.error" />
+      <ErrorAlert v-if="vendorReviewForm.error" :errors="vendorReviewForm.error" />
       <br />
       <VRow>
-        <!-- 👉 Card Number -->
         <VCol cols="12" class="d-flex justify-center">
-          <VRating
-            v-if="serviceId"
-            v-model="serviceReviewForm.rating"
-            label="Rating"
-            :rules="[requiredValidator]"
-          />
-          <VRating
-            v-if="businessProfileId"
-            v-model="vendorReviewForm.rating"
-            label="Rating"
-            :rules="[requiredValidator]"
-          />
+          <div v-if="serviceId" class="w-100">
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Rating</label>
+              <VRating v-model="serviceReviewForm.rating" :rules="[requiredValidator]" />
+            </div>
+            <AppTextarea
+              v-model="serviceReviewForm.message"
+              label="Comments"
+              :rules="[requiredValidator]"
+            />
+          </div>
+          <div v-if="businessProfileId" class="w-100">
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Quality of service</label>
+              <VRating v-model="vendorReviewForm.qualityOfService" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Profesional Behaviour</label>
+              <VRating
+                v-model="vendorReviewForm.professionalBehavior"
+                :rules="[requiredValidator]"
+              />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Response Time</label>
+              <VRating v-model="vendorReviewForm.responseTime" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Communication</label>
+              <VRating v-model="vendorReviewForm.communication" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Fair Pricing</label>
+              <VRating v-model="vendorReviewForm.fairPricing" :rules="[requiredValidator]" />
+            </div>
+            <AppTextarea
+              v-model="vendorReviewForm.message"
+              label="Comments"
+              :rules="[requiredValidator]"
+            />
+          </div>
         </VCol>
 
-        <!-- 👉 Card Name -->
-        <VCol cols="12" md="12">
-          <AppTextarea
-            v-if="serviceId"
-            v-model="serviceReviewForm.message"
-            label="Message"
-            :rules="[requiredValidator]"
-          />
-          <AppTextarea
-            v-if="businessProfileId"
-            v-model="vendorReviewForm.message"
-            label="Message"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
         <!-- 👉 Card actions -->
-        <VCol cols="12" class="text-center">
-          <VBtn class="me-4" type="submit"> Submit </VBtn>
-          <VBtn color="secondary" variant="tonal" @click="isVisible = false"> Cancel </VBtn>
+        <VCol cols="12" class="text-end">
+          <VBtn class="me-4" color="secondary" variant="tonal" @click="isVisible = false">
+            Cancel
+          </VBtn>
+          <VBtn type="submit"> Submit </VBtn>
         </VCol>
       </VRow>
     </CustomForm>

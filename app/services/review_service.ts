@@ -102,10 +102,12 @@ export default class ReviewsService {
 
   async getServiceReviews() {
     const { params, request } = this.ctx
-    console.log(+params.serviceId)
-    console.log('here')
 
-    const reviewsQuery = Review.query().where('service_id', +params.serviceId)
+    const reviewsQuery = Review.query()
+      .where('service_id', +params.serviceId)
+      .preload('user', (u) => {
+        u.select(['first_name', 'last_name'])
+      })
 
     const reviews = await paginate(reviewsQuery, request)
 

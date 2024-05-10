@@ -1,5 +1,5 @@
 import type { AxiosError, AxiosRequestConfig } from 'axios'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import api from '~/utils/axios'
 import * as vt from 'vue-toastification'
 import type { IResType } from '#helpers/types'
@@ -41,7 +41,7 @@ export default function useApiGet<T>() {
   }
 
   return {
-    data,
+    data: data as Ref<T>,
     exec,
     processing,
     error,
