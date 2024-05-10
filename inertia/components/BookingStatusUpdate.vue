@@ -93,7 +93,7 @@ const updateStatusModalStatusType = ref(OrderStatus.PLACED)
       color="success"
       @click="
         () => {
-          updateStatusModalMessage = 'Request booking completion, Are you sure?'
+          updateStatusModalMessage = `Accept Completion and Rate this ${bookingType === 'normal' ? 'Service' : 'Vendor'}`
           updateStatusModalStatusType = OrderStatus.COMPLETED
           updateStatusModal = true
         }

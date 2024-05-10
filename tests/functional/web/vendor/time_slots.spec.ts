@@ -54,8 +54,6 @@ test.group('Web vendor time slots', (group) => {
       .withCsrfToken()
       .withInertia()
 
-    response.dumpBody()
-
     response.assertTextIncludes('Timeslot Updated')
   })
 

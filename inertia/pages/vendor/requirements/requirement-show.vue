@@ -98,7 +98,7 @@ const acceptNegotiate = (placedBidId: number) => {
     <br />
     <br />
     <br />
-    <VRow v-if="placedBid && placedBid.negotiateHistory?.length > 0">
+    <VRow>
       <VCol cols="12" md="6">
         <div v-if="!placedBid">
           <VBtn @click="placeBidModal = true"> Place a Bid</VBtn>
@@ -112,7 +112,7 @@ const acceptNegotiate = (placedBidId: number) => {
           />
         </div>
       </VCol>
-      <VCol cols="12" md="6">
+      <VCol cols="12" md="6" v-if="placedBid && placedBid.negotiateHistory?.length > 0">
         <h4 class="text-bold">Negotiate history</h4>
         <br />
         <div>

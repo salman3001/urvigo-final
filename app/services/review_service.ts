@@ -1,6 +1,9 @@
 import { paginate } from '#helpers/common'
 import { ServiceReviewsInfo, VendorReviewsInfo } from '#helpers/types'
+import BidBooking from '#models/bid_booking'
+import Booking from '#models/booking'
 import Review from '#models/review'
+import User from '#models/user'
 import VendorReview from '#models/vendor_review'
 import { CreateReviewValidator, CreateVendorReviewValidator } from '#validators/reviews_validator'
 import { inject } from '@adonisjs/core'
@@ -14,10 +17,11 @@ export default class ReviewsService {
 
   async getVendorReviews() {
     const { params, request } = this.ctx
-    const reviewsQuery = VendorReview.query().where(
-      'business_profile_id',
-      +params.businessProfileId
-    )
+    const reviewsQuery = VendorReview.query()
+      .where('business_profile_id', +params.businessProfileId)
+      .preload('user', (u) => {
+        u.select(['first_name', 'last_name'])
+      })
 
     const reviews = await paginate(reviewsQuery, request)
 
@@ -37,11 +41,11 @@ export default class ReviewsService {
         AVG(professional_behavior) AS avg_professional_behavior, 
         AVG(communication) AS avg_communication, 
         AVG(fair_pricing) AS avg_fair_pricing, 
-        COUNT(CASE WHEN avg_rating BETWEEN 4 AND 5 THEN 1 END) AS five_star_count,
-        COUNT(CASE WHEN avg_rating BETWEEN 3 AND 4 THEN 1 END) AS four_star_count,
-        COUNT(CASE WHEN avg_rating BETWEEN 2 AND 3 THEN 1 END) AS three_star_count,
-        COUNT(CASE WHEN avg_rating BETWEEN 1 AND 2 THEN 1 END) AS two_star_count,
-        COUNT(CASE WHEN avg_rating BETWEEN 0 AND 1 THEN 1 END) AS one_star_count
+        COUNT(CASE WHEN avg_rating BETWEEN 5 AND 6 THEN 1 END) AS five_star_count,
+        COUNT(CASE WHEN avg_rating BETWEEN 4 AND 4.999 THEN 1 END) AS four_star_count,
+        COUNT(CASE WHEN avg_rating BETWEEN 3 AND 3.999 THEN 1 END) AS three_star_count,
+        COUNT(CASE WHEN avg_rating BETWEEN 2 AND 2.999 THEN 1 END) AS two_star_count,
+        COUNT(CASE WHEN avg_rating BETWEEN 0 AND 1.999 THEN 1 END) AS one_star_count
       FROM 
         vendor_reviews 
       WHERE 
@@ -175,7 +179,7 @@ export default class ReviewsService {
     const { request, bouncer, auth, params } = this.ctx
     await bouncer.with('ReviewPolicy').authorize('create')
 
-    const user = auth.user
+    const user = auth.user as User
     const businessProfileId = params.businessProfileId
 
     const reviewExist = await VendorReview.query()
@@ -185,6 +189,24 @@ export default class ReviewsService {
 
     if (reviewExist) {
       return 'Already Exist'
+    }
+
+    const bookingExist = await Booking.query()
+      .where('user_id', user.id)
+      .whereHas('businessProfile', (b) => {
+        b.where('id', businessProfileId)
+      })
+      .first()
+
+    const bidBookingExist = await BidBooking.query()
+      .where('user_id', user.id)
+      .whereHas('businessProfile', (b) => {
+        b.where('id', businessProfileId)
+      })
+      .first()
+
+    if (!bookingExist && !bidBookingExist) {
+      return 'No booking exist'
     }
 
     const payload = await request.validateUsing(CreateVendorReviewValidator)
@@ -209,7 +231,7 @@ export default class ReviewsService {
   async createServiceReview() {
     const { request, bouncer, params, auth } = this.ctx
     await bouncer.with('ReviewPolicy').authorize('create')
-    const user = auth.user
+    const user = auth.user as User
     const serviceId = params.serviceId
 
     const reviewExist = await Review.query()
@@ -219,6 +241,24 @@ export default class ReviewsService {
 
     if (reviewExist) {
       return 'Already Exist'
+    }
+
+    const bookingExist = await Booking.query()
+      .where('user_id', user.id)
+      .whereRaw("booking_detail->'service_variant'->>'serviceId' = ?", [serviceId])
+      .first()
+
+    // await db.rawQuery(`
+    //   SELECT
+    //     *
+    //   FROM
+    //     bookings
+    //   WHERE
+    //     booking_detail
+    // `)
+
+    if (!bookingExist) {
+      return 'No booking exist'
     }
 
     const payload = await request.validateUsing(CreateReviewValidator)

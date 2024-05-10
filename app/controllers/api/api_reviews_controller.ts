@@ -55,6 +55,13 @@ export default class ApiReviewsController {
         message: 'Review already exits',
         success: false,
       })
+    } else if (data === 'No booking exist') {
+      return response.custom({
+        code: 400,
+        data: null,
+        message: 'Service is not booked',
+        success: false,
+      })
     } else {
       return response.custom({
         code: 200,
@@ -72,6 +79,13 @@ export default class ApiReviewsController {
         code: 400,
         data: null,
         message: 'Review already exits',
+        success: false,
+      })
+    } else if (data === 'No booking exist') {
+      return response.custom({
+        code: 400,
+        data: null,
+        message: 'No Service booked from this vendor',
         success: false,
       })
     } else {

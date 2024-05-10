@@ -48,7 +48,7 @@ const routesObject = {
   "web.account.notifications": "/account/notifications",
   "web.vendor-profile.about": "/vendor-profile/:id/about",
   "web.vendor-profile.services": "/vendor-profile/:id/services",
-  "web.vendor-profile.reviews": "/vendor-profile/:id/reviews/:vendorId",
+  "web.vendor-profile.reviews": "/vendor-profile/:id/reviews",
   "web.chat": "/chat",
   "web.chat.create-masaage": "/chat/:id",
   "web.not-found": "/not-found",

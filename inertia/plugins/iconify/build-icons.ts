@@ -181,6 +181,9 @@ const sources: BundleScriptConfig = {
         'moneybag',
         'message',
         'circle-check',
+        'device-desktop-star',
+        'server',
+        'user-check',
       ],
     },
     {

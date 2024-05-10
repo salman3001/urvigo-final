@@ -31,11 +31,7 @@ export default class UserService {
     const user = await User.query()
       .where('id', +params.id)
       .preload('profile')
-      .preload('businessProfile', (b) => {
-        b.preload('reviews', (r) => {
-          r.limit(10).orderBy('created_at')
-        }).withCount('reviews')
-      })
+      .preload('businessProfile')
       .firstOrFail()
 
     await bouncer.with('userPolicy').authorize('view')
@@ -48,11 +44,7 @@ export default class UserService {
     const user = await User.query()
       .where('id', auth.user!?.id)
       .preload('profile')
-      .preload('businessProfile', (b) => {
-        b.preload('reviews', (r) => {
-          r.limit(10).orderBy('created_at')
-        }).withCount('reviews')
-      })
+      .preload('businessProfile')
       .firstOrFail()
 
     await bouncer.with('userPolicy').authorize('view')

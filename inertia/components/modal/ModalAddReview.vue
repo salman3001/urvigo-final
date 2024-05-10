@@ -35,6 +35,10 @@ const vendorReviewForm = useApiForm({
 
 const formSubmit = async () => {
   if (props.serviceId) {
+    if (['', undefined, null, 0].includes(serviceReviewForm.rating)) {
+      alert('Please select all options')
+      return
+    }
     serviceReviewForm.post(
       routes('api.reviews.services.store', [props.serviceId]),
       {},
@@ -47,8 +51,18 @@ const formSubmit = async () => {
   }
 
   if (props.businessProfileId) {
+    if (
+      ['', undefined, null, 0].includes(vendorReviewForm.communication) ||
+      ['', undefined, null, 0].includes(vendorReviewForm.fairPricing) ||
+      ['', undefined, null, 0].includes(vendorReviewForm.professionalBehavior) ||
+      ['', undefined, null, 0].includes(vendorReviewForm.responseTime) ||
+      ['', undefined, null, 0].includes(vendorReviewForm.qualityOfService)
+    ) {
+      alert('Please select all options')
+      return
+    }
     vendorReviewForm.post(
-      routes('api.reviews.services.store', [props.businessProfileId]),
+      routes('api.reviews.vendor.store', [props.businessProfileId]),
       {},
       {
         onSucess: () => {

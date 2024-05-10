@@ -144,9 +144,7 @@ router
           .group(() => {
             router.get('/:id/about/', [WebPagesController, 'vendorProfile']).as('about')
             router.get('/:id/services/', [WebPagesController, 'vendorServices']).as('services')
-            router
-              .get('/:id/reviews/:vendorId', [WebPagesController, 'vendorReviews'])
-              .as('reviews')
+            router.get('/:id/reviews', [WebPagesController, 'vendorReviews']).as('reviews')
           })
           .prefix('vendor-profile')
           .as('vendor-profile')

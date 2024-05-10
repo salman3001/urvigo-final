@@ -1,6 +1,5 @@
 import User from '#models/user'
 import { BasePolicy, action } from '@adonisjs/bouncer'
-import logger from '@adonisjs/core/services/logger'
 
 export default class ReviewPolicy extends BasePolicy {
   @action({ allowGuest: true })
@@ -14,7 +13,6 @@ export default class ReviewPolicy extends BasePolicy {
   }
 
   async create(user: User) {
-    logger.info({ user: user })
     if (user) {
       return true
     } else {

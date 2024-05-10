@@ -3,9 +3,9 @@ import { OrderStatus } from '#helpers/enums'
 import { useForm } from '@inertiajs/vue3'
 import { VBtn } from 'vuetify/components'
 import CustomForm from '../form/CustomForm.vue'
-import { ref } from 'vue'
 import routes from '~/utils/routes'
 import AppTextarea from '~/@core/components/app-form-elements/AppTextarea.vue'
+import { requiredValidator } from '~/@core/utils/validators'
 
 const isVisible = defineModel<boolean>('isVisible')
 
@@ -19,6 +19,13 @@ const props = defineProps<{
 const form = useForm({
   status: '',
   remarks: '',
+  responseTime: '',
+  qualityOfService: '',
+  professionalBehavior: '',
+  communication: '',
+  fairPricing: '',
+  rating: '',
+  message: '',
 })
 
 const submit = () => {
@@ -60,7 +67,11 @@ const submit = () => {
   }
 
   if (props.type === OrderStatus.COMPLETED && props.bookingType === 'normal') {
-    form.status = OrderStatus.COMPLETION_REQUESTED
+    form.status = OrderStatus.COMPLETED
+    if (['', undefined, null, 0].includes(form.rating)) {
+      alert('Please select all options')
+      return
+    }
     form.post(routes('vendor.booking.accept-completion', [props.bookingId]), {
       onSuccess: () => {
         isVisible.value = false
@@ -107,7 +118,17 @@ const submit = () => {
   }
 
   if (props.type === OrderStatus.COMPLETED && props.bookingType === 'custom') {
-    form.status = OrderStatus.COMPLETION_REQUESTED
+    form.status = OrderStatus.COMPLETED
+    if (
+      ['', undefined, null, 0].includes(form.communication) ||
+      ['', undefined, null, 0].includes(form.fairPricing) ||
+      ['', undefined, null, 0].includes(form.professionalBehavior) ||
+      ['', undefined, null, 0].includes(form.responseTime) ||
+      ['', undefined, null, 0].includes(form.qualityOfService)
+    ) {
+      alert('Please select all options')
+      return
+    }
     form.post(routes('vendor.custom-booking.accept-completion', [props.bookingId]), {
       onSuccess: () => {
         isVisible.value = false
@@ -125,13 +146,49 @@ const submit = () => {
           <h6 class="text-lg font-weight-medium mb-4">
             {{ title }}
           </h6>
+          <div
+            v-if="type === OrderStatus.COMPLETED && props.bookingType === 'normal'"
+            class="w-100"
+          >
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Rating</label>
+              <VRating v-model="form.rating" :rules="[requiredValidator]" />
+            </div>
+            <AppTextarea v-model="form.message" label="Comments" :rules="[requiredValidator]" />
+          </div>
+          <div
+            v-else-if="type === OrderStatus.COMPLETED && props.bookingType === 'custom'"
+            class="w-100"
+          >
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Quality of service</label>
+              <VRating v-model="form.qualityOfService" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Profesional Behaviour</label>
+              <VRating v-model="form.professionalBehavior" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Response Time</label>
+              <VRating v-model="form.responseTime" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Communication</label>
+              <VRating v-model="form.communication" :rules="[requiredValidator]" />
+            </div>
+            <div class="d-flex justify-space-between mb-2">
+              <label for="">Fair Pricing</label>
+              <VRating v-model="form.fairPricing" :rules="[requiredValidator]" />
+            </div>
+            <AppTextarea v-model="form.message" label="Comments" :rules="[requiredValidator]" />
+          </div>
 
-          <div>
+          <div v-else>
             <AppTextarea v-model="form.remarks" label="Add Remarks (Optional)" />
           </div>
         </VCardText>
 
-        <VCardText class="d-flex align-center justify-center gap-2">
+        <VCardText class="d-flex align-end justify-end gap-2">
           <VBtn
             color="secondary"
             variant="tonal"

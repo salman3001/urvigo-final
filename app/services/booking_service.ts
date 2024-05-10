@@ -17,6 +17,8 @@ import db from '@adonisjs/lucid/services/db'
 import { IndexOption } from '../helpers/types.js'
 import { paginate } from '../helpers/common.js'
 import BookedTimeslot from '#models/booked_timeslot'
+import { CreateServiceReviewValidator } from '#validators/service'
+import Review from '#models/review'
 
 @inject()
 export default class BookingService {
@@ -189,7 +191,7 @@ export default class BookingService {
           booking.merge({ status: payload.status })
           booking.history.push({
             date_time: DateTime.now(),
-            event: `Booking ${payload.status}`,
+            event: 'Booking confirmed',
             remarks: payload?.remarks || '',
           })
           await booking.save()
@@ -210,7 +212,7 @@ export default class BookingService {
           booking.merge({ status: payload.status })
           booking.history.push({
             date_time: DateTime.now(),
-            event: `Booking ${payload.status}`,
+            event: `Booking Cancled`,
             remarks: payload?.remarks || '',
           })
           await booking.save()
@@ -231,7 +233,7 @@ export default class BookingService {
           booking.merge({ status: payload.status })
           booking.history.push({
             date_time: DateTime.now(),
-            event: `Booking ${payload.status}`,
+            event: 'Booking Rejected',
             remarks: payload?.remarks || '',
           })
           await booking.save()
@@ -270,11 +272,11 @@ export default class BookingService {
   }
 
   async acceptBookingCompleted() {
-    const { bouncer, request, params } = this.ctx
+    const { bouncer, request, params, auth } = this.ctx
     const booking = await Booking.findOrFail(+params.id)
     await bouncer.with('BookingPolicy').authorize('update', booking)
 
-    const payload = await request.validateUsing(requestBookingCompletionValidator)
+    const payload = await request.validateUsing(CreateServiceReviewValidator)
 
     if (booking.status === OrderStatus.COMPLETION_REQUESTED) {
       await db.transaction(async (trx) => {
@@ -283,9 +285,18 @@ export default class BookingService {
         booking.history.push({
           date_time: DateTime.now(),
           event: 'Booking completed',
-          remarks: payload?.remarks || '',
+          remarks: payload?.message || '',
         })
         await booking.save()
+
+        await Review.create(
+          {
+            ...payload,
+            serviceId: booking.bookingDetail?.service_variant?.serviceId,
+            userId: auth.user!.id,
+          },
+          { client: trx }
+        )
       })
 
       return booking

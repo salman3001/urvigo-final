@@ -3,6 +3,7 @@ import BusinessProfile from '#models/business_profile'
 import User from '#models/user'
 import { createUser, truncateTables } from '#tests/helpers/common'
 import {
+  createBookingPayload,
   createReviewReviewPayload,
   createServiceReviewPayload,
   servicePayload,
@@ -21,11 +22,25 @@ test.group('Api reviews', (group) => {
     customerUser = await createUser(userTypes.USER)
   })
   group.each.teardown(async () => {
-    await truncateTables(['reviews', 'services'])
+    await truncateTables([
+      'services',
+      'users',
+      'business_profiles',
+      'services',
+      'reviews',
+      'bookings',
+    ])
   })
 
   group.teardown(async () => {
-    await truncateTables(['services', 'users', 'business_profiles', 'services', 'reviews'])
+    await truncateTables([
+      'services',
+      'users',
+      'business_profiles',
+      'services',
+      'reviews',
+      'bookings',
+    ])
   })
   test('create service review', async ({ client, route, assert }) => {
     // create service
@@ -41,7 +56,7 @@ test.group('Api reviews', (group) => {
 
     createServiceRes.assertTextIncludes('Service Created')
 
-    // create service review
+    // create service review without booking
     const createReviewRes = await client
       .post(route('api.reviews.services.store', [1]))
       .withGuard('web')
@@ -51,16 +66,43 @@ test.group('Api reviews', (group) => {
       })
       .withCsrfToken()
 
-    createReviewRes.assertTextIncludes('Review Created')
+    createReviewRes.assertTextIncludes('Service is not booked')
+
+    // create vendor review without booking service
+    const createVendorReviewRes = await client
+      .post(route('api.reviews.vendor.store', [1]))
+      .withGuard('web')
+      .loginAs(customerUser!)
+      .form({
+        ...createReviewReviewPayload,
+      })
+      .withCsrfToken()
+
+    createVendorReviewRes.assertTextIncludes('No Service booked from this vendor')
+
+    // create booking
+    const createBookingRes = await client
+      .post(route('web.booking.create'))
+      .withGuard('web')
+      .loginAs(customerUser!)
+      .form({
+        ...createBookingPayload,
+        timeslot: null,
+      })
+      .withCsrfToken()
+      .withSession({ 'booking-summary': 1 })
+      .withInertia()
+
+    createBookingRes.assertTextIncludes('Booking Created')
 
     // create service 2nd review
     const create2ndReviewRes = await client
       .post(route('api.reviews.services.store', [1]))
       .withGuard('web')
-      .loginAs(vendorUser!)
+      .loginAs(customerUser!)
       .form({
         ...createServiceReviewPayload,
-        rating: 2,
+        rating: 3,
       })
       .withCsrfToken()
 
@@ -83,18 +125,14 @@ test.group('Api reviews', (group) => {
 
     assert.containsSubset(serviceReviewsInfo.body(), {
       data: {
-        totalReviews: '2',
+        totalReviews: '1',
         avgRating: '3.0',
       },
     })
 
     assert.containsSubset(serviceReviewsInfo.body()?.data?.counts, [
       {
-        rating: 4,
-        value: '1',
-      },
-      {
-        rating: 2,
+        rating: 3,
         value: '1',
       },
     ])
@@ -102,26 +140,13 @@ test.group('Api reviews', (group) => {
     // get all service reviews
     const getAllServiceReviewsRes = await client.get(route('api.reviews.services', [1]))
 
-    getAllServiceReviewsRes.dumpBody()
-    assert.lengthOf(getAllServiceReviewsRes.body()?.data?.data, 2)
-
-    // create vendor review
-    const createVendorReviewRes = await client
-      .post(route('api.reviews.vendor.store', [1]))
-      .withGuard('web')
-      .loginAs(customerUser!)
-      .form({
-        ...createReviewReviewPayload,
-      })
-      .withCsrfToken()
-
-    createVendorReviewRes.assertTextIncludes('Review Created')
+    assert.lengthOf(getAllServiceReviewsRes.body()?.data?.data, 1)
 
     // create 2nd vendor review
     const createSecondVendorReviewRes = await client
       .post(route('api.reviews.vendor.store', [1]))
       .withGuard('web')
-      .loginAs(vendorUser!)
+      .loginAs(customerUser!)
       .form({
         ...createReviewReviewPayload,
         responseTime: 2,
@@ -138,7 +163,7 @@ test.group('Api reviews', (group) => {
     const createThirdVendorReviewRes = await client
       .post(route('api.reviews.vendor.store', [1]))
       .withGuard('web')
-      .loginAs(vendorUser!)
+      .loginAs(customerUser!)
       .form({
         ...createReviewReviewPayload,
       })
@@ -148,27 +173,16 @@ test.group('Api reviews', (group) => {
 
     // get all Vendor reviews
     const getAllVendorReviewsRes = await client.get(route('api.reviews.vendor', [1]))
-    assert.lengthOf(getAllVendorReviewsRes.body()?.data?.data, 2)
+    assert.lengthOf(getAllVendorReviewsRes.body()?.data?.data, 1)
 
     // get all Vendor reviews
     const getVendorReviewsInfoRes = await client.get(route('api.reviews.vendor.info', [1]))
 
     assert.containsSubset(getVendorReviewsInfoRes.body(), {
       data: {
-        avgRating: '2.8',
+        avgRating: '2.2',
         avgFairPricing: '2.0',
       },
     })
-
-    assert.containsSubset(serviceReviewsInfo.body()?.data?.counts, [
-      {
-        rating: 4,
-        value: '1',
-      },
-      {
-        rating: 2,
-        value: '1',
-      },
-    ])
   })
 })

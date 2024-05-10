@@ -15,6 +15,8 @@ import {
   requestBookingCompletionValidator,
 } from '#validators/booking'
 import BookedTimeslot from '#models/booked_timeslot'
+import { CreateVendorReviewValidator } from '#validators/reviews_validator'
+import VendorReview from '#models/vendor_review'
 
 @inject()
 export default class BidBookingService {
@@ -272,11 +274,11 @@ export default class BidBookingService {
   }
 
   async acceptBookingCompleted() {
-    const { bouncer, request, params } = this.ctx
+    const { bouncer, request, params, auth } = this.ctx
     const booking = await BidBooking.findOrFail(+params.id)
     await bouncer.with('BidBookingPolicy').authorize('update', booking)
 
-    const payload = await request.validateUsing(requestBookingCompletionValidator)
+    const payload = await request.validateUsing(CreateVendorReviewValidator)
 
     if (booking.status === OrderStatus.COMPLETION_REQUESTED) {
       await db.transaction(async (trx) => {
@@ -285,9 +287,27 @@ export default class BidBookingService {
         booking.history.push({
           date_time: DateTime.now(),
           event: 'Booking completed',
-          remarks: payload?.remarks || '',
+          remarks: payload?.message || '',
         })
         await booking.save()
+
+        const avgRating = new BigNumber(payload.responseTime)
+          .plus(payload.qualityOfService)
+          .plus(payload.professionalBehavior)
+          .plus(payload.communication)
+          .plus(payload.fairPricing)
+          .dividedBy(5)
+          .toFixed(1)
+
+        await VendorReview.create(
+          {
+            ...payload,
+            businessProfileId: booking.businessProfileId,
+            userId: auth.user!.id,
+            avgRating,
+          },
+          { client: trx }
+        )
       })
 
       return booking

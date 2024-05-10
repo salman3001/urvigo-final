@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type Review from '#models/review'
+import type VendorReview from '#models/vendor_review'
 import { format } from 'date-fns'
 import { VCardSubtitle } from 'vuetify/components'
 import dummyAvatar from '~/assets/images/dummy-avatar.webp'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 
 defineProps<{
-  review: Review
+  review: Review | VendorReview
 }>()
 
 const getImageUrl = useGetImageUrl()
@@ -35,8 +36,15 @@ const getImageUrl = useGetImageUrl()
       </div>
 
       <div class="d-flex gap-2 align-center mt-1">
-        <span class="text-h5">{{ review.rating }} </span>
-        <VRating :model-value="review.rating" readonly density="compact" class="me-3" />
+        <span class="text-h5"
+          >{{ (review as Review)?.rating || (review as VendorReview)?.avgRating }}
+        </span>
+        <VRating
+          :model-value="(review as Review)?.rating || (review as VendorReview)?.avgRating"
+          readonly
+          density="compact"
+          class="me-3"
+        />
       </div>
     </VCardText>
     <VCardText>

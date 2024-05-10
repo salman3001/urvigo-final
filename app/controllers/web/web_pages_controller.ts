@@ -159,7 +159,6 @@ export default class WebPagesController {
 
   async vendorReviews({ inertia }: HttpContext) {
     return inertia.render('vendor-profiles/reviews', {
-      reviews: () => this.reviewsService.getVendorReviews(),
       vendor: () => this.userService.show(),
     })
   }

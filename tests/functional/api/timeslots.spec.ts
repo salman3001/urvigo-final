@@ -160,7 +160,6 @@ test.group('Api timeslots', (group) => {
       .withGuard('web')
       .loginAs(vendorUser!)
       .withCsrfToken()
-    response.dumpBody()
 
     assert.lengthOf(response.body()?.data, 2)
   })

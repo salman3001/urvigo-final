@@ -5,15 +5,15 @@ import ModalAddReview from './modal/ModalAddReview.vue'
 import { onMounted, reactive, ref, watch } from 'vue'
 import ReviewsCard from './ReviewsCard.vue'
 import useApiGet from '~/composables/useApiGet'
-import type { IPageProps, IPaginatedModel, ServiceReviewsInfo } from '#helpers/types'
-import type Review from '#models/review'
+import type { IPageProps, IPaginatedModel, VendorReviewsInfo } from '#helpers/types'
 import routes from '~/utils/routes'
 import { VCol, VRow, VSkeletonLoader } from 'vuetify/components'
 import { router, usePage } from '@inertiajs/vue3'
 import TablePagination from '~/@core/components/TablePagination.vue'
+import type VendorReview from '#models/vendor_review'
 
 const props = defineProps<{
-  serviceId: number
+  bussinessProfileId: number
 }>()
 
 const { user } = useAuth()
@@ -22,20 +22,20 @@ const addReviewModal = ref(false)
 const query = reactive({
   page: 1,
 })
-const { data: reviews, exec, processing } = useApiGet<IPaginatedModel<Review>>()
+const { data: reviews, exec, processing } = useApiGet<IPaginatedModel<VendorReview>>()
 const {
   data: reviewsInfo,
   exec: getReviewInfo,
   processing: processingGetReviewInfo,
-} = useApiGet<ServiceReviewsInfo>()
+} = useApiGet<VendorReviewsInfo>()
 
 onMounted(() => {
-  exec(routes('api.reviews.services', [props.serviceId]))
-  getReviewInfo(routes('api.reviews.services.info', [props.serviceId]))
+  exec(routes('api.reviews.vendor', [props.bussinessProfileId]))
+  getReviewInfo(routes('api.reviews.vendor.info', [props.bussinessProfileId]))
 })
 
 watch(query, () => {
-  exec(routes('api.reviews.services', [props.serviceId]), {
+  exec(routes('api.reviews.vendor', [props.bussinessProfileId]), {
     params: query,
   })
 })
@@ -46,9 +46,14 @@ watch(query, () => {
       <VCol cols="12" lg="9">
         <ReviewsOverview
           v-if="!processingGetReviewInfo && reviewsInfo"
-          :total-reviews="Number(reviewsInfo?.totalReviews).toFixed(1)"
+          :total-reviews="Number(reviewsInfo?.totalReviews)"
           :rating="Number(reviewsInfo?.avgRating).toFixed(1)"
           :review-card-data="reviewsInfo?.counts!"
+          :avg-com="reviewsInfo?.avgCommunication"
+          :avg-fp="reviewsInfo?.avgFairPricing"
+          :avg-rt="reviewsInfo?.avgResponseTime"
+          :avg-pb="reviewsInfo?.avgProfessionalBehavior"
+          :avg-qos="reviewsInfo?.avgQualityOfService"
         >
         </ReviewsOverview>
         <VSkeletonLoader v-else type="card" />
@@ -101,11 +106,11 @@ watch(query, () => {
   </div>
   <ModalAddReview
     v-model:isVisible="addReviewModal"
-    :service-id="serviceId"
+    :business-profile-id="bussinessProfileId"
     @submit="
       async () => {
-        exec(routes('api.reviews.services', [props.serviceId]))
-        getReviewInfo(routes('api.reviews.services.info', [props.serviceId]))
+        exec(routes('api.reviews.vendor', [props.bussinessProfileId]))
+        getReviewInfo(routes('api.reviews.vendor.info', [props.bussinessProfileId]))
         addReviewModal = false
       }
     "
