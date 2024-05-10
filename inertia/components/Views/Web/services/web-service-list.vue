@@ -4,7 +4,7 @@ import type { IService } from '#models/service'
 import type { IServiceCategory } from '#models/service_category'
 import { router, usePage } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import AppSelect from '~/@core/components/app-form-elements/AppSelect.vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
@@ -24,20 +24,33 @@ const services = computed(() => page.props.services)
 const categories = computed(() => page.props.categories)
 
 const query = reactive({
-  search: page.props?.query?.search || '',
-  orderBy: page.props?.query?.order_by || '',
-  serviceCategoryId: page.props?.query?.service_category_id || '',
-  page: page.props?.query?.page || 1,
+  search: '',
+  orderBy: 'created_at:desc',
+  serviceCategoryId: '',
+  page: 1,
 })
 
+// const page = ref(1)
+
 watchDebounced(
-  query,
+  [() => query.orderBy, () => query.search, () => query.serviceCategoryId],
   () => {
     router.visit(routes('web.services'), {
-      data: query,
+      data: { ...query, page: 1 },
+      preserveState: true,
     })
   },
   { debounce: 500, maxWait: 1000 }
+)
+
+watch(
+  () => query.page,
+  () => {
+    router.visit(routes('web.services'), {
+      data: { ...query },
+      preserveState: true,
+    })
+  }
 )
 </script>
 
@@ -91,7 +104,7 @@ watchDebounced(
 
           <div class="d-flex flex-wrap gap-x-6 gap-y-4 align-center">
             <AppSelect
-              v-model="query.order_by"
+              v-model="query.orderBy"
               :items="[
                 { name: 'None', value: 'created_at:desc' },
                 { name: 'Highest Rating', value: 'avg_rating:desc' },
@@ -103,7 +116,7 @@ watchDebounced(
               style="min-inline-size: 260px"
             />
             <AppSelect
-              v-model="query.service_category_id"
+              v-model="query.serviceCategoryId"
               :items="[...categories, { name: 'All Services', id: '' }]"
               item-title="name"
               item-value="id"

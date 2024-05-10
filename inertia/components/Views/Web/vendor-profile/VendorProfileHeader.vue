@@ -58,7 +58,7 @@ defineProps<{
             <span class="d-flex gap-x-2 align-center">
               <VIcon size="24" icon="tabler-calendar" />
               <div v-if="profileHeaderData?.createdAt" class="text-body-1 font-weight-medium">
-                {{ format(profileHeaderData?.createdAt as unknown as string, 'dd/MM/yyyy HH:mm') }}
+                Joined {{ format(profileHeaderData?.createdAt as unknown as string, 'MMM yyyy') }}
               </div>
             </span>
           </div>

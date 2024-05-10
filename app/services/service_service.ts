@@ -228,7 +228,7 @@ export default class ServiceService {
     return services
   }
 
-  async vendorServices() {
+  async vendorServices(opt?: IndexOption) {
     const { bouncer, params, request } = this.ctx
     await bouncer.with('ServicePolicy').authorize('viewList')
 
@@ -276,6 +276,7 @@ export default class ServiceService {
           v.min('price').as('starting_from')
         })
 
+      !opt?.disableFilter && serviceQuery.filter(request.qs())
       services = await paginate(serviceQuery, request)
     }
 

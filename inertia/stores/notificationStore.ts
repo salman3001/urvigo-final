@@ -55,13 +55,12 @@ const notificationStore = defineStore('notification', () => {
     markAllNotifcationsAsReadForm.post(routes('api.notifications.mark_read', [id]))
   }
 
-  const connectSocket = (url: string, user: any, socketToken: any) => {
+  const connectSocket = (url: string, user: any) => {
     if (!socket.value) {
       socket.value = io(url + '/notifications/', {
         transports: ['websocket'],
         auth: {
-          userId: user?.id || '',
-          socketToken: socketToken || '',
+          'user-id': user?.value!.id as unknown as string,
         },
       })
 

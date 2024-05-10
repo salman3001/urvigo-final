@@ -14,7 +14,7 @@ defineProps<Props>()
 
       <p>{{ vendor?.businessProfile?.shortDesc }}</p>
 
-      <p class="text-sm text-disabled mt-6">CONTACTS</p>
+      <!-- <p class="text-sm text-disabled mt-6">CONTACTS</p> -->
 
       <VList class="card-list text-medium-emphasis">
         <!-- <VListItem v-for="item in props.data.contacts" :key="item.property">
@@ -30,7 +30,7 @@ defineProps<Props>()
         </VListItem> -->
       </VList>
 
-      <p class="text-sm text-disabled mt-6">TEAMS</p>
+      <!-- <p class="text-sm text-disabled mt-6">TEAMS</p> -->
 
       <VList class="card-list text-medium-emphasis">
         <!-- <VListItem v-for="item in props.data.teams" :key="item.property">
@@ -47,12 +47,12 @@ defineProps<Props>()
     </VCardText>
   </VCard>
 
-  <VCard>
+  <!--<VCard>
     <VCardText>
       <p class="text-sm text-disabled">OVERVIEW</p>
 
       <VList class="card-list text-medium-emphasis">
-        <!-- <VListItem v-for="item in props.data.overview" :key="item.property">
+        <VListItem v-for="item in props.data.overview" :key="item.property">
           <VListItemTitle>
             <span class="d-flex align-center">
               <VIcon :icon="item.icon" size="24" class="me-2" />
@@ -62,10 +62,10 @@ defineProps<Props>()
               <div>{{ item.value }}</div>
             </span>
           </VListItemTitle>
-        </VListItem> -->
+        </VListItem> 
       </VList>
     </VCardText>
-  </VCard>
+  </VCard>-->
 </template>
 
 <style lang="scss" scoped>

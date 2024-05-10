@@ -248,15 +248,6 @@ export default class ReviewsService {
       .whereRaw("booking_detail->'service_variant'->>'serviceId' = ?", [serviceId])
       .first()
 
-    // await db.rawQuery(`
-    //   SELECT
-    //     *
-    //   FROM
-    //     bookings
-    //   WHERE
-    //     booking_detail
-    // `)
-
     if (!bookingExist) {
       return 'No booking exist'
     }

@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import type { IPageProps, IPaginatedModel } from '#helpers/types'
+import type { IPaginatedModel } from '#helpers/types'
 import type { IService } from '#models/service'
-import { router, usePage } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
 import { watchDebounced } from '@vueuse/core'
 import { reactive } from 'vue'
 import TablePagination from '~/@core/components/TablePagination.vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import ServiceCard from '~/components/ServiceCard.vue'
 
-const page = usePage<IPageProps<{}>>()
-
 defineProps<{
   services: IPaginatedModel<IService>
 }>()
 
 const query = reactive({
-  search: page?.props?.query?.search || '',
-  page: page?.props?.query?.page || 1,
+  search: '',
+  page: 1,
 })
 
 watchDebounced(

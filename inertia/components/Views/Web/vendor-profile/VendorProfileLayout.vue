@@ -20,7 +20,7 @@ defineProps<{
         <Link :href="routes('web.vendor-profile.about', [vendor.id])">
           <VTab value="profile">
             <VIcon size="20" start icon="tabler-user-check" />
-            Profile
+            About
           </VTab>
         </Link>
         <Link :href="routes('web.vendor-profile.services', [vendor.id])">
