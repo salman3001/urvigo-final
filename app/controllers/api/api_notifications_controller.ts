@@ -30,7 +30,17 @@ export default class ApiNotificationsController {
     return response.custom({
       code: 200,
       data: null,
-      message: 'marked as read',
+      message: 'Marked as read',
+      success: true,
+    })
+  }
+
+  async markAsUnread({ response }: HttpContext) {
+    await this.notificationService.markAsUnRead()
+    return response.custom({
+      code: 200,
+      data: null,
+      message: 'Marked as unread',
       success: true,
     })
   }

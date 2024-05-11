@@ -14,9 +14,9 @@ export default class NotificationSocketController {
 
   private createRoom(user: any): string {
     if (isAdmin(user)) {
-      return `admin:${user.id}`
+      return `notification-room-${user.id}`
     } else {
-      return `user:${user.id}`
+      return `notification-room-${user.id}`
     }
   }
 }

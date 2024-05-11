@@ -74,7 +74,7 @@ const submit = () => {
                 }
               "
             />
-            <AppTextField v-model="addAddressForm.mapAddress" label="Address line 1" disabled />
+            <AppTextField v-model="addAddressForm.mapAddress" label="Address line 1" />
             <AppTextField v-model="addAddressForm.address" label="Address line 2 (optional)" />
             <AppTextField
               v-model="addAddressForm.mobile"

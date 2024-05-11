@@ -143,6 +143,7 @@ const routesObject = {
   "api.chat.show": "/api/chat/conversations/:id",
   "api.notifications.menu": "/api/notifications/get-menu-notifications",
   "api.notifications.mark_read": "/api/notifications/mark-as-read/:id",
+  "api.notifications.mark_unread": "/api/notifications/mark-as-unread/:id",
   "api.notifications.destroy_read": "/api/notifications/delete/read",
   "api.notifications.destroy_all": "/api/notifications/delete/all",
   "api.notifications.index": "/api/notifications",

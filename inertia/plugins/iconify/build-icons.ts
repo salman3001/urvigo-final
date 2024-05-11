@@ -184,6 +184,9 @@ const sources: BundleScriptConfig = {
         'device-desktop-star',
         'server',
         'user-check',
+        'heart-handshake',
+        'question-mark',
+        'mail',
       ],
     },
     {

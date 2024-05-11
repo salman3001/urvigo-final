@@ -92,4 +92,13 @@ export default class NotificationsService {
     await notification.markAsRead()
     return 'marked as read' as 'marked as read'
   }
+
+  async markAsUnRead() {
+    const { params, bouncer } = this.ctx
+    const id = +params.id
+    const notification = await Notification.findOrFail(id)
+    await bouncer.with('NotificationPolicy').authorize('update', notification)
+    await notification.markAsUnread()
+    return 'marked as unread' as 'marked as unread'
+  }
 }

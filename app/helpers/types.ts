@@ -4,6 +4,7 @@ import type ServiceVariant from '../models/service_variant.js'
 import type {
   DeliveryOptions,
   DiscountType,
+  NotificationTypes,
   PaymentMode,
   PaymentStatus,
   WeekDays,
@@ -183,3 +184,75 @@ export type VendorReviewsInfo = {
   totalReviews: number | string
   counts: ReviewsCountInfo
 }
+
+export interface BookingCreatedNotification {
+  type: NotificationTypes.BOOKING_CREATED
+  title: string
+  subTitle: string
+  meta: {
+    booking_id: number
+  }
+}
+
+export interface CustomBookingCreatedNotification {
+  type: NotificationTypes.CUSTOM_BOOKING_CREATED
+  title: string
+  subTitle: string
+  meta: {
+    booking_id: number
+  }
+}
+
+export interface BookingRecievedNotification {
+  type: NotificationTypes.BOOKING_RECIEVED
+  title: string
+  subTitle: string
+  meta: {
+    booking_id: number
+  }
+}
+
+export interface CustomBookingRecievedNotification {
+  type: NotificationTypes.CUSTOM_BOOKING_RECIEVED
+  title: string
+  subTitle: string
+  meta: {
+    booking_id: number
+  }
+}
+
+export interface BidRecievedNotification {
+  type: NotificationTypes.BID_RECIEVED
+  title: string
+  subTitle: string
+  meta: {
+    requirement_id: number
+  }
+}
+
+export interface NegotiationRequiestedNotification {
+  type: NotificationTypes.NEGOTIATION_REQUESTED
+  title: string
+  subTitle: string
+  meta: {
+    requirement_id: number
+  }
+}
+
+export interface NegotiatedNotification {
+  type: NotificationTypes.NEGOTIATED
+  title: string
+  subTitle: string
+  meta: {
+    requirement_id: number
+  }
+}
+
+export type NotificationData =
+  | BookingCreatedNotification
+  | BookingRecievedNotification
+  | CustomBookingCreatedNotification
+  | CustomBookingRecievedNotification
+  | BidRecievedNotification
+  | NegotiationRequiestedNotification
+  | NegotiatedNotification

@@ -14,6 +14,9 @@ router
       .post('/notifications/mark-as-read/:id', [notificationController, 'markAsRead'])
       .as('notifications.mark_read')
     router
+      .post('/notifications/mark-as-unread/:id', [notificationController, 'markAsUnread'])
+      .as('notifications.mark_unread')
+    router
       .delete('/notifications/delete/read', [notificationController, 'destroyRead'])
       .as('notifications.destroy_read')
     router

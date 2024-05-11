@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
-import { DeliveryOptions, NotificationTypes, OrderStatus } from '#helpers/enums'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { DeliveryOptions, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
@@ -67,20 +67,21 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
   @belongsTo(() => BookedTimeslot)
   declare bookedTimeslot: BelongsTo<typeof BookedTimeslot>
 
-  @afterCreate()
-  static async notifyUser(booking: BidBooking) {
-    await booking.load('user')
+  // @afterCreate()
+  // static async notifyUser(booking: BidBooking) {
+  //   await booking.load('user')
 
-    booking.user.related('notifications').create({
-      data: {
-        type: NotificationTypes.BOOKING_CREATED,
-        message: 'You Service has booked Successfully',
-        meta: {
-          bookingId: booking.id,
-        },
-      },
-    })
-  }
+  //   booking.user.related('notifications').create({
+  //     data: {
+  //       type: NotificationTypes.,
+  //       title: 'New Big recived',
+  //       subTitle: 'You have Recived a New bid. click to checkout',
+  //       meta: {
+  //         requirement_id: bid.serviceRequirement.id,
+  //       },
+  //     },
+  //   })
+  // }
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

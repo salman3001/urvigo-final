@@ -1,4 +1,4 @@
-import { CouponType, DiscountType, OrderStatus, userTypes } from '#helpers/enums'
+import { CouponType, DiscountType, NotificationTypes, OrderStatus, userTypes } from '#helpers/enums'
 import Booking from '#models/booking'
 import Coupon from '#models/coupon'
 import ServiceVariant from '#models/service_variant'
@@ -19,6 +19,8 @@ import { paginate } from '../helpers/common.js'
 import BookedTimeslot from '#models/booked_timeslot'
 import { CreateServiceReviewValidator } from '#validators/service'
 import Review from '#models/review'
+import Notification from '#models/notification'
+import User from '#models/user'
 
 @inject()
 export default class BookingService {
@@ -170,6 +172,33 @@ export default class BookingService {
 
         await booking.related('bookedTimeslot').associate(bookedslot)
       }
+
+      //notify user
+      await Notification.create({
+        userId: auth.user!.id,
+        data: {
+          type: NotificationTypes.BOOKING_CREATED,
+          title: 'Booking Created',
+          subTitle: 'You just created a new booking! Click to see detail',
+          meta: {
+            booking_id: booking.id,
+          },
+        },
+      })
+
+      //notify vendor
+      const vendor = await User.findOrFail(booking.businessProfileId, { client: trx })
+      await Notification.create({
+        userId: vendor.id,
+        data: {
+          type: NotificationTypes.BOOKING_RECIEVED,
+          title: 'New Booking Recieved',
+          subTitle: 'You just Recived a new booking! Click to see detail',
+          meta: {
+            booking_id: booking.id,
+          },
+        },
+      })
     })
 
     return booking!

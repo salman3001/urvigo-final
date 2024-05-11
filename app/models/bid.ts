@@ -63,9 +63,10 @@ export default class Bid extends compose(BaseModel, Filterable) {
     await bid.serviceRequirement.user.related('notifications').create({
       data: {
         type: NotificationTypes.BID_RECIEVED,
-        message: 'Some one added a bid on your service requirement',
+        title: 'New Big recived',
+        subTitle: 'You have Recived a New bid. click to checkout',
         meta: {
-          serviceRequirementId: bid.serviceRequirement.id,
+          requirement_id: bid.serviceRequirement.id,
         },
       },
     })

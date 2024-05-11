@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import type { Notification } from '~/@layouts/types'
 import { avatarText } from '../utils/formatters'
+import { VAvatar, VBadge } from 'vuetify/components'
 
 interface Props {
   notifications: Notification[]
@@ -44,14 +45,7 @@ const toggleReadUnread = (isSeen: boolean, Id: number) => {
 
 <template>
   <IconBtn id="notification-btn">
-    <VBadge
-      v-bind="props.badgeProps"
-      :model-value="props.notifications.some((n) => !n.isSeen)"
-      color="error"
-      dot
-      offset-x="2"
-      offset-y="3"
-    >
+    <VBadge v-bind="props.badgeProps" color="error" offset-x="2" offset-y="3">
       <VIcon size="24" icon="tabler-bell" />
     </VBadge>
 
@@ -115,10 +109,10 @@ const toggleReadUnread = (isSeen: boolean, Id: number) => {
                     :color="
                       notification.color && notification.icon ? notification.color : undefined
                     "
-                    :image="notification.img || undefined"
-                    :icon="notification.icon || undefined"
                     :variant="notification.img ? undefined : 'tonal'"
                   >
+                    <VIcon v-if="notification.icon" :icon="notification.icon"></VIcon>
+                    <VImg v-if="notification.img" alt="John" :src="notification.img"></VImg>
                     <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
                   </VAvatar>
 

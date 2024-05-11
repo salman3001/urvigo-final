@@ -1,18 +1,14 @@
 import { DateTime } from 'luxon'
 import { column, BaseModel, afterCreate } from '@adonisjs/lucid/orm'
-import { NotificationTypes } from '#helpers/enums'
 import ws from '#services/ws'
+import type { NotificationData } from '#helpers/types'
 
 export default class Notification extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare data: {
-    type: NotificationTypes
-    message: string
-    meta: Record<any, any>
-  }
+  declare data: NotificationData
 
   @column()
   declare userId: number
@@ -22,8 +18,13 @@ export default class Notification extends BaseModel {
     await this.save()
   }
 
+  async markAsUnread() {
+    this.readAt = null
+    await this.save()
+  }
+
   @column.dateTime()
-  declare readAt: DateTime
+  declare readAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

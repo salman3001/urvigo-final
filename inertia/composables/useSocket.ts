@@ -1,12 +1,10 @@
-import type { IPageProps } from '#helpers/types'
-import { usePage } from '@inertiajs/vue3'
 import { io, type Socket } from 'socket.io-client'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
+import useAuth from './useAuth'
 
 export default function useSocket() {
   const socket = ref<Socket | null>(null)
-  const page = usePage<IPageProps<object>>()
-  const user = computed(() => page.props?.user)
+  const { user } = useAuth()
 
   const connectSocket = (url: string) => {
     if (!socket.value) {
