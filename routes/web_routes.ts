@@ -149,6 +149,15 @@ router
           .prefix('vendor-profile')
           .as('vendor-profile')
 
+        // help-center
+        router
+          .group(() => {
+            router.get('/', [WebPagesController, 'helpcenter']).as('index')
+            router.get('/:slug', [WebPagesController, 'helpcenterContentDetail']).as('show')
+          })
+          .prefix('helpcenter')
+          .as('helpcenter')
+
         router.get('chat', [WebPagesController, 'chat']).as('chat')
         router.post('chat/:id', [WebPagesController, 'createChatMessage']).as('chat.create-masaage')
 

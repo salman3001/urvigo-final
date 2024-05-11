@@ -248,6 +248,15 @@ export interface NegotiatedNotification {
   }
 }
 
+export interface ServiceRequirementAddedNotification {
+  type: NotificationTypes.SERVICE_REQUIREMENT_ADDED
+  title: string
+  subTitle: string
+  meta: {
+    requirement_id: number
+  }
+}
+
 export type NotificationData =
   | BookingCreatedNotification
   | BookingRecievedNotification
@@ -256,3 +265,4 @@ export type NotificationData =
   | BidRecievedNotification
   | NegotiationRequiestedNotification
   | NegotiatedNotification
+  | ServiceRequirementAddedNotification

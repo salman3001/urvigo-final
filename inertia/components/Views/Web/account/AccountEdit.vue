@@ -8,6 +8,7 @@ import CustomForm from '~/components/form/CustomForm.vue'
 import useGetImageUrl from '~/composables/useGetImageUrl'
 import routes from '~/utils/routes'
 import type { IUser } from '#models/user'
+import AddressComponent from '~/components/AddressComponent.vue'
 
 const props = defineProps<{
   user: IUser
@@ -101,5 +102,11 @@ const updateProfile = async () => {
         </VRow>
       </CustomForm>
     </VCardText>
+  </VCard>
+  <br />
+  <VCard title="My Addresses">
+    <VCardItem>
+      <AddressComponent editable />
+    </VCardItem>
   </VCard>
 </template>

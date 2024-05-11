@@ -1,5 +1,7 @@
 import { paginate } from '#helpers/common'
+import { NotificationTypes } from '#helpers/enums'
 import Bid from '#models/bid'
+import Notification from '#models/notification'
 import ServiceRequirement from '#models/service_requirement'
 import TimeslotPlan from '#models/timeslot_plan'
 import { BidValidator } from '#validators/bid'
@@ -126,6 +128,20 @@ export default class BidService {
     bid.offeredPrice = payload.newPrice
 
     await bid.save()
+
+    // notify user
+    await bid.load('serviceRequirement')
+    await Notification.create({
+      userId: bid.serviceRequirement.userId,
+      data: {
+        type: NotificationTypes.NEGOTIATED,
+        title: 'Price Negotiated',
+        subTitle: 'Vendor has negotiated the price. Click to checkout',
+        meta: {
+          requirement_id: bid.serviceRequirement.id,
+        },
+      },
+    })
 
     return bid
   }

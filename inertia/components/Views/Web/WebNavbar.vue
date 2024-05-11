@@ -89,7 +89,7 @@ const menuItems: MenuItem[] = [
     listIcon: 'tabler-photo',
     NavItems: [
       { name: 'Pricing', to: '' },
-      { name: 'Help Center', to: '' },
+      { name: 'Help Center', to: routes('web.helpcenter.index') },
       { name: 'FAQ', to: '' },
       { name: 'Blogs', to: '' },
       { name: 'Contact', to: '' },

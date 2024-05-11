@@ -14,14 +14,14 @@ const notificationStore = defineStore('notification', () => {
 
   const { exec: getMenuNotificationsApi, data } = useApiGet<{
     notifcations: INotification[]
-    notificationCount: number
+    count: number
   }>()
 
-  const deleteAllNotifcationsForm = useApiForm({})
-  const deleteReadNotifcationsForm = useApiForm({})
-  const deleteOneNotifcationsForm = useApiForm({})
-  const markOneAsReadForm = useApiForm({})
-  const markOneAsUnreadForm = useApiForm({})
+  const deleteAllNotifcationsForm = useApiForm({}, { disableToast: true })
+  const deleteReadNotifcationsForm = useApiForm({}, { disableToast: true })
+  const deleteOneNotifcationsForm = useApiForm({}, { disableToast: true })
+  const markOneAsReadForm = useApiForm({}, { disableToast: true })
+  const markOneAsUnreadForm = useApiForm({}, { disableToast: true })
 
   // const playSound = () => {
   //   const audio = new Audio('/audio/iphone_sound.mp3')
@@ -43,22 +43,25 @@ const notificationStore = defineStore('notification', () => {
 
   const deleteNotifcations = async (type: 'all' | 'read') => {
     if (type === 'all') {
-      deleteAllNotifcationsForm.post(routes('api.notifications.destroy_all'))
+      await deleteAllNotifcationsForm.post(routes('api.notifications.destroy_all'))
+      getMenuNotifications()
     } else if (type === 'read') {
-      deleteReadNotifcationsForm.post(routes('api.notifications.destroy_read'))
+      await deleteReadNotifcationsForm.post(routes('api.notifications.destroy_read'))
+      getMenuNotifications()
     }
   }
 
-  const deleteOneNotifcation = async (id: string) => {
-    deleteOneNotifcationsForm.post(routes('api.notifications.destroy', [id]))
+  const deleteOneNotifcation = async (id: number) => {
+    await deleteOneNotifcationsForm.delete(routes('api.notifications.destroy', [id]))
+    getMenuNotifications()
   }
 
   const markAsRead = async (id: number) => {
-    markOneAsReadForm.post(routes('api.notifications.mark_read', [id]))
+    await markOneAsReadForm.post(routes('api.notifications.mark_read', [id]))
   }
 
   const markAsUnead = async (id: number) => {
-    markOneAsUnreadForm.post(routes('api.notifications.mark_unread', [id]))
+    await markOneAsUnreadForm.post(routes('api.notifications.mark_unread', [id]))
   }
 
   const setupNotificationSocket = () => {
@@ -67,15 +70,16 @@ const notificationStore = defineStore('notification', () => {
       console.log(room)
     })
 
-    socket?.value?.on('new-notification', (notification: any) => {
-      if (notifcations.value.length < 20) {
-        notifcations.value.push(notification)
-        notificationCount.value += 1
-      } else {
-        notifcations.value.pop()
-        notifcations.value.unshift(notification)
-        notificationCount.value += 1
-      }
+    socket?.value?.on('new-notification', () => {
+      // if (notifcations.value.length < 20) {
+      //   notifcations.value.push(notification)
+      //   notificationCount.value += 1
+      // } else {
+      //   notifcations.value.pop()
+      //   notifcations.value.unshift(notification)
+      //   notificationCount.value += 1
+      // }
+      getMenuNotifications()
     })
   }
 

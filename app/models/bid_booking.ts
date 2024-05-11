@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import { DeliveryOptions, OrderStatus } from '#helpers/enums'
+import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import { DeliveryOptions, NotificationTypes, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import BusinessProfile from './business_profile.js'
@@ -9,6 +9,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
 import BidBookingFilter from './filters/bid_booking_filter.js'
 import BookedTimeslot from './booked_timeslot.js'
+import Notification from './notification.js'
 
 export default class BidBooking extends compose(BaseModel, Filterable) {
   static $filter = () => BidBookingFilter
@@ -67,21 +68,39 @@ export default class BidBooking extends compose(BaseModel, Filterable) {
   @belongsTo(() => BookedTimeslot)
   declare bookedTimeslot: BelongsTo<typeof BookedTimeslot>
 
-  // @afterCreate()
-  // static async notifyUser(booking: BidBooking) {
-  //   await booking.load('user')
+  @afterCreate()
+  static async pushNotification(bidBooking: BidBooking) {
+    //notify user
+    await Notification.create({
+      userId: bidBooking.userId,
+      data: {
+        type: NotificationTypes.CUSTOM_BOOKING_CREATED,
+        title: 'Booking Created',
+        subTitle: 'You just created a new booking! Click to see detail',
+        meta: {
+          booking_id: bidBooking.id,
+        },
+      },
+    })
 
-  //   booking.user.related('notifications').create({
-  //     data: {
-  //       type: NotificationTypes.,
-  //       title: 'New Big recived',
-  //       subTitle: 'You have Recived a New bid. click to checkout',
-  //       meta: {
-  //         requirement_id: bid.serviceRequirement.id,
-  //       },
-  //     },
-  //   })
-  // }
+    //notify vendor
+    const businessProfile = await BusinessProfile.query()
+      .where('id', bidBooking.businessProfileId)
+      .first()
+    if (businessProfile) {
+      await Notification.create({
+        userId: businessProfile.userId,
+        data: {
+          type: NotificationTypes.CUSTOM_BOOKING_RECIEVED,
+          title: 'New Booking Recieved',
+          subTitle: 'You just Recived a new booking! Click to see detail',
+          meta: {
+            booking_id: bidBooking.id,
+          },
+        },
+      })
+    }
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -67,7 +67,17 @@ export default class extends BaseSeeder {
       .createMany(10)
 
     await blogCategoryFactory.with('blogs', 5).createMany(4)
-    await knowledgebaseCategoryFactory.with('contents', 5).createMany(3)
+    await knowledgebaseCategoryFactory
+      .with('contents', 10, (c) => {
+        c.merge([
+          { featured: true },
+          { featured: true },
+          { featured: true },
+          { featured: true },
+          { featured: true },
+        ])
+      })
+      .createMany(5)
     await contactMessageFactory.createMany(15)
     await supportTicketFactory
       .merge([

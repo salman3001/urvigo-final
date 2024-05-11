@@ -1,5 +1,5 @@
 import { paginate, slugify } from '#helpers/common'
-import { userTypes } from '#helpers/enums'
+import { NotificationTypes, userTypes } from '#helpers/enums'
 import Bid from '#models/bid'
 import ServiceRequirement from '#models/service_requirement'
 import ServiceTag from '#models/service_tag'
@@ -15,6 +15,7 @@ import vine from '@vinejs/vine'
 import { BigNumber } from 'bignumber.js'
 import { DateTime } from 'luxon'
 import { IndexOption } from '#helpers/types'
+import Notification from '#models/notification'
 
 @inject()
 export default class ServiceRequirementService {
@@ -331,6 +332,18 @@ export default class ServiceRequirementService {
     })
 
     await bid.save()
+
+    await Notification.create({
+      userId: bid.userId,
+      data: {
+        type: NotificationTypes.NEGOTIATION_REQUESTED,
+        title: 'Price Negotiation Request',
+        subTitle: 'User requested for price negotiation. Click to checkout',
+        meta: {
+          requirement_id: serviceRequirement.id,
+        },
+      },
+    })
 
     return serviceRequirement
   }

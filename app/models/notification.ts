@@ -38,7 +38,7 @@ export default class Notification extends BaseModel {
     room = `notification-room-${notification.userId}`
 
     if (ws.io) {
-      ws.io.of('/notifications/').to(room).emit('new-notification', notification)
+      ws.io.of('/notifications/').to(room).emit('new-notification')
     }
   }
 }

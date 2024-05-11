@@ -1,5 +1,14 @@
-import { DeliveryOptions, OrderStatus, PaymentMode, PaymentStatus, userTypes } from '#helpers/enums'
+import {
+  DeliveryOptions,
+  NotificationTypes,
+  OrderStatus,
+  PaymentMode,
+  PaymentStatus,
+  userTypes,
+} from '#helpers/enums'
 import type { CordType } from '#helpers/types'
+import type Notification from '#models/notification'
+import routes from './routes'
 
 export function findObjectAndMoveToIndex0(
   array: Record<string, any>[],
@@ -103,4 +112,42 @@ export const isWithinRadius = (cord1: CordType, cord2: CordType, maxRadius: numb
 
   const distanceKm = earthRadiusKm * c
   return distanceKm <= maxRadius
+}
+
+export const resolveNotificationLink = (n?: Notification) => {
+  if (n) {
+    if (n.data.type === NotificationTypes.BOOKING_CREATED)
+      return routes('web.booking.show', [n.data.meta.booking_id])
+    if (n.data.type === NotificationTypes.BOOKING_RECIEVED)
+      return routes('vendor.booking.show', [n.data.meta.booking_id])
+    if (n.data.type === NotificationTypes.CUSTOM_BOOKING_CREATED)
+      return routes('web.custom_booking.show', [n.data.meta.booking_id])
+    if (n.data.type === NotificationTypes.CUSTOM_BOOKING_RECIEVED)
+      return routes('vendor.custom-booking.show', [n.data.meta.booking_id])
+    if (n.data.type === NotificationTypes.BID_RECIEVED)
+      return routes('web.service_requirement.show', [n.data.meta.requirement_id])
+    if (n.data.type === NotificationTypes.NEGOTIATED)
+      return routes('web.service_requirement.show', [n.data.meta.requirement_id])
+    if (n.data.type === NotificationTypes.NEGOTIATION_REQUESTED)
+      return routes('vendor.requirements.show', [n.data.meta.requirement_id])
+    if (n.data.type === NotificationTypes.SERVICE_REQUIREMENT_ADDED)
+      return routes('vendor.requirements.show', [n.data.meta.requirement_id])
+    else return 'tabler-circle-dot'
+  } else return 'tabler-circle-dot'
+}
+
+export const resolveNotificationIcon = (n?: Notification) => {
+  if (n) {
+    if (n.data.type === NotificationTypes.BOOKING_CREATED) return 'tabler-shopping-cart'
+    if (n.data.type === NotificationTypes.BOOKING_RECIEVED) return 'tabler-shopping-cart'
+    if (n.data.type === NotificationTypes.CUSTOM_BOOKING_CREATED) return 'tabler-shopping-cart'
+    if (n.data.type === NotificationTypes.CUSTOM_BOOKING_RECIEVED) return 'tabler-shopping-cart'
+    if (n.data.type === NotificationTypes.BID_RECIEVED) return 'tabler-hand-grab'
+    if (n.data.type === NotificationTypes.NEGOTIATED) return 'tabler-heart-handshake'
+    if (n.data.type === NotificationTypes.NEGOTIATION_REQUESTED) return 'tabler-question-mark'
+    if (n.data.type === NotificationTypes.SERVICE_REQUIREMENT_ADDED) return 'tabler-hand-grab'
+    else return 'tabler-circle-dot'
+  } else {
+    return 'tabler-circle-dot'
+  }
 }

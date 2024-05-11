@@ -5,12 +5,16 @@ import type { IResType } from '#helpers/types'
 import { pickKeysFromReference } from '~/utils/helpers'
 import * as vt from 'vue-toastification'
 
-export default function useApiForm<T extends object>(initialForm: T) {
+export default function useApiForm<T extends object>(
+  initialForm: T,
+  options?: { disableToast?: boolean }
+) {
   const formObject = reactive({
     ...initialForm,
     res: undefined as undefined | IResType<any>,
     processing: false,
     error: null as Record<any, any> | null,
+    disableToast: options?.disableToast || false,
     async post(
       url: string,
       config?: AxiosRequestConfig,
@@ -114,7 +118,7 @@ export default function useApiForm<T extends object>(initialForm: T) {
   watch(
     () => formObject.res,
     (n) => {
-      if (n && !import.meta.env.SSR) {
+      if (n && !import.meta.env.SSR && !formObject.disableToast) {
         const toast = vt.useToast()
         if (n.success === true) {
           toast.success(n.message || ' Success')

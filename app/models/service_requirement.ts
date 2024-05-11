@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
-import { DeliveryOptions } from '#helpers/enums'
+import { BaseModel, afterCreate, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import { DeliveryOptions, NotificationTypes } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import ServiceCategory from './service_category.js'
@@ -81,27 +81,31 @@ export default class ServiceRequirement extends compose(BaseModel, Filterable) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  // @afterCreate()
-  // static async notifyUser(serviceRequirement: ServiceRequirement) {
-  //   const categoryId = serviceRequirement.serviceCategoryId
+  @afterCreate()
+  static async notifyUser(serviceRequirement: ServiceRequirement) {
+    const categoryId = serviceRequirement.serviceCategoryId
 
-  //   const users = await User.query().whereHas('subscribedCategories', (b) => {
-  //     b.where('service_category_id', categoryId)
-  //   })
+    const users = await User.query()
+      .whereHas('businessProfile', (b) => {
+        b.whereHas('services', (s) => {
+          s.where('service_category_id', categoryId)
+        })
+      })
+      .exec()
 
-  //   for (const user of users) {
-  //     await user.related('notifications').create({
-  //       data: {
-  //         type: NotificationTypes.SERVICE_REQUIREMENT_ADDED,
-  //         message: 'New Service Requirement Added',
-  //         meta: {
-  //           id: serviceRequirement.id,
-  //           title: serviceRequirement.title,
-  //         },
-  //       },
-  //     })
-  //   }
-  // }
+    for (const user of users) {
+      await user.related('notifications').create({
+        data: {
+          type: NotificationTypes.SERVICE_REQUIREMENT_ADDED,
+          title: 'New Requirment listed',
+          subTitle: 'New requirement listed you may be interested, checkout',
+          meta: {
+            requirement_id: serviceRequirement.id,
+          },
+        },
+      })
+    }
+  }
 }
 
 export type IServiceRequirement = ServiceRequirement

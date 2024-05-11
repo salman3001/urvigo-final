@@ -2,6 +2,7 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import KnowledgeBaseCategory from './knowledge_base_category.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Language from './language.js'
+import type { ImageType } from '#helpers/types'
 
 export default class KnowledgeBaseContent extends BaseModel {
   @column({ isPrimary: true })
@@ -17,7 +18,13 @@ export default class KnowledgeBaseContent extends BaseModel {
   declare isActive: boolean
 
   @column()
+  declare featured: boolean
+
+  @column()
   declare order: number
+
+  @column()
+  declare imgIcon: ImageType
 
   @column()
   declare knowledgeBaseCategoryId: number
@@ -30,6 +37,9 @@ export default class KnowledgeBaseContent extends BaseModel {
 
   @belongsTo(() => Language)
   declare language: BelongsTo<typeof Language>
+
+  @column()
+  declare shortDesc: string
 
   @column()
   declare content: string

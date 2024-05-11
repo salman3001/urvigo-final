@@ -94,7 +94,7 @@ watch(
                 }
               "
             />
-            <AppTextField v-model="editAddressForm.mapAddress" label="Address line 1" disabled />
+            <AppTextField v-model="editAddressForm.mapAddress" label="Address line 1" />
             <AppTextField v-model="editAddressForm.address" label="Address line 2 (optional)" />
             <AppTextField
               v-model="editAddressForm.mobile"

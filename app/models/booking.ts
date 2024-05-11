@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import { DeliveryOptions, OrderStatus } from '#helpers/enums'
+import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import { DeliveryOptions, NotificationTypes, OrderStatus } from '#helpers/enums'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import ServiceVariant from './service_variant.js'
@@ -10,6 +10,7 @@ import BookingFilter from './filters/booking_filter.js'
 import { Filterable } from 'adonis-lucid-filter'
 import { compose } from '@adonisjs/core/helpers'
 import BookedTimeslot from './booked_timeslot.js'
+import Notification from './notification.js'
 
 export default class Booking extends compose(BaseModel, Filterable) {
   static $filter = () => BookingFilter
@@ -67,6 +68,40 @@ export default class Booking extends compose(BaseModel, Filterable) {
 
   @belongsTo(() => BookedTimeslot)
   declare bookedTimeslot: BelongsTo<typeof BookedTimeslot>
+
+  @afterCreate()
+  static async pushNotification(booking: Booking) {
+    //notify user
+    await Notification.create({
+      userId: booking.userId,
+      data: {
+        type: NotificationTypes.BOOKING_CREATED,
+        title: 'Booking Created',
+        subTitle: 'You just created a new booking! Click to see detail',
+        meta: {
+          booking_id: booking.id,
+        },
+      },
+    })
+
+    //notify vendor
+    const businessProfile = await BusinessProfile.query()
+      .where('id', booking.businessProfileId)
+      .first()
+    if (businessProfile) {
+      await Notification.create({
+        userId: businessProfile.userId,
+        data: {
+          type: NotificationTypes.BOOKING_RECIEVED,
+          title: 'New Booking Recieved',
+          subTitle: 'You just Recived a new booking! Click to see detail',
+          meta: {
+            booking_id: booking.id,
+          },
+        },
+      })
+    }
+  }
 }
 
 export type IBooking = Booking

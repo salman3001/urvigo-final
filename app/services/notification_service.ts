@@ -12,7 +12,9 @@ export default class NotificationsService {
     await bouncer.with('NotificationPolicy').authorize('viewList')
     const user = auth.user!
 
-    const notifcationQuery = Notification.query().where('user_id', user.id)
+    const notifcationQuery = Notification.query()
+      .where('user_id', user.id)
+      .orderBy('created_at', 'desc')
 
     const notifications = paginate(notifcationQuery, request)
 
@@ -30,28 +32,40 @@ export default class NotificationsService {
 
     if (user) {
       await user.load('notifications', (b) => {
-        b.orderBy('created_at').limit(20)
+        b.orderBy('created_at', 'desc').limit(10)
       })
 
-      const query = await db
-        .query()
-        .from('notifications')
-        .select('id')
-        .where('user_id', user.id)
-        .groupBy('id')
-        .count('* as count')
-        .first()
+      const query = await db.rawQuery(
+        `
+      SELECT
+        count(*) as count
+      FROM
+        notifications
+      WHERE 
+        user_id = ? AND read_at IS NULL
+      `,
+        [user.id]
+      )
 
       if (!query) {
         count = 0
       } else {
-        count = query.count
+        count = query.rows[0]?.count
       }
 
       notifcations = user.notifications
     }
 
     return { notifcations, count }
+  }
+
+  async destroy() {
+    const { bouncer, params } = this.ctx
+    const notification = await Notification.findOrFail(+params.id)
+    await bouncer.with('NotificationPolicy').authorize('delete', notification)
+    await notification.delete()
+
+    return 'Notification deleted' as 'Notification deleted'
   }
 
   async destroyRead() {

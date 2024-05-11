@@ -25,47 +25,49 @@ const getImageUrls = useGetImageUrl()
 </script>
 
 <template>
-  <VCard density="compact" dense>
-    <template #title>
-      <div class="d-flex flex-wrap">
-        <VTooltip
-          v-for="(dt, i) in requirement.deliveryOptions"
-          :key="i"
-          text="Accepted Delivery type"
-        >
-          <template #activator="{ props }">
-            <VChip
-              variant="text"
-              :prepend-icon="
-                dt === DeliveryOptions.HOME_SERVICE
-                  ? 'tabler-truck-delivery'
-                  : dt === DeliveryOptions.WALK_IN
-                    ? 'tabler-walk'
-                    : dt === DeliveryOptions.ONLINE
-                      ? 'tabler-wifi'
-                      : ''
-              "
-              v-bind="props"
-            >
-              {{ resolveDeliveryOptions(dt) }}
-            </VChip>
-          </template>
-        </VTooltip>
-      </div>
-    </template>
-    <template #append>
-      <div class="d-flex flex-column align-center justify-center">
-        <VAvatar
-          :image="getImageUrls(requirement?.user?.profile?.avatar?.thumbnailUrl, dummyThumb)"
-          size="48"
-        >
-        </VAvatar>
+  <VCard dense>
+    <VCardItem>
+      <div class="d-flex flex-wrap justify-space-between">
         <div>
-          {{ requirement?.user?.firstName }}
-          {{ requirement?.user?.lastName }}
+          <VTooltip
+            v-for="(dt, i) in requirement.deliveryOptions"
+            :key="i"
+            text="Accepted Delivery type"
+          >
+            <template #activator="{ props }">
+              <VChip
+                variant="text"
+                :prepend-icon="
+                  dt === DeliveryOptions.HOME_SERVICE
+                    ? 'tabler-truck-delivery'
+                    : dt === DeliveryOptions.WALK_IN
+                      ? 'tabler-walk'
+                      : dt === DeliveryOptions.ONLINE
+                        ? 'tabler-wifi'
+                        : ''
+                "
+                v-bind="props"
+                class="pl-0"
+              >
+                {{ resolveDeliveryOptions(dt) }}
+              </VChip>
+            </template>
+          </VTooltip>
+        </div>
+
+        <div class="d-flex flex-column align-center justify-center">
+          <VAvatar
+            :image="getImageUrls(requirement?.user?.profile?.avatar?.thumbnailUrl, dummyThumb)"
+            size="36"
+          >
+          </VAvatar>
+          <div>
+            {{ requirement?.user?.firstName }}
+            {{ requirement?.user?.lastName }}
+          </div>
         </div>
       </div>
-    </template>
+    </VCardItem>
 
     <VCardText>
       <p class="text-h5">{{ requirement.title }}</p>
@@ -82,13 +84,6 @@ const getImageUrls = useGetImageUrl()
       </div>
     </VCardText>
 
-    <VCardItem v-if="requirement?.images">
-      <h3>Images</h3>
-      <br />
-      <ClientOnly>
-        <LightBox :images="requirement.images.map((i) => getImageUrls(i?.file?.url))" />
-      </ClientOnly>
-    </VCardItem>
     <VCardItem>
       <div class="d-flex flex-wrap justify-space-between gap-3">
         <div class="d-flex gap-2">
@@ -114,11 +109,7 @@ const getImageUrls = useGetImageUrl()
         </div>
       </div>
     </VCardItem>
-
-    <VCardText>
-      <VDivider />
-    </VCardText>
-
+    <VDivider />
     <VCardText class="d-flex flex-wrap justify-space-between">
       <div class="normalcase d-flex gap-2 flex-grow-1 pa-2">
         <p v-for="(tag, i) in requirement?.tags" :key="i">#{{ tag.name }}</p>
@@ -150,5 +141,18 @@ const getImageUrls = useGetImageUrl()
         </Link>
       </div>
     </VCardText>
+    <VCardItem v-if="requirement?.images">
+      <h3 class="mb-1">Images</h3>
+      <ClientOnly>
+        <LightBox :images="requirement.images.map((i) => getImageUrls(i?.file?.url))" />
+      </ClientOnly>
+    </VCardItem>
   </VCard>
 </template>
+
+<style lang="scss" scoped>
+.v-card-item {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+</style>

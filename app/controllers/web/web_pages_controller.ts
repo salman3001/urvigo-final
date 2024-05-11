@@ -8,6 +8,7 @@ import WishlstService from '../../services/wishlist_service.js'
 import notificationsService from '../../services/notification_service.js'
 import ReviewsService from '#services/review_service'
 import ChatService from '#services/chat_service'
+import HelpcenterService from '#services/helpcenter_service'
 @inject()
 export default class WebPagesController {
   constructor(
@@ -18,7 +19,8 @@ export default class WebPagesController {
     protected wishlistService: WishlstService,
     protected notificationService: notificationsService,
     protected reviewsService: ReviewsService,
-    protected chatService: ChatService
+    protected chatService: ChatService,
+    protected helpcenterService: HelpcenterService
   ) {}
 
   //auth
@@ -172,6 +174,20 @@ export default class WebPagesController {
   async createChatMessage({ response }: HttpContext) {
     await this.chatService.createMessage()
     return response.redirect().back()
+  }
+
+  // helpcenter
+  async helpcenter({ inertia }: HttpContext) {
+    return inertia.render('helpcenter/helpcenter-index', {
+      data: () => this.helpcenterService.helpcenterIndexPageData(),
+    })
+  }
+
+  // helpcenter
+  async helpcenterContentDetail({ inertia }: HttpContext) {
+    return inertia.render('helpcenter/helpcenter-show', {
+      content: () => this.helpcenterService.helpcenterDetailPageData(),
+    })
   }
 
   async temp({ response }: HttpContext) {

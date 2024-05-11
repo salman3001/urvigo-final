@@ -26,54 +26,55 @@ const getImageUrls = useGetImageUrl()
 
 <template>
   <VCard dense>
-    <template #title>
-      <div class="d-flex flex-wrap">
-        <VTooltip
-          v-for="(dt, i) in requirement.deliveryOptions"
-          :key="i"
-          text="Accepted Delivery type"
-        >
-          <template #activator="{ props }">
-            <VChip
-              variant="text"
-              :prepend-icon="
-                dt === DeliveryOptions.HOME_SERVICE
-                  ? 'tabler-truck-delivery'
-                  : dt === DeliveryOptions.WALK_IN
-                    ? 'tabler-walk'
-                    : dt === DeliveryOptions.ONLINE
-                      ? 'tabler-wifi'
-                      : ''
-              "
-              v-bind="props"
-            >
-              {{ resolveDeliveryOptions(dt) }}
-            </VChip>
-          </template>
-        </VTooltip>
+    <VCardText>
+      <div class="d-flex flex-wrap justify-space-between">
+        <div>
+          <VTooltip
+            v-for="(dt, i) in requirement.deliveryOptions"
+            :key="i"
+            text="Accepted Delivery type"
+          >
+            <template #activator="{ props }">
+              <VChip
+                variant="text"
+                :prepend-icon="
+                  dt === DeliveryOptions.HOME_SERVICE
+                    ? 'tabler-truck-delivery'
+                    : dt === DeliveryOptions.WALK_IN
+                      ? 'tabler-walk'
+                      : dt === DeliveryOptions.ONLINE
+                        ? 'tabler-wifi'
+                        : ''
+                "
+                v-bind="props"
+                class="pl-0"
+              >
+                {{ resolveDeliveryOptions(dt) }}
+              </VChip>
+            </template>
+          </VTooltip>
+        </div>
+        <div class="d-flex flex-column gap-2 align-end justify-start">
+          <VChip v-if="!requirement.acceptedBidId" color="warning" style="max-width: max-content"
+            >Active</VChip
+          >
+          <VChip
+            v-else-if="requirement.acceptedBidId != null"
+            color="success"
+            style="max-width: max-content"
+            >Completed</VChip
+          >
+          <VChip
+            v-else-if="
+              differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
+            "
+            color="error"
+            style="max-width: max-content"
+            >Expired</VChip
+          >
+        </div>
       </div>
-    </template>
-    <template #append>
-      <div class="d-flex flex-column gap-2 align-end justify-start">
-        <VChip v-if="!requirement.acceptedBidId" color="warning" style="max-width: max-content"
-          >Active</VChip
-        >
-        <VChip
-          v-else-if="requirement.acceptedBidId != null"
-          color="success"
-          style="max-width: max-content"
-          >Completed</VChip
-        >
-        <VChip
-          v-else-if="
-            differenceInMinutes(requirement.expiresAt as unknown as string, Date.now()) < 0
-          "
-          color="error"
-          style="max-width: max-content"
-          >Expired</VChip
-        >
-      </div>
-    </template>
+    </VCardText>
     <VCardText>
       <p class="text-h5">{{ requirement.title }}</p>
       <p>
@@ -88,13 +89,6 @@ const getImageUrls = useGetImageUrl()
         >
       </div>
     </VCardText>
-    <VCardItem v-if="requirement?.images">
-      <h3>Images</h3>
-      <br />
-      <ClientOnly>
-        <LightBox :images="requirement.images.map((i) => getImageUrls(i?.file?.url))" />
-      </ClientOnly>
-    </VCardItem>
 
     <VCardItem>
       <div class="d-flex flex-wrap justify-space-between gap-3">
@@ -157,5 +151,12 @@ const getImageUrls = useGetImageUrl()
         </Link>
       </div>
     </VCardText>
+    <VCardItem v-if="requirement?.images">
+      <h3>Images</h3>
+      <br />
+      <ClientOnly>
+        <LightBox :images="requirement.images.map((i) => getImageUrls(i?.file?.url))" />
+      </ClientOnly>
+    </VCardItem>
   </VCard>
 </template>

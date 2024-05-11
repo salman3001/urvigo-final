@@ -45,6 +45,16 @@ export default class ApiNotificationsController {
     })
   }
 
+  async destroy({ response }: HttpContext) {
+    await this.notificationService.destroy()
+    return response.custom({
+      code: 200,
+      data: null,
+      message: 'Notification Deleted',
+      success: true,
+    })
+  }
+
   async destroyRead({ response }: HttpContext) {
     await this.notificationService.destroyRead()
     return response.custom({

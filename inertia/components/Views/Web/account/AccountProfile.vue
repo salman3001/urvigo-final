@@ -20,8 +20,8 @@ const validateAccountDeactivation = [(v: string) => !!v || 'Please confirm accou
     </VCol>
 
     <VCol cols="12">
-      <!-- 👉 Delete Account -->
-      <VCard title="Delete Account">
+      <!-- 👉 Deactivate Account -->
+      <VCard title="Deactivate Account">
         <VCardText>
           <!-- 👉 Checkbox and Button  -->
           <div>
