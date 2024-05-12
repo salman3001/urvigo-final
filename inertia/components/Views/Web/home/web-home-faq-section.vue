@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import boyWithLogo from '~/assets/images/front-pages/landing-page/faq-boy-with-logos.png'
+import routes from '~/utils/routes'
+import { Link } from '@inertiajs/vue3'
 
 const faqData = [
   {
@@ -66,6 +68,11 @@ const faqData = [
             </VExpansionPanels>
           </VCol>
         </VRow>
+        <div class="d-flex justify-end">
+          <Link :href="routes('web.faqs')">
+            <VBtn append-icon="tabler-chevron-right">View all FAQs</VBtn>
+          </Link>
+        </div>
       </div>
     </VContainer>
   </div>

@@ -9,6 +9,7 @@ export default {
 <script setup lang="ts">
 import type KnowledgeBaseCategory from '#models/knowledge_base_category'
 import type KnowledgeBaseContent from '#models/knowledge_base_content'
+import { router } from '@inertiajs/vue3'
 import AppSearchHeader from '~/components/Views/Web/AppSearchHeader.vue'
 import HelpCenterArticlesOverview from '~/components/Views/Web/help-center/HelpCenterArticlesOverview.vue'
 import HelpCenterKnowledgeBase from '~/components/Views/Web/help-center/HelpCenterKnowledgeBase.vue'
@@ -24,11 +25,20 @@ defineProps<{
 
 <template>
   <div class="help-center-page">
-    <div v-if="data && data.catgories.length">
+    <div v-if="data">
       <AppSearchHeader
         subtitle="Common topics: Services listing, Payment process, Custom Requirements"
         custom-class="rounded-0"
         placeholder="Search"
+        @search="
+          (v) => {
+            router.reload({
+              data: {
+                search: v,
+              },
+            })
+          }
+        "
       >
         <template #title>
           <h4 class="text-h4 font-weight-medium" style="color: rgba(var(--v-theme-primary), 1)">
@@ -38,7 +48,7 @@ defineProps<{
       </AppSearchHeader>
 
       <!-- 👉 Popular Articles -->
-      <div class="help-center-section bg-surface">
+      <div v-if="data.featuredContent.length" class="help-center-section bg-surface">
         <VContainer>
           <h4 class="text-h4 text-center mb-6">Popular Articles</h4>
           <HelpCenterArticlesOverview :articles="data.featuredContent" />
@@ -54,12 +64,12 @@ defineProps<{
       </div>
 
       <!-- 👉 Keep Learning -->
-      <div class="help-center-section bg-surface">
+      <!-- <div class="help-center-section bg-surface">
         <VContainer>
           <h4 class="text-h4 text-center mb-6">Keep Learning</h4>
           <HelpCenterArticlesOverview :articles="data.featuredContent" />
         </VContainer>
-      </div>
+      </div> -->
 
       <!-- 👉 Still need help? -->
       <div class="help-center-section">

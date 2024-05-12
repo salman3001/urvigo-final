@@ -1,6 +1,6 @@
-import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import Language from './language.js'
-import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Blog from './blog.js'
 import { compose } from '@adonisjs/core/helpers'
 import { Filterable } from 'adonis-lucid-filter'
@@ -38,8 +38,8 @@ export default class BlogCategory extends compose(BaseModel, Filterable) {
   @column()
   declare metaDesc: string
 
-  @manyToMany(() => Blog, { pivotTable: 'blog_categories_pivot' })
-  declare blogs: ManyToMany<typeof Blog>
+  @hasMany(() => Blog)
+  declare blogs: HasMany<typeof Blog>
 }
 
 export type IBlogCategory = BlogCategory

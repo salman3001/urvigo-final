@@ -51,6 +51,22 @@ router
     router.post('/temp-post', [WebPagesController, 'temp']).as('temp.post')
     router.get('/services', [WebPagesController, 'services']).as('services')
     router.get('/services/:slug', [WebPagesController, 'services_show']).as('services.show')
+    router.get('/contact-us', [WebPagesController, 'contactus']).as('contactus')
+    router.get('/faqs', [WebPagesController, 'faqs']).as('faqs')
+    router
+      .group(() => {
+        router.get('/', [WebPagesController, 'helpcenter']).as('index')
+        router.get('/:slug', [WebPagesController, 'helpcenterContentDetail']).as('show')
+      })
+      .prefix('helpcenter')
+      .as('helpcenter')
+    router
+      .group(() => {
+        router.get('/', [WebPagesController, 'blogs']).as('index')
+        router.get('/:slug', [WebPagesController, 'blogsDetail']).as('show')
+      })
+      .prefix('blogs')
+      .as('blogs')
 
     // with auth
     router
@@ -148,15 +164,6 @@ router
           })
           .prefix('vendor-profile')
           .as('vendor-profile')
-
-        // help-center
-        router
-          .group(() => {
-            router.get('/', [WebPagesController, 'helpcenter']).as('index')
-            router.get('/:slug', [WebPagesController, 'helpcenterContentDetail']).as('show')
-          })
-          .prefix('helpcenter')
-          .as('helpcenter')
 
         router.get('chat', [WebPagesController, 'chat']).as('chat')
         router.post('chat/:id', [WebPagesController, 'createChatMessage']).as('chat.create-masaage')

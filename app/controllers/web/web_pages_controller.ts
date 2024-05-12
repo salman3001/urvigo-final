@@ -9,6 +9,7 @@ import notificationsService from '../../services/notification_service.js'
 import ReviewsService from '#services/review_service'
 import ChatService from '#services/chat_service'
 import HelpcenterService from '#services/helpcenter_service'
+import BlogService from '#services/blog_service'
 @inject()
 export default class WebPagesController {
   constructor(
@@ -20,7 +21,8 @@ export default class WebPagesController {
     protected notificationService: notificationsService,
     protected reviewsService: ReviewsService,
     protected chatService: ChatService,
-    protected helpcenterService: HelpcenterService
+    protected helpcenterService: HelpcenterService,
+    protected blogService: BlogService
   ) {}
 
   //auth
@@ -186,7 +188,30 @@ export default class WebPagesController {
   // helpcenter
   async helpcenterContentDetail({ inertia }: HttpContext) {
     return inertia.render('helpcenter/helpcenter-show', {
-      content: () => this.helpcenterService.helpcenterDetailPageData(),
+      data: () => this.helpcenterService.helpcenterDetailPageData(),
+    })
+  }
+
+  // Faqs
+  async faqs({ inertia }: HttpContext) {
+    return inertia.render('faq', {})
+  }
+
+  // contactus
+  async contactus({ inertia }: HttpContext) {
+    return inertia.render('contactus', {})
+  }
+
+  // blogs
+  async blogs({ inertia }: HttpContext) {
+    return inertia.render('blogs/blog-index', {
+      blogs: () => this.blogService.blogListPagedata(),
+    })
+  }
+
+  async blogsDetail({ inertia }: HttpContext) {
+    return inertia.render('blogs/blog-detail', {
+      data: () => this.blogService.blogDetailPagedata(),
     })
   }
 

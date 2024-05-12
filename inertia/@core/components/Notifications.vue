@@ -7,6 +7,7 @@ import { VAvatar, VBadge } from 'vuetify/components'
 
 interface Props {
   notifications: Notification[]
+  unreadCount: number
   badgeProps?: object
   location?: any
 }
@@ -45,7 +46,14 @@ const toggleReadUnread = (isSeen: boolean, Id: number) => {
 
 <template>
   <IconBtn id="notification-btn">
-    <VBadge v-bind="props.badgeProps" color="error" offset-x="2" offset-y="3">
+    <VBadge
+      v-bind="props.badgeProps"
+      color="error"
+      offset-x="2"
+      offset-y="3"
+      :dot="unreadCount < 1"
+      :content="unreadCount"
+    >
       <VIcon size="24" icon="tabler-bell" />
     </VBadge>
 

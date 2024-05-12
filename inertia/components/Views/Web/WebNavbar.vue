@@ -33,7 +33,7 @@ interface MenuItem {
 }
 
 const navMenuItems = [
-  { label: 'Home', link: routes('web.home') },
+  // { label: 'Home', link: routes('web.home') },
   { label: 'Services', link: routes('web.services') },
   { label: 'Service Requirements', link: routes('web.service_requirement.my-list') },
 ]
@@ -50,7 +50,7 @@ watch(
   { deep: true }
 )
 
-const isMenuOpen = ref(false)
+const isMenuOpen = ref(true)
 const isMegaMenuOpen = ref(false)
 
 const menuItems: MenuItem[] = [
@@ -90,9 +90,9 @@ const menuItems: MenuItem[] = [
     NavItems: [
       { name: 'Pricing', to: '' },
       { name: 'Help Center', to: routes('web.helpcenter.index') },
-      { name: 'FAQ', to: '' },
-      { name: 'Blogs', to: '' },
-      { name: 'Contact', to: '' },
+      { name: 'FAQ', to: routes('web.faqs') },
+      { name: 'Blogs', to: routes('web.blogs.index') },
+      { name: 'Contact', to: routes('web.contactus') },
       { name: 'About', to: '' },
       // { name: 'Verify Email (Basic)', to: { name: 'pages-authentication-verify-email-v1' } },
       // { name: 'Verify Email (Cover)', to: { name: 'pages-authentication-verify-email-v2' } },
@@ -211,14 +211,10 @@ const isPageActive = computed(() =>
         <!-- Title and Landing page sections -->
         <div class="d-flex align-center">
           <VAppBarTitle class="me-6">
-            <Link
-              :href="routes('web.home')"
-              class="d-flex gap-x-4"
-              :class="$vuetify.display.mdAndUp ? 'd-none' : 'd-block'"
-            >
+            <Link :href="routes('web.home')" class="d-flex gap-x-4">
               <div class="app-logo">
                 <VNodeRenderer :nodes="themeConfig.app.logo" />
-                <h1 class="app-logo-title">
+                <h1 class="app-logo-title" v-if="$vuetify.display.smAndUp">
                   {{ themeConfig.app.title }}
                 </h1>
               </div>

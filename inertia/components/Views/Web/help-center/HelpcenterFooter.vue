@@ -15,6 +15,9 @@ import routes from '~/utils/routes'
       <Link :href="routes('web.home')">
         <VBtn>Contact us</VBtn>
       </Link>
+      <Link :href="routes('web.home')">
+        <VBtn>Support</VBtn>
+      </Link>
     </div>
   </VCardText>
 </template>

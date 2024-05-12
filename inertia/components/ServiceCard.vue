@@ -103,7 +103,7 @@ const removeItem = (serviceId: number | string) => {
           <div class="d-flex justify-between">
             <div class="">
               <span> {{ service.variants?.length ? 1 && 'Starting From ' : '' }}</span>
-              <span class="text-bold text-h6"
+              <span class="text-bold text-h6 font-weight-bold"
                 >&#x20B9;{{ new BigNumber(minPriceVariant.price).minus(discount).toFixed(2) }}</span
               >
               <span v-if="discount.gt(0)" class="text-bold text-h6 text-decoration-line-through"

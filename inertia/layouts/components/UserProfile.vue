@@ -12,7 +12,7 @@ const { user, isVendor } = useAuth()
 
 <template>
   <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
-    <VAvatar class="cursor-pointer" color="primary" variant="tonal">
+    <VAvatar class="cursor-pointer" variant="tonal">
       <VImg :src="getImageUrl(user?.profile?.avatar?.thumbnailUrl, avatar)" />
 
       <!-- SECTION Menu -->
@@ -23,7 +23,7 @@ const { user, isVendor } = useAuth()
             <template #prepend>
               <VListItemAction start>
                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
-                  <VAvatar color="primary" variant="tonal">
+                  <VAvatar variant="tonal">
                     <VImg :src="getImageUrl(user?.profile?.avatar?.thumbnailUrl, avatar)" />
                   </VAvatar>
                 </VBadge>
@@ -44,7 +44,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 dashboard -->
           <Link v-if="isVendor()" :href="routes('vendor.dashboard')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-brand-envato" size="22" />
               </template>
@@ -54,7 +54,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Profile -->
           <Link :href="routes('web.account.profile')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-user" size="22" />
               </template>
@@ -65,7 +65,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 chat -->
           <Link :href="routes('web.chat')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-mail-opened" size="22" />
               </template>
@@ -76,7 +76,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Settings -->
           <Link :href="routes('web.account.settings')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-settings" size="22" />
               </template>
@@ -87,7 +87,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Bookings -->
           <Link :href="routes('web.booking.list')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-shopping-cart" size="22" />
               </template>
@@ -98,7 +98,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Custom Bookings -->
           <Link :href="routes('web.custom_booking.list')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-shopping-cart" size="22" />
               </template>
@@ -109,7 +109,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Wishlist -->
           <Link :href="routes('web.account.wishlist')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-heart" size="22" />
               </template>
@@ -120,7 +120,7 @@ const { user, isVendor } = useAuth()
 
           <!-- 👉 Notification -->
           <Link :href="routes('web.account.notifications')">
-            <VListItem link>
+            <VListItem link class="text-grey-600">
               <template #prepend>
                 <VIcon class="me-2" icon="tabler-bell" size="22" />
               </template>

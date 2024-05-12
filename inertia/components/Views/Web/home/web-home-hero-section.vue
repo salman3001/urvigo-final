@@ -22,20 +22,28 @@ const theme = useTheme()
               Streamline Your Services, Simplify Your Bookings: Your One-Stop Services solution.
             </h6>
             <div class="position-relative">
-              <h6
+              <!-- <h6
                 class="position-absolute hero-btn-item d-md-flex d-none text-h6 text-medium-emphasis mt-6"
               >
                 Join Community
                 <VImg :src="joinArrow" class="flip-in-rtl" width="54" height="31" />
-              </h6>
-              <div class="d-flex flex-column flex-sm-row justify-space-between flex-sm-row gap-2">
+              </h6> -->
+              <div class="d-flex flex-column flex-sm-row justify-center flex-sm-row gap-10">
                 <Link :href="routes('web.services')">
-                  <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
+                  <VBtn
+                    :size="$vuetify.display.smAndUp ? 'large' : 'default'"
+                    :active="false"
+                    prepend-icon="tabler-brand-asana"
+                  >
                     Explore Services
                   </VBtn>
                 </Link>
                 <Link :href="routes('web.service_requirement.my-list')">
-                  <VBtn :size="$vuetify.display.smAndUp ? 'large' : 'default'" :active="false">
+                  <VBtn
+                    :size="$vuetify.display.smAndUp ? 'large' : 'default'"
+                    :active="false"
+                    prepend-icon="tabler-hand-grab"
+                  >
                     Personalize Service
                   </VBtn>
                 </Link>
@@ -195,7 +203,7 @@ section {
 .landing-hero-light-bg {
   background:
     url('~/assets/images/front-pages/backgrounds/hero-bg.png') center no-repeat,
-    linear-gradient(138.18deg, #eae8fd 0%, #fce5e6 94.44%);
+    linear-gradient(138.18deg, #e8fdeb 0%, #fce5e6 94.44%);
   background-size: cover;
 }
 
@@ -216,7 +224,7 @@ section {
 
 .hero-title {
   animation: shine 2s ease-in-out infinite alternate;
-  background: linear-gradient(135deg, #28c76f 0%, #5a4aff 47.92%, #ff3739 100%);
+  background: linear-gradient(135deg, #40c728 0%, #ac437d 47.92%, #01d41d 100%);
   //  stylelint-disable-next-line property-no-vendor-prefix
   -webkit-background-clip: text;
   background-clip: text;

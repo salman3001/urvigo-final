@@ -191,7 +191,13 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('~/@core/components/A
     <IconBtn @click="Shepherd.activeTour?.cancel()">
       <VIcon icon="tabler-search" />
     </IconBtn>
-    <AppTextField v-if="inputVisible" placeholder="Search Services" @focus.prevent="" />
+    <AppTextField
+      v-if="inputVisible"
+      placeholder="Search Services"
+      @focus.prevent=""
+      class="text-primary"
+      variant="solo-inverted"
+    />
 
     <span
       v-if="configStore.appContentLayoutNav === 'vertical'"
@@ -310,5 +316,9 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('~/@core/components/A
   .card-list {
     --v-card-list-gap: 8px;
   }
+}
+
+.v-text-field--outlined fieldset {
+  color: red !important;
 }
 </style>

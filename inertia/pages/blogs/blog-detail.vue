@@ -2,7 +2,6 @@
 import Layout from '~/layouts/default.vue'
 import { VBreadcrumbs, VBreadcrumbsItem, VIcon } from 'vuetify/components'
 import { ref } from 'vue'
-import { watchDebounced } from '@vueuse/core'
 import { format } from 'date-fns'
 
 export default {
@@ -16,13 +15,13 @@ import { Link, router } from '@inertiajs/vue3'
 import routes from '~/utils/routes'
 
 defineProps<{
-  data: { content: KnowledgeBaseContent; similarContent: KnowledgeBaseContent[] }
+  data: { blog: KnowledgeBaseContent; similarBlogs: KnowledgeBaseContent[] }
 }>()
 
 const search = ref('')
 const searchContent = () => {
   if (search.value) {
-    router.visit(routes('web.helpcenter.index'), {
+    router.visit(routes('web.blogs.index'), {
       data: {
         search: search.value,
       },
@@ -36,28 +35,35 @@ const searchContent = () => {
   <div class="bg-surface help-center-article">
     <!-- 👉 Content -->
     <VContainer>
-      <div v-if="data?.content && data?.content?.title" class="article-section">
+      <div v-if="data?.blog" class="article-section">
         <VRow>
           <VCol cols="12" md="8">
             <div>
               <VBreadcrumbs class="px-0 pb-2 pt-0 help-center-breadcrumbs">
-                <Link :href="routes('web.helpcenter.index')">
-                  <VBreadcrumbsItem active>Help Center</VBreadcrumbsItem>
+                <Link :href="routes('web.blogs.index')">
+                  <VBreadcrumbsItem active>Blogs</VBreadcrumbsItem>
                 </Link>
                 <VIcon icon="tabler-chevron-right" />
-                <VBreadcrumbsItem>{{ data?.content?.title }}</VBreadcrumbsItem>
+                <VBreadcrumbsItem
+                  class="line-clamp-1"
+                  style="max-width: 200px; text-wrap: nowrap"
+                  >{{ data?.blog?.title }}</VBreadcrumbsItem
+                >
               </VBreadcrumbs>
               <h4 class="text-h4 mb-2">
-                {{ data?.content?.title }}
+                {{ data?.blog?.title }}
               </h4>
               <div class="text-body-1">
-                {{ format(data?.content?.updatedAt as unknown as string, 'dd/MM/yyyy') }}
+                {{ format(data?.blog?.updatedAt as unknown as string, 'dd/MM/yyyy HH:mm') }}&nbsp;
+                <VChip v-if="data.blog.category" color="primary">{{
+                  data.blog.category.name
+                }}</VChip>
               </div>
             </div>
             <VDivider class="my-6" />
-            <p>{{ data?.content.shortDesc }}</p>
+            <p>{{ data?.blog.shortDesc }}</p>
             <!-- eslint-disable vue/no-v-html -->
-            <div class="mb-6 text-body-1" v-html="data?.content?.content" />
+            <div class="mb-6 text-body-1" v-html="data?.blog?.content" />
             <!-- <VImg class="rounded-lg" :src="content?.content" />
             <p class="my-6 text-body-1">
               {{ articleData?.checkoutContent }}
@@ -82,7 +88,7 @@ const searchContent = () => {
               </h5>
               <VList class="card-list">
                 <VListItem
-                  v-for="(item, index) in data?.similarContent"
+                  v-for="(item, index) in data?.similarBlogs"
                   :key="index"
                   link
                   class="text-disabled"
@@ -93,7 +99,7 @@ const searchContent = () => {
                       size="20"
                     />
                   </template>
-                  <Link :href="routes('web.helpcenter.show', [item.slug])">
+                  <Link :href="routes('web.blogs.show', [item.slug])">
                     <div class="text-body-1 text-high-emphasis line-clamp-2">
                       {{ item.title }}
                     </div>

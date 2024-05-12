@@ -7,7 +7,7 @@ export default Factory.define(Blog, ({ faker }) => {
     slug: faker.lorem.slug(5),
     shortDesc: faker.lorem.paragraph(3),
     longDesc: faker.lorem.paragraphs(3, '<br/>\n'),
-    isPublished: false,
+    isPublished: true,
     metaTitle: faker.lorem.lines(1),
     metaKeywords: faker.lorem.words(5),
     metaDesc: faker.lorem.words(10),

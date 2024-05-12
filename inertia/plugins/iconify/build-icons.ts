@@ -187,6 +187,9 @@ const sources: BundleScriptConfig = {
         'heart-handshake',
         'question-mark',
         'mail',
+        'phone',
+        'shopping-cart-plus',
+        'phone-call',
       ],
     },
     {

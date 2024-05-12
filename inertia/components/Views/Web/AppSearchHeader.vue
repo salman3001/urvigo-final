@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { watchDebounced } from '@vueuse/core'
+import { ref } from 'vue'
 import AppTextField from '~/@core/components/app-form-elements/AppTextField.vue'
 import AppSearchHeaderBg from '~/assets/images/pages/app-search-header-bg.png'
 
@@ -11,14 +13,31 @@ interface Props {
   isReverse?: boolean
 }
 
+const search = ref('')
+
 defineOptions({
   inheritAttrs: false,
 })
+
+const emits = defineEmits<{
+  (e: 'search', val: string): void
+}>()
 
 const props = withDefaults(defineProps<Props>(), {
   density: 'comfortable',
   isReverse: false,
 })
+
+watchDebounced(
+  search,
+  () => {
+    emits('search', search.value)
+  },
+  {
+    debounce: 500,
+    maxWait: 1000,
+  }
+)
 </script>
 
 <template>
@@ -47,6 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
             :placeholder="props.placeholder"
             :density="props.density"
             prepend-inner-icon="tabler-search"
+            v-model="search"
           />
         </div>
       </div>

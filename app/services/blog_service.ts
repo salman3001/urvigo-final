@@ -16,7 +16,14 @@ export default class BlogService {
   async index(opt?: IndexOption) {
     const { request, bouncer } = this.ctx
     await bouncer.with('BlogPolicy').authorize('viewList')
-    const blogQuery = Blog.query()
+    const blogQuery = Blog.query().select([
+      'id',
+      'title',
+      'slug',
+      'thumbnail',
+      'short_desc',
+      'updatedAt',
+    ])
 
     !opt?.disableFilter && blogQuery.filter(request.qs())
     const blogs = await paginate(blogQuery, request)
@@ -24,12 +31,49 @@ export default class BlogService {
     return blogs
   }
 
+  async blogListPagedata(opt?: IndexOption) {
+    const { request, bouncer } = this.ctx
+    await bouncer.with('BlogPolicy').authorize('viewList')
+    const blogQuery = Blog.query()
+      .where('is_published', true)
+      .select(['id', 'title', 'slug', 'thumbnail', 'short_desc', 'updatedAt'])
+
+    !opt?.disableFilter && blogQuery.filter(request.qs())
+    const blogs = await paginate(blogQuery, request)
+
+    return blogs
+  }
+
+  async blogDetailPagedata() {
+    const { bouncer, params } = this.ctx
+    await bouncer.with('BlogPolicy').authorize('view')
+
+    const slug = params.slug
+    const blog = await Blog.query()
+      .preload('category', (c) => {
+        c.select(['id', 'name'])
+      })
+      .where('slug', slug)
+      .where('is_published', true)
+      .firstOrFail()
+
+    const similarBlogs = await Blog.query()
+      .where('blog_category_id', blog.category.id)
+      .whereNot('id', blog.id)
+      .where('slug', slug)
+      .where('is_published', true)
+      .select(['id', 'title', 'slug', 'thumbnail', 'short_desc', 'updatedAt'])
+      .exec()
+
+    return { blog, similarBlogs }
+  }
+
   async show() {
     const { bouncer, params } = this.ctx
     await bouncer.with('BlogPolicy').authorize('view')
 
-    const id = params.id
-    const blog = await Blog.query().where('id', id).firstOrFail()
+    const slug = params.slug
+    const blog = await Blog.query().where('slug', slug).firstOrFail()
 
     return blog
   }
@@ -37,8 +81,7 @@ export default class BlogService {
   async store() {
     const { request, bouncer } = this.ctx
     await bouncer.with('BlogPolicy').authorize('create')
-    const { image, blogCategoryId, slug, ...payload } =
-      await request.validateUsing(createBlogValidator)
+    const { image, slug, ...payload } = await request.validateUsing(createBlogValidator)
 
     let blog: null | Blog = null
 
@@ -46,10 +89,6 @@ export default class BlogService {
       blog = await Blog.create({ ...payload, slug })
     } else {
       blog = await Blog.create({ slug: slugify(payload.title), ...payload })
-    }
-
-    if (blogCategoryId) {
-      blog.related('category').attach([blogCategoryId])
     }
 
     if (image) {
@@ -67,17 +106,11 @@ export default class BlogService {
 
     const blog = await Blog.findOrFail(+params.id)
 
-    const { image, blogCategoryId, slug, ...payload } =
-      await request.validateUsing(updateBlogValidator)
+    const { image, slug, ...payload } = await request.validateUsing(updateBlogValidator)
 
     if (slug) {
       blog.merge({ ...payload, slug })
       await blog.save()
-    }
-
-    if (blogCategoryId) {
-      await blog.related('category').detach()
-      await blog.related('category').attach([blogCategoryId])
     }
 
     if (image) {

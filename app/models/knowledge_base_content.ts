@@ -3,6 +3,7 @@ import KnowledgeBaseCategory from './knowledge_base_category.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Language from './language.js'
 import type { ImageType } from '#helpers/types'
+import { DateTime } from 'luxon'
 
 export default class KnowledgeBaseContent extends BaseModel {
   @column({ isPrimary: true })
@@ -46,8 +47,16 @@ export default class KnowledgeBaseContent extends BaseModel {
 
   @column()
   declare metaTitle: string
+
   @column()
   declare metaDesc: string
+
   @column()
   declare metaKeywords: string
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
 }

@@ -4,15 +4,11 @@
     <span class="d-flex align-center text-medium-emphasis">
       &copy;
       {{ new Date().getFullYear() }}
-      Made With
+      Made with
       <VIcon icon="tabler-heart-filled" color="error" size="1.25rem" class="mx-1" />
       By
-      <a
-        href="https://pixinvent.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-primary ms-1"
-        >Pixinvent</a
+      <a href="" target="_blank" rel="noopener noreferrer" class="text-primary ms-1"
+        >Urvigo developers</a
       >
     </span>
     <!-- 👉 Footer: right content -->
