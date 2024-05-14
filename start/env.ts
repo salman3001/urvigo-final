@@ -41,5 +41,6 @@ export default await Env.create(new URL('../', import.meta.url), {
   SMTP_PASSWORD: Env.schema.string(),
   RAZOR_KEY_ID: Env.schema.string(),
   RAZOR_KEY_SECRETE: Env.schema.string(),
+  RAZOR_WEBHOOK_SECRETE: Env.schema.string(),
   UPLOAD_PATH: Env.schema.string(),
 })
