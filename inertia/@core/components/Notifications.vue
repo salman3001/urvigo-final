@@ -4,6 +4,8 @@ import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import type { Notification } from '~/@layouts/types'
 import { avatarText } from '../utils/formatters'
 import { VAvatar, VBadge } from 'vuetify/components'
+import { Link } from '@inertiajs/vue3'
+import routes from '~/utils/routes'
 
 interface Props {
   notifications: Notification[]
@@ -178,7 +180,9 @@ const toggleReadUnread = (isSeen: boolean, Id: number) => {
 
         <!-- 👉 Footer -->
         <VCardText v-show="props.notifications.length" class="pa-4">
-          <VBtn block size="small"> View All Notifications </VBtn>
+          <Link :href="routes('web.account.notifications')">
+            <VBtn block size="small"> View All Notifications </VBtn>
+          </Link>
         </VCardText>
       </VCard>
     </VMenu>
